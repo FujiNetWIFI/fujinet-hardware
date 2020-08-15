@@ -14,4 +14,4 @@ Licensees must place a link to the FujiNet project github site, github.com/FujiN
 
 FujiNet hardware is certified open source by [OSHWA](https://oshwa.org). Certification details are available in the [certification directory](https://certification.oshwa.org/us000651.html) under the UID US000651.
 
-![OSHWA Mark](https://github.com/FujiNetWIFI/fujinet-hardware/raw/master/images/oshwa-mark_us00651.png)
+![OSHWA Mark](https://github.com/FujiNetWIFI/fujinet-hardware/raw/master/images/oshwa-mark_us000651.png)

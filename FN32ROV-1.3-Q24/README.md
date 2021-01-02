@@ -13,10 +13,13 @@ This is the second official public release of FujiNet hardware and is officially
  * New Power switch & 3D printed slide cover
  * Remove always on solder jumper
  * Add pull down for MOTOR for Cassette emulation
+ * JTAG port removed. Signals available as test points
 
 # PCB
 
 PCB's for FN32ROV-1.3 can be ordered directly from the [OSH Park project page](https://oshpark.com/shared_projects/mkCMfFhV) or by submitting the files from the Gerbers directory to the fab house of your choice. The design was created using [Diptrace](https://diptrace.com).
+
+SDM pads for passives are 0402 but you _can_ use 0603 sized passives on them.
 
 # 3D Printed Cases
 

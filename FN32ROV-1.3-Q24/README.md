@@ -4,9 +4,9 @@ This is the second official public release of FujiNet hardware and is officially
 
 ![OSHWA Mark](https://github.com/FujiNetWIFI/fujinet-hardware/raw/master/images/oshwa-mark_us000651.png)
 
-# BUGFIX
+# IMPORTANT BUGFIXES
 
-The original release of v1.3 had an error that could cause a failure to flash the esp32 from some computers while working fine from others. This was due to leaving the CP2102 VIO pin unconnected. The design files have been updated to coonect this pin to VDD. Boards made with the error can be fixed by creating a solder bridge from pin 4 to pin 5 on U2. See [CP2102 Bodge Image](https://github.com/FujiNetWIFI/fujinet-hardware/blob/master/FN32ROV-1.3-Q24/CP210x_RESET-BUG_FIX.jpg)
+The original release of v1.3 had an error that could cause a failure to flash the esp32 from some computers while working fine from others. This was due to leaving the CP2102 VIO pin unconnected. The design files have been updated to connect VIO to VDD. Boards made with the error can be fixed by creating a solder bridge from pin 5 to pin 6 on U2. See [CP2102 Bodge Image](https://github.com/FujiNetWIFI/fujinet-hardware/blob/master/FN32ROV-1.3-Q24/CP210x_RESET-BUG_FIX.jpg)
 
 # Changes from 1.0
  * SIO lines connected to ESP32 through two 74LS07

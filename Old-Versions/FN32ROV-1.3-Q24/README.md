@@ -9,7 +9,7 @@ This is the second official public release of FujiNet hardware and is officially
 It is not recommended to make these boards. A new version will replace this board. The original release of v1.3 had errors that could cause a failure to flash the esp32 from some computers while working fine from others. This was due to several reasons:
 
  1. CP2102 VIO pin was left unconnected
- 2. Weak R6 & R7 pullups
+ 2. Strong R6 & R7 pullups
  3. Improper decoupling capacitors for CP2102
 
 Boards made with the error can be fixed by replacing R6 & R7 with 10K resistors, creating a solder bridge from pin 5 to pin 6 on U2, adding a 4.7uF cap to C5, replace C6 with a 0.1uF cap and adding 4.7uF cap to C6. See [CP2102 Bodge Image](https://github.com/FujiNetWIFI/fujinet-hardware/blob/master/FN32ROV-1.3-Q24/CP210x_RESET-BUG_FIX_FINAL.jpg)

@@ -14,6 +14,7 @@ This is the third official public release of FujiNet hardware and is officially 
  * Add 4.7k pull up resistor to SIO_DATAIN
  * Add 10k pull up resistors for uSD Card
  * Change auto-reset pull up resistors from 1k to 10k
+ * Change auto-reset/EN capacitance to 4.7uF
  * Change SIO AUDIO_IN resistor to 10K
 
 # PCB

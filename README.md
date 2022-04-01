@@ -1,6 +1,6 @@
 # FujiNet Hardware
 
-Hardware design files for FujiNet Atari 8 Bit WiFi Adapter
+Hardware design files for FujiNet Retro Computer WiFi Adapter
 
 # License
 

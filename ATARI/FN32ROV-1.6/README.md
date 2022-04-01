@@ -1,4 +1,4 @@
-# FujiNet FN32ROV-1.6
+# ATARI FujiNet FN32ROV-1.6
 
 This public release of FujiNet hardware and is officially certified open source hardware by [OSHWA](https://oshwa.org). Certification details are available in the [certified directory](https://certification.oshwa.org/us000651.html) under the UID US000651.
 

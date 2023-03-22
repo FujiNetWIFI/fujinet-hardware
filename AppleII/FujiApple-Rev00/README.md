@@ -6,8 +6,11 @@ This design should be considered a development board and not a finished product.
 
 # SPI FIX Modification
 
-This board shares the SPI MOSI pin between the SmartPort Bus and the SD Card. While this worked for floppy disk emulation, it was discovered later that CP/M emulation did not work. CP/M emulation needs constant access to the SD card due to it's filesystem being stored there which interferes with SmartPort bus access. The following hardware fix can be applied to the FujiApple Rev00 board to enable CP/M support. The firmware will automatically detect this fix and enable the CP/M device when accessed.
+This board shares the SPI MOSI pin between the SmartPort Bus and the SD Card. While this worked for floppy disk emulation, it was discovered later that CP/M emulation did not work. CP/M emulation needs constant access to the SD card due to it's filesystem being stored there which interferes with SmartPort bus access. The following hardware fix can be applied to the FujiApple Rev00 board to enable CP/M support. The firmware will automatically detect this fix and enable the CP/M device when accessed. This fix sacrafices the Safe Reset Button and converts it to Hard Reset instead.
 
+![image](FujiApple-SPI-Fix.jpg)
+
+![image](FujiApple-Rev00-Schematic_SPI-FIX.jpg)
 
 # License
 

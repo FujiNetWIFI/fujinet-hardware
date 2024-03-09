@@ -1,0 +1,1 @@
+Interactive BOM - https://djtersteegc.github.io/fujinet-hardware/AppleII/ibom-DevKit-IDC-20-v1.0.html

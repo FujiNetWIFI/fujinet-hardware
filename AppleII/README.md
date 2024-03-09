@@ -12,18 +12,18 @@ Rev1.1 improves on the Rev1 physical design by making the buttons more accessibl
 
 A more DIY friendly version of the Rev1 electrical design by using the ESP32-DEVKITC-VE board to reduce the BOM and make hand assembly easier.  Still all SMD compontents, but now 0805 package size or larger and the buffer chips are a TSSOP package for easier soldering.  Requires a female to female IDC-20 cable and the [DB-19M-Adapter-Male-Rev1](DB-19M-Adapter-Male-Rev1/README.md) adapter for DB19 operation.
 
-![devkit-idc20](../Docs/AppleII/devkit-idc20.jpg)
+![devkit-idc20](../docs/AppleII/devkit-idc20.jpg)
 
 # [DevKit SmartPort Rev1](FujiApple-DevKit-SmartPort-Rev1/README.md)
 
 Same functionality as the DevKit IDC-20 Rev1 but has an integrated DB19 connector. The smallest FujiApple option for the Apple IIc, IIc+, IIgs, or Laser128 only.
 
-![devkit-idc20](../Docs/AppleII/devkit-smartport.jpg)
+![devkit-idc20](../docs/AppleII/devkit-smartport.jpg)
 
-![devkit-idc20-back](../Docs/AppleII/devkit-smartport-back.jpg)
+![devkit-idc20-back](../docs/AppleII/devkit-smartport-back.jpg)
 
 # [DevKit Combo Rev1](FujiApple-DevKit-Combo-Rev1/README.md)
 
-A mashup of the IDC-20 and SmartPort versions that includes both an integrated DB19 connector and an IDC-20 connector. Slightly larger than the SmartPort only option and for IDC-20 operation requires a female to female ICD-20 cable.
+A mashup of the IDC-20 and SmartPort versions that includes both an integrated DB19 connector and an IDC-20 connector. Slightly larger than the SmartPort only option and for IDC-20 operation requires a female to female IDC-20 cable.
 
-![devkit-combo](../Docs/AppleII/devkit-combo.jpg)
+![devkit-combo](../docs/AppleII/devkit-combo.jpg)

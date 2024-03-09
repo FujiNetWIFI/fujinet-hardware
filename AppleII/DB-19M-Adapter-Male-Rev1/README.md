@@ -1,6 +1,6 @@
 A DB19 to IDC-20 adapter for use with Rev1 Devkit FujiApple boards, or Rev0 MacFuji boards.  Uses cheap DB pins originally intended to be soldered on the end of wires and is housed in a 3D printed case.
 
-![db19-parts](../../Docs/AppleII/db19-parts.jpg)
+![db19-parts](../../docs/AppleII/db19-parts.jpg)
 
 [Schematic](db19-to-idc20-schematic.pdf)
 
@@ -18,15 +18,15 @@ M2.5x16mm Countersunk Screws - https://www.aliexpress.us/item/2251832747871730.h
 
 The case parts are designed to printed at a 0.2mm layer height. There are two different DB19 connector options for the case.
 
-![db19-back-panels](../../Docs/AppleII/db19-back-panels.jpg)
+![db19-back-panels](../../docs/AppleII/db19-back-panels.jpg)
 
 One is a flat back that IMHO looks better but only works on an Apple IIc or IIc+. 
 
-![db19-iic](../../Docs/AppleII/db19-iic.jpg)
+![db19-iic](../../docs/AppleII/db19-iic.jpg)
 
 The other is a stepped back that provides the clearance needed to sit flush on a IIgs or compact Mac model.
 
-![db19-iigs](../../Docs/AppleII/db19-iigs.jpg)
+![db19-iigs](../../docs/AppleII/db19-iigs.jpg)
 
 # Solder Jumpers
 
@@ -46,12 +46,12 @@ Cleanup you 3D printed DB19 connector by using a 1mm and 2mm drill bit to size t
 
 Press some M2.5 nuts into the DB19 connector, place it on a female DB19, or cut down female DB25, connector and then insert the 19 DB pins with the tube cut facing outwards to enable easier soldering access.
 
-![db25-to-db19.jpg](../../Docs/AppleII/db25-to-db19.jpg)
+![db25-to-db19.jpg](../../docs/AppleII/db25-to-db19.jpg)
 
-![db-19-assembly](../../Docs/AppleII/db-19-assembly2.jpg)
+![db-19-assembly](../../docs/AppleII/db-19-assembly2.jpg)
 
 Then slide the PCB into the case and work it over the DB pins.  I like to temporarily screw the PCB/case to the DB19 connector with some M2.5x10mm nylon screws (they have a very small head) and clamp the whole assembly in a vise for soldering.  The ends of the tube cuts in the DB19 pins should be flush with the top of the PCB.
 
-![db-19-assembly](../../Docs/AppleII/db-19-assembly.jpg)
+![db-19-assembly](../../docs/AppleII/db-19-assembly.jpg)
 
 Finally assemble the case lid with two M2.5x16mm screws.

@@ -50,13 +50,13 @@ Cleanup you 3D printed DB19 connector by using a 1mm and 2mm drill bit to size t
 
 Press some M2.5 nuts into the DB19 connector, place it on a female DB19, or cut down female DB25, connector and then insert the 19 DB pins with the tube cut facing forward away from the IDC-20 connector to enable easier soldering access.
 
-![db25-to-db19.jpg](E:\Vintage Computers\FujiNet\fujinet-hardware\docs\AppleII\db25-to-db19.jpg)
+![db25-to-db19.jpg](../../docs/AppleII/db25-to-db19.jpg)
 
-![db-19-assembly](E:\Vintage Computers\FujiNet\fujinet-hardware\docs\AppleII\db-19-assembly2.jpg)
+![db-19-assembly](../../docs/AppleII/db-19-assembly2.jpg)
 
 Then slide the PCB into the case and work it over the DB pins.  I like to temporarily screw the PCB/case to the DB19 connector with some M2.5x10mm nylon screws (they have a very small head) and clamp the whole assembly in a vise for soldering.  The ends of the tube cuts in the DB19 pins should be flush with the top of the PCB.
 
-![Combo-Connector](E:\Vintage Computers\FujiNet\fujinet-hardware\docs\AppleII\Combo-Connector.jpg)
+![Combo-Connector](../../docs/AppleII/Combo-Connector.jpg)
 
 Now you can solder on the ESP32.  Once complete you will need to trim the pins to allow the PCB to slide back in the case.
 

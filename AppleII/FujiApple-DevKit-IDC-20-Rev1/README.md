@@ -4,7 +4,7 @@ This is the easiest to build of the Devkit series.  It is built with 8.5mm high 
 
 ![IDC-20-Assembled](../../docs/AppleII/IDC-20-Assembled.jpg)
 
-[Schematic](https://djtersteegc.github.io/fujinet-hardware/AppleII/Schematic-DevKit-IDC-20-v1.0)
+[Schematic](https://djtersteegc.github.io/fujinet-hardware/AppleII/Schematic-DevKit-IDC-20-v1.0.pdf)
 
 # BOM
 
@@ -18,7 +18,7 @@ The MicroSD sockets are readily available from [AliExpress](https://www.aliexpre
 
 The "standard" FujiNet LED's colors are white for Wifi and orange for bus activity.
 
-The case requires four M2.5x10mm countersunk screws.  Longer scews up to 16mm will also work.
+The case requires two M2.5x10mm countersunk screws.  Longer scews up to 16mm will also work.
 
 Buying everything in quantity 10 from someplace like AliExpress will be much cheaper, especially if you plan on doing multiple build. But here's a Mouser shared project, including a straight IDC-20 connector for the DB19 adapter -  https://www.mouser.com/ProjectManager/ProjectDetail.aspx?AccessID=60b4472e9d
 
@@ -26,19 +26,17 @@ Buying everything in quantity 10 from someplace like AliExpress will be much che
 
 Designed to be printed at a 0.2mm layer height. Use Polymaker PolyTerra Matte PLA in Muted White (Hex Code: #Bfbcb1) for a good match to Apple Platinum.
 
-Use the [Tall](3D/Tall/STL) case files if assembled on 8.5mm tall female headers, or the [Short](3D/Short/STL) if you soldered the ESP32 directly to the PCB.
-
-Assemble with four M2.5x10mm countersunk screws.
+Assemble with two M2.5x10mm countersunk screws.
 
 ![DesignSpark-IDC-20](../../docs/AppleII/DesignSpark-IDC-20.PNG)
 
 # Assembly
 
-Assemble all the SMD components.  I use solder paste hand applied with a pneumatic dispenser and then finish on a hot plate. But you can also hand solder, use hot air, or even order a stencil for paste application and use a proper reflow oven.
+Solder on all the SMD components.  I use solder paste hand applied with a pneumatic dispenser and then finish on a hot plate. But you can also hand solder, use hot air, or even order a stencil for paste application and use a proper reflow oven.
 
-Use thecase and the 1mm lip on the case lid to space the 3mm LED's away from the board and protrudely slightly above the top of the case lid. Then solder them into place.
+Use the case and the 1mm lip on the case lid to space the 3mm LED's away from the board and protruding slightly above the top of the case lid. Then solder them into place.
 
-If building in a Short configuration make extra sure you have not bridged joints or have other soldering issues on the MicroSD socket and buffer chips.  Once you solder on the ESP32, they become inaccessible.
+When placing in the case, you will need to angle the board a bit to slide the MicroSD socket into the case cutout.  Bending the LED's slightly forward will help align them with the case holes during this process.
 
 # Flashing
 

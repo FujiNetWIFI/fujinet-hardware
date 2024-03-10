@@ -12,7 +12,7 @@ DB 1.0mm pins, Wires Solder Model - https://www.aliexpress.us/item/3256802431271
 
 M2.5 Nuts - https://www.aliexpress.us/item/2255800799473326.html
 
-M2.5x16mm Countersunk Screws - https://www.aliexpress.us/item/2251832747871730.html
+M2.5x12mm Countersunk Screws - https://www.aliexpress.us/item/2251832747871730.html
 
 # Case
 
@@ -54,4 +54,4 @@ Then slide the PCB into the case and work it over the DB pins.  I like to tempor
 
 ![db-19-assembly](../../docs/AppleII/db-19-assembly.jpg)
 
-Finally assemble the case lid with two M2.5x16mm screws.
+Finally assemble the case lid with two M2.5x12mm screws.

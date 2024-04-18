@@ -1,6 +1,6 @@
 Note, this is an **early prototype** for Apple 68k Macs.
 
-Design sourced from []https://github.com/djtersteegc/Apple-68k-FujiNet](https://github.com/djtersteegc/Apple-68k-FujiNet)
+Design sourced from [https://github.com/djtersteegc/Apple-68k-FujiNet](https://github.com/djtersteegc/Apple-68k-FujiNet)
 
 # Rev0
 

@@ -47,16 +47,18 @@ You'll also need components to build the DIN4 serial cable, so please read the S
 
 Unlike the previous revisions, you will need to solder the ESP32 onto the PCB since the cartridge format is to short to allow it to be mounted on standard 8.5mm tall female headers. Print four of the [4mm spacers](CoCo-FujiNet-Rev000/3D/STL/CoCo-FujiNet-Rev000-4mm-Spacer.stl) to mount the ESP32 elevated from the PCB to help improve the wifi performance if using the VE version with integrated antenna and provide more space between the SD slot and USB port.
 
+![rev000-spacers](../docs/Coco/rev000-spacers.jpg)
+
 ![rev000-ports](../docs/Coco/rev000-ports.jpg)
 
 The DIP switch allows for up to four 16K ROM images to loaded and selected on a 27c512 (or equivalent) EPROM. There is a precompiled image in the [ROM directory](ROM) with HDB-DOS DriveWire 3 images for the various Coco's from the hdbdos-snapshot20190324 as well as a diagnostics ROM from the Color Computer Archive.
 
-| ROM                                       | SW1-1 (A14) | SW1-2 (A15) |
-| ----------------------------------------- | ----------- | ----------- |
-| hdbdw3cc1.rom                             | ON          | ON          |
-| hdbdw3cc2.rom                             | OFF         | ON          |
-| hdbdw3cc3.rom                             | ON          | OFF         |
-| Diagnostics v2.0 (1982) (26-3019) (Tandy) | OFF         | OFF         |
+| ROM                                       | Baud    | SW1-1 (A14) | SW1-2 (A15) |
+| ----------------------------------------- | ------- | ----------- | ----------- |
+| hdbdw3cc1.rom                             | 38,400  | ON          | ON          |
+| hdbdw3cc2.rom                             | 57,600  | OFF         | ON          |
+| hdbdw3cc3.rom                             | 115,200 | ON          | OFF         |
+| Diagnostics v2.0 (1982) (26-3019) (Tandy) | N/A     | OFF         | OFF         |
 
 The case is designed to be printed at a 0.2mm layer height.  Secure the PCB and two case halves with four M3x10mm to 20mm screws in the center four holes, and optionally four M3x16mm to 20mm screws in the outer four holes.  Overkill, but results in a very solid feeling cartridge with minimal gaps between the two halves.  There are two zip tie mounts for the serial cable and VIE external antenna.
 
@@ -65,6 +67,12 @@ The case is designed to be printed at a 0.2mm layer height.  Secure the PCB and 
 ![rev000-assembled](../docs/Coco/rev000-assembled.jpg)
 
 ![rev000-working](../docs/Coco/rev000-working.jpg)
+
+# Rework to Set Baud Rate Based on ROM Image
+
+Originally the firmware was hard coded to 57,600 baud to work with a Coco2 DriveWire HDB-DOS ROM.  Since we now have three selectable HDB-DOS ROM's each with a different baud rate for the serial port, wouldn't it be nice for that to change based on the image selected without having to flash new firmware?  Simply solder two jumper wires between the A14/A15 dip switch and pins 3/4 on the ESP32 and the switch positions will now be detected at startup and the correct baud rate set based on the ROM table above.
+
+![rev000-baud-rework](../docs/Coco/rev000-baud-rework.jpg)
 
 # Building the Serial Cable
 
@@ -86,9 +94,9 @@ At this stage there is no official release of the Coco firmware in the [Fujinet 
 
 # Usage
 
-Rev000 - Insert into cart slot and plug attached cable into your Coco's serial port.
+Insert into cart slot and plug attached cable into your Coco's serial port.
 
-Assuming the FujiNet device (and CocoSDC if needed) is correctly flashed, it should launch into the Fujinet config app on power up.
+Assuming the FujiNet device is correctly flashed, it should launch into the Fujinet config app on power up.
 
 ![fujinet-loading](../docs/Coco/fujinet-loading.jpg)
 

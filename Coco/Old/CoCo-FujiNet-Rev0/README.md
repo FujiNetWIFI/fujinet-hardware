@@ -56,6 +56,14 @@ HDBDW3C3.ROM - HDB-DOS for Drivewire 3 (Coco 3) (Cloud-9)`
 
 Since I'm using a Coco2, I used **HDBDW3C2.ROM** and flashed it to the slot number 3 on my CocoSDC.  Set your DIP jumpers accordingly to use this new ROM image instead of the standard SDC-DOS image in slot 0. See the CocoSDC docs for more details.
 
+# Rework to Set Baud Rate
+
+With the introduction of Rev000 and dip switch selectable HDB-DOS firmware images, the Fujinet code now by default detects the status of the ROM image selected on ESP32 pins 3 and 4.  Since these pins are input only and don't have any pull-up/pull-down options in code, without any rework they are both read as low and the firmware selects 38,400 which is correct for the Coco1 DW3 ROM image.  If you want to select 57,600 or 115,200 baud for either a Coco2 or Coco3 ROM image, you can either solder 10K pull-up resistors between the appropiate pins and pin 1 of the ESP32 (3.3V), or use **FORCE_UART_BAUD** in https://github.com/FujiNetWIFI/fujinet-firmware/blob/master/lib/bus/drivewire/drivewire.cpp to ignore this pins and force the baud rate based on whatever you hardcode in the the firmware.
+
+Below pin3  is pulled high, and pin 4 left low which reads as a Coco2 and sets the baud rate to 57,600.
+
+![rev00-baud-rework](../../../docs/Coco/rev00-baud-rework.jpg)
+
 # Building the Serial Cable
 
 The DIN 4 serial cable pinout (looking at it from the backside of the connector) with the corresponding XH connector pins (they are also marked on the PCB).

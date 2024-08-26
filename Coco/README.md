@@ -1,4 +1,14 @@
-# Rev000
+# Rev0000
+
+Rev0000 is a minor PCB revision on Rev000, changes include:
+
+- No longer needed to bodge the A14 and A15 DIP switches to the ESP32 to detect the baud rate
+- Add 2N3904 transistor driver to CD pin on the serial port (currently unused in the firmware)
+- Remove copper ground planes under ESP32 anntenna area
+- Auto Start jumper is now normally open for Coco3 compatibility without the need to cut it first
+- Fix Pin 2 and Pin 40 silkscreen on the bottom of the board
+
+Otherwise the build and function is the same as Rev000 and uses the same 3D printed case.
 
 Rev000 does away with the tape circuit and moves to a ROM for bootstrapping HDB-DOS, similar to a "minimal" Rev00 build and bootstraping via a CocoSDC or other ROM cart.  Since it is now a cartridge format, you no longer need to power the ESP32 via USB, and instead it will normally take 5V from the cartridge port.  There is a diode so if you do want to power by USB for debug logging or other reasons it is safe to do so without backfeeding into the Coco.
 
@@ -10,13 +20,13 @@ Schematic - https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Rev
 
 # BOM
 
-Interactive BOM - https://djtersteegc.github.io/fujinet-hardware/Coco/ibom-Rev000.html
+Interactive BOM - https://djtersteegc.github.io/fujinet-hardware/Coco/ibom-Rev0000.html
 
 The MicroSD sockets are readily available from [AliExpress](https://www.aliexpress.us/item/3256801145064294.html), [Amazon](https://www.amazon.com/Spring-Loaded-Transflash-Memory-Socket/dp/B0CDC5Q1HF), eBay and other places, sometimes called _Push Push TransFlash Socket_.
 
 The cable sockets on the board are the cheap [XH2.54 4p angle](https://www.aliexpress.us/item/2251832822174658.html) connectors.
 
-The [3D printable case](CoCo-FujiNet-Rev000/3D/STL) is designed for 5mm LED's and 8mm stem length right angle tact switches. The "standard" FujiNet LED's colors are white for Wifi and orange for bus activity.
+The [3D printable case](CoCo-FujiNet-Rev0000/3D/STL) is designed for 5mm LED's and 8mm stem length right angle tact switches. The "standard" FujiNet LED's colors are white for Wifi and orange for bus activity.
 
 If you are a fan of AliExpress, there's a shopping list below.  Vendors come and go so links may go dead over time.  The ESP32 is actually cheaper on Amazon (with free Prime shipping). Can also be sourced from places like Digikey and Mouser, just make sure to pay attention to the suffix, models like the ESP32-DevKitC-32E will NOT work.
 
@@ -28,7 +38,7 @@ You'll also need components to build the DIN4 serial cable, so please read the S
 | 47uF 10V 3528 Tantalum Capacitor        | 1    | B Type Case (or smaller)           | [AliExpress](https://www.aliexpress.us/item/3256805505328370.html) |
 | 100uF 10V Electrolytic Capacitor        | 1    | 6.3mm Diameter, 2.5mm Lead Spacing | [AliExpress](https://www.aliexpress.us/item/3256805505601375.html) |
 | 10K 1/4w Resistor                       | 2    |                                    | [AliExpress](https://www.aliexpress.us/item/3256805483572082.html) |
-| 1K 1/4w Resistor                        | 2    |                                    | [AliExpress](https://www.aliexpress.us/item/3256805483572082.html) |
+| 1K 1/4w Resistor                        | 4    |                                    | [AliExpress](https://www.aliexpress.us/item/3256805483572082.html) |
 | 10K 9 Pin Resistor Array                | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/3256805495673085.html) |
 | 1N5817 Diode                            | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/3256805521351480.html) |
 | 5mm LED (White)                         | 1    | Wifi                               | [AliExpress](https://www.aliexpress.us/item/3256805522045262.html) |
@@ -45,7 +55,7 @@ You'll also need components to build the DIN4 serial cable, so please read the S
 
 # Assembly
 
-Unlike the previous revisions, you will need to solder the ESP32 onto the PCB since the cartridge format is to short to allow it to be mounted on standard 8.5mm tall female headers. Print four of the [4mm spacers](CoCo-FujiNet-Rev000/3D/STL/CoCo-FujiNet-Rev000-4mm-Spacer.stl) to mount the ESP32 elevated from the PCB to help improve the wifi performance if using the VE version with integrated antenna and provide more space between the SD slot and USB port.
+Unlike the previous revisions, you will need to solder the ESP32 onto the PCB since the cartridge format is to short to allow it to be mounted on standard 8.5mm tall female headers. Print four of the [4mm spacers](CoCo-FujiNet-Rev0000/3D/STL/CoCo-FujiNet-Rev000-4mm-Spacer.stl) to mount the ESP32 elevated from the PCB to help improve the wifi performance if using the VE version with integrated antenna and provide more space between the SD slot and USB port.
 
 ![rev000-spacers](../docs/Coco/rev000-spacers.jpg)
 
@@ -68,11 +78,7 @@ The case is designed to be printed at a 0.2mm layer height.  Secure the PCB and 
 
 ![rev000-working](../docs/Coco/rev000-working.jpg)
 
-# Rework to Set Baud Rate Based on ROM Image
 
-Originally the firmware was hard coded to 57,600 baud to work with a Coco2 DriveWire HDB-DOS ROM.  Since we now have three selectable HDB-DOS ROM's each with a different baud rate for the serial port, wouldn't it be nice for that to change based on the image selected without having to flash new firmware?  Simply solder two jumper wires between the A14/A15 dip switch and pins 3/4 on the ESP32 and the switch positions will now be detected at startup and the correct baud rate set based on the ROM table above.
-
-![rev000-baud-rework](../docs/Coco/rev000-baud-rework.jpg)
 
 # Building the Serial Cable
 

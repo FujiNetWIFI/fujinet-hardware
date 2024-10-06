@@ -21,7 +21,7 @@ An IDC-26  to IDC-20 adapter allowing to to use yourApple II Fujinet, Floppy Emu
 
 # Case
 
-The case parts are designed to printed at a 0.2mm layer height and snaps together by inserting the wider tab first and then pushing down on the shorter tab side with the 72LS32 chip.  I found the tab on the lid broke off when using matte PLA with it's lower layer bond strength, but regular PLA or PLA+ (and probably PETG) worked fine and could be assembled and disassambled multiple times.  Your mileage may vary.
+The case parts are designed to printed at a 0.2mm layer height and snap together by inserting the wider tab first and then pushing down on the shorter tab side near the 72LS32 chip.  I found the tab on the lid broke off when using matte PLA with it's lower layer bond strength, but regular PLA or PLA+ (and probably PETG) worked fine and could be assembled and disassambled multiple times.  Your mileage may vary.
 
 ![IDC-26-Adapter-Rev1-DesignSpark](../../docs/AppleIII/IDC-26-Adapter-Rev1-DesignSpark.png)
 
@@ -37,13 +37,13 @@ The case parts are designed to printed at a 0.2mm layer height and snaps togethe
 
 **Pin 19** - Routes either the Drive 3 signal or +12V to Pin 19. For use with the Fujinet, experimental, not currently supported in hardware or firmware.
 
-Here's a table of the different ways to can build this and what works.  If you route either Drive2 or Drive2 to pin 17 and 19, you must **NEVER** then attempt to plug an actual Disk II drive into this since they internally bridge +12V on all four pins and will backfeed that voltage into your Apple III drive enable lines.
+Here's a table of the different ways to can build this and what works.  If you route either Drive2 or Drive3 to pin 17 and 19, you must **NEVER** then attempt to plug an actual Disk II drive into this since they internally bridge +12V on all four pins and will backfeed that voltage into your Apple III drive enable lines.
 
 | Mode       | -12V    | 12V     | Pin 5 | Pin 17 | Pin 19 |
 | ---------- | ------- | ------- | ----- | ------ | ------ |
 | Disk II    | Closed  | Closed  | GND   | +12V   | +12V   |
 | Fujinet    | Open    | Open    | GND   | DRV2   | DRV3   |
-| Floppy Emu | Closed* | Closed* | DRV2  | Open   | Open   |
+| Floppy Emu | Closed* | Closed* | DRV2  | +12V*  | +12V*  |
 
 | Mode       | Disk II                | Fujinet                   | Floppy Emu                |
 | ---------- | ---------------------- | ------------------------- | ------------------------- |
@@ -51,7 +51,7 @@ Here's a table of the different ways to can build this and what works.  If you r
 | Fujinet    | **DANGER, DO NOT USE** | Drive 1 (.d2) and 2 (.d3) | Drive 1 (as .d2) only     |
 | Floppy Emu | Yes                    | Drive 1 (as .d2) only     | Drive 1 (.d2) and 2 (.d3) |
 
-*If you don't plan on using a Disk II, I would recommend NOT closing the two 12V jumpers for safety's sake, since these voltages are not needed by any of these modern drive emulators.
+*If you don't plan on using a Disk II, I would recommend NOT closing any of the 12V jumpers for safety's sake, since these voltages are not needed by any of these modern drive emulators.
 
 # Assembly
 

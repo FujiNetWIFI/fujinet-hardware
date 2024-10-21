@@ -13,7 +13,7 @@ An IDC-26  to IDC-20 adapter allowing to to use yourApple II Fujinet, Floppy Emu
 | Component                          | Qty  | Notes                                 | LCSC                                                         |
 | ---------------------------------- | ---- | ------------------------------------- | ------------------------------------------------------------ |
 | IDC-20 2.54mm 2x10 Male Box Header | 1    |                                       | [C429961](https://www.lcsc.com/product-detail/IDC-Connectors_JILN-321020SG0ABK00A01_C429961.html) |
-| IDC-26 2.54mm 2x13 Female Header   | 1    |                                       | [C2834333](https://www.lcsc.com/product-detail/Female-Headers_TXGA-FFH25407-D26S1004K6K_C2834333.html) |
+| IDC-26 2.54mm 2x13 Female Header   | 1    | Try to find one with a key            | [C2834333](https://www.lcsc.com/product-detail/Female-Headers_TXGA-FFH25407-D26S1004K6K_C2834333.html) |
 | 74LS32 SOP or SOIC                 | 1    | SOIC-14_3.9x8.7mm_P1.27mm             | [C521171](https://www.lcsc.com/product-detail/Logic-Gates_XINLUDA-XL74LS32_C521171.html) |
 | 470R 0805 Resistor                 | 1    | Only needed for Floppy Emu mode build | [C17710](https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_UNI-ROYAL-Uniroyal-Elec-0805W8F4700T5E_C17710.html) |
 | 3.3K 0805 Resistor                 | 3    |                                       | [C26010](https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_UNI-ROYAL-Uniroyal-Elec-0805W8F3301T5E_C26010.html) |
@@ -24,6 +24,10 @@ An IDC-26  to IDC-20 adapter allowing to to use yourApple II Fujinet, Floppy Emu
 The case parts are designed to printed at a 0.2mm layer height and snap together by inserting the wider tab first and then pushing down on the shorter tab side near the 72LS32 chip.  I found the tab on the lid broke off when using matte PLA with it's lower layer bond strength, but regular PLA or PLA+ (and probably PETG) worked fine and could be assembled and disassambled multiple times.  Your mileage may vary.
 
 ![IDC-26-Adapter-Rev1-DesignSpark](../../docs/AppleIII/IDC-26-Adapter-Rev1-DesignSpark.png)
+
+One issue observed with using a non-keyed female IDC-26 connector is the ability to misalign by one pin inside of the Apple III's IDC-26 male connector when inserting the adpater if you aren't careful. There is a "sleeve" that can be printed to press over the connector to prevent this misalignment from happening.  It's designed as a friction fit based on the generic Chinese connector I was using and a Bambu A1 printing PLA, so tolerances may need to be tweaked for your printer/connector combination.
+
+![IDC-26-Adapter-Rev1-Connector-Sleeve](../../docs/AppleIII/IDC-26-Adapter-Rev1-Connector-Sleeve.jpg)
 
 # Solder Jumpers
 

@@ -1,0 +1,1 @@
+copy /b hdbdw3cc1.rom + hdbdw3cc1.rom + hdbdw3cc2.rom + hdbdw3cc2.rom + hdbdw3cc3.rom + hdbdw3cc3.rom + hdbdw3dgn.rom + hdbdw3dgn.rom coco-fujinet-27C512.rom

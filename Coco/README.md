@@ -61,14 +61,14 @@ Unlike the previous revisions, you will need to solder the ESP32 onto the PCB si
 
 ![rev000-ports](../docs/Coco/rev000-ports.jpg)
 
-The DIP switch allows for up to four 16K ROM images to loaded and selected on a 27c512 (or equivalent) EPROM. There is a precompiled image in the [ROM directory](ROM) with HDB-DOS DriveWire 3 images for the various Coco's from the hdbdos-snapshot20190324 as well as a diagnostics ROM from the Color Computer Archive.
+The DIP switch allows for up to four 16K ROM images to loaded and selected on a 27c512 (or equivalent) EPROM. There is a precompiled image in the [ROM directory](ROM) with HDB-DOS DriveWire 3 images for the various Coco's and Tano Dragon's from the hdbdos-snapshot20190324 archive.
 
-| ROM                                       | Baud    | SW1-1 (A14) | SW1-2 (A15) |
-| ----------------------------------------- | ------- | ----------- | ----------- |
-| hdbdw3cc1.rom                             | 38,400  | ON          | ON          |
-| hdbdw3cc2.rom                             | 57,600  | OFF         | ON          |
-| hdbdw3cc3.rom                             | 115,200 | ON          | OFF         |
-| Diagnostics v2.0 (1982) (26-3019) (Tandy) | N/A     | OFF         | OFF         |
+| Computer     | ROM           | Baud    | SW1-1 (A14) | SW1-2 (A15) |
+| ------------ | ------------- | ------- | ----------- | ----------- |
+| Coco 1       | hdbdw3cc1.rom | 38,400  | ON          | ON          |
+| Coco 2       | hdbdw3cc2.rom | 57,600  | OFF         | ON          |
+| Coco 3       | hdbdw3cc3.rom | 115,200 | ON          | OFF         |
+| Dragon 32/64 | hdbdw3dgn.rom | 57,600  | OFF         | OFF         |
 
 The case is designed to be printed at a 0.2mm layer height.  Secure the PCB and two case halves with four M3x10mm to 20mm screws in the center four holes, and optionally four M3x16mm to 20mm screws in the outer four holes.  Overkill, but results in a very solid feeling cartridge with minimal gaps between the two halves.  There are two zip tie mounts for the serial cable and VIE external antenna.
 
@@ -80,7 +80,7 @@ The case is designed to be printed at a 0.2mm layer height.  Secure the PCB and 
 
 
 
-# Building the Serial Cable
+# Building the Serial Cable (Coco1/2/3)
 
 If you have a later Coco2 or Coco3 with the serial port close to the cartridge port, you can buy some 300mm [prewired female connectors](https://www.aliexpress.us/item/2255801048702387.html) and [4mm nylon sleaving](https://www.aliexpress.us/item/2251832733475111.html) for cable making.  A Coco1 and early Coco2's with the serial port further from the cartridge port requires a longer 18" cable to reach. [Four core 26AWG UL2547 cable](https://www.aliexpress.us/item/3256801872028158.html) works well for this with some [XH2.54 4P connectors and terminals](https://www.aliexpress.us/item/2251832815492773.html). For either option you'll need a [DIN4 male](https://www.aliexpress.us/item/3256804124853512.html) plug for the serial port.
 
@@ -94,9 +94,43 @@ And some completed cable pics:
 
 ![serial-cable-xh](../docs/Coco/serial-cable-xh.jpg)
 
+# Building the Serial Cable (Dragon 32/64)
+
+** Currently Untested **
+
+Info taken from https://web.archive.org/web/20140814201934/https://archive.worldofdragon.org/phpBB3/viewtopic.php?f=5&t=781
+
+Normally you would need to invert the signals on the parallel port when connecting to a PC hosted DriveWire server, but the Fujinet takes care of that is software when selecting the Dragon HDB-DOS ROM so you can simply cable from the Fujinet over to the parallel port.
+
+Here's the parallel port pinout looking at the port on the Dragon.
+
+```
+ 19                  1
+  . . . . . . . . . .
+  . . . . . . . . . .
+ 20                  2
+
+  1  Strobe      2  +5V
+  3  Data 0      4  +5V
+  5  Data 1      6  Ground
+  7  Data 2      8  Ground
+  9  Data 3     10  Ground
+ 11  Data 4     12  Ground
+ 13  Data 5     14  Ground
+ 15  Data 6     16  Ground
+ 17  Data 7     18  Ground
+ 19  !ACK       20  BUSY
+```
+
+And here's the wiring to the J1 serial port connector on the CocoFuji. Signal names are also silkscreened on the underside of the PCB.
+
+![dragon-cable-wiring](../docs/Coco/dragon-cable-wiring.png)
+
+
+
 # Flashing Your FujiNet
 
-At this stage there is no official release of the Coco firmware in the [Fujinet Flasher](https://fujinet.online/download/).  But you can still use it to easily flash a precompile version (check the Discord), or you can [compile one yourself](https://github.com/FujiNetWIFI/fujinet-firmware/wiki/Board-Bring-Up-Software).
+Tandy CoCo builds are available in the [Fujinet Flasher](https://fujinet.online/download/).
 
 # Usage
 

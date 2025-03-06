@@ -2,7 +2,7 @@
 
 This adapter was created to be used with FujiNet Rev1
 
-<img src="https://github.com/FujiNetWIFI/fujinet-hardware/blob/master/AppleII/DB-19M-Adapter/images/DB19M_to_IDC20_Adapter.png" width="400px">
+[<img src="images/DB19M_to_IDC20_Adapter.png" width="400px" />](images/DB19M_to_IDC20_Adapter.png)
 
 # License
 
@@ -17,8 +17,8 @@ This project is released under the CERN OHL v2.0.
 
 Insert the 19 pins for the DB-19 socket into a DB-19 or DB-25 cable/adapter with the "fins" of the pins as shown below
 
-<img src="https://github.com/FujiNetWIFI/fujinet-hardware/blob/master/AppleII/DB-19M-Adapter/images/DB19M_to_IDC20_Pin-Alignment.png" width="300px">
-<img src="https://github.com/FujiNetWIFI/fujinet-hardware/blob/master/AppleII/DB-19M-Adapter/images/IMG_20221002_145542.jpg" width="300px">
+[<img src="images/DB19M_to_IDC20_Pin-Alignment.png" width="300px" />](images/DB19M_to_IDC20_Pin-Alignment.png)
+[<img src="images/IMG_20221002_145542.jpg" width="300px" />](images/IMG_20221002_145542.jpg)
 
 The PCB is labeled "PIN SIDE" which is where the 3D printed connector goes. The unlabled side of the PCB is the solder side. Solder pin 1 and pin 19 first, ensuring the pins are straight/flush with the PCB then solder the remaining pins. Use side cutters to remove excess pins from the solder side.
 

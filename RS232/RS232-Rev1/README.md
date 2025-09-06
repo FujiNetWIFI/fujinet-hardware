@@ -24,6 +24,6 @@ Additional parts required for case:
  * 1pc: M3 x 8mm Wood screw https://www.aliexpress.com/item/3256803466380721.html
  * 2pcs: M2 x 10mm Machine Screw https://www.aliexpress.com/item/3256806488497909.html
  * 2pcs: M2 x 3mm Heat Set Insert https://www.aliexpress.us/item/3256803396040989.html
- * 2pcs: 4-40 x 3/4" Machine Screw https://www.aliexpress.com/item/3256803157986523.html
+ * 2pcs: 4-40 x 3/4" Machine Screw https://www.aliexpress.us/item/3256807730476515.html
 
 Using a heat set insert tool or soldering iron, push the heat set inserts into the 2 holes near the neck of the case. The two 4-40 screws are to be screwed onto the 3D printed knurled nuts. Add a drop of glue to the threads just below the head so when screwed down it will secure itself inside the knurled nut.

@@ -4,7 +4,10 @@
 
 Uses an RP2350B dev board connected to a cartridge.
 
-[Schematic](Prototype-2)
+[Schematic - KiCad](Prototype-2)
+
+[Schematic - PDF](../docs/MSX/MSX-Prototype-2.pdf)
+
 [Waveshare Core2350B](https://www.waveshare.com/Core2350B.htm)
 
 ![MSX Prototype 2](../docs/MSX/msx-prototype-2.jpg)

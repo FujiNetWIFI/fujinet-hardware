@@ -16,7 +16,7 @@ Schematic - [https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Re
 | 4P Right Angle XH2.54 JST Connector     | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832822174658.html) |
 | IDC-20 (2x10) Female Header             | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832769816317.html) |
 | Small cable tie                         | 1    |                                    |                                                              |
-
+**Note: When ordering the PCB, use a thickness of 2mm. The ensures the best fit for the IDC-20 Header.**
 
 #PCB Assembly
 1) Solder the JST connector with its opening facing the two holes labeled "Cable Tie."

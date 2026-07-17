@@ -9,6 +9,8 @@ To use this adapter, your Rev0000 board must have the EEPROM image dated June 15
 
 Schematic - [https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Rev000-Schematic.pdf](https://github.com/FutureVision-Research/fujinet-hardware/blob/master/Coco/CoCo-FujiNet-Dragon-Adapter/CoCo-FujiNet-Dragon-Adapter-PCB-Schematic.pdf)
 
+![Assembled CoCo FujiNet Dragon Adapter](CoCo-FujiNet-Dragon-Adapter-Assembled.png)
+
 # PCB BOM
 
 | Component                               | Qty  | Notes                              | Link                                                         |
@@ -37,7 +39,7 @@ Terminate both sides of the cable with 4P XH2.54 JST recepticles using the same 
 The difference is that you must connect the white wire in the cable (ground) as a drain to the cables shield.
 It is highly recommended to place heat-shrink tubing over the exposed wires and the end of the cable jacket.
 
-![rev000](../../docs/Coco/serial-cable-xh.jpg)
+![Terminated JST Connector](../../docs/Coco/serial-cable-xh.jpg)
 
 #Enclosure
 STL files are provided for a PCB enclosure. It is designed to be printed at a .02mm layer height. Use four M3×10 flathead screws to secure the enclosure.

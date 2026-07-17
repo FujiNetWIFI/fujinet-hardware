@@ -15,6 +15,8 @@ Schematic - [https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Re
 | --------------------------------------- | ---- | ---------------------------------- | ------------------------------------------------------------ |
 | 4P Right Angle XH2.54 JST Connector     | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832822174658.html) |
 | IDC-20 (2x10) Female Header             | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832769816317.html) |
+| Small cable tie                         | 1    |                                    |                                                              |
+
 
 #PCB Assembly
 1) Solder the JST connector with its opening facing the two holes labeled "Cable Tie."
@@ -27,10 +29,14 @@ Note: To hold the IDC-20 connector in place while soldering, insert a second IDC
 | --------------------------------------- | ---- | ---------------------------------- | ------------------------------------------------------------ |
 | 4P XH2.54 JST Recepticle                | 2    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832815492773.html) |
 | Four core 26AWG Shielded cable          | 36"  |(76cm)                              | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
+| 3/16" Heat Shrink                       |      |                                    | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
+
 
 #Cable Assembly
 Terminate both sides of the cable with 4P XH2.54 JST recepticles using the same pinout as the standard CoCo-FujiNet cable.
 The difference is that you must connect the white wire in the cable (ground) as a drain to the cables shield.
+It is highly recommended to place heat-shrink tubing over the exposed wires and the end of the cable jacket.
+
 ![rev000](../../docs/Coco/serial-cable-xh.jpg)
 
 #Enclosure

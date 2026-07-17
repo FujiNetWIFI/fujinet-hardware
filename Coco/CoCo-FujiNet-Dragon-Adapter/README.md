@@ -1,18 +1,10 @@
-# Rev0000
+# CoCo FujiNet Dragon Adapter
 
-Rev0000 is a minor PCB revision on Rev000, changes include:
+This adapter provides a replacement PCB and cable for the CoCo FujiNet Rev0000 which allows connection to a Dragon 32/64 computer.
 
-- No longer needed to bodge the A14 and A15 DIP switches to the ESP32 to detect the baud rate
-- Add 2N3904 transistor driver to CD pin on the serial port (currently unused in the firmware)
-- Remove copper ground planes under ESP32 anntenna area
-- Auto Start jumper is now normally open for Coco3 compatibility without the need to cut it first
-- Fix Pin 2 and Pin 40 silkscreen on the bottom of the board
+In order to take advantage of this cable, your Rev0000 board must have the EEPROM file updated on June 15, 2026 (or later) and FujiNet firmware 1.6.1 (or later). Previous versions of both these files introduced significant timeout problems.
 
-Otherwise the build and function is the same as Rev000 and uses the same 3D printed case.
 
-Rev000 does away with the tape circuit and moves to a ROM for bootstrapping HDB-DOS, similar to a "minimal" Rev00 build and bootstraping via a CocoSDC or other ROM cart.  Since it is now a cartridge format, you no longer need to power the ESP32 via USB, and instead it will normally take 5V from the cartridge port.  There is a diode so if you do want to power by USB for debug logging or other reasons it is safe to do so without backfeeding into the Coco.
-
-With extra space in the cartridge case you can build with either the ESP32-DEVKITC-VE with an integrated antenna, or use a ESP32-DEVKITC-VIE with an external (included) antenna. In my testing the VIE version performed slightly better so I would recommend using it given the price is the same (at least in the US).
 
 ![rev000](../docs/Coco/rev000.jpg)
 
@@ -20,17 +12,6 @@ Schematic - https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Rev
 
 # BOM
 
-Interactive BOM - https://djtersteegc.github.io/fujinet-hardware/Coco/ibom-Rev0000.html
-
-The MicroSD sockets are readily available from [AliExpress](https://www.aliexpress.us/item/3256801145064294.html), [Amazon](https://www.amazon.com/Spring-Loaded-Transflash-Memory-Socket/dp/B0CDC5Q1HF), eBay and other places, sometimes called _Push Push TransFlash Socket_.
-
-The cable sockets on the board are the cheap [XH2.54 4p angle](https://www.aliexpress.us/item/2251832822174658.html) connectors.
-
-The [3D printable case](CoCo-FujiNet-Rev0000/3D/STL) is designed for 5mm LED's and 8mm stem length right angle tact switches. The "standard" FujiNet LED's colors are white for Wifi and orange for bus activity.
-
-If you are a fan of AliExpress, there's a shopping list below.  Vendors come and go so links may go dead over time.  The ESP32 is actually cheaper on Amazon (with free Prime shipping). Can also be sourced from places like Digikey and Mouser, just make sure to pay attention to the suffix, models like the ESP32-DevKitC-32E will NOT work.
-
-You'll also need components to build the DIN4 serial cable, so please read the Serial Cable section below to determine which parts you will need source for your Coco model.
 
 | Component                               | Qty  | Notes                              | Link                                                         |
 | --------------------------------------- | ---- | ---------------------------------- | ------------------------------------------------------------ |

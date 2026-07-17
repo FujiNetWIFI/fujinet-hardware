@@ -2,7 +2,7 @@
 
 This adapter provides a replacement PCB and cable for the CoCo FujiNet Rev0000 which allows connection to a Dragon 32/64 computer.
 
-The PCB provides a mounting platform for the Female ICSP header used to mate with the Dragons Centronics connector.
+The PCB provides a mounting platform for the Female IDC 2x10 header used to mate with the Dragons Centronics connector.
 
 In order to take advantage of this cable, your Rev0000 board must have the EEPROM file updated on June 15, 2026 (or later) and FujiNet firmware 1.6.1 (or later). Previous versions of both these files introduced significant timeout problems.
 

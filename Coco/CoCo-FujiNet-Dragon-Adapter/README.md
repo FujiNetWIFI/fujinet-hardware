@@ -18,6 +18,7 @@ Schematic - [https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Re
 | 4P Right Angle XH2.54 JST Connector     | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832822174658.html) |
 | IDC-20 (2x10) Female Header             | 1    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832769816317.html) |
 | Small cable tie                         | 1    |                                    |                                                              |
+
 **Note: When ordering the PCB, use a thickness of 2mm. The ensures the best fit for the IDC-20 Header.**
 
 #PCB Assembly
@@ -30,24 +31,24 @@ Note: To hold the IDC-20 connector in place while soldering, insert a second IDC
 | Component                               | Qty  | Notes                              | Link                                                         |
 | --------------------------------------- | ---- | ---------------------------------- | ------------------------------------------------------------ |
 | 4P XH2.54 JST Recepticle                | 2    |                                    | [AliExpress](https://www.aliexpress.us/item/2251832815492773.html) |
-| Four core 26AWG Shielded cable          | 36"  |(76cm)                              | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
+| Four core 26AWG Shielded cable          | 30"  |(76cm)                              | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
 | 3/16" Heat Shrink                       |      |                                    | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
 
 
-#Cable Assembly
+# Cable Assembly
 Terminate both sides of the cable with 4P XH2.54 JST recepticles using the same pinout as the standard CoCo-FujiNet cable.
 The difference is that you must connect the white wire in the cable (ground) as a drain to the cables shield.
 It is highly recommended to place heat-shrink tubing over the exposed wires and the end of the cable jacket.
 
 ![Terminated JST Connector](../../docs/Coco/serial-cable-xh.jpg)
 
-#Enclosure
+# Enclosure
 STL files are provided for a PCB enclosure. It is designed to be printed at a .02mm layer height. Use four M3×10 flathead screws to secure the enclosure.
 1) One wall of the bottom half of the enclosure is shorter than the others. Place the PCB into the bottom half of the enclosure so that the shorter wall is adjacent to the IDC-20 connector.
 2) Install the top half of the enclosure so that the opening allows the cable to exit the enclosure.
 Note: The IDC-20 connector and a portion of the PCB will remain outside the enclosure to provide clearance for the Dragon's case. If desired, you can cover the exposed portion of the PCB and the IDC-20 solder tabs with a 3/4 diameter piece of heat-shrink tubing. Do not place heat-shrink tubing over the IDC-20 connector itself.
 
-#Final Assembly
+# Final Assembly
 1) Connect one side of the cable to the Dragon Adapter PCB.
 2) Attach and tighten a cable tie using the two provided holes on the PCB. This provides strain relief and esures the cable reamins connected
 3) Mount inside a 3D printed enclosure if desired.

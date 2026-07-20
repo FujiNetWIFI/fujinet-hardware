@@ -28,11 +28,11 @@ Note: To hold the IDC-20 connector in place while soldering, insert a second IDC
 
 #Cable Parts List
 
-| Component                               | Qty  | Notes                                 | Link                                                         |
-| --------------------------------------- | ---- | ----------------------------------    | ------------------------------------------------------------ |
-| 4P XH2.54 JST Recepticle                | 2    |                                       | [AliExpress](https://www.aliexpress.us/item/2251832815492773.html) |
-| Four core 26AWG Shielded cable          | 34"  |(76cm) Provides 4" more than is needed | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
-| 3/16" Heat Shrink                       |      |                                       | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
+| Component                               | Qty        | Notes                                 | Link                                                         |
+| --------------------------------------- | ----       | ----------------------------------    | ------------------------------------------------------------ |
+| 4P XH2.54 JST Recepticle                | 2          |                                       | [AliExpress](https://www.aliexpress.us/item/2251832815492773.html) |
+| Four core 26AWG Shielded cable          | 34" (76cm) | Provides 4" more than is needed       | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
+| 3/16" Heat Shrink                       |            |                                       | [AliExpress](https://www.aliexpress.us/item/3256801872028158.html) |
 
 
 # Cable Assembly

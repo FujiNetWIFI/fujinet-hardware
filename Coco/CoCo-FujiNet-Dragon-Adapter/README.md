@@ -10,6 +10,7 @@ To use this adapter, your Rev0000 board must have the EEPROM image dated June 15
 Schematic - [https://djtersteegc.github.io/fujinet-hardware/Coco/CoCo-FujiNet-Rev000-Schematic.pdf](https://github.com/FutureVision-Research/fujinet-hardware/blob/master/Coco/CoCo-FujiNet-Dragon-Adapter/CoCo-FujiNet-Dragon-Adapter-PCB-Schematic.pdf)
 
 ![Assembled CoCo FujiNet Dragon Adapter](CoCo-FujiNet-Dragon-Adapter-Assembled.png)
+*This picture shows Version 1.1 of the PCB. The provided Gerber files are for Version 1.2, which is slightly longer to provide additional clearance for the Dragon's case when the PCB is mounted in the 3D-printed enclosure.*
 
 # PCB BOM
 
@@ -41,6 +42,7 @@ The difference is that you must connect the white wire in the cable (ground) as 
 It is highly recommended to place heat-shrink tubing over the exposed wires and the end of the cable jacket.
 
 ![Terminated JST Connector](../../docs/Coco/serial-cable-xh.jpg)
+*Terminate both sides of the cable in this order.*
 
 # Enclosure
 STL files are provided for a PCB enclosure. It is designed to be printed at a .02mm layer height. Use four M3×10 flathead screws to secure the enclosure.

@@ -1,0 +1,2459 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "d68dae35-6964-5c96-b143-56818a1c33c0")
+	(paper "A3")
+	(lib_symbols
+		(symbol "Diode:SS34"
+				(pin_numbers
+					(hide yes)
+				)
+				(pin_names
+					(offset 1.016)
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "D"
+					(at 0 2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "SS34"
+					(at 0 -2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "Diode_SMD:D_SMA"
+					(at 0 -4.445 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://www.vishay.com/docs/88751/ss32.pdf"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "40V 3A Schottky Diode, SMA"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "diode Schottky"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "D*SMA*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "SS34_0_1"
+					(polyline
+						(pts
+							(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+						)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+						)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 1.27 0) (xy -1.27 0)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(symbol "SS34_1_1"
+					(pin passive line
+						(at -3.81 0 0)
+						(length 2.54)
+						(name "K"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 3.81 0 180)
+						(length 2.54)
+						(name "A"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "Device:C_Polarized"
+				(pin_numbers
+					(hide yes)
+				)
+				(pin_names
+					(offset 0.254)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "C"
+					(at 0.635 2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Value" "C_Polarized"
+					(at 0.635 -2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Footprint" ""
+					(at 0.9652 -3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Polarized capacitor"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "cap capacitor"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "CP_*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "C_Polarized_0_1"
+					(rectangle
+						(start -2.286 0.508)
+						(end 2.286 1.016)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.778 2.286) (xy -0.762 2.286)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -1.27 2.794) (xy -1.27 1.778)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(rectangle
+						(start 2.286 -0.508)
+						(end -2.286 -1.016)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type outline)
+						)
+					)
+				)
+				(symbol "C_Polarized_1_1"
+					(pin passive line
+						(at 0 3.81 270)
+						(length 2.794)
+						(name ""
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 0 -3.81 90)
+						(length 2.794)
+						(name ""
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "Regulator_Switching:AP63203WU"
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "U"
+					(at -7.62 6.35 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "AP63203WU"
+					(at 2.54 6.35 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-6"
+					(at 0 -22.86 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP63200-AP63201-AP63203-AP63205.pdf"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "2A, 1.1MHz Buck DC/DC Converter, fixed 3.3V output voltage, TSOT-23-6"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "2A Buck DC/DC"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "TSOT?23*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "AP63203WU_0_1"
+					(rectangle
+						(start -7.62 5.08)
+						(end 7.62 -5.08)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+				)
+				(symbol "AP63203WU_1_1"
+					(pin input line
+						(at 10.16 -2.54 180)
+						(length 2.54)
+						(name "FB"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin input line
+						(at -10.16 -2.54 0)
+						(length 2.54)
+						(name "EN"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin power_in line
+						(at -10.16 2.54 0)
+						(length 2.54)
+						(name "IN"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin power_in line
+						(at 0 -7.62 90)
+						(length 2.54)
+						(name "GND"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin output line
+						(at 10.16 2.54 180)
+						(length 2.54)
+						(name "SW"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "5"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 10.16 0 180)
+						(length 2.54)
+						(name "BST"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "6"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "Device:C"
+				(pin_numbers
+					(hide yes)
+				)
+				(pin_names
+					(offset 0.254)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "C"
+					(at 0.635 2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Value" "C"
+					(at 0.635 -2.54 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Footprint" ""
+					(at 0.9652 -3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Unpolarized capacitor"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "cap capacitor"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "C_*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "C_0_1"
+					(polyline
+						(pts
+							(xy -2.032 0.762) (xy 2.032 0.762)
+						)
+						(stroke
+							(width 0.508)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy -2.032 -0.762) (xy 2.032 -0.762)
+						)
+						(stroke
+							(width 0.508)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(symbol "C_1_1"
+					(pin passive line
+						(at 0 3.81 270)
+						(length 2.794)
+						(name ""
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 0 -3.81 90)
+						(length 2.794)
+						(name ""
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "Device:L"
+				(pin_numbers
+					(hide yes)
+				)
+				(pin_names
+					(offset 1.016)
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "L"
+					(at -1.27 0 90)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "L"
+					(at 1.905 0 90)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Inductor"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "inductor choke coil reactor magnetic"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "Choke_* *Coil* Inductor_* L_*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "L_0_1"
+					(arc
+						(start 0 2.54)
+						(mid 0.6323 1.905)
+						(end 0 1.27)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(arc
+						(start 0 1.27)
+						(mid 0.6323 0.635)
+						(end 0 0)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(arc
+						(start 0 0)
+						(mid 0.6323 -0.635)
+						(end 0 -1.27)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(arc
+						(start 0 -1.27)
+						(mid 0.6323 -1.905)
+						(end 0 -2.54)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(symbol "L_1_1"
+					(pin passive line
+						(at 0 3.81 270)
+						(length 1.27)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 0 -3.81 90)
+						(length 1.27)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+		(symbol "power:PWR_FLAG"
+				(power global)
+				(pin_numbers
+					(hide yes)
+				)
+				(pin_names
+					(offset 0)
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "#FLG"
+					(at 0 1.905 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "PWR_FLAG"
+					(at 0 3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Special symbol for telling ERC where power comes from"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "flag power"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "PWR_FLAG_0_0"
+					(pin power_out line
+						(at 0 0 90)
+						(length 0)
+						(name ""
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(symbol "PWR_FLAG_0_1"
+					(polyline
+						(pts
+							(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+	)
+	(symbol
+		(lib_id "Diode:SS34")
+		(at 33.02 40.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4cb2d0c5-a5bb-584a-aedb-a4e92a6bbc45")
+		(property "Reference" "D6"
+			(at 33.02 37.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SS34"
+			(at 33.02 39.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:D_SMA"
+			(at 33.02 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "console 5V OR-ing / backfeed block"
+			(at 33.02 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C8678"
+			(at 33.02 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6e751e80-b3e5-58d6-9caf-30fb3b6f0226")
+		)
+		(pin "2"
+			(uuid "ed8809cb-28f1-5ed2-b480-e31df14c2bdd")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "D6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 29.21 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ce156675-4b0b-5252-8806-6515c24e0c04")
+	)
+	(global_label "+5V"
+		(shape passive)
+		(at 36.83 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "947c7bdf-c9e9-5c9b-945c-bb5066517b95")
+	)
+	(symbol
+		(lib_id "Diode:SS34")
+		(at 60.96 40.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1cf632a8-49ad-5b53-b22d-55b9e45140bb")
+		(property "Reference" "D7"
+			(at 60.96 37.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SS34"
+			(at 60.96 39.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:D_SMA"
+			(at 60.96 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "USB VBUS OR-ing"
+			(at 60.96 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C8678"
+			(at 60.96 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0e1e86dd-233b-5e43-afd0-e7c485bcf2d0")
+		)
+		(pin "2"
+			(uuid "cf7259e6-3b36-55fa-b56b-b95f2bda2ab0")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "D7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 57.15 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "76ec975b-2d9b-57cf-bafe-ec28392818ac")
+	)
+	(global_label "VBUS"
+		(shape passive)
+		(at 64.77 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11ac1719-3fbe-5d52-b358-df5ca8671b73")
+	)
+	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 86.36 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2f5c3257-7ab2-523d-906c-2ff0ae4e77af")
+		(property "Reference" "C28"
+			(at 86.36 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470uF"
+			(at 86.36 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:CP_EIA-7343-31_Kemet-D"
+			(at 86.36 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "VIN bulk"
+			(at 86.36 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "6.3V polymer, 7343"
+			(at 86.36 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7cce88eb-7cea-5e00-bfff-d8a3dae38268")
+		)
+		(pin "2"
+			(uuid "13eee6e4-2687-5d1f-b112-ba75e803c3fc")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "C28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 86.36 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3aadb64d-2eea-5768-bb28-379830a70405")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 86.36 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "98f391e5-b3e2-5271-9bc5-e83647537032")
+	)
+	(symbol
+		(lib_id "Regulator_Switching:AP63203WU")
+		(at 114.3 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "759601fa-bd7b-5b71-a09d-ba5ca3a91a9a")
+		(property "Reference" "U5"
+			(at 114.3 37.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AP63203WU"
+			(at 114.3 39.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:TSOT-23-6"
+			(at 114.3 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.3 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "3.3V/2A sync buck (FB tied to VOUT: fixed 3.3V version)"
+			(at 114.3 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "AP63203WU-7"
+			(at 114.3 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C965680"
+			(at 114.3 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "25e99955-1385-5b7c-a89e-ed9d64082ccc")
+		)
+		(pin "2"
+			(uuid "12c43112-648a-59b6-8d52-0abcba0e4121")
+		)
+		(pin "3"
+			(uuid "56b20175-7c2a-5e93-b810-f7f8b3b09e7d")
+		)
+		(pin "4"
+			(uuid "effed531-409c-5bf9-9a69-f8bede07acb7")
+		)
+		(pin "5"
+			(uuid "c647bc7f-c324-5cd4-a1ff-dd674c82c6f3")
+		)
+		(pin "6"
+			(uuid "87fdbfa3-9c56-5dba-b118-2a3f5957bc62")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "U5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+3V3"
+		(shape passive)
+		(at 124.46 45.72 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "244608ba-a0a8-513b-b5fe-64644d422ab1")
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 104.14 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "eab6c6b6-3c19-561a-9852-2ed6d7444bb8")
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 104.14 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b5f0e081-b35e-5d2e-8b1a-ea67be5c67f3")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 114.3 50.8 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9aad3fb6-5331-5e37-a75a-44b3e1ca710d")
+	)
+	(global_label "BUCK_SW"
+		(shape passive)
+		(at 124.46 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "974433cc-409b-55ef-baa5-96d2c569ac66")
+	)
+	(global_label "BUCK_BST"
+		(shape passive)
+		(at 124.46 43.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8123a18f-8dd4-5f98-b493-284d8c5b3664")
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 144.78 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "be7f1ac9-9d98-500d-a4a1-41d08c00f659")
+		(property "Reference" "C32"
+			(at 144.78 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 144.78 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:C_0603_1608Metric"
+			(at 144.78 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "bootstrap"
+			(at 144.78 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0922fe27-434e-5812-a1fd-78ac50c8ec44")
+		)
+		(pin "2"
+			(uuid "8bd0755e-6071-5141-8539-915dd5ba037c")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "C32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "BUCK_SW"
+		(shape passive)
+		(at 144.78 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a2a0eb40-2739-5ebf-a668-7411ef1ca8f0")
+	)
+	(global_label "BUCK_BST"
+		(shape passive)
+		(at 144.78 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "38f5955b-769c-5bef-aebb-94650f34afc7")
+	)
+	(symbol
+		(lib_id "Device:L")
+		(at 165.1 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2ba30d7f-b53d-547d-9203-6fc796ecb979")
+		(property "Reference" "L2"
+			(at 165.1 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "6.8uH"
+			(at 165.1 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:L_Sunlord_SWPA4030S"
+			(at 165.1 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 165.1 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck inductor (AP63203 datasheet)"
+			(at 165.1 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "6.8uH >=2.5A shielded 4030"
+			(at 165.1 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dd136de6-fb0a-56a4-b96c-97ddd5612620")
+		)
+		(pin "2"
+			(uuid "d3ed688e-00c6-5bd3-bb7e-c9bb7bbfcb94")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "L2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "BUCK_SW"
+		(shape passive)
+		(at 165.1 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "fcbb9b9a-ea6f-59ca-8e33-f748c8bb151e")
+	)
+	(global_label "+3V3"
+		(shape passive)
+		(at 165.1 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "51ae1e2e-4610-5555-9717-5d50591b24df")
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 185.42 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b61436d8-01dc-545c-a758-648069d3104f")
+		(property "Reference" "C29"
+			(at 185.42 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10uF"
+			(at 185.42 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:C_0805_2012Metric"
+			(at 185.42 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck input"
+			(at 185.42 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "99504fc3-8b99-5417-8aee-598687528859")
+		)
+		(pin "2"
+			(uuid "ff44a86a-480b-5122-8b2b-dd227b434874")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "C29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 185.42 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e63f0fad-2cfb-54b2-8fbb-9c121b8d96f4")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 185.42 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3ce129a0-3441-55d1-863e-4653a76baae8")
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 205.74 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9dc49429-d982-51ee-bb28-8eef4b3cd87c")
+		(property "Reference" "C30"
+			(at 205.74 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 205.74 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:C_0805_2012Metric"
+			(at 205.74 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 205.74 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck output"
+			(at 205.74 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 205.74 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5227889b-06c4-5435-a982-3388b958b7b9")
+		)
+		(pin "2"
+			(uuid "81509b55-3645-5780-8e87-8ff915067910")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "C30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+3V3"
+		(shape passive)
+		(at 205.74 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2ae0e6df-8a88-53da-88dc-b995ab17636b")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 205.74 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "279e56ac-09aa-5fc0-8feb-dbfb2ec894f5")
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 226.06 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8cf39552-3e37-5d05-a48a-4a639fd4bd4e")
+		(property "Reference" "C31"
+			(at 226.06 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 226.06 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:C_0805_2012Metric"
+			(at 226.06 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck output"
+			(at 226.06 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 226.06 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8716c12a-b560-5bb8-bc68-5053ed93e52e")
+		)
+		(pin "2"
+			(uuid "6bc0c2df-c54f-5f17-b7d9-03a0fccb7d2f")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "C31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+3V3"
+		(shape passive)
+		(at 226.06 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c1a80036-7d17-5a58-bd64-1d56bce12adc")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 226.06 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "651df4d0-44d1-5415-bb65-109d6af63c8f")
+	)
+	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 246.38 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5405c20b-244b-54f8-ada7-4d6253ec8920")
+		(property "Reference" "C33"
+			(at 246.38 36.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "220uF"
+			(at 246.38 38.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-INTV:CP_EIA-7343-31_Kemet-D"
+			(at 246.38 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 246.38 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "3V3 bulk (S3 WiFi bursts)"
+			(at 246.38 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "6.3V polymer, 7343"
+			(at 246.38 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "baa97080-cf96-527a-9d9c-08645f55ae01")
+		)
+		(pin "2"
+			(uuid "53be9e10-7946-5dec-be32-f54c4a4711c6")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "C33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+3V3"
+		(shape passive)
+		(at 246.38 39.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2efa66ee-2b2a-5823-a505-c8de3c2a4809")
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 246.38 46.99 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c59c7555-8f9b-5740-81a8-5b170de6d94c")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 30.48 218.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e2216b33-7457-559e-8748-8d749c12db8d")
+		(property "Reference" "#FLG01"
+			(at 30.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 30.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1c3e4399-99b7-5e6a-8dc3-79b0c104abf2")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "#FLG01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+5V"
+		(shape passive)
+		(at 30.48 218.44 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f59dcb68-6d4c-57bd-95a9-e6f8e162d5ab")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 55.88 218.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cef785a4-f8f1-5797-84a9-5c9c37303b33")
+		(property "Reference" "#FLG02"
+			(at 55.88 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 55.88 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 55.88 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 55.88 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 55.88 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3c0359fa-6233-5d25-89e0-270040fa1f7f")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "#FLG02")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VBUS"
+		(shape passive)
+		(at 55.88 218.44 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2ad5076d-1406-5405-b117-21e17cb1fd7a")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 81.28 218.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "acbe7ff3-7a49-5fb6-9a48-3c7afa7ef658")
+		(property "Reference" "#FLG03"
+			(at 81.28 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 81.28 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 81.28 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 81.28 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 81.28 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ae636bb8-3a24-5016-9af6-6229f428df97")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "#FLG03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "VIN"
+		(shape passive)
+		(at 81.28 218.44 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a176c6aa-6904-5695-928a-0871180b523d")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 106.68 218.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d88cc853-424b-5291-932a-314413c5cf44")
+		(property "Reference" "#FLG04"
+			(at 106.68 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 106.68 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 106.68 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "cadb3701-24c2-513a-a51a-4c17def39ecb")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "#FLG04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+3V3"
+		(shape passive)
+		(at 106.68 218.44 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "da0483c2-632e-526e-9104-c2aad5452eac")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 132.08 218.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b97288fc-5e0e-5e25-80d3-91ba95a58bdb")
+		(property "Reference" "#FLG05"
+			(at 132.08 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 132.08 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 132.08 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 132.08 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 132.08 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2b82a53a-8aa7-5f89-ba19-d044817b95f9")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "#FLG05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "GND"
+		(shape passive)
+		(at 132.08 218.44 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5113eb26-6951-537a-9e36-da7cd586f6b1")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 157.48 218.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1fc0c8c0-262e-553b-9d7e-670923b279f5")
+		(property "Reference" "#FLG06"
+			(at 157.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 157.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 157.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 157.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 157.48 214.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "55a412d1-9c34-5e4b-9839-fb622c405330")
+		)
+		(instances
+			(project "FujiNet-INTV-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7/21de077e-3c6e-5ed0-be2f-b4b6636b129b"
+					(reference "#FLG06")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "DVDD"
+		(shape passive)
+		(at 157.48 218.44 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b3027f98-fada-545d-806b-d1c1df075a29")
+	)
+)

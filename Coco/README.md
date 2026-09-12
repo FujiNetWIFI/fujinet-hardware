@@ -96,7 +96,7 @@ And some completed cable pics:
 
 # Building the Serial Cable (Dragon 32/64)
 
-** Currently Untested **
+This was successfully tested by Brian Cox in July 2026. However, it is recommended that a shielded cable be used, with the drain wire connected to the ground pin on both connectors. Testing showed that using a non-shielded cable could prevent Config from launching in certain environments.
 
 Info taken from https://web.archive.org/web/20140814201934/https://archive.worldofdragon.org/phpBB3/viewtopic.php?f=5&t=781
 

@@ -1,0 +1,84 @@
+(footprint "MountingHole_5.4mm_NPTH"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Shell screw post pass-through, 5.38mm NPTH (PiRTO II cart shell)")
+	(attr exclude_from_pos_files exclude_from_bom)
+	(property "Reference" "REF**"
+		(at 0 -3.8 0)
+		(layer "F.SilkS")
+		(uuid "c8ac3642-5b5c-45d7-9c73-27f3d5f67159")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MountingHole_5.4mm_NPTH"
+		(at 0 3.8 0)
+		(layer "F.Fab")
+		(uuid "7ac79632-6cf4-4c78-b60f-aaca2b98139d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "48ca36a8-4b13-4cc4-9b02-f7047300bfc5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f185cac7-9812-4ba0-a4e9-f325cd21894b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c7e6ac46-ce3a-4e01-bc48-456f279acd28")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at 0 0)
+		(size 5.38 5.38)
+		(drill 5.38)
+		(layers "*.Cu" "*.Mask")
+		(uuid "02aa0c49-a9aa-4fb1-b1e6-56712830a994")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 3.0 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "0f62b0b2-bb47-462f-997b-5aeed9570e17")
+	)
+)

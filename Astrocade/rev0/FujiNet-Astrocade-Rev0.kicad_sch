@@ -1,0 +1,177 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "892e4e06-ac77-5e44-a273-1b91db5e02f7")
+	(paper "A3")
+	(lib_symbols
+	)
+	(sheet
+		(at 30 40)
+		(size 50.8 25.4)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "e7b7f31c-53cb-522c-969c-6f71324396e8")
+		(property "Sheetname" "cart-rp2040"
+			(at 30 39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cart-rp2040.kicad_sch"
+			(at 30 66.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-Astrocade-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 100 40)
+		(size 50.8 25.4)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "f483e77d-7119-5d6e-b460-97c71b0876e0")
+		(property "Sheetname" "esp32s3-sd"
+			(at 100 39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "esp32s3-sd.kicad_sch"
+			(at 100 66.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-Astrocade-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 170 40)
+		(size 50.8 25.4)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "d5b92682-ae55-51f3-aa20-93af9f260b77")
+		(property "Sheetname" "usb-uart"
+			(at 170 39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb-uart.kicad_sch"
+			(at 170 66.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-Astrocade-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 240 40)
+		(size 50.8 25.4)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "21de077e-3c6e-5ed0-be2f-b4b6636b129b")
+		(property "Sheetname" "power"
+			(at 240 39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 240 66.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-Astrocade-Rev0"
+				(path "/892e4e06-ac77-5e44-a273-1b91db5e02f7"
+					(page "5")
+				)
+			)
+		)
+	)
+	(text "FujiNet-Astrocade-Rev0 — all-in-one Bally Astrocade FujiNet cartridge.\nRP2040 serves the 8K cart window (pico/astrocade fujicade firmware); 3x 74LVC245\nlevel-shift the 5V bus. ESP32-S3-WROOM-1-N16R8 (fujiversal-astrocade) is USB host\nto the RP2040 (native USB, VID 0xCafe). Single USB-C via CP2102N flashes the S3;\nRP2040 flashes through the S3 (PICOBOOT doorbell / GPIO4-GPIO5 forcing).\nEdge: 1x26 0.100in single-sided per ballyalley (Tilton/MCM). SW1 = top-face RESET."
+		(exclude_from_sim no)
+		(at 30 120 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left)
+		)
+		(uuid "11719de7-fe17-5956-adcf-22768d92c58d")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

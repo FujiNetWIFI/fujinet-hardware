@@ -1,0 +1,111 @@
+(footprint "L_2016Metric"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Inductor SMD 2.0x1.6mm (0806), e.g. AOTA-B201610S")
+	(attr smd)
+	(property "Reference" "REF**"
+		(at 0 -1.8 0)
+		(layer "F.SilkS")
+		(uuid "ba544086-b7d3-49a2-8185-9b6d79db8b75")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "L_2016Metric"
+		(at 0 1.8 0)
+		(layer "F.Fab")
+		(uuid "bd179eca-9aec-48a8-b942-278e10e92793")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "58d209f6-5e54-44a5-ab0b-9851a44947aa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "32928134-ebc7-4fbe-be5b-ff65952376fe")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "db391121-20e6-43a5-9d28-03100ebe7e16")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -0.7750 0.0000)
+		(size 0.85 1.7)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(roundrect_rratio 0.2)
+		(uuid "255a1ff8-ca7f-4c1d-bcec-e468ef196764")
+	)
+	(pad "2" smd roundrect
+		(at 0.7750 0.0000)
+		(size 0.85 1.7)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(roundrect_rratio 0.2)
+		(uuid "84f4195d-5e88-4cfa-b5a1-da7fd65cf93e")
+	)
+	(fp_line
+		(start -1.0000 -0.8000)
+		(end 1.0000 -0.8000)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "9831875c-d5ef-4896-88c0-741cb3c70aa3")
+	)
+	(fp_line
+		(start -1.0000 0.8000)
+		(end 1.0000 0.8000)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "244a7b11-30b2-443a-87e0-153cf5293bce")
+	)
+	(fp_rect
+		(start -1.4500 -1.1000)
+		(end 1.4500 1.1000)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "d981b0a1-1f7a-4d40-a401-96558c835002")
+	)
+)

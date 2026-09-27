@@ -129,7 +129,10 @@
 	)
 	(fp_poly
 		(pts
-			(xy -9.2 -6.025) (xy -9.7 -6.025) (xy -9.2 -6.525) (xy -9.2 -6.025)
+			(xy -9.2 -6.025)
+			(xy -9.7 -6.025)
+			(xy -9.2 -6.525)
+			(xy -9.2 -6.025)
 		)
 		(stroke
 			(width 0.12)
@@ -139,14 +142,6 @@
 		(layer "F.SilkS")
 		(uuid "745b72d1-b121-4969-8423-f9add86aea48")
 	)
-	
-	
-	
-	
-	
-	
-	
-	
 	(fp_line
 		(start -9 -12.75)
 		(end 9 -12.75)
@@ -654,12 +649,7 @@
 		(uuid "5e8289d8-6b8c-42b0-9b0c-4b9d5f574318")
 	)
 	(zone
-		(layers "F.Cu" "B.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" "In5.Cu" "In6.Cu"
-			"In7.Cu" "In8.Cu" "In9.Cu" "In10.Cu" "In11.Cu" "In12.Cu" "In13.Cu" "In14.Cu"
-			"In15.Cu" "In16.Cu" "In17.Cu" "In18.Cu" "In19.Cu" "In20.Cu" "In21.Cu"
-			"In22.Cu" "In23.Cu" "In24.Cu" "In25.Cu" "In26.Cu" "In27.Cu" "In28.Cu"
-			"In29.Cu" "In30.Cu"
-		)
+		(layers "F.Cu" "B.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" "In5.Cu" "In6.Cu" "In7.Cu" "In8.Cu" "In9.Cu" "In10.Cu" "In11.Cu" "In12.Cu" "In13.Cu" "In14.Cu" "In15.Cu" "In16.Cu" "In17.Cu" "In18.Cu" "In19.Cu" "In20.Cu" "In21.Cu" "In22.Cu" "In23.Cu" "In24.Cu" "In25.Cu" "In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu" "In30.Cu")
 		(uuid "18bbecf2-2977-41e2-b949-929efe1bdbf7")
 		(hatch full 0.508)
 		(connect_pads
@@ -684,12 +674,14 @@
 		)
 		(polygon
 			(pts
-				(xy -24 -6.75) (xy 24 -6.75) (xy 24 -27.75) (xy -24 -27.75)
+				(xy -24 -6.75)
+				(xy 24 -6.75)
+				(xy 24 -27.75)
+				(xy -24 -27.75)
 			)
 		)
 	)
-	(embedded_fonts no)
-	(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-S3-WROOM-1.step"
+	(model "${KIPRJMOD}/3d/ESP32-S3-WROOM-1.step"
 		(offset
 			(xyz 0 0 0)
 		)
@@ -700,6 +692,7 @@
 			(xyz 0 0 0)
 		)
 	)
+	(embedded_fonts no)
 	(fp_rect
 		(start -9.75 -12.85)
 		(end 9.75 13.45)

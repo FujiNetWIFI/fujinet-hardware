@@ -1,0 +1,6 @@
+(version 1)
+(rule "default_clearance"
+	(constraint clearance (min 0.15mm)))
+(rule "ep_solid"
+	(condition "A.NetName == 'GND' && (A.memberOfFootprint('U1') || A.memberOfFootprint('U7'))")
+	(constraint zone_connection solid))

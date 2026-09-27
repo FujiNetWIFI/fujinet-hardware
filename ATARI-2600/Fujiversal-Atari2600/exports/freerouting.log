@@ -1,0 +1,107 @@
+2026-09-27 14:17:11.105 INFO   Freerouting v2.4.1 (build-date: 2026-09-03)
+WARNING: Final field userProfileSettings in class app.freerouting.settings.GlobalSettings has been mutated reflectively by class com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$2 in unnamed module @954b04f (file:/home/thomc/.local/share/freerouting/freerouting-2.4.1.jar)
+WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
+WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
+2026-09-27 14:17:12.463 INFO   [B2336A\F358BB] Loading board file 'Fujiversal-Atari2600-Rev0.dsn'...
+2026-09-27 14:17:12.538 INFO   [B2336A\F358BB] Job 'B2336A\F358BB' started at 2026-09-27T19:17:12.538383895Z.
+2026-09-27 14:17:12.848 INFO   [B2336A\F358BB] Fanout stage started on board '37c53d2dca8980c35e23ee8ececd540d' with 392 of 442 SMD pins needing fanout (50 already connected, 0 netless).
+2026-09-27 14:17:15.227 INFO   [B2336A\F358BB] Fanout pass #1 on board 'b468ba139e0a03b42cb4756664a07e0e' completed in 2.17 seconds with 68 SMD pins fanouted, 191 not routed, 0 insert errors, +10 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-09-27 14:17:16.949 INFO   [B2336A\F358BB] Fanout pass #2 on board 'ceb0d5ae9ce73a6d4f17389a90264d96' completed in 1.71 seconds with 25 SMD pins fanouted, 202 not routed, 0 insert errors, +1 extra via (0 SMD pins still to check in pass, ripup costs=200).
+2026-09-27 14:17:18.656 INFO   [B2336A\F358BB] Fanout pass #3 on board 'a5bb2321a611ccde900095a226e4c972' completed in 1.70 seconds with 17 SMD pins fanouted, 206 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=300).
+2026-09-27 14:17:20.381 INFO   [B2336A\F358BB] Fanout pass #4 on board '55d3ab895d0ea39a7b9cfbb25d2e1364' completed in 1.72 seconds with 17 SMD pins fanouted, 206 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=400).
+2026-09-27 14:17:22.103 INFO   [B2336A\F358BB] Fanout pass #5 on board '651667f7d0d033f7d72f86bc368567be' completed in 1.71 seconds with 17 SMD pins fanouted, 206 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=500).
+2026-09-27 14:17:23.793 INFO   [B2336A\F358BB] Fanout pass #6 on board '6ea1dd9f65f9894db31f727b8f2b15ee' completed in 1.68 seconds with 17 SMD pins fanouted, 206 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=600).
+2026-09-27 14:17:23.793 INFO   Fanout stopped after 6 passes: no progress for 3 consecutive passes.
+2026-09-27 14:17:24.009 INFO   [B2336A\F358BB] Fanout stage completed: started with 442 total SMD pins, completed in 10.97 seconds, escaped pins: 208/442 (47.1%), using 11.29 total CPU seconds, 107.13 GB total allocated, and 4306.5 MB peak heap usage.
+2026-09-27 14:17:24.020 INFO   [B2336A\F358BB] Auto-routing stage started on board '6ea1dd9f65f9894db31f727b8f2b15ee' for 128 unrouted items.
+2026-09-27 14:18:01.024 INFO   [B2336A\F358BB] Auto-routing pass #1 on board '6ea1dd9f65f9894db31f727b8f2b15ee' was completed in 36.54 seconds with score 690.43 (61 unrouted and 181 violations), using 47.63 CPU seconds and the job allocated 408.43 GB of memory so far.
+2026-09-27 14:18:34.327 INFO   [B2336A\F358BB] Auto-routing pass #2 on board '40ef680069ae001375812861d5b9f1f5' was completed in 32.73 seconds with score 719.10 (52 unrouted and 181 violations), using 80.34 CPU seconds and the job allocated 665.51 GB of memory so far.
+2026-09-27 14:19:05.642 INFO   [B2336A\F358BB] Auto-routing pass #3 on board 'b6f76ff2aedc8f7e77d4aa0c40f7d957' was completed in 30.74 seconds with score 747.76 (43 unrouted and 181 violations), using 112.03 CPU seconds and the job allocated 913.39 GB of memory so far.
+2026-09-27 14:19:38.076 INFO   [B2336A\F358BB] Auto-routing pass #4 on board '2d2bba5bd0d682b2dec1a869e00ecd49' was completed in 31.86 seconds with score 754.13 (41 unrouted and 181 violations), using 143.70 CPU seconds and the job allocated 1152.37 GB of memory so far.
+2026-09-27 14:20:09.493 INFO   [B2336A\F358BB] Auto-routing pass #5 on board '582bafc7cc0849ae1b59f755355df28e' was completed in 30.84 seconds with score 763.68 (38 unrouted and 181 violations), using 174.38 CPU seconds and the job allocated 1384.86 GB of memory so far.
+2026-09-27 14:20:41.710 INFO   [B2336A\F358BB] Auto-routing pass #6 on board '58d56570981eec299b471aceecf53c8f' was completed in 31.63 seconds with score 766.87 (37 unrouted and 181 violations), using 207.04 CPU seconds and the job allocated 1630.73 GB of memory so far.
+2026-09-27 14:21:13.665 INFO   [B2336A\F358BB] Auto-routing pass #7 on board '0918e11d17a746e75f30c3fa9a8afe00' was completed in 31.36 seconds with score 770.05 (36 unrouted and 181 violations), using 238.70 CPU seconds and the job allocated 1868.13 GB of memory so far.
+2026-09-27 14:21:45.723 INFO   [B2336A\F358BB] Auto-routing pass #8 on board 'a2af582412677891158c540c1319ae38' was completed in 31.47 seconds with score 770.05 (36 unrouted and 181 violations), using 270.36 CPU seconds and the job allocated 2102.40 GB of memory so far.
+2026-09-27 14:22:17.734 INFO   [B2336A\F358BB] Auto-routing pass #9 on board 'aeee4f3caaacf6885f4e161136a046a0' was completed in 31.41 seconds with score 770.05 (36 unrouted and 181 violations), using 302.03 CPU seconds and the job allocated 2336.91 GB of memory so far.
+2026-09-27 14:22:49.875 INFO   [B2336A\F358BB] Auto-routing pass #10 on board '82eec581fecfb09abba50235ef3404fc' was completed in 31.55 seconds with score 770.05 (36 unrouted and 181 violations), using 333.68 CPU seconds and the job allocated 2570.02 GB of memory so far.
+2026-09-27 14:23:21.722 INFO   [B2336A\F358BB] Auto-routing pass #11 on board '0bf5c13b89bb6ffdd269021528d4d60e' was completed in 31.25 seconds with score 770.05 (36 unrouted and 181 violations), using 365.34 CPU seconds and the job allocated 2805.91 GB of memory so far.
+2026-09-27 14:23:53.282 INFO   [B2336A\F358BB] Auto-routing pass #12 on board 'be75fed02dde225017a61096ca364817' was completed in 30.68 seconds with score 770.05 (36 unrouted and 181 violations), using 396.01 CPU seconds and the job allocated 3034.25 GB of memory so far.
+2026-09-27 14:24:24.599 INFO   [B2336A\F358BB] Auto-routing pass #13 on board '58e5e2fa2dcd63e8986cee6958579a5e' was completed in 30.73 seconds with score 770.05 (36 unrouted and 181 violations), using 426.69 CPU seconds and the job allocated 3261.79 GB of memory so far.
+2026-09-27 14:24:55.928 INFO   [B2336A\F358BB] Auto-routing pass #14 on board '5dbbacacde009750364a6fa0f85a5807' was completed in 30.74 seconds with score 770.05 (36 unrouted and 181 violations), using 458.35 CPU seconds and the job allocated 3499.75 GB of memory so far.
+2026-09-27 14:25:27.237 INFO   [B2336A\F358BB] Auto-routing pass #15 on board '512d70d271ee1298af819edfd1e80d78' was completed in 30.72 seconds with score 770.05 (36 unrouted and 181 violations), using 489.02 CPU seconds and the job allocated 3727.56 GB of memory so far.
+2026-09-27 14:25:58.936 INFO   [B2336A\F358BB] Auto-routing pass #16 on board '7bf17f85eb67d98a297c2b8d06d303e4' was completed in 31.10 seconds with score 770.05 (36 unrouted and 181 violations), using 520.65 CPU seconds and the job allocated 3961.75 GB of memory so far.
+2026-09-27 14:26:31.213 INFO   [B2336A\F358BB] Auto-routing pass #17 on board 'dee020d018bf6ca2204be8d83960727f' was completed in 31.67 seconds with score 770.05 (36 unrouted and 181 violations), using 552.20 CPU seconds and the job allocated 4189.91 GB of memory so far.
+2026-09-27 14:27:03.482 INFO   [B2336A\F358BB] Auto-routing pass #18 on board 'f5f7c8edc96cfcc0cf1a090aaee580bc' was completed in 31.66 seconds with score 770.05 (36 unrouted and 181 violations), using 583.71 CPU seconds and the job allocated 4417.99 GB of memory so far.
+2026-09-27 14:27:03.513 INFO   [B2336A\F358BB] The router's best score (770.05) has not improved by more than 0.5 points since pass #8. Stopping the auto-router after 18 passes (36 items still unconnected).
+The following connections could not be routed -- please review your design (e.g. check pad clearances, trace width rules, and available routing space):
+  Net 'GND' (6 unrouted connections):
+    - via  ->  U9-4
+    - via  ->  J1-12
+    - J1-24  ->  via
+    - via  ->  U1-19
+    - J1-12  ->  J1-12@1
+    - J1-24@1  ->  J1-24
+  Net '+3V3' (4 unrouted connections):
+    - U9-1  ->  via
+    - U1-43  ->  U1-42
+    - U1-48  ->  U1-44
+    - U6-2  ->  conductionarea
+  Net 'BUCK_SW' (1 unrouted connection):
+    - U9-5  ->  C32-1
+  Net 'CA7' (1 unrouted connection):
+    - J1-1@1  ->  J1-1
+  Net 'CA6' (1 unrouted connection):
+    - J1-2@1  ->  J1-2
+  Net 'CA5' (1 unrouted connection):
+    - J1-3@1  ->  J1-3
+  Net 'CA4' (1 unrouted connection):
+    - J1-4@1  ->  J1-4
+  Net 'CA3' (1 unrouted connection):
+    - J1-5  ->  J1-5@1
+  Net 'CA2' (1 unrouted connection):
+    - J1-6  ->  J1-6@1
+  Net 'CA1' (1 unrouted connection):
+    - J1-7  ->  J1-7@1
+  Net 'CA0' (1 unrouted connection):
+    - J1-8@1  ->  J1-8
+  Net 'CD0' (1 unrouted connection):
+    - J1-9@1  ->  J1-9
+  Net 'CD1' (1 unrouted connection):
+    - J1-10@1  ->  J1-10
+  Net 'CD2' (1 unrouted connection):
+    - J1-11@1  ->  J1-11
+  Net 'CD3' (1 unrouted connection):
+    - J1-13@1  ->  J1-13
+  Net 'CD4' (1 unrouted connection):
+    - J1-14@1  ->  J1-14
+  Net 'CD5' (1 unrouted connection):
+    - J1-15@1  ->  J1-15
+  Net 'CD6' (1 unrouted connection):
+    - J1-16@1  ->  J1-16
+  Net 'CD7' (1 unrouted connection):
+    - J1-17@1  ->  J1-17
+  Net 'CA12' (1 unrouted connection):
+    - J1-18@1  ->  J1-18
+  Net 'CA10' (1 unrouted connection):
+    - J1-19@1  ->  J1-19
+  Net 'CA11' (1 unrouted connection):
+    - J1-20@1  ->  J1-20
+  Net 'CA9' (1 unrouted connection):
+    - J1-21  ->  J1-21@1
+  Net 'CA8' (1 unrouted connection):
+    - J1-22@1  ->  J1-22
+  Net '+5V' (1 unrouted connection):
+    - J1-23  ->  J1-23@1
+  Net 'DVDD' (3 unrouted connections):
+    - U1-50  ->  via
+    - U1-50  ->  U1-45
+    - via  ->  U1-23
+2026-09-27 14:27:04.089 INFO   [B2336A\F358BB] Auto-routing stage completed: started with 175 unrouted nets, completed in 591.23 seconds, final score: 770.05 (36 unrouted and 181 violations), using 584.69 total CPU seconds, 4428.25 GB total allocated, and 4306.5 MB peak heap usage.
+2026-09-27 14:27:04.386 INFO   [B2336A\F358BB] Optimization stage started on board 'e0cfb438c77d2eb7a5e4fdfffc5677a5' with score 770.05 (36 unrouted and 181 violations).
+2026-09-27 14:27:34.075 INFO   [B2336A\F358BB] Stopping optimization pass #1 early after 50 consecutive items could not be improved.
+2026-09-27 14:27:34.376 INFO   [B2336A\F358BB] Optimizer pass #1 on board 'cc881e16022beb2a37cc96e01d4d79fb' was completed in 29.10 seconds with the score of 770.05 (36 unrouted and 181 violations).
+2026-09-27 14:27:34.671 INFO   [B2336A\F358BB] Stopping optimizer because the improvement in this pass (0.0000%) is below the threshold (1.00%).
+2026-09-27 14:27:34.960 INFO   [B2336A\F358BB] Optimization stage completed: started with score 770.05 (36 unrouted and 181 violations), completed in 30.29 seconds, final score: 770.05 (36 unrouted and 181 violations), using 29.86 total CPU seconds, 305.57 GB total allocated, and 1539.3 MB peak heap usage.
+2026-09-27 14:27:34.971 INFO   [B2336A\F358BB] Job 'B2336A\F358BB' finished with state: COMPLETED (elapsed: 10 minutes 22.43 seconds, finished at UTC: 2026-09-27T19:27:34.970515474Z).
+2026-09-27 14:27:35.341 INFO   Saving output file '/home/thomc/Workspace/fujinet-hardware/ATARI-2600/Fujiversal-Atari2600/exports/Fujiversal-Atari2600-Rev0.ses' (SES)...
+2026-09-27 14:27:35.342 INFO   Successfully saved output file '/home/thomc/Workspace/fujinet-hardware/ATARI-2600/Fujiversal-Atari2600/exports/Fujiversal-Atari2600-Rev0.ses' (63501 bytes).

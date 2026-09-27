@@ -1,0 +1,149 @@
+2026-09-27 08:49:28.126 INFO   Freerouting v2.4.1 (build-date: 2026-09-03)
+WARNING: Final field userProfileSettings in class app.freerouting.settings.GlobalSettings has been mutated reflectively by class com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$2 in unnamed module @954b04f (file:/home/thomc/.local/share/freerouting/freerouting-2.4.1.jar)
+WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
+WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
+2026-09-27 08:49:29.485 INFO   [D22F44\D98AC5] Loading board file 'FujiNet-Astrocade-Rev0.dsn'...
+2026-09-27 08:49:29.555 WARN   Power-plane validation failed:
+- Dedicated power layer 'In4.Cu' has overlapping conduction areas: Area (ID 9, Net(s): [DVDD]) and Area (ID 8, Net(s): [+3V3]) overlap.
+
+Proper Definition and Best Practices for Power Planes:
+1. What Belongs on a Power Plane:
+   - Solid Copper Pours: A single, uninterrupted sheet of copper assigned to one voltage (e.g., +3.3V).
+   - Split Planes: Multiple distinct voltage zones divided by thin isolation gaps (puzzle pieces).
+   - Vias and Anti-Pads: Plated holes passing through the board, surrounded by circular voids (anti-pads) to prevent shorting.
+   - Thermal Reliefs: Spoked connections for vias or pins that connect to the plane, facilitating soldering.
+2. Why Signal Wires/Traces are Banned:
+   - Destroyed Return Paths: High-speed signals on adjacent layers couple to the solid plane below/above as return paths. Crossing a trace gap detours return currents, causing severe EMI and signal integrity issues.
+   - Compromised Power Delivery: Power planes should provide the lowest impedance path. Routing traces chops up the copper, creating bottleneck restrictions and voltage drops.
+
+2026-09-27 08:49:29.561 INFO   [D22F44\D98AC5] Job 'D22F44\D98AC5' started at 2026-09-27T13:49:29.561535513Z.
+2026-09-27 08:49:29.867 INFO   [D22F44\D98AC5] Fanout stage started on board 'e8a3ed83bd2a3df2f2ca05e763f0dd3e' with 323 of 388 SMD pins needing fanout (65 already connected, 0 netless).
+2026-09-27 08:49:32.017 INFO   [D22F44\D98AC5] Fanout pass #1 on board 'b580c37b3413f1e78bc29e2b1e5acc1f' completed in 1.94 seconds with 77 SMD pins fanouted, 127 not routed, 0 insert errors, +14 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-09-27 08:49:33.400 INFO   [D22F44\D98AC5] Fanout pass #2 on board '2f8cceebee0b7510ef8179607c1131c3' completed in 1.37 seconds with 26 SMD pins fanouted, 139 not routed, 0 insert errors, +3 extra vias (0 SMD pins still to check in pass, ripup costs=200).
+2026-09-27 08:49:34.742 INFO   [D22F44\D98AC5] Fanout pass #3 on board 'ec1daf97b975ae7a7f1bd0c3418e4bd5' completed in 1.33 seconds with 20 SMD pins fanouted, 140 not routed, 0 insert errors, +2 extra vias (0 SMD pins still to check in pass, ripup costs=300).
+2026-09-27 08:49:36.087 INFO   [D22F44\D98AC5] Fanout pass #4 on board '13f52d5df753e77cd6160ad02991cb2f' completed in 1.34 seconds with 18 SMD pins fanouted, 141 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=400).
+2026-09-27 08:49:37.420 INFO   [D22F44\D98AC5] Fanout pass #5 on board 'be6c4b2bbf32e8fcbe8c51d7fc3c6c97' completed in 1.32 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=500).
+2026-09-27 08:49:38.705 INFO   [D22F44\D98AC5] Fanout pass #6 on board 'f1628297fd7f89b735ed04d456bebbee' completed in 1.28 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=600).
+2026-09-27 08:49:40.058 INFO   [D22F44\D98AC5] Fanout pass #7 on board 'a70ce538f901025d1fca227c97717897' completed in 1.34 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=700).
+2026-09-27 08:49:41.371 INFO   [D22F44\D98AC5] Fanout pass #8 on board 'd3d047f89a5ac10435e1b54557e68c91' completed in 1.30 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=800).
+2026-09-27 08:49:41.371 INFO   Fanout stopped after 8 passes: no progress for 3 consecutive passes.
+2026-09-27 08:49:41.592 INFO   [D22F44\D98AC5] Fanout stage completed: started with 388 total SMD pins, completed in 11.53 seconds, escaped pins: 218/388 (56.2%), using 11.84 total CPU seconds, 108.91 GB total allocated, and 4355.9 MB peak heap usage.
+2026-09-27 08:49:41.605 INFO   [D22F44\D98AC5] Auto-routing stage started on board 'd3d047f89a5ac10435e1b54557e68c91' for 119 unrouted items.
+2026-09-27 08:50:42.154 WARN   Polyline: must contain at least 2 different points
+2026-09-27 08:50:55.460 INFO   [D22F44\D98AC5] Auto-routing pass #1 on board 'd3d047f89a5ac10435e1b54557e68c91' was completed in 73.35 seconds with score 684.46 (69 unrouted and 163 violations), using 84.30 CPU seconds and the job allocated 590.48 GB of memory so far.
+2026-09-27 08:52:30.637 INFO   [D22F44\D98AC5] Auto-routing pass #2 on board 'd81d90e423d6f2b58f566bb804b2fee9' was completed in 94.60 seconds with score 706.20 (62 unrouted and 163 violations), using 179.33 CPU seconds and the job allocated 1202.65 GB of memory so far.
+2026-09-27 08:54:07.039 INFO   [D22F44\D98AC5] Auto-routing pass #3 on board '977e2f2bc0190d72e6e5d2f42f951bcc' was completed in 95.81 seconds with score 703.10 (63 unrouted and 163 violations), using 274.31 CPU seconds and the job allocated 1795.55 GB of memory so far.
+2026-09-27 08:55:43.854 INFO   [D22F44\D98AC5] Auto-routing pass #4 on board 'bdeab0fc4e38cf7366d20f621fed7051' was completed in 96.22 seconds with score 706.20 (62 unrouted and 163 violations), using 370.26 CPU seconds and the job allocated 2401.89 GB of memory so far.
+2026-09-27 08:57:22.709 INFO   [D22F44\D98AC5] Auto-routing pass #5 on board '354dbd481daa2d07eb8e1831ceca4b7f' was completed in 98.27 seconds with score 712.41 (60 unrouted and 163 violations), using 468.18 CPU seconds and the job allocated 3016.53 GB of memory so far.
+2026-09-27 08:59:00.240 INFO   [D22F44\D98AC5] Auto-routing pass #6 on board '946404e82011e324bc20dcfa84f49318' was completed in 96.94 seconds with score 715.52 (59 unrouted and 163 violations), using 564.10 CPU seconds and the job allocated 3611.06 GB of memory so far.
+2026-09-27 09:00:37.020 INFO   [D22F44\D98AC5] Auto-routing pass #7 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.19 seconds with score 715.52 (59 unrouted and 163 violations), using 660.03 CPU seconds and the job allocated 4213.49 GB of memory so far.
+2026-09-27 09:02:13.774 INFO   [D22F44\D98AC5] Auto-routing pass #8 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.45 seconds with score 715.52 (59 unrouted and 163 violations), using 755.98 CPU seconds and the job allocated 4813.30 GB of memory so far.
+2026-09-27 09:03:50.694 INFO   [D22F44\D98AC5] Auto-routing pass #9 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.62 seconds with score 715.52 (59 unrouted and 163 violations), using 850.93 CPU seconds and the job allocated 5401.78 GB of memory so far.
+2026-09-27 09:05:27.694 INFO   [D22F44\D98AC5] Auto-routing pass #10 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.70 seconds with score 715.52 (59 unrouted and 163 violations), using 946.84 CPU seconds and the job allocated 5999.01 GB of memory so far.
+2026-09-27 09:07:04.653 INFO   [D22F44\D98AC5] Auto-routing pass #11 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.66 seconds with score 715.52 (59 unrouted and 163 violations), using 1042.76 CPU seconds and the job allocated 6596.95 GB of memory so far.
+2026-09-27 09:08:42.419 INFO   [D22F44\D98AC5] Auto-routing pass #12 on board '832a3d392d9708701c166e62af5b1a40' was completed in 97.17 seconds with score 715.52 (59 unrouted and 163 violations), using 1139.67 CPU seconds and the job allocated 7199.64 GB of memory so far.
+2026-09-27 09:10:19.335 INFO   [D22F44\D98AC5] Auto-routing pass #13 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.61 seconds with score 715.52 (59 unrouted and 163 violations), using 1235.58 CPU seconds and the job allocated 7798.09 GB of memory so far.
+2026-09-27 09:11:56.559 INFO   [D22F44\D98AC5] Auto-routing pass #14 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.92 seconds with score 715.52 (59 unrouted and 163 violations), using 1331.50 CPU seconds and the job allocated 8393.35 GB of memory so far.
+2026-09-27 09:13:34.151 INFO   [D22F44\D98AC5] Auto-routing pass #15 on board '832a3d392d9708701c166e62af5b1a40' was completed in 97.29 seconds with score 715.52 (59 unrouted and 163 violations), using 1428.40 CPU seconds and the job allocated 8995.23 GB of memory so far.
+2026-09-27 09:15:11.745 INFO   [D22F44\D98AC5] Auto-routing pass #16 on board '832a3d392d9708701c166e62af5b1a40' was completed in 97.29 seconds with score 715.52 (59 unrouted and 163 violations), using 1524.31 CPU seconds and the job allocated 9587.03 GB of memory so far.
+2026-09-27 09:16:48.661 INFO   [D22F44\D98AC5] Auto-routing pass #17 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.61 seconds with score 715.52 (59 unrouted and 163 violations), using 1620.21 CPU seconds and the job allocated 10185.41 GB of memory so far.
+2026-09-27 09:18:25.582 INFO   [D22F44\D98AC5] Auto-routing pass #18 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.61 seconds with score 715.52 (59 unrouted and 163 violations), using 1716.12 CPU seconds and the job allocated 10784.11 GB of memory so far.
+2026-09-27 09:18:25.614 INFO   [D22F44\D98AC5] The router's best score (715.52) has not improved by more than 0.5 points since pass #8. Stopping the auto-router after 18 passes (59 items still unconnected).
+The following connections could not be routed -- please review your design (e.g. check pad clearances, trace width rules, and available routing space):
+  Net 'GND' (6 unrouted connections):
+    - J1-26@1  ->  J1-26@2
+    - J1-13@1  ->  J1-13@2
+    - J1-1@1  ->  J1-1@2
+    - J1-26  ->  J1-26@1
+    - J1-13  ->  J1-13@1
+    - J1-1@1  ->  J1-1
+  Net '+3V3' (2 unrouted connections):
+    - U1-54  ->  U1-53
+    - U1-45  ->  conductionarea
+  Net 'DVDD' (1 unrouted connection):
+    - U1-50  ->  conductionarea
+  Net 'VREG_AVDD' (2 unrouted connections):
+    - R1-2  ->  C16-1
+    - C16-1  ->  U1-46
+  Net '+5V' (2 unrouted connections):
+    - J1-25@2  ->  J1-25@1
+    - J1-25@1  ->  J1-25
+  Net 'RP_USB_DM' (1 unrouted connection):
+    - R12-2  ->  U1-51
+  Net 'RP_USB_DP' (1 unrouted connection):
+    - R11-2  ->  U1-52
+  Net 'CA0' (2 unrouted connections):
+    - J1-9@1  ->  J1-9@2
+    - J1-9  ->  J1-9@1
+  Net 'CA1' (2 unrouted connections):
+    - J1-8@1  ->  J1-8@2
+    - J1-8@1  ->  J1-8
+  Net 'CA2' (2 unrouted connections):
+    - J1-7@1  ->  J1-7@2
+    - J1-7@1  ->  J1-7
+  Net 'CA3' (2 unrouted connections):
+    - J1-6@1  ->  J1-6@2
+    - J1-6  ->  J1-6@1
+  Net 'CA4' (2 unrouted connections):
+    - J1-5@1  ->  J1-5@2
+    - J1-5@1  ->  J1-5
+  Net 'CA5' (2 unrouted connections):
+    - J1-4@1  ->  J1-4@2
+    - J1-4@1  ->  J1-4
+  Net 'CA6' (2 unrouted connections):
+    - J1-3@2  ->  J1-3@1
+    - J1-3@1  ->  J1-3
+  Net 'CA7' (2 unrouted connections):
+    - J1-2@1  ->  J1-2@2
+    - J1-2  ->  J1-2@1
+  Net 'CA8' (2 unrouted connections):
+    - J1-24@1  ->  J1-24@2
+    - J1-24  ->  J1-24@1
+  Net 'CA9' (2 unrouted connections):
+    - J1-23@1  ->  J1-23@2
+    - J1-23  ->  J1-23@1
+  Net 'CA10' (2 unrouted connections):
+    - J1-20@1  ->  J1-20@2
+    - J1-20  ->  J1-20@1
+  Net 'CA11' (2 unrouted connections):
+    - J1-19@1  ->  J1-19@2
+    - J1-19  ->  J1-19@1
+  Net 'CA12' (2 unrouted connections):
+    - J1-22@1  ->  J1-22@2
+    - J1-22@1  ->  J1-22
+  Net 'CCS_N' (2 unrouted connections):
+    - J1-21@1  ->  J1-21@2
+    - J1-21@1  ->  J1-21
+  Net 'CD0' (2 unrouted connections):
+    - J1-10@2  ->  J1-10@1
+    - J1-10@1  ->  J1-10
+  Net 'CD1' (2 unrouted connections):
+    - J1-11@1  ->  J1-11@2
+    - J1-11@1  ->  J1-11
+  Net 'CD2' (2 unrouted connections):
+    - J1-12@1  ->  J1-12@2
+    - J1-12@1  ->  J1-12
+  Net 'CD3' (2 unrouted connections):
+    - J1-14@1  ->  J1-14@2
+    - J1-14  ->  J1-14@1
+  Net 'CD4' (2 unrouted connections):
+    - J1-15@1  ->  J1-15@2
+    - J1-15  ->  J1-15@1
+  Net 'CD5' (2 unrouted connections):
+    - J1-16@1  ->  J1-16@2
+    - J1-16  ->  J1-16@1
+  Net 'CD6' (2 unrouted connections):
+    - J1-17@1  ->  J1-17@2
+    - J1-17@1  ->  J1-17
+  Net 'CD7' (2 unrouted connections):
+    - J1-18@1  ->  J1-18@2
+    - J1-18@1  ->  J1-18
+2026-09-27 09:18:26.193 INFO   [D22F44\D98AC5] Auto-routing stage completed: started with 163 unrouted nets, completed in 1736.30 seconds, final score: 715.52 (59 unrouted and 163 violations), using 1717.11 total CPU seconds, 10793.95 GB total allocated, and 4275.4 MB peak heap usage.
+2026-09-27 09:18:26.482 INFO   [D22F44\D98AC5] Optimization stage started on board '832a3d392d9708701c166e62af5b1a40' with score 715.52 (59 unrouted and 163 violations).
+2026-09-27 09:18:54.982 INFO   [D22F44\D98AC5] Stopping optimization pass #1 early after 50 consecutive items could not be improved.
+2026-09-27 09:18:55.281 INFO   [D22F44\D98AC5] Optimizer pass #1 on board '6e49b7b8bd261f6e605f5c7bc486ab33' was completed in 27.92 seconds with the score of 715.52 (59 unrouted and 163 violations).
+2026-09-27 09:18:55.566 INFO   [D22F44\D98AC5] Stopping optimizer because the improvement in this pass (0.0000%) is below the threshold (1.00%).
+2026-09-27 09:18:55.852 INFO   [D22F44\D98AC5] Optimization stage completed: started with score 715.52 (59 unrouted and 163 violations), completed in 29.09 seconds, final score: 715.52 (59 unrouted and 163 violations), using 28.82 total CPU seconds, 289.28 GB total allocated, and 670.8 MB peak heap usage.
+2026-09-27 09:18:55.862 INFO   [D22F44\D98AC5] Job 'D22F44\D98AC5' finished with state: COMPLETED (elapsed: 29 minutes 26.30 seconds, finished at UTC: 2026-09-27T14:18:55.861344545Z).
+2026-09-27 09:18:56.056 INFO   Saving output file '/home/thomc/Workspace/fujinet-hardware/Astrocade/rev0/exports/FujiNet-Astrocade-Rev0.ses' (SES)...
+2026-09-27 09:18:56.057 INFO   Successfully saved output file '/home/thomc/Workspace/fujinet-hardware/Astrocade/rev0/exports/FujiNet-Astrocade-Rev0.ses' (56396 bytes).

@@ -45,6 +45,16 @@ board x = 131.75 (cart top view: left, insertion away). PCB underside sits
 ribs back the PCB above the contact zone. Four M3 posts at board
 (55,33)(145,33)(55,84)(145,84) = cart (∓45, 57)/(∓45, 6).
 
+The top-face holes and trailing-face openings (RESET, BOOTSEL, WS2812 light
+pipe, USB-C, microSD, ESP32 antenna window) come from
+`board-anchors.scad`, which `tools/gen_pcb.py` writes from the placement.
+The shell always matches the board; never edit those numbers by hand. The PCB
+is 6-layer, 1.6 mm, so the seat height is unchanged.
+
+Each land's plated escape hole sits 17.4 mm in from the PCB's leading edge.
+That puts it about 19.4 mm in from the cart face, beyond the blade's measured
+17-18 mm reach. Confirm this against a real blade (see item 5).
+
 ## Open items before printing/ordering
 
 1. Caliper a real Videocade: width, depth, thickness, slot width/height and
@@ -57,6 +67,9 @@ ribs back the PCB above the contact zone. Four M3 posts at board
 4. Blade spring compression: pcb_seat_z (4.0 mm) sets land height; tune so
    the springs wipe with real force after measuring an original cart's PCB
    height above its slot floor.
+5. Blade reach: confirm the contact tips stop short of 17.4 mm in from the
+   PCB's leading edge. That is where the lands' masked necks end in plated
+   holes; the B.Cu rule area starts at 16.5 mm.
 
 `FujiNet-Astrocade-Shell.scad` is parametric over all of the above
 (`part = "bottom" | "top" | "assembly"`).

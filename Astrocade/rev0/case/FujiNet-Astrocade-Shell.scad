@@ -52,14 +52,9 @@ eps = 0.01;
 function bx(x) = x - 100;
 function byy(y) = (88 - y) + pcb_lead_setback;
 
-// component anchors (from FujiNet-Astrocade-Rev0.kicad_pcb)
-sw1   = [bx(141), byy(54)];    // RESET  (top-face button hole)
-sw2   = [bx(141), byy(62)];    // BOOTSEL (pinhole)
-ws    = [bx(100), byy(50.5)];  // WS2812 light pipe
-usb   = [bx(124), byy(30)];    // USB-C exits trailing edge (board y30)
-sd    = [bx(67),  byy(30)];    // microSD exits trailing edge
-holes = [[bx(55), byy(33)], [bx(145), byy(33)], [bx(55), byy(84)], [bx(145), byy(84)]];
-ant_c = bx(88);                // ESP32 antenna center X (overhangs trailing edge)
+// component anchors: generated from the board by tools/gen_pcb.py
+// (sw1, sw2, ws, usb, sd, holes, ant_c) -- never edit by hand
+include <board-anchors.scad>
 
 // outer envelope: low leading section + taller rear body, rounded corners
 module envelope(h_lead, h_body) {

@@ -1,204 +1,185 @@
 #!/usr/bin/env python3
-"""Machine cross-check: FujiNet-Astrocade-Rev0 netlist vs the firmware pin
-maps (fujinet-firmware pico/astrocade astrocade_cart.h, pinmap
-fujiversal-astrocade.h) and the ballyalley 26-pin edge pinout.
+"""Cross-check the FujiNet-Astrocade Rev0 schematic netlist against the
+firmware that has to run on it -- independently of tools/design.py.
 
-Run after ANY schematic edit:  python3 tools/check_nets.py
-Exports a fresh netlist via kicad-cli, then runs 151 checks.
+Exports a fresh netlist with kicad-cli and reads, from fujinet-firmware
+(default ~/Workspace/fujinet-firmware, or $FUJINET_FIRMWARE):
+  pico/astrocade/firmware/include/astrocade_cart.h      ADDR_MASK, EN_PIN, D0_PIN
+  pico/astrocade/firmware/boards/fujicade_rp2354.h      FUJICADE_VSENSE_PIN
+  include/pinmap/fujiversal-astrocade.h                 S3 SD/LED/UART/RUN/BOOTSEL pins
+and checks every one of them, plus the Tilton 26-pin edge map, against the
+pin *functions* the netlist reports (GPIOn on the RP2354A, IOn on the S3).
+
+Usage: python3 tools/check_nets.py         exit 1 on any failure
 """
-import re, sys
+import os, re, subprocess, sys, tempfile
+import xml.etree.ElementTree as ET
 
-
-def extract_block(text, start_idx):
-    """Return (block_text, end_idx) for the paren block starting at start_idx ('(')."""
-    depth = 0; i = start_idx; n = len(text); in_str = False
-    while i < n:
-        c = text[i]
-        if in_str:
-            if c == '\\': i += 2; continue
-            if c == '"': in_str = False
-        else:
-            if c == '"': in_str = True
-            elif c == '(': depth += 1
-            elif c == ')':
-                depth -= 1
-                if depth == 0: return text[start_idx:i+1], i+1
-        i += 1
-    raise ValueError("unbalanced")
-
-def find_symbol_def(libtext, name):
-    """Find top-level (symbol "name" ...) block in a .kicad_sym or lib_symbols body."""
-    import re
-    for m in re.finditer(r'\(symbol\s+"%s"' % re.escape(name), libtext):
-        # ensure this is a definition start (not nested unit) by checking it parses
-        blk, _ = extract_block(libtext, m.start())
-        return blk
-    return None
-
-def parse_pins(symblock):
-    """Return list of dicts: number, name, x, y, rot, length for all pins in a symbol block."""
-    import re
-    pins = []
-    i = 0
-    while True:
-        j = symblock.find('(pin ', i)
-        if j < 0: break
-        blk, k = extract_block(symblock, j)
-        at = re.search(r'\(at\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\)', blk)
-        ln = re.search(r'\(length\s+([\d.]+)\)', blk)
-        nm = re.search(r'\(name\s+"([^"]*)"', blk)
-        no = re.search(r'\(number\s+"([^"]*)"', blk)
-        pins.append(dict(number=no.group(1), name=nm.group(1),
-                         x=float(at.group(1)), y=float(at.group(2)),
-                         rot=float(at.group(3)), length=float(ln.group(1))))
-        i = k
-    return pins
-
-
-import os, subprocess, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
-netf = os.path.join(tempfile.gettempdir(), "fujinet-astrocade-check.net")
-subprocess.run(["kicad-cli", "sch", "export", "netlist", "--format", "kicadsexpr",
-                "-o", netf, os.path.join(PRJ, "FujiNet-Astrocade-Rev0.kicad_sch")],
-               check=True, capture_output=True)
-NET = open(netf).read()
+FW = os.environ.get('FUJINET_FIRMWARE', os.path.expanduser('~/Workspace/fujinet-firmware'))
+SCH = os.path.join(PRJ, 'FujiNet-Astrocade-Rev0.kicad_sch')
 
-# parse nets -> set of (ref, pin)
-nets = {}
-i = 0
-while True:
-    j = NET.find('(net\n', i)
-    if j < 0: break
-    blk, i = extract_block(NET, j)
-    name = re.search(r'\(name "([^"]*)"\)', blk).group(1)
-    nodes = set()
-    for m in re.finditer(r'\(node\s+\(ref "([^"]+)"\)\s+\(pin "([^"]+)"\)', blk):
-        nodes.add((m.group(1), m.group(2)))
-    nets[name] = nodes
+EDGE = {1: 'GND', 2: 'A7', 3: 'A6', 4: 'A5', 5: 'A4', 6: 'A3', 7: 'A2', 8: 'A1', 9: 'A0',
+        10: 'D0', 11: 'D1', 12: 'D2', 13: 'GND', 14: 'D3', 15: 'D4', 16: 'D5', 17: 'D6',
+        18: 'D7', 19: 'A11', 20: 'A10', 21: '/CCS', 22: 'A12', 23: 'A9', 24: 'A8', 25: '+5V',
+        26: 'GND'}   # Tilton 1-26 (= MCM 0-25), ballyalley cartridge-port page
 
-def netof(ref, pin):
-    for name, nodes in nets.items():
-        if (ref, pin) in nodes: return name
-    return None
+fails = 0
+count = 0
 
-ok = bad = 0
-def chk(desc, cond):
-    global ok, bad
-    if cond: ok += 1
-    else:
-        bad += 1
-        print("FAIL:", desc)
 
-# --- RP2040 QFN-56 physical pin for GPIOn (from the official symbol used) ---
-gpio_pin = {0:'2',1:'3',2:'4',3:'5',4:'6',5:'7',6:'8',7:'9',8:'11',9:'12',
-            10:'13',11:'14',12:'15',13:'16',14:'17',15:'18',16:'27',17:'28',
-            18:'29',19:'30',20:'31',21:'32',22:'34',23:'35',24:'36',25:'37',
-            26:'38',27:'39',28:'40',29:'41'}
+def chk(desc, ok):
+    global fails, count
+    count += 1
+    if not ok:
+        fails += 1
+        print('FAIL:', desc)
 
-# astrocade_cart.h: GP0-12 = A0-12 (one contiguous mask), GP13 = /ENABLE,
-# GP14-21 = D0-7, GP22 selftest, GP25 LED, GP26 5V sense, GP27 debug TX
-for n in range(13):
-    chk(f"U1 GPIO{n} on RP_A{n}", netof('U1', gpio_pin[n]) == f"RP_A{n}")
-chk("U1 GPIO13 on RP_EN", netof('U1', gpio_pin[13]) == "RP_EN")
-for n in range(8):
-    chk(f"U1 GPIO{14+n} on RP_D{n}", netof('U1', gpio_pin[14+n]) == f"RP_D{n}")
-chk("U1 GPIO22 SELFTEST", netof('U1', gpio_pin[22]) == "SELFTEST")
-chk("U1 GPIO25 RP_LED",  netof('U1', gpio_pin[25]) == "RP_LED")
-chk("U1 GPIO26 VSENSE",  netof('U1', gpio_pin[26]) == "VSENSE")
-chk("U1 GPIO27 RP_DBG_TX", netof('U1', gpio_pin[27]) == "RP_DBG_TX")
 
-# --- edge pinout (Tilton 1..26) ---
-edge = {1:"GND",2:"CA7",3:"CA6",4:"CA5",5:"CA4",6:"CA3",7:"CA2",8:"CA1",
-        9:"CA0",10:"CD0",11:"CD1",12:"CD2",13:"GND",14:"CD3",15:"CD4",
-        16:"CD5",17:"CD6",18:"CD7",19:"CA11",20:"CA10",21:"CCS_N",22:"CA12",
-        23:"CA9",24:"CA8",25:"+5V",26:"GND"}
-for k, n in edge.items():
-    chk(f"J1 pin {k} on {n}", netof('J1', str(k)) == n)
+def define(path, name):
+    txt = open(os.path.join(FW, path)).read()
+    m = re.search(r'#define\s+%s\s+(\S+)' % re.escape(name), txt)
+    if not m:
+        raise SystemExit('%s: no #define %s' % (path, name))
+    v = m.group(1)
+    m2 = re.match(r'GPIO_NUM_(\d+)', v)
+    if m2:
+        return int(m2.group(1))
+    return int(v.rstrip('uUlL'), 0)
 
-# --- level shifter continuity: every CA/CD/CCS reaches the right RP pin ---
-# U8: B0..7 (18..11) = CA0..7 ; A0..7 (2..9) = RP_A0..7
-for i2 in range(8):
-    chk(f"U8 ch{i2} CA{i2}", netof('U8', str(18-i2)) == f"CA{i2}")
-    chk(f"U8 ch{i2} RP_A{i2}", netof('U8', str(2+i2)) == f"RP_A{i2}")
-# U9: B0..4=CA8..12, B5=CCS_N ; A0..4=RP_A8..12, A5=RP_EN
-for i2 in range(5):
-    chk(f"U9 ch{i2} CA{8+i2}", netof('U9', str(18-i2)) == f"CA{8+i2}")
-    chk(f"U9 ch{i2} RP_A{8+i2}", netof('U9', str(2+i2)) == f"RP_A{8+i2}")
-chk("U9 B5 CCS_N", netof('U9', '13') == "CCS_N")
-chk("U9 A5 RP_EN", netof('U9', '7') == "RP_EN")
-chk("U9 DIR=GND (B->A)", netof('U9', '1') == "GND")
-chk("U8 DIR=GND (B->A)", netof('U8', '1') == "GND")
-chk("U9 OE tied active", netof('U9', '19') == "GND")
-chk("U8 OE tied active", netof('U8', '19') == "GND")
-# U7 data: A=RP_D, B=CD, DIR=+3V3 (A->B), OE=/CCS
-for i2 in range(8):
-    chk(f"U7 ch{i2} RP_D{i2}", netof('U7', str(2+i2)) == f"RP_D{i2}")
-    chk(f"U7 ch{i2} CD{i2}", netof('U7', str(18-i2)) == f"CD{i2}")
-chk("U7 DIR=+3V3 (A->B)", netof('U7', '1') == "+3V3")
-chk("U7 OE = CCS_N", netof('U7', '19') == "CCS_N")
 
-# --- QSPI flash ---
-for pin, net in [('1','QSPI_SS'),('2','QSPI_SD1'),('3','QSPI_SD2'),
-                 ('5','QSPI_SD0'),('6','QSPI_SCLK'),('7','QSPI_SD3'),
-                 ('4','GND'),('8','+3V3')]:
-    chk(f"U6 pin {pin} {net}", netof('U6', pin) == net)
-for pin, net in [('56','QSPI_SS'),('52','QSPI_SCLK'),('53','QSPI_SD0'),
-                 ('55','QSPI_SD1'),('54','QSPI_SD2'),('51','QSPI_SD3')]:
-    chk(f"U1 pin {pin} {net}", netof('U1', pin) == net)
+def main():
+    fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-check.xml')
+    subprocess.run(['kicad-cli', 'sch', 'export', 'netlist', '--format', 'kicadxml', '-o', fn, SCH],
+                   check=True, capture_output=True)
+    t = ET.parse(fn)
+    node_net, func_net, nets = {}, {}, {}
+    for n in t.iter('net'):
+        name = n.get('name')
+        for nd in n.iter('node'):
+            ref, pin, fn_ = nd.get('ref'), nd.get('pin'), (nd.get('pinfunction') or '')
+            fn_ = re.sub(r'_%s$' % re.escape(pin), '', fn_)   # kicad-cli appends _<pin>
+            node_net[(ref, pin)] = name
+            func_net[(ref, fn_)] = name
+            nets.setdefault(name, []).append((ref, pin, fn_))
+    parts = {c.get('ref'): (c.findtext('value'), c.findtext('footprint')) for c in t.iter('comp')}
+    by_value = lambda v: sorted(r for r, (val, _) in parts.items() if val == v)
 
-# --- USB link RP <-> ESP32-S3 (S3 is host on GPIO19/20) ---
-esp = open(os.path.join(PRJ, 'esp32s3-sd.kicad_sch')).read()
-blk = find_symbol_def(esp, "RF_Module:ESP32-S3-WROOM-1")
-esppins = {p['name']: p['number'] for p in parse_pins(blk)}
-chk("U1 USB_DM->RP_USB_DM", netof('U1','46') == "RP_USB_DM")
-chk("U1 USB_DP->RP_USB_DP", netof('U1','47') == "RP_USB_DP")
-chk("R1 bridges RP_USB_DP/USB_DP",
-    {netof('R1','1'), netof('R1','2')} == {"RP_USB_DP","USB_DP"})
-chk("R2 bridges RP_USB_DM/USB_DM",
-    {netof('R2','1'), netof('R2','2')} == {"RP_USB_DM","USB_DM"})
-# module pad 13 = GPIO19 (USB D-), pad 14 = GPIO20 (USB D+) per Espressif DS
-chk("S3 pad13/GPIO19 (USB D-) on USB_DM", netof('U2', '13') == "USB_DM")
-chk("S3 pad14/GPIO20 (USB D+) on USB_DP", netof('U2', '14') == "USB_DP")
+    U1 = by_value('RP2354A')[0]
+    U2 = by_value('ESP32-S3-WROOM-1-N16R8')[0]
+    J1 = by_value('Astrocade_Cart_Edge_26')[0]
+    J2 = by_value('microSD')[0]
+    UCP = by_value('CP2102N-A02-GQFN28')[0]
+    WS = by_value('WS2812B-2020-V6')[0]
 
-# --- fujiversal-astrocade.h ESP32 pins ---
-for io, net in [('IO41','SD_CS'),('IO39','SD_SCK'),('IO40','SD_MISO'),
-                ('IO38','SD_MOSI'),('TXD0','S3_TXD'),('RXD0','S3_RXD'),
-                ('IO48','LED_STRIP'),('IO4','RUN_CTL'),('IO5','BOOTSEL_CTL')]:
-    pin = esppins.get(io)
-    chk(f"S3 {io} on {net}", pin is not None and netof('U2', pin) == net)
+    def rp(gpio):
+        for (ref, f), n in func_net.items():
+            if ref == U1 and re.match(r'GPIO%d(/|$)' % gpio, f):
+                return n
+        return None
 
-chk("WS2812 DIN driven from LED_STRIP via series R",
-    any({netof(r,'1'),netof(r,'2')} == {"LED_STRIP","WS_DIN"}
-        for r in ("R12","R13","R14","R15")) and
-    any(netof('D2', p) == "WS_DIN" for p in ("1","2","3","4")))
+    def s3(io):
+        return func_net.get((U2, 'IO%d' % io))
 
-# --- forcing + reset chain ---
-chk("Q2 collector on RUN", netof('Q2','3') == "RUN")
-chk("Q3 collector on QSPI_SS", netof('Q3','3') == "QSPI_SS")
-chk("R9 RUN_CTL->Q2B", {netof('R9','1'),netof('R9','2')} == {"RUN_CTL","Q2B"})
-chk("R11 BOOTSEL_CTL->Q3B", {netof('R11','1'),netof('R11','2')} == {"BOOTSEL_CTL","Q3B"})
-chk("U1 RUN pin", netof('U1','26') == "RUN")
-chk("D8 A1 on RUN", netof('D8','1') == "RUN")
-chk("D8 A2 on S3_EN", netof('D8','2') == "S3_EN")
-chk("D8 K on RST_BTN", netof('D8','3') == "RST_BTN")
-chk("SW1 shorts RST_BTN to GND",
-    {netof('SW1','1'),netof('SW1','2')} == {"RST_BTN","GND"})
-chk("S3 EN net exists on U2", netof('U2', esppins.get('EN','?')) == "S3_EN")
-chk("SW2+R20 BOOTSEL chain",
-    {netof('R20','1'),netof('R20','2')} == {"QSPI_SS","BOOTSEL_BTN"} and
-    {netof('SW2','1'),netof('SW2','2')} == {"BOOTSEL_BTN","GND"})
+    def through_r(a, b):
+        """a and b joined by exactly one 2-pin resistor."""
+        for r, (val, fp) in parts.items():
+            if r.startswith('R') and not r.startswith('RN'):
+                ends = {node_net.get((r, '1')), node_net.get((r, '2'))}
+                if ends == {a, b}:
+                    return val
+        return None
 
-# --- power & sense ---
-chk("edge +5V feeds power sheet (D6 anode)", netof('D6','2') == "+5V" or netof('D6','1') == "+5V")
-chk("R7 +5V->VSENSE", {netof('R7','1'),netof('R7','2')} == {"+5V","VSENSE"})
-chk("R8 VSENSE->GND", {netof('R8','1'),netof('R8','2')} == {"VSENSE","GND"})
-chk("U1 IOVDD on +3V3", netof('U1','1') == "+3V3")
-chk("U1 DVDD from VREG", netof('U1','23') == "DVDD" and netof('U1','45') == "DVDD")
-chk("U1 TESTEN grounded", netof('U1','19') == "GND")
-chk("XIN chain", netof('U1','20') == "XIN" and netof('Y1','1') == "XIN")
-chk("XOUT chain", netof('U1','21') == "XOUT" and
-    {netof('R4','1'),netof('R4','2')} == {"XOUT_Y","XOUT"} and netof('Y1','3') == "XOUT_Y")
+    # ---- firmware pin contracts ----
+    cart = 'pico/astrocade/firmware/include/astrocade_cart.h'
+    addr_mask = define(cart, 'ADDR_MASK')
+    en_pin = define(cart, 'EN_PIN')
+    d0_pin = define(cart, 'D0_PIN')
+    vsense = define('pico/astrocade/firmware/boards/fujicade_rp2354.h', 'FUJICADE_VSENSE_PIN')
+    pm = 'include/pinmap/fujiversal-astrocade.h'
+    sd = {k: define(pm, 'PIN_SD_HOST_' + k) for k in ('CS', 'SCK', 'MISO', 'MOSI')}
+    led_strip = define(pm, 'PIN_LED_STRIP')
+    run_io, bsel_io = define(pm, 'PIN_RP2040_RUN'), define(pm, 'PIN_RP2040_BOOTSEL')
+    chk('ADDR_MASK is A0-A12 unshifted', addr_mask == 0x1FFF)
 
-print(f"\n{ok}/{ok+bad} checks passed" + ("" if bad == 0 else f"  ({bad} FAILED)"))
-sys.exit(1 if bad else 0)
+    # ---- edge <-> RP2354A, straight through (5V-tolerant pads, no buffers) ----
+    edge_net = {p: node_net.get((J1, str(p))) for p in EDGE}
+    for p, sig in EDGE.items():
+        n = edge_net[p]
+        if sig == 'GND':
+            chk('J1.%d is GND' % p, n == 'GND')
+        elif sig == '+5V':
+            chk('J1.25 is +5V', n == '+5V')
+        elif sig == '/CCS':
+            chk('J1.21 /CCS -> GP%d (EN_PIN)' % en_pin, n is not None and rp(en_pin) == n)
+        elif sig.startswith('A'):
+            a = int(sig[1:])
+            chk('J1.%d %s -> GP%d' % (p, sig, a), n is not None and rp(a) == n)
+        else:
+            d = int(sig[1:])
+            chk('J1.%d %s -> GP%d' % (p, sig, d0_pin + d), n is not None and rp(d0_pin + d) == n)
+    bus = [edge_net[p] for p, s in EDGE.items() if s not in ('GND', '+5V')]
+    for n in bus:
+        others = [(r, pin) for (r, pin, f) in nets[n] if r not in (U1, J1)]
+        allowed = n == edge_net[21] and len(others) == 1   # /CCS pull-up only
+        chk('bus net %s touches only J1 + U1 (+ /CCS pull-up)' % n, not others or allowed)
+    ccs = edge_net[21]
+    chk('/CCS has a pull-up to +3V3', through_r(ccs, '+3V3') is not None)
+
+    # ---- console power sense ----
+    vs = rp(vsense)
+    top, bot = through_r('+5V', vs), through_r(vs, 'GND')
+    chk('GP%d VSENSE divider from +5V' % vsense, top is not None and bot is not None)
+    if top and bot:
+        val = lambda s: float(s.replace('k', 'e3').replace('R', ''))
+        vout = 5.25 * val(bot) / (val(top) + val(bot))
+        chk('VSENSE <= 3.3V at 5.25V in (%.2fV) and >= 2.0V at 4.75V' % vout,
+            vout <= 3.3 and 4.75 * val(bot) / (val(top) + val(bot)) >= 2.0)
+
+    # ---- RP support ----
+    chk('RP USB_DP -> 27R -> S3 USB_D+ (IO20)', through_r(func_net.get((U1, 'USB_DP')), func_net.get((U2, 'USB_D+'))) == '27R')
+    chk('RP USB_DM -> 27R -> S3 USB_D- (IO19)', through_r(func_net.get((U1, 'USB_DM')), func_net.get((U2, 'USB_D-'))) == '27R')
+    run, ss = func_net.get((U1, 'RUN')), func_net.get((U1, '~{QSPI_SS}'))
+    chk('S3 IO%d (PIN_RP2040_RUN) -> 1k -> RP RUN (active low, no inverter)' % run_io, through_r(s3(run_io), run) == '1k')
+    chk('S3 IO%d (PIN_RP2040_BOOTSEL) -> 1k -> RP QSPI_SS' % bsel_io, through_r(s3(bsel_io), ss) == '1k')
+    chk('RUN pull-up', through_r(run, '+3V3') == '10k')
+    chk('QSPI_SS pull-up', through_r(ss, '+3V3') == '10k')
+    for f in ('QSPI_SCLK', 'QSPI_SD0', 'QSPI_SD1', 'QSPI_SD2', 'QSPI_SD3'):
+        chk('RP %s unconnected (flash is in the package)' % f, func_net.get((U1, f), '').startswith('unconnected'))
+    for n, nodes in nets.items():   # every supply pin (names repeat: IOVDD x6, DVDD x3)
+        for (ref, pin, f) in nodes:
+            if ref == U1 and (f == 'IOVDD' or f in ('QSPI_IOVDD', 'USB_OTP_VDD', 'ADC_AVDD', 'VREG_VIN')):
+                chk('RP %s (pin %s) on +3V3' % (f, pin), n == '+3V3')
+            if ref == U1 and f == 'DVDD':
+                chk('RP DVDD (pin %s) on DVDD' % pin, n == 'DVDD')
+    chk('RP VREG_FB on DVDD', func_net.get((U1, 'VREG_FB')) == 'DVDD')
+
+    # ---- S3 pins ----
+    chk('SD CS  IO%d -> J2 DAT3/CS' % sd['CS'], s3(sd['CS']) == node_net.get((J2, '2')))
+    chk('SD MOSI IO%d -> J2 CMD' % sd['MOSI'], s3(sd['MOSI']) == node_net.get((J2, '3')))
+    chk('SD SCK IO%d -> J2 CLK' % sd['SCK'], s3(sd['SCK']) == node_net.get((J2, '5')))
+    chk('SD MISO IO%d -> J2 DAT0' % sd['MISO'], s3(sd['MISO']) == node_net.get((J2, '7')))
+    chk('J2 VDD on +3V3, VSS on GND', node_net.get((J2, '4')) == '+3V3' and node_net.get((J2, '6')) == 'GND')
+    ws_din = node_net.get((WS, '3'))
+    chk('LED strip IO%d -> R -> WS2812 DIN' % led_strip, through_r(s3(led_strip), ws_din) is not None)
+    chk('S3 TXD0 -> CP2102N RXD', func_net.get((U2, 'TXD0')) == func_net.get((UCP, 'RXD')))
+    chk('S3 RXD0 <- CP2102N TXD', func_net.get((U2, 'RXD0')) == func_net.get((UCP, 'TXD')))
+    for io in (0, 3, 45, 46):
+        n = s3(io)
+        chk('S3 strapping IO%d not loaded by anything but EN/BOOT circuitry' % io,
+            n is None or n.startswith('unconnected') or io == 0)
+    for io in range(26, 38):
+        n = s3(io)
+        chk('S3 IO%d (flash/PSRAM on N16R8) unused' % io, n is None or n.startswith('unconnected'))
+
+    # ---- general ----
+    for n, nodes in nets.items():
+        if not n.startswith('unconnected'):
+            chk('net %s has >= 2 pins' % n, len(nodes) >= 2)
+    print('%d checks, %d failed' % (count, fails))
+    sys.exit(1 if fails else 0)
+
+
+if __name__ == '__main__':
+    main()

@@ -31,7 +31,7 @@ def pour(board, layer, net, name):
     z.SetNetCode(board.GetNetInfo().GetNetItem(net).GetNetCode())
     z.SetZoneName(name)
     z.SetAssignedPriority(0)
-    z.SetLocalClearance(pcbnew.FromMM(0.25))
+    z.SetLocalClearance(pcbnew.FromMM(0.15))   # net-class/DRU clearances still apply
     z.SetMinThickness(pcbnew.FromMM(0.25))
     z.SetThermalReliefGap(pcbnew.FromMM(0.3))
     z.SetThermalReliefSpokeWidth(pcbnew.FromMM(0.4))

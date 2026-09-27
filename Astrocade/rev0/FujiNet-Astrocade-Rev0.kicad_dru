@@ -5,6 +5,6 @@
 (rule "default_clearance"
 	(condition "A.NetName != 'DVDD' && A.NetName != 'RP_LX' && A.NetName != 'VREG_AVDD' && B.NetName != 'DVDD' && B.NetName != 'RP_LX' && B.NetName != 'VREG_AVDD'")
 	(constraint clearance (min 0.15mm)))
-(rule "rp2350_core_caps_spokes"
-	(condition "A.memberOfFootprint('C10') || A.memberOfFootprint('C15')")
-	(constraint min_resolved_spokes 1))
+(rule "rp2350_core_gnd_solid"
+	(condition "A.NetName == 'GND' && (A.memberOfFootprint('C10') || A.memberOfFootprint('C15') || A.memberOfFootprint('C16') || A.memberOfFootprint('U1'))")
+	(constraint zone_connection solid))

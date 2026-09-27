@@ -135,7 +135,8 @@ python3 tools/gen_pcb.py      # placement + RPi regulator graft + nets (from the
                               # + locked plane fan-out; rules/net classes/.kicad_dru; case anchors
 python3 tools/finish_route.py --nets=VBUS,XIN,XOUT,XOUT_Y,DVDD --lock   # RP core nets first, locked
 python3 tools/route.py        # DSN -> Freerouting (headless) -> SES -> GND pours -> zone fill
-python3 tools/finish_route.py # two-layer A* (+ transactional rip-up) for anything left; drops dangling stubs
+python3 tools/finish_route.py # multi-layer A* (+ transactional rip-up) for anything left; drops dangling stubs
+python3 tools/tidy_tracks.py  # remove router crumbs and fold-backs, merge collinear runs, fix acute corners (DRC-checked)
 python3 tools/check_nets.py   # netlist vs fujinet-firmware headers (independent of design.py)
 python3 tools/export.py       # BOM, JLCPCB BOM + CPL, gerbers/drill zip, schematic PDF, SVGs, renders
 ```
@@ -162,7 +163,11 @@ the RP2350A minimal design (MIT, `tools/RPI-MINIMAL-LICENSE.txt`):
 
 `tools/rpi_graft.py` extracts all of this into `tools/rpi_core_graft.sexpr`.
 A `.kicad_dru` rule allows Raspberry Pi's 0.12 mm clearance on the
-DVDD/RP_LX/VREG_AVDD nets only.
+DVDD/RP_LX/VREG_AVDD nets only. The reference's small GND pour in that
+corner is not copied. The board-wide top GND pour fills it instead,
+solid-connected to C10/C15/C16 and U1's PGND and exposed pad
+(`rp2350_core_gnd_solid` in the `.kicad_dru`). So there is no separate
+ground island next to the RP.
 
 **How the routing works.** `gen_pcb.py` places a locked stub and via on
 every GND/+3V3 SMD pad, because Freerouting handles plane fan-out poorly.

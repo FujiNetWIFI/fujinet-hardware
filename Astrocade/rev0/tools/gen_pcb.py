@@ -219,6 +219,8 @@ def graft_copper(ux, uy):
                         ['drill', 0.3], ['layers', Q('F.Cu'), Q('B.Cu')], ['locked', 'yes'],
                         ['net', find(e, 'net')[1]], ['uuid', uid('graft', i)]])
         elif e[0] == 'zone':
+            if str(find(e, 'net')[1]) == 'GND':
+                continue    # the board-wide GND_top pour covers this corner (solid-connected, see .kicad_dru)
             pts = [(round(ux + float(p[1]), 4), round(uy + float(p[2]), 4)) for p in find(e, 'pts')[1:]]
             z = ['zone', ['net', find(e, 'net')[1]], ['layer', find(e, 'layer')[1]], ['uuid', uid('graft', i)],
                  ['name', Q('rpi_graft_%d' % i)], ['hatch', 'edge', 0.5], ['priority', int(find(e, 'priority')[1]) + 10],
@@ -415,11 +417,12 @@ def configure_project():
         '\t(condition "A.NetName != \'DVDD\' && A.NetName != \'RP_LX\' && A.NetName != \'VREG_AVDD\' && '
         'B.NetName != \'DVDD\' && B.NetName != \'RP_LX\' && B.NetName != \'VREG_AVDD\'")\n'
         '\t(constraint clearance (min 0.15mm)))\n'
-        # C10/C15 GND pads sit inside the grafted GND pour (solid, with its own
-        # vias); the board-wide GND_top pour only needs to reach them once
-        '(rule "rp2350_core_caps_spokes"\n'
-        '\t(condition "A.memberOfFootprint(\'C10\') || A.memberOfFootprint(\'C15\')")\n'
-        '\t(constraint min_resolved_spokes 1))\n')
+        # The regulator corner's GND (C10/C15/C16 and U1's PGND + EP) joins the
+        # top GND pour solidly, as Raspberry Pi's own GND pour there did
+        '(rule "rp2350_core_gnd_solid"\n'
+        '\t(condition "A.NetName == \'GND\' && (A.memberOfFootprint(\'C10\') || A.memberOfFootprint(\'C15\') || '
+        'A.memberOfFootprint(\'C16\') || A.memberOfFootprint(\'U1\'))")\n'
+        '\t(constraint zone_connection solid))\n')
 
 
 def write_case_anchors():

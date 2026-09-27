@@ -11,6 +11,7 @@ python3 tools/gen_pcb.py
 python3 tools/finish_route.py --nets=VBUS,XIN,XOUT,XOUT_Y,DVDD --lock || true   # leftovers go to Freerouting
 python3 tools/route.py --passes 25
 python3 tools/finish_route.py
+python3 tools/tidy_tracks.py     # drop router crumbs / fold-backs, merge, fix acute corners (DRC-checked)
 python3 tools/check_nets.py
 kicad-cli sch erc --severity-all --exit-code-violations FujiNet-Astrocade-Rev0.kicad_sch -o /dev/null
 kicad-cli pcb drc --schematic-parity --severity-error --exit-code-violations FujiNet-Astrocade-Rev0.kicad_pcb -o /dev/null

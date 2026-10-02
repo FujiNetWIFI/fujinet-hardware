@@ -31,3 +31,8 @@ fp-info-cache
 __pycache__/
 *.pyc
 ~*.lck
+
+# kicad-happy analyzer runs and downloaded datasheets (manifest kept)
+**/analysis/
+**/datasheets/*.pdf
+**/datasheets/extracted/

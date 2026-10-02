@@ -1,0 +1,46 @@
+// kicad-happy project config for FujiNet-NES Rev0 (JSONC)
+{
+  "version": 1,
+  "project": {
+    "name": "FujiNet-NES Rev0",
+    "revision": "0",
+    "company": "FujiNet",
+    "market": "us",
+    "emc_standard": "fcc-class-b",
+    "pdn_transient_current_a": 0.6
+  },
+  "preferred_suppliers": ["lcsc"],
+  "bom": { "field_priority": ["MPN", "LCSC"], "group_by": "value+footprint" },
+  "design_intent": {
+    "product_class": "prototype",
+    "target_market": "hobby",
+    "ipc_class": 2,
+    "preferred_passive_size": "0603",
+    "operating_temp_range": [0, 70]
+  },
+  "analysis": {
+    "output_dir": "analysis",
+    "retention": 5,
+    "auto_diff": true,
+    "track_in_git": false,
+    "power_rails": {
+      // logic outputs / divider nodes that only look like rails by name
+      "ignore": ["PWR_OK*", "VBUS_SNS", "VSENSE", "POR*", "SR_OE_N", "PFET_G"],
+      "voltage_overrides": { "+3V3_RP": 3.3, "+5V": 5.0, "CONS_5V": 5.0, "DVDD": 1.1 }
+    }
+  },
+  "suppressions": [
+    {
+      "rule_id": "VM-001",
+      "reason": "Deliberate: the RP2354B sits on the 5 V cart bus through its 5 V-tolerant pads (datasheet 5.5 V with IOVDD powered); IOVDD comes from a fast LDO so the pads are powered before the console's NMOS bus levels arrive. 3.3 V outputs into 74HCT / AS6C4008 (VIH 2.0 / 2.2 V) are in spec."
+    },
+    { "rule_id": "RS-001", "nets": ["PWR_OK", "PWR_OK_N", "VBUS_SNS", "POR", "POR_RC"],
+      "reason": "Logic outputs and divider nodes, not rails." },
+    { "rule_id": "PU-001", "components": ["U10"],
+      "reason": "CP2102N CHREN/CHR0/CHR1 are charger-detect outputs, left open as in the ESP32-S3-DevKitC-1 reference." },
+    { "rule_id": "CG-AUD", "components": ["J1"],
+      "reason": "Console-defined 72-pin NES edge: two GND pins by Nintendo's pinout." },
+    { "rule_id": "EP-AUD", "components": ["J1", "J2"],
+      "reason": "J1 is the console bus (no ESD devices on any NES cart); J2 microSD sits inside the shell." }
+  ]
+}

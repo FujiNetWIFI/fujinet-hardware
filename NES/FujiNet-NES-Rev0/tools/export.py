@@ -2,8 +2,8 @@
 """Fabrication + documentation outputs for FujiNet-NES Rev0.
 
 Always (from the schematic / design.py):
-  FujiNet-NES-Rev0-BOM.csv                  full BOM (INTV Rev0 column set)
-  exports/jlcpcb/BOM-JLCPCB.csv             Comment,Designator,Footprint,LCSC Part #
+  FujiNet-NES-Rev0-BOM.csv                  full BOM (INTV Rev0 column set; DNP parts flagged)
+  exports/jlcpcb/BOM-JLCPCB.csv             Comment,Designator,Footprint,LCSC Part # (no DNP parts)
   docs/FujiNet-NES-Rev0-schematic.pdf
 
 Only once FujiNet-NES-Rev0.kicad_pcb exists (the layout stage is not done):
@@ -37,6 +37,7 @@ JLC_ROT = [  # (footprint regex, degrees added to KiCad's rotation)
     (r'^QFN-', 270),
     (r'^SOIC-', 270),
     (r'^TSOP-I-', 270),
+    (r'^SOT-23-5', 180),
     (r'^USB_C_Receptacle_HRO_TYPE-C-31-M-12', 180),
     (r'^LED_WS2812B-2020', 180),
     (r'^D_SMA', 180),
@@ -57,24 +58,26 @@ def boms():
     for p in D.PARTS:
         if not p.bom:
             continue
-        key = (p.value, p.footprint, p.mpn, p.lcsc)
+        key = (p.value, p.footprint, p.mpn, p.lcsc, p.dnp)
         groups.setdefault(key, []).append(p)
     ref_key = lambda r: (re.sub(r'\d', '', r), int(re.sub(r'\D', '', r) or 0))
     rows = sorted(groups.items(), key=lambda kv: ref_key(kv[1][0].ref))
     with open(os.path.join(PRJ, D.PROJECT + '-BOM.csv'), 'w', newline='') as f:
         w = csv.writer(f, quoting=csv.QUOTE_ALL)
         w.writerow(['Refs', 'Value', 'Footprint', 'MPN', 'LCSC', 'Description', 'DNP'])
-        for (val, fp, mpn, lcsc), ps in rows:
+        for (val, fp, mpn, lcsc, dnp), ps in rows:
             refs = ','.join(sorted((p.ref for p in ps), key=ref_key))
-            w.writerow([refs, val, fp.split(':')[1], mpn, lcsc, ps[0].desc, ''])
+            w.writerow([refs, val, fp.split(':')[1], mpn, lcsc, ps[0].desc, 'DNP' if dnp else ''])
     with open(os.path.join(OUT, 'BOM-JLCPCB.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['Comment', 'Designator', 'Footprint', 'LCSC Part #'])
-        for (val, fp, mpn, lcsc), ps in rows:
+        for (val, fp, mpn, lcsc, dnp), ps in rows:
+            if dnp:
+                continue       # not assembled: the CPL export skips DNP parts too
             if not lcsc:
                 raise SystemExit('no LCSC code for ' + ps[0].ref)
             w.writerow([val, ','.join(sorted((p.ref for p in ps), key=ref_key)), fp.split(':')[1], lcsc])
-    return {p.ref for p in D.PARTS if p.bom}
+    return {p.ref for p in D.PARTS if p.bom and not p.dnp}
 
 
 def cpl(bom_refs):

@@ -1,10 +1,13 @@
-2026-09-27 08:49:28.126 INFO   Freerouting v2.4.1 (build-date: 2026-09-03)
+2026-10-02 23:15:35.261 INFO   Freerouting v2.4.1 (build-date: 2026-09-03)
 WARNING: Final field userProfileSettings in class app.freerouting.settings.GlobalSettings has been mutated reflectively by class com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$2 in unnamed module @954b04f (file:/home/thomc/.local/share/freerouting/freerouting-2.4.1.jar)
 WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
 WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
-2026-09-27 08:49:29.485 INFO   [D22F44\D98AC5] Loading board file 'FujiNet-Astrocade-Rev0.dsn'...
-2026-09-27 08:49:29.555 WARN   Power-plane validation failed:
-- Dedicated power layer 'In4.Cu' has overlapping conduction areas: Area (ID 9, Net(s): [DVDD]) and Area (ID 8, Net(s): [+3V3]) overlap.
+2026-10-02 23:15:36.629 INFO   [B6D549\ECC253] Loading board file 'FujiNet-Astrocade-Rev0.dsn'...
+2026-10-02 23:15:36.746 WARN   DSN file 'FujiNet-Astrocade-Rev0.dsn' was loaded with 4 warning(s).
+2026-10-02 23:15:36.752 WARN   Power-plane validation failed:
+- Dedicated power layer 'In4.Cu' has overlapping conduction areas: Area (ID 15, Net(s): [+3V3_RP]) and Area (ID 14, Net(s): [DVDD]) overlap.
+- Dedicated power layer 'In4.Cu' has overlapping conduction areas: Area (ID 15, Net(s): [+3V3_RP]) and Area (ID 13, Net(s): [+3V3]) overlap.
+- Dedicated power layer 'In4.Cu' has overlapping conduction areas: Area (ID 14, Net(s): [DVDD]) and Area (ID 13, Net(s): [+3V3]) overlap.
 
 Proper Definition and Best Practices for Power Planes:
 1. What Belongs on a Power Plane:
@@ -16,134 +19,218 @@ Proper Definition and Best Practices for Power Planes:
    - Destroyed Return Paths: High-speed signals on adjacent layers couple to the solid plane below/above as return paths. Crossing a trace gap detours return currents, causing severe EMI and signal integrity issues.
    - Compromised Power Delivery: Power planes should provide the lowest impedance path. Routing traces chops up the copper, creating bottleneck restrictions and voltage drops.
 
-2026-09-27 08:49:29.561 INFO   [D22F44\D98AC5] Job 'D22F44\D98AC5' started at 2026-09-27T13:49:29.561535513Z.
-2026-09-27 08:49:29.867 INFO   [D22F44\D98AC5] Fanout stage started on board 'e8a3ed83bd2a3df2f2ca05e763f0dd3e' with 323 of 388 SMD pins needing fanout (65 already connected, 0 netless).
-2026-09-27 08:49:32.017 INFO   [D22F44\D98AC5] Fanout pass #1 on board 'b580c37b3413f1e78bc29e2b1e5acc1f' completed in 1.94 seconds with 77 SMD pins fanouted, 127 not routed, 0 insert errors, +14 extra vias (0 SMD pins still to check in pass, ripup costs=100).
-2026-09-27 08:49:33.400 INFO   [D22F44\D98AC5] Fanout pass #2 on board '2f8cceebee0b7510ef8179607c1131c3' completed in 1.37 seconds with 26 SMD pins fanouted, 139 not routed, 0 insert errors, +3 extra vias (0 SMD pins still to check in pass, ripup costs=200).
-2026-09-27 08:49:34.742 INFO   [D22F44\D98AC5] Fanout pass #3 on board 'ec1daf97b975ae7a7f1bd0c3418e4bd5' completed in 1.33 seconds with 20 SMD pins fanouted, 140 not routed, 0 insert errors, +2 extra vias (0 SMD pins still to check in pass, ripup costs=300).
-2026-09-27 08:49:36.087 INFO   [D22F44\D98AC5] Fanout pass #4 on board '13f52d5df753e77cd6160ad02991cb2f' completed in 1.34 seconds with 18 SMD pins fanouted, 141 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=400).
-2026-09-27 08:49:37.420 INFO   [D22F44\D98AC5] Fanout pass #5 on board 'be6c4b2bbf32e8fcbe8c51d7fc3c6c97' completed in 1.32 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=500).
-2026-09-27 08:49:38.705 INFO   [D22F44\D98AC5] Fanout pass #6 on board 'f1628297fd7f89b735ed04d456bebbee' completed in 1.28 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=600).
-2026-09-27 08:49:40.058 INFO   [D22F44\D98AC5] Fanout pass #7 on board 'a70ce538f901025d1fca227c97717897' completed in 1.34 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=700).
-2026-09-27 08:49:41.371 INFO   [D22F44\D98AC5] Fanout pass #8 on board 'd3d047f89a5ac10435e1b54557e68c91' completed in 1.30 seconds with 15 SMD pins fanouted, 142 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=800).
-2026-09-27 08:49:41.371 INFO   Fanout stopped after 8 passes: no progress for 3 consecutive passes.
-2026-09-27 08:49:41.592 INFO   [D22F44\D98AC5] Fanout stage completed: started with 388 total SMD pins, completed in 11.53 seconds, escaped pins: 218/388 (56.2%), using 11.84 total CPU seconds, 108.91 GB total allocated, and 4355.9 MB peak heap usage.
-2026-09-27 08:49:41.605 INFO   [D22F44\D98AC5] Auto-routing stage started on board 'd3d047f89a5ac10435e1b54557e68c91' for 119 unrouted items.
-2026-09-27 08:50:42.154 WARN   Polyline: must contain at least 2 different points
-2026-09-27 08:50:55.460 INFO   [D22F44\D98AC5] Auto-routing pass #1 on board 'd3d047f89a5ac10435e1b54557e68c91' was completed in 73.35 seconds with score 684.46 (69 unrouted and 163 violations), using 84.30 CPU seconds and the job allocated 590.48 GB of memory so far.
-2026-09-27 08:52:30.637 INFO   [D22F44\D98AC5] Auto-routing pass #2 on board 'd81d90e423d6f2b58f566bb804b2fee9' was completed in 94.60 seconds with score 706.20 (62 unrouted and 163 violations), using 179.33 CPU seconds and the job allocated 1202.65 GB of memory so far.
-2026-09-27 08:54:07.039 INFO   [D22F44\D98AC5] Auto-routing pass #3 on board '977e2f2bc0190d72e6e5d2f42f951bcc' was completed in 95.81 seconds with score 703.10 (63 unrouted and 163 violations), using 274.31 CPU seconds and the job allocated 1795.55 GB of memory so far.
-2026-09-27 08:55:43.854 INFO   [D22F44\D98AC5] Auto-routing pass #4 on board 'bdeab0fc4e38cf7366d20f621fed7051' was completed in 96.22 seconds with score 706.20 (62 unrouted and 163 violations), using 370.26 CPU seconds and the job allocated 2401.89 GB of memory so far.
-2026-09-27 08:57:22.709 INFO   [D22F44\D98AC5] Auto-routing pass #5 on board '354dbd481daa2d07eb8e1831ceca4b7f' was completed in 98.27 seconds with score 712.41 (60 unrouted and 163 violations), using 468.18 CPU seconds and the job allocated 3016.53 GB of memory so far.
-2026-09-27 08:59:00.240 INFO   [D22F44\D98AC5] Auto-routing pass #6 on board '946404e82011e324bc20dcfa84f49318' was completed in 96.94 seconds with score 715.52 (59 unrouted and 163 violations), using 564.10 CPU seconds and the job allocated 3611.06 GB of memory so far.
-2026-09-27 09:00:37.020 INFO   [D22F44\D98AC5] Auto-routing pass #7 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.19 seconds with score 715.52 (59 unrouted and 163 violations), using 660.03 CPU seconds and the job allocated 4213.49 GB of memory so far.
-2026-09-27 09:02:13.774 INFO   [D22F44\D98AC5] Auto-routing pass #8 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.45 seconds with score 715.52 (59 unrouted and 163 violations), using 755.98 CPU seconds and the job allocated 4813.30 GB of memory so far.
-2026-09-27 09:03:50.694 INFO   [D22F44\D98AC5] Auto-routing pass #9 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.62 seconds with score 715.52 (59 unrouted and 163 violations), using 850.93 CPU seconds and the job allocated 5401.78 GB of memory so far.
-2026-09-27 09:05:27.694 INFO   [D22F44\D98AC5] Auto-routing pass #10 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.70 seconds with score 715.52 (59 unrouted and 163 violations), using 946.84 CPU seconds and the job allocated 5999.01 GB of memory so far.
-2026-09-27 09:07:04.653 INFO   [D22F44\D98AC5] Auto-routing pass #11 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.66 seconds with score 715.52 (59 unrouted and 163 violations), using 1042.76 CPU seconds and the job allocated 6596.95 GB of memory so far.
-2026-09-27 09:08:42.419 INFO   [D22F44\D98AC5] Auto-routing pass #12 on board '832a3d392d9708701c166e62af5b1a40' was completed in 97.17 seconds with score 715.52 (59 unrouted and 163 violations), using 1139.67 CPU seconds and the job allocated 7199.64 GB of memory so far.
-2026-09-27 09:10:19.335 INFO   [D22F44\D98AC5] Auto-routing pass #13 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.61 seconds with score 715.52 (59 unrouted and 163 violations), using 1235.58 CPU seconds and the job allocated 7798.09 GB of memory so far.
-2026-09-27 09:11:56.559 INFO   [D22F44\D98AC5] Auto-routing pass #14 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.92 seconds with score 715.52 (59 unrouted and 163 violations), using 1331.50 CPU seconds and the job allocated 8393.35 GB of memory so far.
-2026-09-27 09:13:34.151 INFO   [D22F44\D98AC5] Auto-routing pass #15 on board '832a3d392d9708701c166e62af5b1a40' was completed in 97.29 seconds with score 715.52 (59 unrouted and 163 violations), using 1428.40 CPU seconds and the job allocated 8995.23 GB of memory so far.
-2026-09-27 09:15:11.745 INFO   [D22F44\D98AC5] Auto-routing pass #16 on board '832a3d392d9708701c166e62af5b1a40' was completed in 97.29 seconds with score 715.52 (59 unrouted and 163 violations), using 1524.31 CPU seconds and the job allocated 9587.03 GB of memory so far.
-2026-09-27 09:16:48.661 INFO   [D22F44\D98AC5] Auto-routing pass #17 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.61 seconds with score 715.52 (59 unrouted and 163 violations), using 1620.21 CPU seconds and the job allocated 10185.41 GB of memory so far.
-2026-09-27 09:18:25.582 INFO   [D22F44\D98AC5] Auto-routing pass #18 on board '832a3d392d9708701c166e62af5b1a40' was completed in 96.61 seconds with score 715.52 (59 unrouted and 163 violations), using 1716.12 CPU seconds and the job allocated 10784.11 GB of memory so far.
-2026-09-27 09:18:25.614 INFO   [D22F44\D98AC5] The router's best score (715.52) has not improved by more than 0.5 points since pass #8. Stopping the auto-router after 18 passes (59 items still unconnected).
+2026-10-02 23:15:36.758 INFO   [B6D549\ECC253] Job 'B6D549\ECC253' started at 2026-10-03T04:15:36.758277433Z.
+2026-10-02 23:15:37.246 INFO   [B6D549\ECC253] Fanout stage started on board '14185322c0986e92afee80172ada0ffa' with 231 of 409 SMD pins needing fanout (175 already connected, 3 netless).
+2026-10-02 23:15:46.383 WARN   BasicBoard.normalizeTraces: reached 2000 iterations for net '/esp32/RST_BTN' — stopping to prevent hang. The board geometry for this net may be oscillating (split/combine cycle); traces are kept as-is and further normalization for this net is suppressed on this board candidate.
+2026-10-02 23:15:47.204 INFO   [B6D549\ECC253] Fanout pass #1 on board '9d5425e868ae04d18042fd827de39a1e' completed in 9.59 seconds with 28 SMD pins fanouted, 54 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-10-02 23:15:59.813 WARN   BasicBoard.normalizeTraces: reached 2000 iterations for net '/usb/UART_DTR' — stopping to prevent hang. The board geometry for this net may be oscillating (split/combine cycle); traces are kept as-is and further normalization for this net is suppressed on this board candidate.
+2026-10-02 23:16:00.879 INFO   [B6D549\ECC253] Fanout pass #2 on board '1e9f986c661fcd744c1a4b2dc61ff656' completed in 13.65 seconds with 21 SMD pins fanouted, 54 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=200).
+2026-10-02 23:16:02.413 INFO   [B6D549\ECC253] Fanout pass #3 on board 'd3340a57dffc59dbb26fb796e0858a54' completed in 1.51 seconds with 20 SMD pins fanouted, 54 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=300).
+2026-10-02 23:16:03.921 INFO   [B6D549\ECC253] Fanout pass #4 on board '3264fb22af8c18cdd3a3290325cdb801' completed in 1.49 seconds with 20 SMD pins fanouted, 54 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=400).
+2026-10-02 23:16:05.411 INFO   [B6D549\ECC253] Fanout pass #5 on board '8a2d017162697c2885175ae40835c26e' completed in 1.47 seconds with 20 SMD pins fanouted, 54 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=500).
+2026-10-02 23:16:06.984 INFO   [B6D549\ECC253] Fanout pass #6 on board '2c45e90e1a2a6d5895ee580d64584d0f' completed in 1.55 seconds with 20 SMD pins fanouted, 54 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=600).
+2026-10-02 23:16:06.984 INFO   Fanout stopped after 6 passes: no progress for 3 consecutive passes.
+2026-10-02 23:16:07.357 INFO   [B6D549\ECC253] Fanout stage completed: started with 406 total SMD pins, completed in 29.77 seconds, escaped pins: 291/406 (71.7%), using 30.21 total CPU seconds, 255.68 GB total allocated, and 4422.5 MB peak heap usage.
+2026-10-02 23:16:07.393 INFO   [B6D549\ECC253] Auto-routing stage started on board '2c45e90e1a2a6d5895ee580d64584d0f' for 69 unrouted items.
+2026-10-02 23:16:13.976 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:16:13.976 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:16:15.152 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:16:15.152 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:17:38.838 WARN   Polyline: must contain at least 2 different points
+2026-10-02 23:17:40.573 INFO   [B6D549\ECC253] Auto-routing pass #1 on board '2c45e90e1a2a6d5895ee580d64584d0f' was completed in 92.35 seconds with score 705.91 (67 unrouted and 162 violations), using 121.86 CPU seconds and the job allocated 664.38 GB of memory so far.
+2026-10-02 23:17:46.910 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:17:46.910 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:17:48.044 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:17:48.044 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:19:11.728 INFO   [B6D549\ECC253] Auto-routing pass #2 on board '4f606fb8304b067f98febbd94ddac296' was completed in 90.34 seconds with score 705.91 (67 unrouted and 162 violations), using 211.85 CPU seconds and the job allocated 1070.55 GB of memory so far.
+2026-10-02 23:19:17.077 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:19:17.077 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:19:18.074 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:19:18.074 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:20:31.468 INFO   [B6D549\ECC253] Auto-routing pass #3 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 79.03 seconds with score 705.91 (67 unrouted and 162 violations), using 290.91 CPU seconds and the job allocated 1480.19 GB of memory so far.
+2026-10-02 23:20:37.072 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:20:37.072 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:20:38.223 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:20:38.223 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:21:57.526 INFO   [B6D549\ECC253] Auto-routing pass #4 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 85.64 seconds with score 705.91 (67 unrouted and 162 violations), using 376.23 CPU seconds and the job allocated 1884.63 GB of memory so far.
+2026-10-02 23:22:03.230 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:22:03.231 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:22:04.298 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:22:04.298 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:23:24.367 INFO   [B6D549\ECC253] Auto-routing pass #5 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 86.44 seconds with score 705.91 (67 unrouted and 162 violations), using 462.50 CPU seconds and the job allocated 2290.80 GB of memory so far.
+2026-10-02 23:23:29.990 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:23:29.990 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:23:31.155 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:23:31.155 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:24:51.041 INFO   [B6D549\ECC253] Auto-routing pass #6 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 86.26 seconds with score 705.91 (67 unrouted and 162 violations), using 548.73 CPU seconds and the job allocated 2698.29 GB of memory so far.
+2026-10-02 23:24:56.829 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:24:56.829 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:24:57.857 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:24:57.857 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:26:17.655 INFO   [B6D549\ECC253] Auto-routing pass #7 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 86.19 seconds with score 705.91 (67 unrouted and 162 violations), using 633.97 CPU seconds and the job allocated 3098.50 GB of memory so far.
+2026-10-02 23:26:23.423 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:26:23.423 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:26:24.534 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:26:24.534 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:27:45.087 INFO   [B6D549\ECC253] Auto-routing pass #8 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 87.01 seconds with score 705.91 (67 unrouted and 162 violations), using 721.21 CPU seconds and the job allocated 3507.62 GB of memory so far.
+2026-10-02 23:27:50.838 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:27:50.838 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:27:51.919 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:27:51.920 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:29:12.942 INFO   [B6D549\ECC253] Auto-routing pass #9 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 87.45 seconds with score 705.91 (67 unrouted and 162 violations), using 807.46 CPU seconds and the job allocated 3905.60 GB of memory so far.
+2026-10-02 23:29:18.726 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:29:18.726 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:29:19.848 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:29:19.848 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:30:41.609 INFO   [B6D549\ECC253] Auto-routing pass #10 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 88.25 seconds with score 705.91 (67 unrouted and 162 violations), using 895.64 CPU seconds and the job allocated 4313.47 GB of memory so far.
+2026-10-02 23:30:47.644 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:30:47.644 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:30:48.840 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:30:48.840 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:32:09.086 INFO   [B6D549\ECC253] Auto-routing pass #11 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 87.03 seconds with score 705.91 (67 unrouted and 162 violations), using 982.88 CPU seconds and the job allocated 4722.16 GB of memory so far.
+2026-10-02 23:32:15.214 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:32:15.214 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:32:16.343 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:32:16.343 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:33:36.565 INFO   [B6D549\ECC253] Auto-routing pass #12 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 86.67 seconds with score 705.91 (67 unrouted and 162 violations), using 1069.12 CPU seconds and the job allocated 5126.10 GB of memory so far.
+2026-10-02 23:33:42.204 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:33:42.204 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:33:43.341 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:33:43.341 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:34:57.099 INFO   [B6D549\ECC253] Auto-routing pass #13 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 80.12 seconds with score 705.91 (67 unrouted and 162 violations), using 1149.38 CPU seconds and the job allocated 5534.08 GB of memory so far.
+2026-10-02 23:35:01.871 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:35:01.871 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:35:02.821 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:35:02.821 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:36:17.852 INFO   [B6D549\ECC253] Auto-routing pass #14 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 80.41 seconds with score 705.91 (67 unrouted and 162 violations), using 1228.60 CPU seconds and the job allocated 5930.20 GB of memory so far.
+2026-10-02 23:36:22.318 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:36:22.318 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:36:23.186 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:36:23.187 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:37:38.358 INFO   [B6D549\ECC253] Auto-routing pass #15 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 80.18 seconds with score 705.91 (67 unrouted and 162 violations), using 1308.84 CPU seconds and the job allocated 6340.71 GB of memory so far.
+2026-10-02 23:37:44.224 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:37:44.224 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:37:45.373 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:37:45.373 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:39:09.095 INFO   [B6D549\ECC253] Auto-routing pass #16 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 90.30 seconds with score 705.91 (67 unrouted and 162 violations), using 1398.07 CPU seconds and the job allocated 6739.92 GB of memory so far.
+2026-10-02 23:39:15.009 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:39:15.009 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:39:16.138 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:39:16.138 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:40:40.286 INFO   [B6D549\ECC253] Auto-routing pass #17 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 90.76 seconds with score 705.91 (67 unrouted and 162 violations), using 1489.27 CPU seconds and the job allocated 7150.77 GB of memory so far.
+2026-10-02 23:40:46.210 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:40:46.210 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:40:47.383 WARN   Simplex.calc_division_lines: division not found
+2026-10-02 23:40:47.384 WARN   Simplex.cutout_from: division line is null
+2026-10-02 23:42:10.913 INFO   [B6D549\ECC253] Auto-routing pass #18 on board '0bf905a8095f5ed1b1f280cd3519f2c8' was completed in 90.19 seconds with score 705.91 (67 unrouted and 162 violations), using 1578.51 CPU seconds and the job allocated 7551.13 GB of memory so far.
+2026-10-02 23:42:10.980 INFO   [B6D549\ECC253] The router's best score (705.91) has not improved by more than 0.5 points since pass #8. Stopping the auto-router after 18 passes (67 items still unconnected).
 The following connections could not be routed -- please review your design (e.g. check pad clearances, trace width rules, and available routing space):
+  Net '+3V3_RP' (4 unrouted connections):
+    - U1-53  ->  U1-54
+    - via  ->  C7-1
+    - conductionarea  ->  U1-44
+    - C2-1  ->  C11-1
+  Net 'DVDD' (1 unrouted connection):
+    - U1-50  ->  conductionarea
   Net 'GND' (6 unrouted connections):
     - J1-26@1  ->  J1-26@2
     - J1-13@1  ->  J1-13@2
-    - J1-1@1  ->  J1-1@2
-    - J1-26  ->  J1-26@1
-    - J1-13  ->  J1-13@1
+    - J1-1@2  ->  J1-1@1
+    - J1-26@1  ->  J1-26
+    - J1-13@1  ->  J1-13
     - J1-1@1  ->  J1-1
-  Net '+3V3' (2 unrouted connections):
-    - U1-54  ->  U1-53
-    - U1-45  ->  conductionarea
-  Net 'DVDD' (1 unrouted connection):
-    - U1-50  ->  conductionarea
-  Net 'VREG_AVDD' (2 unrouted connections):
+  Net '/esp32/S3_EN' (1 unrouted connection):
+    - via  ->  U4-6
+  Net '/cart/VREG_AVDD' (2 unrouted connections):
     - R1-2  ->  C16-1
     - C16-1  ->  U1-46
-  Net '+5V' (2 unrouted connections):
+  Net 'CONS_5V' (2 unrouted connections):
     - J1-25@2  ->  J1-25@1
     - J1-25@1  ->  J1-25
-  Net 'RP_USB_DM' (1 unrouted connection):
+  Net '/cart/BOOTSEL_BTN' (1 unrouted connection):
+    - SW1-1  ->  via
+  Net '/usb/UBRG_DP' (1 unrouted connection):
+    - J3-B6  ->  via
+  Net '/usb/UART_RTS' (2 unrouted connections):
+    - U4-1  ->  U4-5
+    - U4-1  ->  U3-24
+  Net '/cart/RUN' (1 unrouted connection):
+    - R6-2  ->  R3-2
+  Net '/cart/RP_USB_DM' (1 unrouted connection):
     - R12-2  ->  U1-51
-  Net 'RP_USB_DP' (1 unrouted connection):
+  Net '/cart/RP_USB_DP' (1 unrouted connection):
     - R11-2  ->  U1-52
-  Net 'CA0' (2 unrouted connections):
+  Net '/cart/CA0' (2 unrouted connections):
     - J1-9@1  ->  J1-9@2
-    - J1-9  ->  J1-9@1
-  Net 'CA1' (2 unrouted connections):
-    - J1-8@1  ->  J1-8@2
+    - J1-9@1  ->  J1-9
+  Net '/cart/CA1' (2 unrouted connections):
+    - J1-8@2  ->  J1-8@1
     - J1-8@1  ->  J1-8
-  Net 'CA2' (2 unrouted connections):
+  Net '/cart/CA2' (2 unrouted connections):
     - J1-7@1  ->  J1-7@2
     - J1-7@1  ->  J1-7
-  Net 'CA3' (2 unrouted connections):
+  Net '/cart/CA3' (2 unrouted connections):
     - J1-6@1  ->  J1-6@2
     - J1-6  ->  J1-6@1
-  Net 'CA4' (2 unrouted connections):
+  Net '/cart/CA4' (2 unrouted connections):
     - J1-5@1  ->  J1-5@2
-    - J1-5@1  ->  J1-5
-  Net 'CA5' (2 unrouted connections):
+    - J1-5  ->  J1-5@1
+  Net '/cart/CA5' (2 unrouted connections):
     - J1-4@1  ->  J1-4@2
-    - J1-4@1  ->  J1-4
-  Net 'CA6' (2 unrouted connections):
-    - J1-3@2  ->  J1-3@1
+    - J1-4  ->  J1-4@1
+  Net '/cart/CA6' (2 unrouted connections):
+    - J1-3@1  ->  J1-3@2
     - J1-3@1  ->  J1-3
-  Net 'CA7' (2 unrouted connections):
-    - J1-2@1  ->  J1-2@2
-    - J1-2  ->  J1-2@1
-  Net 'CA8' (2 unrouted connections):
+  Net '/cart/CA7' (2 unrouted connections):
+    - J1-2@2  ->  J1-2@1
+    - J1-2@1  ->  J1-2
+  Net '/cart/CA8' (2 unrouted connections):
     - J1-24@1  ->  J1-24@2
-    - J1-24  ->  J1-24@1
-  Net 'CA9' (2 unrouted connections):
+    - J1-24@1  ->  J1-24
+  Net '/cart/CA9' (2 unrouted connections):
     - J1-23@1  ->  J1-23@2
     - J1-23  ->  J1-23@1
-  Net 'CA10' (2 unrouted connections):
-    - J1-20@1  ->  J1-20@2
-    - J1-20  ->  J1-20@1
-  Net 'CA11' (2 unrouted connections):
+  Net '/cart/CA10' (2 unrouted connections):
+    - J1-20@2  ->  J1-20@1
+    - J1-20@1  ->  J1-20
+  Net '/cart/CA11' (2 unrouted connections):
     - J1-19@1  ->  J1-19@2
     - J1-19  ->  J1-19@1
-  Net 'CA12' (2 unrouted connections):
+  Net '/cart/CA12' (2 unrouted connections):
     - J1-22@1  ->  J1-22@2
     - J1-22@1  ->  J1-22
-  Net 'CCS_N' (2 unrouted connections):
+  Net '/cart/CCS_N' (2 unrouted connections):
     - J1-21@1  ->  J1-21@2
     - J1-21@1  ->  J1-21
-  Net 'CD0' (2 unrouted connections):
-    - J1-10@2  ->  J1-10@1
+  Net '/cart/CD0' (2 unrouted connections):
+    - J1-10@1  ->  J1-10@2
     - J1-10@1  ->  J1-10
-  Net 'CD1' (2 unrouted connections):
+  Net '/cart/CD1' (2 unrouted connections):
     - J1-11@1  ->  J1-11@2
-    - J1-11@1  ->  J1-11
-  Net 'CD2' (2 unrouted connections):
+    - J1-11  ->  J1-11@1
+  Net '/cart/CD2' (2 unrouted connections):
     - J1-12@1  ->  J1-12@2
     - J1-12@1  ->  J1-12
-  Net 'CD3' (2 unrouted connections):
+  Net '/cart/CD3' (2 unrouted connections):
     - J1-14@1  ->  J1-14@2
     - J1-14  ->  J1-14@1
-  Net 'CD4' (2 unrouted connections):
+  Net '/cart/CD4' (2 unrouted connections):
     - J1-15@1  ->  J1-15@2
     - J1-15  ->  J1-15@1
-  Net 'CD5' (2 unrouted connections):
+  Net '/cart/CD5' (2 unrouted connections):
     - J1-16@1  ->  J1-16@2
-    - J1-16  ->  J1-16@1
-  Net 'CD6' (2 unrouted connections):
+    - J1-16@1  ->  J1-16
+  Net '/cart/CD6' (2 unrouted connections):
     - J1-17@1  ->  J1-17@2
     - J1-17@1  ->  J1-17
-  Net 'CD7' (2 unrouted connections):
+  Net '/cart/CD7' (2 unrouted connections):
     - J1-18@1  ->  J1-18@2
-    - J1-18@1  ->  J1-18
-2026-09-27 09:18:26.193 INFO   [D22F44\D98AC5] Auto-routing stage completed: started with 163 unrouted nets, completed in 1736.30 seconds, final score: 715.52 (59 unrouted and 163 violations), using 1717.11 total CPU seconds, 10793.95 GB total allocated, and 4275.4 MB peak heap usage.
-2026-09-27 09:18:26.482 INFO   [D22F44\D98AC5] Optimization stage started on board '832a3d392d9708701c166e62af5b1a40' with score 715.52 (59 unrouted and 163 violations).
-2026-09-27 09:18:54.982 INFO   [D22F44\D98AC5] Stopping optimization pass #1 early after 50 consecutive items could not be improved.
-2026-09-27 09:18:55.281 INFO   [D22F44\D98AC5] Optimizer pass #1 on board '6e49b7b8bd261f6e605f5c7bc486ab33' was completed in 27.92 seconds with the score of 715.52 (59 unrouted and 163 violations).
-2026-09-27 09:18:55.566 INFO   [D22F44\D98AC5] Stopping optimizer because the improvement in this pass (0.0000%) is below the threshold (1.00%).
-2026-09-27 09:18:55.852 INFO   [D22F44\D98AC5] Optimization stage completed: started with score 715.52 (59 unrouted and 163 violations), completed in 29.09 seconds, final score: 715.52 (59 unrouted and 163 violations), using 28.82 total CPU seconds, 289.28 GB total allocated, and 670.8 MB peak heap usage.
-2026-09-27 09:18:55.862 INFO   [D22F44\D98AC5] Job 'D22F44\D98AC5' finished with state: COMPLETED (elapsed: 29 minutes 26.30 seconds, finished at UTC: 2026-09-27T14:18:55.861344545Z).
-2026-09-27 09:18:56.056 INFO   Saving output file '/home/thomc/Workspace/fujinet-hardware/Astrocade/rev0/exports/FujiNet-Astrocade-Rev0.ses' (SES)...
-2026-09-27 09:18:56.057 INFO   Successfully saved output file '/home/thomc/Workspace/fujinet-hardware/Astrocade/rev0/exports/FujiNet-Astrocade-Rev0.ses' (56396 bytes).
+    - J1-18  ->  J1-18@1
+2026-10-02 23:42:11.771 INFO   [B6D549\ECC253] Auto-routing stage completed: started with 75 unrouted nets, completed in 1594.58 seconds, final score: 705.91 (67 unrouted and 162 violations), using 1579.50 total CPU seconds, 7558.59 GB total allocated, and 4422.5 MB peak heap usage.
+2026-10-02 23:42:12.170 INFO   [B6D549\ECC253] Optimization stage started on board '0bf905a8095f5ed1b1f280cd3519f2c8' with score 705.91 (67 unrouted and 162 violations).
+2026-10-02 23:42:20.585 INFO   [B6D549\ECC253] Optimizer pass #1 on board '3627a8cb1ba1102e2f7dd5358754c136' was completed in 7.18 seconds with the score of 705.91 (67 unrouted and 162 violations).
+2026-10-02 23:42:20.982 INFO   [B6D549\ECC253] Stopping optimizer because the improvement in this pass (0.0000%) is below the threshold (1.00%).
+2026-10-02 23:42:21.387 INFO   [B6D549\ECC253] Optimization stage completed: started with score 705.91 (67 unrouted and 162 violations), completed in 8.82 seconds, final score: 705.91 (67 unrouted and 162 violations), using 8.74 total CPU seconds, 66.72 GB total allocated, and 1766.6 MB peak heap usage.
+2026-10-02 23:42:21.405 INFO   [B6D549\ECC253] Job 'B6D549\ECC253' finished with state: COMPLETED (elapsed: 26 minutes 44.64 seconds, finished at UTC: 2026-10-03T04:42:21.403945993Z).
+2026-10-02 23:42:21.682 INFO   Saving output file '/home/thomc/Workspace/fh-astrocade/Astrocade/rev0/exports/FujiNet-Astrocade-Rev0.ses' (SES)...
+2026-10-02 23:42:21.683 INFO   Successfully saved output file '/home/thomc/Workspace/fh-astrocade/Astrocade/rev0/exports/FujiNet-Astrocade-Rev0.ses' (106563 bytes).

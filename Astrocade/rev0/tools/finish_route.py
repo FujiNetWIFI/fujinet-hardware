@@ -3,7 +3,7 @@
 
 For each connection KiCad's DRC still reports as unconnected, rasterise the
 other nets' copper (pads, tracks, vias, holes, board edge, the B.Cu blade rule
-area) around it at 0.05 mm, inflated by clearance + half the track width,
+area along the contact lands) around it at 0.05 mm, inflated by clearance + half the track width,
 and search F.Cu/B.Cu with vias.  The path is written back as tracks and vias
 on the right net, the GND pours are refilled, and DRC is the judge.
 
@@ -20,24 +20,29 @@ import gen_pcb as G
 _args = [a for a in sys.argv[1:] if not a.startswith('--')]
 PCB = os.path.abspath(_args[0]) if _args else G.PCB
 ONLY = next((a.split('=', 1)[1].split(',') for a in sys.argv[1:] if a.startswith('--nets=')), None)
+ONLY = [G.NET(n) for n in ONLY] if ONLY else ONLY      # design.py names -> KiCad's (/cart/CA0)
 LOCK = '--lock' in sys.argv
 # --force=NETS: route these first, ignoring (and ripping up) other nets' unlocked
 # router copper; the ripped nets are left for the next Freerouting round
 FORCE = next((a.split('=', 1)[1].split(',') for a in sys.argv[1:] if a.startswith('--force=')), None)
+FORCE = [G.NET(n) for n in FORCE] if FORCE else FORCE
+OPEN_NETS = set()      # nets still unconnected when the finisher starts (they keep their escape lanes)
 RES = 0.05
 MARGIN = 0.02          # grid discretisation allowance on top of the rule clearance (DRC verifies)
 VIA_D, VIA_DRILL = 0.6, 0.3
+RIP_PEN = 1.0           # rip-up mode: cost (mm per cell) of running through another net's unlocked copper,
+                        # so the search detours around what it can and rips up only what it must
 VIA_COST = 12.0
 WIDTH = {'PWR': 0.5, 'VBUS': 0.3, 'USB': 0.25, 'Default': 0.2}
 CLEAR = {'PWR': 0.2, 'VBUS': 0.15, 'USB': 0.15, 'Default': 0.15}
-NETCLASS = {n: c for c, _, _, _, _, nets in G.NETCLASSES for n in nets}
+NETCLASS = {n: c for c, _, _, _, _, nets in G.netclasses() for n in nets}
 LAYERS = ('F.Cu', 'B.Cu')                 # outer copper
-RLAYERS = ('F.Cu', 'In2.Cu', 'In3.Cu', 'B.Cu')   # every signal layer of the 6-layer stack
+RLAYERS = G.SIGNAL_LAYERS                 # every signal layer of the stack (gen_pcb.STACKUP)
 
 
 def drc_unconnected():
     fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-finish.json')
-    subprocess.run(['kicad-cli', 'pcb', 'drc', '--format', 'json', '-o', fn, PCB], capture_output=True)
+    subprocess.run(['kicad-cli', 'pcb', 'drc', '--refill-zones', '--format', 'json', '-o', fn, PCB], capture_output=True)
     out = []
     for v in json.load(open(fn)).get('unconnected_items', []):
         ends = []
@@ -47,8 +52,8 @@ def drc_unconnected():
             if 'PTH' in d or d.startswith('Via'):
                 lays = RLAYERS
             else:
-                m = re.search(r' on ([FB]\.Cu)', d)
-                lays = (m.group(1),) if m else LAYERS
+                m = re.search(r' on (\w+\.Cu)', d)
+                lays = (m.group(1),) if m and m.group(1) in RLAYERS else LAYERS
             ends.append((net, it['pos']['x'], it['pos']['y'], lays, d))
         out.append(ends)
     return out
@@ -65,7 +70,7 @@ def copper(board):
         if not (isinstance(e, list) and e):
             continue
         if e[0] == 'zone' and find(e, 'name') and not find(e, 'keepout') and \
-                str(find(e, 'name')[1]).startswith(('rpi_graft', 'rp_3v3_ring')):
+                str(find(e, 'name')[1]).startswith(('rp_dvdd_island', 'rp_io_island', 'rpi_graft')):
             # the FILLED copper (fill keeps clearance to other nets), not the outline
             net = find(e, 'net')
             for fp_ in findall(e, 'filled_polygon'):
@@ -113,31 +118,41 @@ def dist_field(kind, g, X, Y):
     return np.hypot(X - (x0 + t * dx), Y - (y0 + t * dy)) - hw
 
 
-def route_one(board, net, a, b, ignore_tracks=False, margin=8):
+def route_one(board, net, a, b, ignore_tracks=False, margin=8, protect=()):
     """Return (items, conflicting nets).  With ignore_tracks, other nets'
     unlocked (router-made) tracks/vias are not obstacles; the nets they belong
     to are reported so the caller can rip them up."""
     cls = NETCLASS.get(net, 'Default')
     w, c = WIDTH[cls], CLEAR[cls]
+    # a finger pad's anchor sits on the tab (outside the routable body): aim for its
+    # locked stub end at y = TAB_Y - 1 instead (gen_pcb.finger_stubs)
+    a = a if a[2] < G.TAB_Y - 1.0 else (a[0], a[1], G.TAB_Y - 1.0, a[3], a[4])
+    b = b if b[2] < G.TAB_Y - 1.0 else (b[0], b[1], G.TAB_Y - 1.0, b[3], b[4])
     x0 = max(G.X0, min(a[1], b[1]) - margin); x1 = min(G.X1, max(a[1], b[1]) + margin)
-    y0 = max(G.Y0, min(a[2], b[2]) - margin); y1 = min(G.Y1, max(a[2], b[2]) + margin)
+    y0 = max(G.Y0, min(a[2], b[2]) - margin); y1 = min(G.TAB_Y, max(a[2], b[2]) + margin)
     xs = np.arange(x0, x1 + RES / 2, RES); ys = np.arange(y0, y1 + RES / 2, RES)
     X, Y = np.meshgrid(xs, ys)
     need_t = c + w / 2 + MARGIN
     need_v = c + VIA_D / 2 + MARGIN
     free = {L: np.ones(X.shape, bool) for L in RLAYERS}
     vfree = np.ones(X.shape, bool)
-    edge = np.minimum.reduce([X - G.X0, G.X1 - X, Y - G.Y0, G.Y1 - Y])
+    edge = np.minimum.reduce([X - G.X0, G.X1 - X, Y - G.Y0, G.TAB_Y - Y])   # the body; the tab is fingers only
     for L in RLAYERS:
         free[L] &= edge > 0.25 + w / 2
     vfree &= edge > 0.5 + VIA_D / 2
+    for (hx, hy, hd) in G.HOLES:
+        free_h = np.hypot(X - hx, Y - hy) > hd / 2 + 0.3 + w / 2
+        for L in RLAYERS:
+            free[L] &= free_h
+        vfree &= np.hypot(X - hx, Y - hy) > hd / 2 + 0.3 + VIA_D / 2
+    # the console blade wipes the underside along the contact lands: no B.Cu tracks, no vias there
     free['B.Cu'] &= Y < G.BLADE_Y - w / 2 - 0.05
     vfree &= Y < G.BLADE_Y - VIA_D / 2 - 0.05
     u1 = [e for e in board if isinstance(e, list) and e and e[0] == 'footprint'
           and any(isinstance(p, list) and p and p[0] == 'property' and p[1] == 'Reference' and p[2] == 'U1' for p in e)][0]
     ua = find(u1, 'at'); ux_, uy_ = float(ua[1]), float(ua[2])
     under = (np.abs(X - ux_) < G.UNDER) & (np.abs(Y - uy_) < G.UNDER)
-    for L in ('F.Cu',):   # nothing new on F.Cu under the RP2354A (+3V3 bar, DVDD stubs)
+    for L in ('F.Cu',):   # nothing new on F.Cu under the RP2354B (DVDD stubs, EP vias)
         free[L] &= ~under
     vfree &= ~under
     for e in board:     # rule areas that forbid tracks (e.g. under the RP2354A)
@@ -149,13 +164,31 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
             if L in free:
                 free[L] &= d > w / 2 + 0.05
             vfree &= d > VIA_D / 2 + 0.05
-    soft = []
+    soft, own_copper = [], []
+    # only copper near the search window matters: cull the rest before rasterising
+    pad_ = need_v + 1.0
+    def near(kind, g):
+        if kind == 'rect':
+            cx, cy, hw, hh = g; bx0, by0, bx1, by1 = cx - hw, cy - hh, cx + hw, cy + hh
+        elif kind == 'circ':
+            cx, cy, r = g; bx0, by0, bx1, by1 = cx - r, cy - r, cx + r, cy + r
+        elif kind == 'poly':
+            bx0, by0 = min(p[0] for p in g), min(p[1] for p in g); bx1, by1 = max(p[0] for p in g), max(p[1] for p in g)
+        else:
+            sx0, sy0, sx1, sy1, hw = g
+            bx0, by0, bx1, by1 = min(sx0, sx1) - hw, min(sy0, sy1) - hw, max(sx0, sx1) + hw, max(sy0, sy1) + hw
+        return bx1 >= x0 - pad_ and bx0 <= x1 + pad_ and by1 >= y0 - pad_ and by0 <= y1 + pad_
     for (L, n, kind, g, npth, rid) in copper(board):
-        if n == net and not npth:
-            if kind == 'circ' or (kind == 'rect' and rid is None and False):
-                vfree &= dist_field(kind, g, X, Y) > VIA_D / 2 + 0.05   # hole spacing to same-net vias
+        if not near(kind, g):
             continue
-        if ignore_tracks and rid is not None:
+        if n == net and not npth:
+            own_copper.append((L, kind, g))
+            if kind in ('circ', 'rect') and rid is None:
+                # hole spacing to same-net vias, and no via inside or against a same-net pad
+                # (an untented via in or at an SMD pad wicks the solder away): 0.2 mm mask dam
+                vfree &= dist_field(kind, g, X, Y) > VIA_D / 2 + (0.2 if kind == 'rect' else 0.05)
+            continue
+        if ignore_tracks and rid is not None and n not in protect:
             soft.append((L, n, kind, g))
             continue
         d = dist_field(kind, g, X, Y)
@@ -166,15 +199,37 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
             continue
         if L in free:
             free[L] &= d > need_t
+        if kind == 'poly' and n != 'DVDD' and L not in LAYERS:
+            continue        # a big island's FILL re-pours around a via: only tracks must stay off it
+            # (the small DVDD island under the RP is kept whole: vias stay out of it)
         vfree &= d > need_v     # a via crosses every layer, In2 tracks included
     # escape lanes in front of other nets' fine-pitch pins (as fanout.py keeps
     # them): no vias and no crossing tracks in the first 1.2 mm
     pads_, _ = G.board_pads(board)
+    # the endpoints' own footprints are exempt from the lane rule: reaching a 0.5 mm-pitch
+    # pad along its axis necessarily runs beside its siblings' lanes (their axes stay free)
+    own = {re.search(r' of (\S+) ', s).group(1) for s in (a[4], b[4]) if re.search(r' of (\S+) ', s)}
+    # ... for TRACKS.  A via next to one's own pin walls in the neighbours (0.4 mm pitch: there
+    # is no via spot between two lanes), so the via rule still applies to the siblings: the pin's
+    # via belongs beyond the lane ends, in the column between the fan-out vias and the ring
+    # every narrow SMD pin gets a lane: 0.4/0.5 mm-pitch QFN/TSOP pins and 0.6 mm-wide SOIC
+    # pins (0603 passives, 0.9 mm wide, do not); without it a pin boxed in by a neighbour's
+    # track had no via spot at all once vias inside pads were ruled out
     for q in pads_:
-        if q.th or q.net in (None, net) or min(q.hw, q.hh) > 0.15 or 'F.Cu' not in q.layers:
+        if q.th or q.net in (None, net) or min(q.hw, q.hh) > 0.3 or 'F.Cu' not in q.layers:
             continue
+        # own-footprint tracks may run beside sibling lanes only at 0.4/0.5 mm pitch (there is no
+        # other way to reach such a pad); a SOIC pin is entered along its own lane
+        exempt_tracks = q.ref in own and min(q.hw, q.hh) <= 0.15
         fx, fy = q.fp_xy
-        for length, target in ((1.2, 'via'), (1.2, 'track')):
+        # track lanes only while pre-routing (locked copper must not wall in a pin's
+        # escape); in the final pass a crossing track is DRC's business, and 0.4 mm-pitch
+        # neighbours could never be reached otherwise
+        # via lanes: always while pre-routing; in the final pass only for pins whose net is still
+        # open -- a routed neighbour no longer needs its escape, and keeping its lane free left a
+        # signal pin between it and an IOVDD fan-out stub with no via spot at all
+        via_lane = ((1.2, 'via'),) if (ONLY or q.net in OPEN_NETS) else ()
+        for length, target in via_lane + (((1.2, 'track'),) if ONLY and not exempt_tracks else ()):
             if q.hh > q.hw:
                 sg = 1 if q.cy > fy else -1
                 ya, yb = sorted((q.cy + sg * q.hh, q.cy + sg * (q.hh + length)))
@@ -188,13 +243,30 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
                 vfree &= d > VIA_D / 2 + 0.05
             else:
                 free['F.Cu'] &= d > w / 2 + 0.05
+    # the net's own copper is always walkable, whatever masked the cells (an endpoint can
+    # be a router leftover ending under the RP or inside a keep-out: walk it back to the pad)
+    for (L, kind, g) in own_copper:
+        d = dist_field(kind, g, X, Y)
+        for L2 in (RLAYERS if kind == 'circ' else [L]):
+            if L2 in free:
+                free[L2] |= d <= 0
     for L in RLAYERS:
         vfree &= free[L]
+    # rip-up mode: other nets' router copper is passable at a price, not free
+    pen = {L: np.zeros(X.shape, np.float32) for L in RLAYERS}
+    vpen = np.zeros(X.shape, np.float32)
+    for (L, n, kind, g) in soft:
+        d = dist_field(kind, g, X, Y)
+        if L in pen:
+            pen[L][d <= need_t] = RIP_PEN
+        vpen[d <= need_v] = RIP_PEN
 
     def cell(x, y):
         return int(round((y - y0) / RES)), int(round((x - x0) / RES))
     (sy, sx), (ty, tx) = cell(a[1], a[2]), cell(b[1], b[2])
     H, W = X.shape
+    if not (0 <= sy < H and 0 <= sx < W and 0 <= ty < H and 0 <= tx < W):
+        return None, set()       # an endpoint outside the routable body (tab, off-board)
     starts = [(sy, sx, L) for L in a[3]]
     goals = {(ty, tx, L) for L in b[3]}
     # the endpoints sit on same-net copper; open a small disc around each
@@ -222,11 +294,11 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
             if 0 <= ny < H and 0 <= nx < W and free[L][ny, nx]:
                 if dy and dx and not (free[L][y, nx] and free[L][ny, x]):
                     continue
-                nbrs.append(((ny, nx, L), cst))
+                nbrs.append(((ny, nx, L), cst + float(pen[L][ny, nx])))
         if vfree[y, x]:
             for L2 in RLAYERS:
                 if L2 != L:
-                    nbrs.append(((y, x, L2), VIA_COST * RES))
+                    nbrs.append(((y, x, L2), VIA_COST * RES + float(vpen[y, x])))
         for ns, cst in nbrs:
             ng = gcost + cst
             if ng < best.get(ns, 1e18):
@@ -239,14 +311,7 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
     while path[-1] in prev:
         path.append(prev[path[-1]])
     path.reverse()
-    hit = set()
-    if soft:
-        px = np.array([x0 + q[1] * RES for q in path]); py = np.array([y0 + q[0] * RES for q in path])
-        pl = np.array([q[2] for q in path])
-        for (L, n, kind, g) in soft:
-            m = pl == L
-            if m.any() and (dist_field(kind, g, px[m], py[m]) < need_t).any():
-                hit.add(n)
+    hit = set()         # filled in below, from the copper actually produced
     # split into same-layer runs (a via between runs), then string-pull each
     # run: keep a straight shot whenever every sample along it is a free cell
     runs, vias = [[path[0]]], []
@@ -263,7 +328,7 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
         for i in range(n + 1):
             t = i / n
             yy = int(round(p[0] + (q[0] - p[0]) * t)); xx = int(round(p[1] + (q[1] - p[1]) * t))
-            if not free[L][yy, xx]:
+            if not free[L][yy, xx] or pen[L][yy, xx] > 0:
                 return False
         return True
     segs = []
@@ -278,6 +343,25 @@ def route_one(board, net, a, b, ignore_tracks=False, margin=8):
             i = j
         segs += [[pts[k], pts[k + 1]] for k in range(len(pts) - 1)]
     xy = lambda s: (round(x0 + s[1] * RES, 4), round(y0 + s[0] * RES, 4))
+    if soft:
+        # which other nets does this copper actually touch: sample every straightened
+        # segment on its layer, and test every via against all layers (it crosses them all)
+        pts = {L: [] for L in RLAYERS}
+        for r in segs:
+            (ay, ax), (by, bx) = r[0][:2], r[-1][:2]
+            n = max(2, int(max(abs(by - ay), abs(bx - ax)) * 2))
+            for i in range(n + 1):
+                t = i / n
+                pts[r[0][2]].append((x0 + (ax + (bx - ax) * t) * RES, y0 + (ay + (by - ay) * t) * RES))
+        vx_ = np.array([x0 + v[1] * RES for v in vias]); vy_ = np.array([y0 + v[0] * RES for v in vias])
+        for (L, n, kind, g) in soft:
+            if pts.get(L):
+                px = np.array([q[0] for q in pts[L]]); py = np.array([q[1] for q in pts[L]])
+                if (dist_field(kind, g, px, py) < need_t).any():
+                    hit.add(n)
+                    continue
+            if len(vx_) and (dist_field(kind, g, vx_, vy_) < need_v).any():
+                hit.add(n)
     out = []
     for r in segs:
         if len(r) >= 2 and r[0][:2] != r[-1][:2]:
@@ -303,7 +387,7 @@ def remove_dangling():
     fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-finish2.json')
     removed = 0
     for _ in range(5):
-        subprocess.run(['kicad-cli', 'pcb', 'drc', '--format', 'json', '-o', fn, PCB], capture_output=True)
+        subprocess.run(['kicad-cli', 'pcb', 'drc', '--refill-zones', '--format', 'json', '-o', fn, PCB], capture_output=True)
         ids = {it['uuid'] for v in json.load(open(fn)).get('violations', [])
                if v['type'] in ('via_dangling', 'track_dangling') for it in v['items']}
         if not ids:
@@ -359,6 +443,7 @@ def main():
     if n:
         print('finish_route: removed %d dangling via/track items' % n)
     todo = drc_unconnected()
+    OPEN_NETS.update(ab[0][0] for ab in todo)
     if not todo:
         print('finish_route: nothing to do')
         if n:
@@ -370,17 +455,6 @@ def main():
     def insert(board, items):
         k = max(k for k, e in enumerate(board) if isinstance(e, list) and e and e[0] in ('segment', 'via', 'footprint'))
         board[k + 1:k + 1] = items
-
-    def route_simple(pairs):
-        """Route pairs without ripping; True if every one found a path."""
-        for a, b in pairs:
-            board = parse(open(PCB).read())
-            items, _ = route_one(board, a[0], a, b)
-            if items is None:
-                return False
-            insert(board, items)
-            open(PCB, 'w').write(dump(board) + '\n')
-        return True
 
     done, failed = 0, set()
     for _ in range(60):
@@ -395,8 +469,10 @@ def main():
         net = a[0]
         board = parse(open(PCB).read())
         items, _ = route_one(board, net, a, b)
-        if items is None:   # maybe it needs a long detour: search the whole board
-            items, _ = route_one(board, net, a, b, margin=200)
+        if items is None:   # maybe it needs a long detour: widen the search (the whole board
+            # in the final pass; a bounded window while pre-routing, where a far-apart pair
+            # of a plane net is Freerouting's job, not a minutes-long A* over 4 M cells)
+            items, _ = route_one(board, net, a, b, margin=40)
         if items is not None:
             insert(board, items)
             open(PCB, 'w').write(dump(board) + '\n')
@@ -417,13 +493,28 @@ def main():
         insert(board, items)
         open(PCB, 'w').write(dump(board) + '\n')
         ok = True
-        for _ in range(len(hit) * 4 + 4):
-            victims = [(x, y) for x, y in drc_unconnected() if x[0] in hit]
+        ripped = set(hit)           # every net ripped in this transaction (each at most once)
+        for _ in range(40):
+            victims = [(x, y) for x, y in drc_unconnected() if x[0] in ripped]
             if not victims:
                 break
-            if not route_simple(victims[:1]):
+            va, vb = victims[0]
+            board = parse(open(PCB).read())
+            items, _ = route_one(board, va[0], va, vb)
+            if items is None and len(ripped) < 12:
+                # the victim may in turn rip up nets not yet involved (cost-aware, so few)
+                items, h2 = route_one(board, va[0], va, vb, ignore_tracks=True, protect={net} | ripped)
+                if items is not None and h2:
+                    board = [e for e in board if not (isinstance(e, list) and e and e[0] in ('segment', 'via')
+                                                      and not find(e, 'locked') and find(e, 'net')
+                                                      and str(find(e, 'net')[1]) in h2)]
+                    ripped |= h2
+            if items is None:
                 ok = False
                 break
+            insert(board, items)
+            open(PCB, 'w').write(dump(board) + '\n')
+        hit = ripped
         after = len(drc_unconnected())
         if ok and after < before:
             done += 1

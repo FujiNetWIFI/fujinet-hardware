@@ -3,7 +3,8 @@
 firmware that has to run on it -- independently of tools/design.py.
 
 Exports a fresh netlist with kicad-cli and reads, from fujinet-firmware
-(default ~/Workspace/fujinet-firmware, or $FUJINET_FIRMWARE):
+($FUJINET_FIRMWARE, else the worktree ~/Workspace/fn-astrocade on branch
+astrocade-rp2354-board, else ~/Workspace/fujinet-firmware):
   pico/astrocade/firmware/include/astrocade_cart.h      ADDR_MASK, EN_PIN, D0_PIN
   pico/astrocade/firmware/boards/fujicade_rp2354.h      FUJICADE_VSENSE_PIN
   include/pinmap/fujiversal-astrocade.h                 S3 SD/LED/UART/RUN/BOOTSEL pins
@@ -17,7 +18,11 @@ import xml.etree.ElementTree as ET
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
-FW = os.environ.get('FUJINET_FIRMWARE', os.path.expanduser('~/Workspace/fujinet-firmware'))
+FW = os.environ.get('FUJINET_FIRMWARE') or next(
+    (p for p in map(os.path.expanduser, ('~/Workspace/fn-astrocade', '~/Workspace/fujinet-firmware'))
+     if os.path.exists(os.path.join(p, 'pico/astrocade/firmware/boards/fujicade_rp2354.h'))),
+    os.path.expanduser('~/Workspace/fujinet-firmware'))
+RP_RAIL = '+3V3_RP'     # the RP2354A's own LDO rail (IOVDD up before the console bus)
 SCH = os.path.join(PRJ, 'FujiNet-Astrocade-Rev0.kicad_sch')
 
 EDGE = {1: 'GND', 2: 'A7', 3: 'A6', 4: 'A5', 5: 'A4', 6: 'A3', 7: 'A2', 8: 'A1', 9: 'A0',
@@ -110,7 +115,7 @@ def main():
         if sig == 'GND':
             chk('J1.%d is GND' % p, n == 'GND')
         elif sig == '+5V':
-            chk('J1.25 is +5V', n == '+5V')
+            chk('J1.25 is CONS_5V (console +5V)', n == 'CONS_5V')
         elif sig == '/CCS':
             chk('J1.21 /CCS -> GP%d (EN_PIN)' % en_pin, n is not None and rp(en_pin) == n)
         elif sig.startswith('A'):
@@ -121,16 +126,16 @@ def main():
             chk('J1.%d %s -> GP%d' % (p, sig, d0_pin + d), n is not None and rp(d0_pin + d) == n)
     bus = [edge_net[p] for p, s in EDGE.items() if s not in ('GND', '+5V')]
     for n in bus:
-        others = [(r, pin) for (r, pin, f) in nets[n] if r not in (U1, J1)]
+        others = [(r, pin) for (r, pin, f) in nets[n] if r not in (U1, J1) and not r.startswith('TP')]
         allowed = n == edge_net[21] and len(others) == 1   # /CCS pull-up only
-        chk('bus net %s touches only J1 + U1 (+ /CCS pull-up)' % n, not others or allowed)
+        chk('bus net %s touches only J1 + U1 (+ /CCS pull-up, test pad)' % n, not others or allowed)
     ccs = edge_net[21]
-    chk('/CCS has a pull-up to +3V3', through_r(ccs, '+3V3') is not None)
+    chk('/CCS has a pull-up to the RP rail', through_r(ccs, RP_RAIL) is not None)
 
     # ---- console power sense ----
     vs = rp(vsense)
-    top, bot = through_r('+5V', vs), through_r(vs, 'GND')
-    chk('GP%d VSENSE divider from +5V' % vsense, top is not None and bot is not None)
+    top, bot = through_r('CONS_5V', vs), through_r(vs, 'GND')
+    chk('GP%d VSENSE divider from the console rail (before the OR diode)' % vsense, top is not None and bot is not None)
     if top and bot:
         val = lambda s: float(s.replace('k', 'e3').replace('R', ''))
         vout = 5.25 * val(bot) / (val(top) + val(bot))
@@ -143,17 +148,37 @@ def main():
     run, ss = func_net.get((U1, 'RUN')), func_net.get((U1, '~{QSPI_SS}'))
     chk('S3 IO%d (PIN_RP2040_RUN) -> 1k -> RP RUN (active low, no inverter)' % run_io, through_r(s3(run_io), run) == '1k')
     chk('S3 IO%d (PIN_RP2040_BOOTSEL) -> 1k -> RP QSPI_SS' % bsel_io, through_r(s3(bsel_io), ss) == '1k')
-    chk('RUN pull-up', through_r(run, '+3V3') == '10k')
-    chk('QSPI_SS pull-up', through_r(ss, '+3V3') == '10k')
+    chk('RUN pull-up', through_r(run, RP_RAIL) == '10k')
+    chk('QSPI_SS pull-up', through_r(ss, RP_RAIL) == '10k')
     for f in ('QSPI_SCLK', 'QSPI_SD0', 'QSPI_SD1', 'QSPI_SD2', 'QSPI_SD3'):
         chk('RP %s unconnected (flash is in the package)' % f, func_net.get((U1, f), '').startswith('unconnected'))
     for n, nodes in nets.items():   # every supply pin (names repeat: IOVDD x6, DVDD x3)
         for (ref, pin, f) in nodes:
             if ref == U1 and (f == 'IOVDD' or f in ('QSPI_IOVDD', 'USB_OTP_VDD', 'ADC_AVDD', 'VREG_VIN')):
-                chk('RP %s (pin %s) on +3V3' % (f, pin), n == '+3V3')
+                chk('RP %s (pin %s) on %s' % (f, pin, RP_RAIL), n == RP_RAIL)
             if ref == U1 and f == 'DVDD':
                 chk('RP DVDD (pin %s) on DVDD' % pin, n == 'DVDD')
     chk('RP VREG_FB on DVDD', func_net.get((U1, 'VREG_FB')) == 'DVDD')
+
+    chk('RP VREG_AVDD from the RP rail through 33R', through_r(RP_RAIL, func_net.get((U1, 'VREG_AVDD'))) == '33R')
+
+    # ---- power: diode-OR, buck, RP LDO ----
+    ldo = by_value('AP2112K-3.3')
+    chk('one AP2112K-3.3', len(ldo) == 1)
+    if ldo:
+        chk('AP2112K VIN/EN on +5V, VOUT on the RP rail',
+            func_net.get((ldo[0], 'VIN')) == '+5V' and func_net.get((ldo[0], 'EN')) == '+5V'
+            and func_net.get((ldo[0], 'VOUT')) == RP_RAIL)
+    ors = [r for r in by_value('SS34')]
+    anodes = sorted(node_net.get((r, '2')) for r in ors)
+    chk('SS34 diode-OR: CONS_5V and VBUS anodes, +5V cathodes',
+        anodes == ['CONS_5V', 'VBUS'] and all(node_net.get((r, '1')) == '+5V' for r in ors))
+    buck = by_value('AP63203WU')
+    chk('AP63203 IN on +5V, FB on +3V3', bool(buck) and func_net.get((buck[0], 'IN')) == '+5V'
+        and func_net.get((buck[0], 'FB')) == '+3V3')
+    chk('WS2812B VDD on +5V (datasheet 3.7-5.3 V)', node_net.get((WS, '4')) == '+5V')
+    chk('nothing but the RP side on the RP rail', all(r in (U1,) or r.startswith(('C', 'R', 'TP')) or r in ldo
+                                                         for (r, p, f) in nets.get(RP_RAIL, [])))
 
     # ---- S3 pins ----
     chk('SD CS  IO%d -> J2 DAT3/CS' % sd['CS'], s3(sd['CS']) == node_net.get((J2, '2')))

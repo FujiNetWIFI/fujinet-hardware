@@ -1,19 +1,20 @@
 """Plane fan-out for gen_pcb.py.
 
-Every SMD pad on a plane net (GND -> In1.Cu, +3V3 -> In2.Cu) gets a short
-stub and a via, placed here geometrically with explicit clearance checks,
+Every SMD pad on a plane net (GND -> the In1.Cu plane; +3V3, +3V3_RP, DVDD
+-> the power plane and its islands, where gen_pcb.py has checked that the
+plane under the via carries the pad's net) gets a short stub and a via, placed here geometrically with explicit clearance checks,
 and written LOCKED so the autorouter keeps them.  QFN exposed pads get a
 via array.  Freerouting is then left with signal nets only -- it is poor at
 plane fan-out on its own.
 """
 import math
 
-PLANE_NETS = ('GND', '+3V3')
+PLANE_NETS = ('GND', '+3V3', '+3V3_RP', 'DVDD')
 VIA_D, VIA_DRILL = 0.6, 0.3
 STUB_W = 0.3
 CLR = 0.16          # copper clearance kept by the fan-out (rules say 0.15)
 EDGE_CLR = 0.6
-EP_ARRAYS = {'U3': 2}   # exposed-pad via grid (n x n); U1's footprint carries its own
+EP_ARRAYS = {'U3': 3}   # exposed-pad via grid (n x n): CP2102N QFN-28 (3.35 mm EP); U1's footprint carries its own
 ESCAPE = 1.2        # length of the via-free lane kept in front of fine-pitch signal pins
 
 
@@ -139,8 +140,13 @@ def plan(pads, keepouts, board_box, blade_y, holes, skip_refs=(), extra_segs=(),
                 ex = min(max(mx, ep.cx - ep.hw + 0.05), ep.cx + ep.hw - 0.05)
                 ey = min(max(my, ep.cy - ep.hh + 0.05), ep.cy + ep.hh - 0.05)
                 others = [q for q in pads if q is not ep]
+
+                def via_clear(x0_, y0_, x1_, y1_):
+                    return not any(_pt_seg(ox, oy, x0_, y0_, x1_, y1_) < VIA_D / 2 + sw / 2 + CLR
+                                   for (ox, oy, on) in vias if on != p.net)
                 if (_seg_ok(p.cx, p.cy, mx, my, others, p, p.net, sw / 2)
-                        and _seg_ok(mx, my, ex, ey, others, p, p.net, sw / 2)):
+                        and _seg_ok(mx, my, ex, ey, others, p, p.net, sw / 2)
+                        and via_clear(p.cx, p.cy, mx, my) and via_clear(mx, my, ex, ey)):
                     segs.append((p.cx, p.cy, mx, my, p.net, sw))
                     segs.append((mx, my, ex, ey, p.net, sw))
                     continue

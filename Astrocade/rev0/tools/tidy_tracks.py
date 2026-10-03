@@ -25,7 +25,7 @@ EPS = 1e-3
 
 def drc_errors():
     fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-tidy.json')
-    subprocess.run(['kicad-cli', 'pcb', 'drc', '--schematic-parity', '--format', 'json', '-o', fn, PCB],
+    subprocess.run(['kicad-cli', 'pcb', 'drc', '--refill-zones', '--schematic-parity', '--format', 'json', '-o', fn, PCB],
                    capture_output=True)
     d = json.load(open(fn))
     errs = sum(1 for v in d.get('violations', []) if v['severity'] == 'error')

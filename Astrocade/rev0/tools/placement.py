@@ -5,8 +5,8 @@ Regions (top view):
   north-west  ESP32-S3 module, antenna overhanging the trailing edge
   north-mid   microSD (slot at the trailing edge), SD pull-ups, WS2812 status
   north-east  USB-C (trailing edge), ESD, CP2102N + auto-program, VBUS OR diode
-  east        top-face RESET / BOOTSEL buttons, RUN/BOOTSEL force transistors, test pads
-  west        S3 EN/BOOT buttons, buck regulator + console-5V OR diode
+  east        top-face RESET / BOOTSEL buttons, test pads
+  west        S3 EN/BOOT buttons, buck regulator + console-5V OR diode, RP LDO
   centre      RP2354A with its decoupling ring, crystal, core SMPS
   south       contact lands (B.Cu) and their plated escapes at y=70.6
 """
@@ -55,18 +55,23 @@ def do_placement(place):
     place('R10', 78.0, 63.6, 90)
     place('R13', rx + 13.0, ry + 0.4, 0)     # LED
     place('R8', 87.6, 62.4, 90)           # /CCS pull-up
-    place('D2', rx + 13.0, ry + 2.2, 180)
-    # test pads (F.Cu)
+    place('D1', rx + 13.0, ry + 2.2, 180)
+    # test pads (F.Cu): SWD + GND, SELFTEST / DBG_TX, RUN / BOOTSEL, the three rails
     place('TP1', 134.0, 60.0, 0)
     place('TP2', 136.8, 60.0, 0)
     place('TP3', 139.6, 60.0, 0)
     place('TP4', 134.0, 63.0, 0)
     place('TP5', 136.8, 63.0, 0)
+    place('TP6', 139.6, 63.0, 0)             # RUN
+    place('TP7', 142.4, 63.0, 0)             # BOOTSEL (QSPI_SS)
+    place('TP9', 142.4, 60.0, 0)             # +3V3
+    place('TP8', 62.0, 67.0, 0)              # +5V, by the OR diodes
+    place('TP10', 120.6, 67.6, 0)            # +3V3_RP (inside the RP island)
 
     # ---------------- east: top-face buttons ----------------
-    place('SW1', 141, 43, 0)                 # top-face RESET
-    place('D1', 133.8, 45.0, 0)              # BAT54C
-    place('SW2', 141, 52, 0)                 # BOOTSEL
+    place('SW4', 141, 43, 0)                 # top-face RESET
+    place('D2', 133.8, 45.0, 0)              # BAT54C
+    place('SW1', 141, 52, 0)                 # BOOTSEL (pinhole)
 
     # ---------------- north-west: ESP32-S3 ----------------
     place('U2', 68, 36.35, 0)
@@ -74,8 +79,8 @@ def do_placement(place):
     place('C20', 56.3, 43.6, 90)
     place('R14', 56.3, 46.8, 90)
     place('C21', 56.3, 50.2, 90)
-    place('SW3', 57.0, 57.0, 90)
-    place('SW4', 57.0, 66.0, 90)
+    place('SW2', 57.0, 57.0, 90)
+    place('SW3', 57.0, 66.0, 90)
 
     # ---------------- north-mid: microSD + status LED ----------------
     place('J2', 88, 39.55, 180)
@@ -93,10 +98,12 @@ def do_placement(place):
     place('D4', 120.6, 43.0, 0)
     place('D5', 127.6, 43.0, 0)
     place('D6', 117.4, 41.6, 90)
+    place('C24', 109.6, 39.0, 0)             # VBUS 1 uF (by the OR diode)
+    place('C25', 109.6, 41.0, 0)             # VBUS 100 nF
     place('D8', 113.0, 40.0, 90)
     place('U3', 124.2, 48.8, 270)           # D+/D- face J3, RTS/DTR face U4
-    place('C24', 119.8, 46.4, 90)
-    place('C25', 118.0, 46.4, 90)
+    place('C26', 119.8, 46.4, 90)
+    place('C27', 118.0, 46.4, 90)
     place('R19', 118.8, 49.8, 0)
     place('R20', 118.8, 51.5, 0)
     place('R21', 118.8, 53.2, 0)
@@ -104,13 +111,17 @@ def do_placement(place):
 
     # ---------------- west: power ----------------
     place('D7', 71.5, 67.0, 0)
-    place('C26', 66.0, 69.0, 0)
+    # RP2354A LDO (+3V3_RP): next to the console OR diode's +5V, its output in the RP island
+    place('U6', 84.5, 66.5, 0)
+    place('C36', 81.0, 66.5, 90)             # LDO in
+    place('C37', 88.0, 66.5, 90)             # LDO out
+    place('C28', 66.0, 69.0, 0)
     place('U5', 70.0, 57.5, 0)
-    place('C27', 65.8, 55.4, 90)
-    place('C28', 65.8, 59.4, 90)
-    place('C29', 65.8, 63.4, 90)
-    place('C30', 68.6, 61.2, 0)
-    place('C31', 70.0, 54.6, 0)
+    place('C29', 65.8, 55.4, 90)
+    place('C30', 65.8, 59.4, 90)
+    place('C31', 65.8, 63.4, 90)
+    place('C32', 68.6, 61.2, 0)
+    place('C33', 70.0, 54.6, 0)
     place('L2', 75.0, 57.5, 90)
-    place('C32', 78.6, 55.6, 90)
-    place('C33', 78.6, 59.6, 90)
+    place('C34', 78.6, 55.6, 90)
+    place('C35', 78.6, 59.6, 90)

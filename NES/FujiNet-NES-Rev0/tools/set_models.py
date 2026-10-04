@@ -7,7 +7,7 @@ KiCad's optional 3D-model package.
 Model sources (see 3d/README.md): KiCad's own kicad-packages3D for stock
 footprints (copied from Astrocade/rev0/3d or fetched from the library
 repository); LCSC/EasyEDA models (easyeda2kicad) for the parts KiCad has
-none for (Abracon AOTA inductor, HRO USB-C); a simple VRML stand-in for the
+none for (Abracon AOTA inductor, HRO USB-C, RP2354B QFN-80); a simple VRML stand-in for the
 WS2812B-2020 (no vendor model published).  Footprints without a model in
 3d/ are left without one (the board still renders).
 
@@ -39,7 +39,7 @@ MODELS = {
     'L_Sunlord_SWPA4030S': ('L_Sunlord_SWPA4030S.step', (0, 0, 0), (0, 0, 0)),
     'RPI_L_AOTA-B201610S3R3': ('AOTA-B201610S3R3.step', (0, 0, 0), (0, 0, 0)),
     'QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm': ('QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm.step', (0, 0, 0), (0, 0, 0)),
-    'QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm': ('QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm.step', (0, 0, 0), (0, 0, 0)),
+    'QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm': ('RP2354B_QFN-80_10x10.step', (0, 0, 0), (0, 0, 0)),
     'TSOP-I-32_18.4x8mm_P0.5mm': ('TSOP-I-32_18.4x8mm_P0.5mm.step', (0, 0, 0), (0, 0, 0)),
     'SOIC-14_3.9x8.7mm_P1.27mm': ('SOIC-14_3.9x8.7mm_P1.27mm.step', (0, 0, 0), (0, 0, 0)),
     'SOIC-16_3.9x9.9mm_P1.27mm': ('SOIC-16_3.9x9.9mm_P1.27mm.step', (0, 0, 0), (0, 0, 0)),

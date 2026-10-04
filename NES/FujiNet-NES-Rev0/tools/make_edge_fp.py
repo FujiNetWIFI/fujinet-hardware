@@ -57,7 +57,7 @@ fp = ['footprint', Q('NES_Cart_Edge_72'), ['version', 20241229], ['generator', Q
       ['tags', Q('nes nintendo cartridge edge connector')],
       ['property', Q('Reference'), Q('REF**'), ['at', 0, -(TAB_D + 1.5), 0], ['layer', Q('F.SilkS')], F()],
       ['property', Q('Value'), Q('NES_Cart_Edge_72'), ['at', 0, -(TAB_D + 3.5), 0], ['layer', Q('F.Fab')], F()],
-      ['attr', 'smd', 'exclude_from_pos_files', 'exclude_from_bom'],
+      ['attr', 'smd', 'exclude_from_pos_files', 'exclude_from_bom', 'allow_soldermask_bridges'],   # one opening spans all fingers
       # the tab outline on Fab, for reference (Edge.Cuts is drawn by gen_pcb.py)
       ['fp_rect', ['start', -TAB_W / 2, 0], ['end', TAB_W / 2, -TAB_D],
        ['stroke', ['width', 0.1], ['type', 'solid']], ['fill', 'no'], ['layer', Q('F.Fab')]],

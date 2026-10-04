@@ -40,6 +40,7 @@ if [ "${LAYOUT:-0}" = 1 ]; then
     python3 tools/tidy_tracks.py
     python3 tools/stitch_gnd.py               # GND stitching grid + edge guard row, DRC-filtered
     python3 tools/set_models.py
+    python3 tools/fix_silk.py                 # refs off pads/other silk (nearest clear spot, else hidden)
     kicad-cli pcb drc --refill-zones --schematic-parity --severity-error --exit-code-violations FujiNet-NES-Rev0.kicad_pcb -o /dev/null
 fi
 python3 tools/export.py                       # BOM, JLCPCB BOM, schematic PDF (+ CPL/gerbers/renders with a .kicad_pcb)

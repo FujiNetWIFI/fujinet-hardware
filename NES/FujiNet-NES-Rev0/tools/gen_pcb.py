@@ -252,7 +252,7 @@ def finger_stubs(board):
     fx = float(find(j1, 'at')[1])      # J1 sits at rotation 0: pad x is footprint x + local x
     for pd in findall(j1, 'pad'):
         a = find(pd, 'at'); net = find(pd, 'net')
-        if not net:
+        if not net or str(net[1]).startswith('unconnected-'):   # unused finger: no stub to dangle
             continue
         layer = str(find(pd, 'layers')[1])
         x = round(fx + float(a[1]), 4)
@@ -609,7 +609,7 @@ def main():
     board.append(text('FujiNet NES Rev0', XC + 6, 84.0, 'F.SilkS', 1.5))
     board.append(text('RP2354B + ESP32-S3', XC + 6, 86.2, 'F.SilkS', 1.0))
     board.append(text('CERN-OHL-W-2.0  fujinet.online', XC, Y0 + 3.0, 'B.SilkS', 1.0, mirror=True))
-    board.append(text('label side: pin 1 ->', XC + 6, 88.0, 'F.SilkS', 0.8))
+    board.append(text('label side: pin 1 ->', XC + 6, 87.75, 'F.SilkS', 0.8))   # clear of R1's outline
     board.append(['embedded_fonts', 'no'])
     open(PCB, 'w').write(dump(board) + '\n')
     print('placed %d parts -> %s' % (len(D.PARTS), os.path.basename(PCB)))

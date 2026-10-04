@@ -81,7 +81,7 @@ def fiducial():
             ['fp_circle', ['center', 0, 0], ['end', 1.25, 0], ['stroke', ['width', 0.05], ['type', 'solid']],
              ['fill', 'no'], ['layer', Q('F.CrtYd')]],
             ['pad', Q('1'), 'smd', 'circle', ['at', 0, 0], ['size', 1.0, 1.0], ['layers', Q('F.Cu'), Q('F.Mask')],
-             ['solder_mask_margin', 0.5]],
+             ['solder_mask_margin', 0.5], ['clearance', 0.5]],   # keep the pour out of the mask opening
             ['embedded_fonts', 'no']]
 
 

@@ -25,10 +25,11 @@ KICAD_SYMS = os.environ.get('KICAD_SYMBOL_DIR', '/usr/share/kicad/symbols')
 # lib -> symbols to flatten from the stock libraries
 STOCK = {
     'MCU_RaspberryPi': ['RP2354B'],
-    '74xx': ['74HCT00', '74HCT595', '74HC14', '74LS32', '74LS253', '74LS20'],
+    '74xx': ['74HCT00', '74HCT595', '74HC14', '74LS32', '74LS20'],   # the '253 is drawn by gen_sch
     'Regulator_Linear': ['AP2112K-3.3'],          # RP IOVDD LDO
     'Transistor_FET': ['AO3401A'],                # console 5V P-FET switch
     'MCU_Microchip_ATtiny': ['ATtiny13A-SS'],     # CIClone (DNP)
+    'power': ['GND', '+5V', '+3V3', 'VBUS'],      # rail symbols (the drawn sheets; Value = net name)
 }
 # symbols the Astrocade cache carries that this board does not use
 DROP = {'FujiNet-Astrocade:Astrocade_Cart_Edge_26', 'FujiNet-INTV:INTV_Cart_Edge_44',

@@ -12,7 +12,7 @@ fi
 python3 tools/harvest_symbols.py >/dev/null   # stock symbols -> tools/symcache.sexpr
 python3 tools/make_edge_fp.py                 # 72-pin edge footprint (measured NES-EWROM-01 geometry)
 python3 tools/make_fp_extra.py >/dev/null     # SOT-23-5, SOIC-8
-python3 tools/gen_sch.py                      # design.py -> root + 4 sheets, project symbol lib, .kicad_pro sheets
+python3 tools/gen_sch.py                      # design.py + sch_layout.py -> root + 7 drawn sheets, project symbol lib, .kicad_pro sheets
 kicad-cli sch erc --severity-all --exit-code-violations FujiNet-NES-Rev0.kicad_sch -o /dev/null
 python3 tools/check_nets.py                   # netlist vs fujinet-firmware headers (independent of design.py)
 if [ "${LAYOUT:-0}" = 1 ]; then

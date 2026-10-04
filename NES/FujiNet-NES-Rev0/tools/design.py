@@ -35,11 +35,14 @@ LIB = 'FujiNet-NES'
 PROJECT = 'FujiNet-NES-Rev0'
 NC = None  # explicit no-connect
 
-SHEETS = [  # (file stem, title, page)
-    ('cart-rp2354b', 'RP2354B bus controller, PRG/CHR SRAM, 5V glue, CIClone, 72-pin edge', 2),
-    ('esp32s3-sd', 'ESP32-S3 FujiNet core, microSD, status LED', 3),
-    ('usb-uart', 'USB-C, CP2102N programming bridge', 4),
-    ('power', 'Power: console 5V P-FET / USB VBUS OR, 3.3V buck, RP I/O LDO', 5),
+SHEETS = [  # (file stem, title, page) -- in signal-flow order, console side first
+    ('edge-cic', '72-pin cart edge, CIClone', 2),
+    ('rp2354b', 'RP2354B bus controller', 3),
+    ('sram', 'PRG and CHR SRAM', 4),
+    ('glue', "5V glue logic, '595 control bits", 5),
+    ('esp32s3-sd', 'ESP32-S3, microSD, status LED', 6),
+    ('usb-uart', 'USB-C, CP2102N bridge', 7),
+    ('power', 'Power: 5V OR, 3.3V buck, RP LDO', 8),
 ]
 
 # ---- RP2354B (QFN-80) GPIO -> package pin ---------------------------------
@@ -203,7 +206,7 @@ def GATES4(lib_id, value, mpn, lcsc, gates, desc):
 
 
 # =========================================================================
-sheet('cart-rp2354b')
+sheet('rp2354b')
 # -- RP2354B core: the Astrocade RP2354A circuit on the QFN-80 pin-out.
 # Every RP supply pin on +3V3_RP (the LDO, up within tens of us of the 5 V rail,
 # so the pads are powered before the console's bus levels reach them; VREG_VIN
@@ -221,8 +224,10 @@ for g, pin in RP_GPIO_PIN.items():
     rp[pin] = RP_GPIO_NET[g]
 add('U', 'MCU_RaspberryPi:RP2354B', 'RP2354B', FP('QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm'), rp,
     mpn='RP2354B', lcsc='C39843328', desc='RP2350B + 2MB flash in package; cart bus server + bank tables')
+sheet('edge-cic')
 add('J', '%s:NES_Cart_Edge_72' % LIB, 'NES_Cart_Edge_72', FP('NES_Cart_Edge_72'),
     {k: v[0] for k, v in EDGE.items()}, desc='72-pin NES cartridge edge, 2.50 mm pitch', bom=False)
+sheet('rp2354b')
 # decoupling: one 100nF per IOVDD/DVDD/QSPI/USB/ADC supply pin, bulk on each rail
 for _ in RP_IOVDD_PINS:
     C('100nF', RP_IO_RAIL, desc='IOVDD decoupling')
@@ -265,7 +270,9 @@ TP('SWCLK', 'SWCLK')
 TP('SWDIO', 'SWDIO')
 TP('GND', 'GND')
 TP('RUN', 'RUN')
+sheet('edge-cic')
 TP('M2', 'M2')
+sheet('glue')
 TP('SR_SPARE', 'SR_SPARE')
 
 # -- console power sense: edge +5V (before the P-FET) -> 0.82 x -> '14 Schmitt.
@@ -281,6 +288,7 @@ R('100k', 'VSENSE', 'GND', desc='console 5V sense -> 0.82 x CONS_5V')
 C('1uF', 'POR_RC', '+5V', desc="'595 power-on hold-off RC")
 R('100k', 'POR_RC', 'GND', desc="'595 power-on hold-off RC")
 
+sheet('sram')
 # -- PRG / CHR SRAM on the 5V rail: their outputs drive the 5V bus directly
 SRAM(['CA%d' % i for i in range(13)] + ['PRG_A%d' % i for i in range(13, 19)],
      ['CD%d' % i for i in range(8)], 'PRG_CE_N', 'PRG_OE_N', 'PRG_WE_N',
@@ -292,6 +300,7 @@ C('100nF', '+5V', desc='PRG SRAM decoupling')
 C('100nF', '+5V', desc='CHR SRAM decoupling')
 C('10uF', '+5V', desc='5V logic domain bulk')
 
+sheet('glue')
 # -- 74HCT595: the slow control bits, Q0 first (SR_* in nes_cart.h).  /OE is
 # driven (SR_OE_N): outputs float -- onto the pull-downs below -- until the
 # power-on hold-off expires, and whenever the console is off.
@@ -307,7 +316,7 @@ RN('4x100k', ['MIR0', 'MIR1', 'SR_LED', 'SR_SPARE'], 'GND',
 # -- 74HCT253: a = CIRAM A10 = {PA10, PA11, 0, 1}[MIR1:MIR0]; b = CIRAM /CE pass-through
 # (all four inputs the same, so the select is irrelevant).  Both halves
 # tri-state on PWR_OK_N: nothing drives the console's CIRAM pins while it is off.
-add('U', '74xx:74LS253', '74HCT253', SOIC16,
+add('U', '%s:74HCT253' % LIB, '74HCT253', SOIC16,
     {1: 'PWR_OK_N', 6: 'PA10', 5: 'PA11', 4: 'GND', 3: '+5V', 7: 'CIRAM_A10',   # /OEa I0a I1a I2a I3a Za
      14: 'MIR0', 2: 'MIR1',                                                    # A0 A1 (shared selects)
      15: 'PWR_OK_N', 10: 'CIRAM_CE_PRE', 11: 'CIRAM_CE_PRE', 12: 'CIRAM_CE_PRE', 13: 'CIRAM_CE_PRE',
@@ -351,6 +360,7 @@ R('1k', 'SR_LED', 'SR_LED_A', desc='LED series')
 add('D', 'Device:LED', 'green', FP('LED_0603_1608Metric'), {1: 'GND', 2: 'SR_LED_A'},
     mpn='KT-0603G', lcsc='C12624', desc="activity LED ('595 QG)")
 
+sheet('edge-cic')
 # -- CIClone: 10NES lockout clone on the four CIC fingers, DNP until its
 # firmware is in hand.  Pin map = the common ATtiny13A NES CIC clone
 # (avrciczz / "ciclone"): PB3 CLK, PB0 DOUT (toMB), PB1 DIN (toPak), PB2 RST;

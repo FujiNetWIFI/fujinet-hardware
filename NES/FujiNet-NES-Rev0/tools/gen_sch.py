@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Generate the schematic (root + 4 sheets) from design.py.
+"""Generate the schematic (root + 7 sheets) from design.py.
 
-Style: every symbol stands alone and every connected pin carries a global
-label with its net name (the same convention the INTV / Astrocade Rev0
-sheets use); unconnected pins get no-connect flags.  Symbols come from
+design.py says what connects to what; sch_layout.py says how each sheet is
+drawn: parts placed left to right in signal-flow order and joined by wires,
+the parallel CPU / PPU buses as KiCad buses, rails as power symbols, global
+labels only where a net leaves the sheet (sch_draw.py has the conventions).
+Each sheet is connectivity-checked as it is drawn (sch_draw.Sheet.check) and
+the written schematic is checked once more through kicad-cli's netlist
+against design.py, net by net, names included.  Symbols come from
 tools/symcache.sexpr (stock KiCad symbols as flattened by eeschema, see
 harvest_symbols.py) plus the project library, which this script also
 (re)writes: FujiNet-NES.kicad_sym.  The sheet list in the .kicad_pro is kept
@@ -15,10 +19,11 @@ import os, sys, uuid, copy, json, re
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sexpr import parse, dump, find, findall, Q
 import design as D
+import sch_draw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
-DATE = '2026-10-01'
+DATE = '2026-10-04'
 NS = uuid.UUID('6f1c9a1e-3a52-4d7e-9b7d-0a57a0ade5e5')
 
 
@@ -36,71 +41,109 @@ def hidden():
 
 # ---------------------------------------------------------------------------
 # project-library symbols
-def box_symbol(name, ref, value, footprint, desc, left, right=(), bottom=(), top=(), w=15.24):
-    """left/right/bottom/top: lists of (number, name, etype).  2.54 pitch."""
+def box_symbol(name, ref, value, footprint, desc, left, right=(), bottom=(), top=(), w=15.24, tb_x=0, ds=''):
+    """left/right/bottom/top: lists of (number, name, etype); None in left/right
+    leaves a one-pin gap between groups.  2.54 pitch, every pin end on the 2.54 grid
+    (w a multiple of 5.08)."""
     n = max(len(left), len(right), 1)
-    h = (n + 1) * 2.54
-    y0 = (n - 1) * 2.54 / 2
-    y0 = round(y0 / 1.27) * 1.27
+    y0 = ((n - 1) // 2) * 2.54
     top_y = y0 + 2.54
-    bot_y = top_y - h
-    bot_y = round(bot_y / 1.27) * 1.27
+    bot_y = y0 - n * 2.54
     half = w / 2
     body = ['symbol', Q(name + '_0_1'),
             ['rectangle', ['start', -half, top_y], ['end', half, bot_y],
              ['stroke', ['width', 0.254], ['type', 'default']], ['fill', ['type', 'background']]]]
     pins = ['symbol', Q(name + '_1_1')]
 
-    def pin(num, nm, et, x, y, ang):
-        pins.append(['pin', et, 'line', ['at', x, y, ang], ['length', 2.54],
+    def pin(num, nm, et, x, y, ang, shape='line'):
+        pins.append(['pin', et, shape, ['at', x, y, ang], ['length', 2.54],
                      ['name', Q(nm), font()], ['number', Q(str(num)), font()]])
-    for i, (num, nm, et) in enumerate(left):
-        pin(num, nm, et, -half - 2.54, y0 - i * 2.54, 0)
-    for i, (num, nm, et) in enumerate(right):
-        pin(num, nm, et, half + 2.54, y0 - i * 2.54, 180)
-    for i, (num, nm, et) in enumerate(bottom):
-        x = -((len(bottom) - 1) * 2.54) / 2 + i * 2.54
-        pin(num, nm, et, round(x / 1.27) * 1.27, bot_y - 2.54, 90)
-    for i, (num, nm, et) in enumerate(top):
-        x = -((len(top) - 1) * 2.54) / 2 + i * 2.54
-        pin(num, nm, et, round(x / 1.27) * 1.27, top_y + 2.54, 270)
+    for i, e in enumerate(left):
+        if e:
+            pin(*e[:3], -half - 2.54, y0 - i * 2.54, 0, *e[3:])
+    for i, e in enumerate(right):
+        if e:
+            pin(*e[:3], half + 2.54, y0 - i * 2.54, 180, *e[3:])
+    for i, (num, nm, et, *sh) in enumerate(bottom):
+        x = tb_x - ((len(bottom) - 1) // 2) * 2.54 + i * 2.54
+        pin(num, nm, et, x, bot_y - 2.54, 90)
+    for i, (num, nm, et, *sh) in enumerate(top):
+        x = tb_x - ((len(top) - 1) // 2) * 2.54 + i * 2.54
+        pin(num, nm, et, x, top_y + 2.54, 270)
     return ['symbol', Q(name), ['pin_names', ['offset', 1.016]], ['exclude_from_sim', 'no'],
             ['in_bom', 'yes'], ['on_board', 'yes'],
             ['property', Q('Reference'), Q(ref), ['at', 0, top_y + 1.27, 0], font()],
             ['property', Q('Value'), Q(value), ['at', 0, bot_y - 5.08, 0], font()],
             ['property', Q('Footprint'), Q(footprint), ['at', 0, 0, 0], hidden()],
-            ['property', Q('Datasheet'), Q(''), ['at', 0, 0, 0], hidden()],
+            ['property', Q('Datasheet'), Q(ds), ['at', 0, 0, 0], hidden()],
             ['property', Q('Description'), Q(desc), ['at', 0, 0, 0], hidden()],
             body, pins]
 
 
-def project_symbols():
-    edge = box_symbol('NES_Cart_Edge_72', 'J', 'NES_Cart_Edge_72', D.FP('NES_Cart_Edge_72'),
+# The edge drawn by function, not by finger: every console signal on the
+# right (toward the cart), grouped CPU address / data / control, PPU address /
+# data / control, CIC; the unused EXP fingers and SYSTEM CLK on the left.
+EDGE_GROUPS = [['CA%d' % i for i in range(15)], ['CD%d' % i for i in range(8)],
+               ['M2', 'RW', 'ROMSEL_N', 'IRQ_N'],
+               ['PA%d' % i for i in range(14)] + ['PA13_N'], ['PD%d' % i for i in range(8)],
+               ['PPU_RD_N', 'PPU_WR_N', 'CIRAM_A10', 'CIRAM_CE_N'],
+               ['CIC_TOMB', None, 'CIC_TOPAK', None, 'CIC_RST', None, 'CIC_CLK']]   # the CIClone's order, 5.08 apart for the net names
+
+
+def edge_symbol():
+    by_net = {}
+    for p, (net, nm) in D.EDGE.items():
+        by_net.setdefault(net, []).append(p)
+    right = []
+    for g in EDGE_GROUPS:
+        if right:
+            right.append(None)
+        right += [(by_net[n][0], D.EDGE[by_net[n][0]][1], 'passive') if n else None for n in g]
+    left = [(p, D.EDGE[p][1], 'passive') for p in sorted(by_net[None], key=lambda p: (D.EDGE[p][1] == 'SYSTEM CLK', int(D.EDGE[p][1][3:]) if D.EDGE[p][1].startswith('EXP') else 0))]
+    assert len([e for e in right if e]) + len(left) + 3 == 72
+    return box_symbol('NES_Cart_Edge_72', 'J', 'NES_Cart_Edge_72', D.FP('NES_Cart_Edge_72'),
                       'NES 72-pin cartridge edge, 2.50 mm pitch; pins 1-36 label side, 37-72 back (nesdev)',
-                      left=[(p, D.EDGE[p][1], 'passive') for p in range(1, 37)],
-                      right=[(p, D.EDGE[p][1], 'passive') for p in range(37, 73)], w=30.48)
+                      left=left, right=right, top=[(36, '+5V', 'passive')],
+                      bottom=[(1, 'GND', 'passive'), (72, 'GND', 'passive')], w=30.48, tb_x=-7.62)
+
+
+def project_symbols():
+    edge = edge_symbol()
     sp = D.SRAM_PIN
     sram = box_symbol('AS6C4008-55TIN', 'U', 'AS6C4008-55TIN', D.FP('TSOP-I-32_18.4x8mm_P0.5mm'),
                       '512K x 8 low power CMOS SRAM, 55 ns, 2.7-5.5 V, TSOP-I-32 (Alliance pin order)',
-                      left=[(sp['A%d' % i], 'A%d' % i, 'input') for i in range(19)],
-                      right=[(sp['DQ%d' % i], 'DQ%d' % i, 'bidirectional') for i in range(8)] +
-                            [(sp['CE#'], '~{CE}', 'input'), (sp['OE#'], '~{OE}', 'input'),
-                             (sp['WE#'], '~{WE}', 'input')],
+                      left=[(sp['A%d' % i], 'A%d' % i, 'input') for i in range(19)] + [None] +
+                           [(sp['CE#'], '~{CE}', 'input'), (sp['OE#'], '~{OE}', 'input'),
+                            (sp['WE#'], '~{WE}', 'input')],
+                      right=[(sp['DQ%d' % i], 'DQ%d' % i, 'bidirectional') for i in range(8)],
                       top=[(sp['VCC'], 'VCC', 'power_in')], bottom=[(sp['VSS'], 'VSS', 'power_in')],
-                      w=17.78)
+                      w=20.32)
+    # microSD drawn in the S3's SPI pin order, signals 5.08 apart (room for their names)
     sd = box_symbol('MicroSD_TF015', 'J', 'microSD', D.FP('TF-SMD_TF-015'),
                     'microSD push-push socket, SOFNG TF-015 (LCSC C113206)',
-                    left=[(1, 'DAT2', 'bidirectional'), (2, 'DAT3/CS', 'bidirectional'),
-                          (3, 'CMD/DI', 'input'), (4, 'VDD', 'power_in'), (5, 'CLK', 'input'),
-                          (6, 'VSS', 'power_in'), (7, 'DAT0/DO', 'bidirectional'),
-                          (8, 'DAT1', 'bidirectional'), (9, 'CD', 'passive')],
+                    left=[(8, 'DAT1', 'bidirectional'), None, (1, 'DAT2', 'bidirectional'), None,
+                          (3, 'CMD/DI', 'input'), None, (5, 'CLK', 'input'), None,
+                          (7, 'DAT0/DO', 'bidirectional'), None, (2, 'DAT3/CS', 'bidirectional'), None,
+                          (9, 'CD', 'passive'), None, (4, 'VDD', 'power_in'), (6, 'VSS', 'power_in')],
                     bottom=[(10, 'SH', 'passive'), (11, 'SH', 'passive'),
-                            (12, 'SH', 'passive'), (13, 'SH', 'passive')], w=17.78)
+                            (12, 'SH', 'passive'), (13, 'SH', 'passive')], w=20.32)
+    # the '253 with its pins in signal-flow order (selects, half a, half b), same
+    # pin numbers / names / types as 74xx:74LS253 so check_nets reads it the same
+    mux = box_symbol('74HCT253', 'U', '74HCT253', D.SOIC16,
+                     'Dual 4-to-1 multiplexer, 3-state outputs (drawn in signal-flow order)',
+                     left=[(14, 'A0', 'input'), (2, 'A1', 'input'), None,
+                           (6, 'I0a', 'input'), (5, 'I1a', 'input'), (4, 'I2a', 'input'), (3, 'I3a', 'input'),
+                           (1, 'OEa', 'input', 'inverted'), None,
+                           (10, 'I0b', 'input'), (11, 'I1b', 'input'), (12, 'I2b', 'input'), (13, 'I3b', 'input'),
+                           (15, 'OEb', 'input', 'inverted')],
+                     right=[None, None, None, (7, 'Za', 'tri_state')] + [None] * 5 + [(9, 'Zb', 'tri_state')],
+                     top=[(16, 'VCC', 'power_in')], bottom=[(8, 'GND', 'power_in')], w=20.32,
+                     ds='https://www.ti.com/lit/gpn/sn74hct253')
     lib = ['kicad_symbol_lib', ['version', 20241209], ['generator', Q('fujinet_gen')],
-           ['generator_version', Q('1.0')], edge, sram, sd]
+           ['generator_version', Q('1.0')], edge, sram, sd, mux]
     open(os.path.join(PRJ, D.LIB + '.kicad_sym'), 'w').write(dump(lib) + '\n')
     cache = {}
-    for s in (edge, sram, sd):
+    for s in (edge, sram, sd, mux):
         c = copy.deepcopy(s)
         c[1] = Q(D.LIB + ':' + s[1])
         cache[c[1]] = c
@@ -115,20 +158,6 @@ def load_symbols():
     return syms
 
 
-def sym_pins(sym):
-    """[(unit, number, x, y, angle)] in library coordinates (y up); body style 1 only
-    (the De Morgan alternates of the 74xx gates repeat the same pins)."""
-    out = []
-    for sub in findall(sym, 'symbol'):
-        unit, style = (int(v) for v in sub[1].rsplit('_', 2)[-2:])
-        if style > 1:
-            continue
-        for p in findall(sub, 'pin'):
-            at = find(p, 'at')
-            out.append((unit, str(find(p, 'number')[1]), float(at[1]), float(at[2]), int(float(at[3]))))
-    return out
-
-
 def pin_names(sym):
     """pin number -> name."""
     out = {}
@@ -138,41 +167,7 @@ def pin_names(sym):
     return out
 
 
-def sym_bbox(sym, unit):
-    xs, ys = [], []
-
-    def walk(e):
-        for x in e:
-            if isinstance(x, list) and x:
-                if x[0] in ('xy', 'start', 'end', 'center', 'mid') and len(x) >= 3:
-                    xs.append(float(x[1])); ys.append(float(x[2]))
-                elif x[0] == 'pin':
-                    at = find(x, 'at'); ln = float(find(x, 'length')[1])
-                    xs.append(float(at[1])); ys.append(float(at[2]))
-                elif x[0] != 'property':
-                    walk(x)
-    for sub in findall(sym, 'symbol'):
-        u, style = (int(v) for v in sub[1].rsplit('_', 2)[-2:])
-        if u in (0, unit) and style <= 1:
-            walk(sub)
-    if not xs:
-        return (-2.54, -2.54, 2.54, 2.54)
-    return (min(xs), min(ys), max(xs), max(ys))
-
-
-def units_of(sym):
-    us = sorted({u for u, *_ in sym_pins(sym) if u})
-    return us or [1]
-
-
-def side_fields(sym, unit):
-    """Small parts whose pins all point up/down: put Reference/Value beside the body."""
-    angs = {a for (u, n, x, y, a) in sym_pins(sym) if u in (0, unit)}
-    return len(sym_pins(sym)) <= 3 and angs <= {90, 270}
-
-
-def label_len(text):
-    return 1.0 * len(text) + 3.0
+units_of = sch_draw.units_of
 
 
 def verify_pin_tables(syms):
@@ -197,150 +192,143 @@ def verify_pin_tables(syms):
 
 
 # ---------------------------------------------------------------------------
-def build_sheet(stem, title, page, parts, syms, root_uuid, sheet_uuid, flags=()):
-    items = []
-    used = {}
-    # instances to place: (part, unit)
-    places = []
-    for p in parts:
-        sym = syms[p.lib_id]
-        for u in units_of(sym):
-            places.append((p, u))
-    for i, n in enumerate(flags):
-        places.append((('FLAG', i, n), 1))
+def field(name, value, pos, rot, hide=False, mirror=None):
+    """A property at an absolute position; text kept horizontal on rotated symbols.
+    pos's justification is as seen on the sheet; eeschema applies the symbol's
+    own flip to it, so a 90/180-degree or y-mirrored symbol gets it swapped."""
+    x, y, j = pos
+    if j and ((rot in (90, 180)) != (mirror == 'y')):
+        j = {'left': 'right', 'right': 'left'}[j]
+    eff = ['effects', ['font', ['size', 1.27, 1.27]]]
+    if j:
+        eff.append(['justify', j])
+    if hide:
+        eff.append(['hide', 'yes'])
+    return ['property', Q(name), Q(value), ['at', x, y, 90 if rot in (90, 270) else 0], eff]
 
-    # footprint of each placement incl. labels (sheet coords relative to origin)
-    def extent(p, u):
-        if isinstance(p, tuple):
-            sym = syms['power:PWR_FLAG']
-            pins = {'1': p[2]}
-        else:
-            sym = syms[p.lib_id]
-            pins = p.pins
-        x0, y0, x1, y1 = sym_bbox(sym, u)
-        # sheet coords: flip y
-        L, T, Rr, B = x0, -y1, x1, -y0
-        for (uu, num, px, py, ang) in sym_pins(sym):
-            if uu not in (0, u):
-                continue
-            net = pins.get(num)
-            ll = label_len(net) if net else 1.5
-            sx, sy = px, -py
-            if ang == 0:
-                L = min(L, sx - ll)
-            elif ang == 180:
-                Rr = max(Rr, sx + ll)
-            elif ang == 90:
-                B = max(B, sy + ll)
-            else:
-                T = min(T, sy - ll)
-        if side_fields(sym, u):
-            ref = 'X' if isinstance(p, tuple) else p.ref
-            val = 'PWR_FLAG' if isinstance(p, tuple) else p.value
-            Rr = max(Rr, x1 + 2.0 + 1.0 * max(len(ref), len(val)))
-            return L - 2.54, T - 1.27, Rr + 2.54, B + 2.54
-        return L - 2.54, T - 5.08, Rr + 2.54, B + 2.54
 
-    paper, (PW, PH) = ('A3', (420, 297))
-    if len(places) > 60:
-        paper, (PW, PH) = ('A2', (594, 420))
-    margin, x, y, shelf = 15.0, 15.0, 30.0, 0.0
-    pos = []
-    big = sorted(places, key=lambda pu: 0 if isinstance(pu[0], tuple) else -len(pu[0].pins))
-    # biggest first, then keep declaration order for the small ones
-    order = [pu for pu in big if not isinstance(pu[0], tuple) and len(pu[0].pins) > 8] + \
-            [pu for pu in places if isinstance(pu[0], tuple) or len(pu[0].pins) <= 8]
-    for p, u in order:
-        L, T, Rr, B = extent(p, u)
-        w, h = Rr - L, B - T
-        if x + w > PW - margin:
-            x = margin; y += shelf; shelf = 0.0
-        ox = round((x - L) / 2.54) * 2.54
-        oy = round((y - T) / 2.54) * 2.54
-        pos.append((p, u, ox, oy))
-        x += w + 2.54
-        shelf = max(shelf, h + 2.54)
-    if y + shelf > PH - 40:
-        raise SystemExit('%s: does not fit on %s (y=%.1f)' % (stem, paper, y + shelf))
-
+def serialize(sh, title, root_uuid, sheet_uuid, pwr):
+    """sch_draw.Sheet -> kicad_sch tree.  pwr: running #PWR / #FLG counter (dict)."""
+    stem = sh.stem
     path = '/%s/%s' % (root_uuid, sheet_uuid)
-    for p, u, ox, oy in pos:
-        if isinstance(p, tuple):
-            ref, lib_id, value, fp, pins, fields, bom, dnp = '#FLG%02d' % (p[1] + 1), 'power:PWR_FLAG', 'PWR_FLAG', '', {'1': p[2]}, {}, False, False
-            key = ('flag', p[2])
-        else:
-            ref, lib_id, value, fp, pins, bom, dnp = p.ref, p.lib_id, p.value, p.footprint, p.pins, p.bom, p.dnp
-            fields = {'MPN': p.mpn, 'LCSC': p.lcsc}
-            key = (p.ref, u)
-        sym = syms[lib_id]
+    items, used = [], {}
+
+    def inst(lib_id, x, y, rot, mirror, unit, ref, uu, fields, pins, bom=True, board=True, dnp=False):
+        sym = sh.syms[lib_id]
         used[lib_id] = sym
-        x0, y0, x1, y1 = sym_bbox(sym, u)
-        ds = ''
-        for pr in findall(sym, 'property'):
-            if pr[1] == 'Datasheet':
-                ds = pr[2]
-        desc = '' if isinstance(p, tuple) else p.desc
-        if side_fields(sym, u):
-            fx = ox + x1 + 1.27
-            fpos = [[['at', fx, oy - 1.27, 0], ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left']]],
-                    [['at', fx, oy + 1.27, 0], ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left']]]]
-        else:
-            top = oy - y1
-            for (uu, num, px, py, ang) in sym_pins(sym):
-                if uu in (0, u) and ang == 270 and pins.get(num):
-                    top = min(top, oy - py - label_len(pins[num]))
-            fpos = [[['at', ox, top - 3.81, 0], font()], [['at', ox, top - 1.27, 0], font()]]
-        e = ['symbol', ['lib_id', Q(lib_id)], ['at', ox, oy, 0], ['unit', u],
-             ['exclude_from_sim', 'no'], ['in_bom', 'yes' if bom else 'no'],
-             ['on_board', 'no' if isinstance(p, tuple) else 'yes'], ['dnp', 'yes' if dnp else 'no'],
-             ['uuid', uid(stem, *key)],
-             ['property', Q('Reference'), Q(ref)] + fpos[0],
-             ['property', Q('Value'), Q(value)] + fpos[1],
-             ['property', Q('Footprint'), Q(fp), ['at', ox, oy, 0], hidden()],
-             ['property', Q('Datasheet'), Q(ds), ['at', ox, oy, 0], hidden()],
-             ['property', Q('Description'), Q(desc), ['at', ox, oy, 0], hidden()]]
-        for k, v in fields.items():
-            if v:
-                e.append(['property', Q(k), Q(v), ['at', ox, oy, 0], hidden()])
-        allpins = sym_pins(sym)
-        for (uu, num, px, py, ang) in allpins:
-            if uu in (0, u):
-                e.append(['pin', Q(num), ['uuid', uid(stem, *key, 'pin', num)]])
-        e.append(['instances', ['project', Q(D.PROJECT),
-                                ['path', Q(path), ['reference', Q(ref)], ['unit', u]]]])
+        e = ['symbol', ['lib_id', Q(lib_id)], ['at', x, y, rot]]
+        if mirror:
+            e.append(['mirror', mirror])
+        e += [['unit', unit], ['exclude_from_sim', 'no'], ['in_bom', 'yes' if bom else 'no'],
+              ['on_board', 'yes' if board else 'no'], ['dnp', 'yes' if dnp else 'no'], ['uuid', uu]]
+        e += fields
+        for num in pins:
+            e.append(['pin', Q(num), ['uuid', uid(stem, ref, unit, 'pin', num)]])
+        e.append(['instances', ['project', Q(D.PROJECT), ['path', Q(path), ['reference', Q(ref)], ['unit', unit]]]])
         items.append(e)
-        # labels / no-connects, one per distinct pin position
-        seen = {}
-        for (uu, num, px, py, ang) in allpins:
-            if uu not in (0, u):
-                continue
-            sx, sy = round(ox + px, 2), round(oy - py, 2)
-            net = pins.get(num)
-            if num not in pins and not isinstance(p, tuple):
-                raise SystemExit('%s pin %s not assigned in design.py' % (ref, num))
-            if (sx, sy) in seen:
-                if seen[(sx, sy)] != net:
-                    raise SystemExit('%s: stacked pins with different nets at %s' % (ref, (sx, sy)))
-                continue
-            seen[(sx, sy)] = net
-            if net is None:
-                items.append(['no_connect', ['at', sx, sy], ['uuid', uid(stem, *key, 'nc', num)]])
-            else:
-                just = {0: 'right', 180: 'left', 90: 'right', 270: 'left'}[ang]
-                items.append(['global_label', Q(net), ['shape', 'passive'], ['at', sx, sy, ang],
-                              ['fields_autoplaced', 'yes'],
-                              ['effects', ['font', ['size', 1.27, 1.27]], ['justify', just]],
-                              ['uuid', uid(stem, *key, 'lbl', num)]])
-    # every lib symbol that the sheet references
+
+    for (ref, u), d in sh.placed.items():
+        p = d['part']
+        sym = sh.syms[p.lib_id]
+        ds = next((pr[2] for pr in findall(sym, 'property') if pr[1] == 'Datasheet'), '')
+        x, y, rot = d['x'], d['y'], d['rot']
+        hid = (x, y, None)
+        fl = [field('Reference', ref, d['fields'][0], rot, mirror=d['mirror']),
+              field('Value', p.value, d['fields'][1], rot, mirror=d['mirror']),
+              field('Footprint', p.footprint, hid, rot, True), field('Datasheet', ds, hid, rot, True),
+              field('Description', p.desc, hid, rot, True)]
+        for k, v in (('MPN', p.mpn), ('LCSC', p.lcsc)):
+            if v:
+                fl.append(field(k, v, hid, rot, True))
+        pins = sorted({num for (uu, num, *_r) in sch_draw.lib_pins(sym) if uu in (0, u)})
+        # symbol uuid: the same key as the shelf-placed sheets had (the board's paths follow it)
+        inst(p.lib_id, x, y, rot, d['mirror'], u, ref, uid(stem, ref, u), fl, pins,
+             bom=p.bom, dnp=p.dnp)
+    for net, x, y, rot in sh.rails:
+        lib = sch_draw.Sheet.RAILS[net]
+        pwr['pwr'] += 1
+        ref = '#PWR%03d' % pwr['pwr']
+        ux, uy = (0, 1) if net == 'GND' else (0, -1)         # the symbol's tip direction...
+        for _ in range(rot // 90):                         # ...turned with it (CCW on the sheet)
+            ux, uy = uy, -ux
+        w = 0.9 * 1.27 * len(net) / 2
+        vx, vy = x + ux * (3.3 + w), y + uy * 3.81           # value beyond the tip
+        inst(lib, x, y, rot, None, 1, ref, uid(stem, 'rail', net, x, y),
+             [field('Reference', ref, (x, y + 6.35 if net == 'GND' else y - 6.35, None), rot, True),
+              field('Value', net, (vx, vy, None), rot), field('Footprint', '', (x, y, None), 0, True),
+              field('Datasheet', '', (x, y, None), 0, True), field('Description', '', (x, y, None), 0, True)],
+             ['1'], bom=False, board=False)
+    for net, x, y in sh.flags:
+        pwr['flg'] += 1
+        ref = '#FLG%02d' % pwr['flg']
+        inst('power:PWR_FLAG', x, y, 0, None, 1, ref, uid(stem, 'flag', net),
+             [field('Reference', ref, (x, y - 1.905, None), 0, True),
+              field('Value', 'PWR_FLAG', (x, y - 3.81, None), 0), field('Footprint', '', (x, y, None), 0, True),
+              field('Datasheet', '', (x, y, None), 0, True), field('Description', '', (x, y, None), 0, True)],
+             ['1'], bom=False, board=False)
+    st = ['stroke', ['width', 0], ['type', 'default']]
+    for a, b in sh.wires:
+        items.append(['wire', ['pts', ['xy', a[0], a[1]], ['xy', b[0], b[1]]], st, ['uuid', uid(stem, 'w', a, b)]])
+    for a, b in sh.buses:
+        items.append(['bus', ['pts', ['xy', a[0], a[1]], ['xy', b[0], b[1]]], st, ['uuid', uid(stem, 'b', a, b)]])
+    for (x, y), (dx, dy) in sh.entries:
+        items.append(['bus_entry', ['at', x, y], ['size', dx, dy], st, ['uuid', uid(stem, 'e', x, y)]])
+    for (x, y) in sh.junctions:
+        items.append(['junction', ['at', x, y], ['diameter', 0], ['color', 0, 0, 0, 0], ['uuid', uid(stem, 'j', x, y)]])
+    for (x, y) in sh.ncs:
+        items.append(['no_connect', ['at', x, y], ['uuid', uid(stem, 'nc', x, y)]])
+    for kind, net, x, y, ang, shape in sh.labels:
+        just = 'left' if ang in (0, 90) else 'right'
+        e = [kind, Q(net)]
+        if kind == 'global_label':
+            e.append(['shape', shape])
+        e += [['at', x, y, ang]]
+        if kind == 'global_label':
+            e.append(['fields_autoplaced', 'yes'])
+        e += [['effects', ['font', ['size', 1.27, 1.27]], ['justify', just] if kind == 'global_label'
+               else ['justify', just, 'bottom']], ['uuid', uid(stem, kind, net, x, y)]]
+        items.append(e)
+    for s, x, y, size, j in sh.texts:
+        items.append(['text', Q(s.replace('\n', '\\n')), ['exclude_from_sim', 'no'], ['at', x, y, 0],
+                      ['effects', ['font', ['size', size, size]], ['justify', j, 'top']], ['uuid', uid(stem, 'text', x, y)]])
     lib_symbols = ['lib_symbols'] + [used[k] for k in sorted(used)]
     tb = ['title_block', ['title', Q('FujiNet NES Rev0 - ' + title)], ['date', Q(DATE)],
           ['rev', Q('0')], ['company', Q('FujiNet')],
-          ['comment', 1, Q('Generated by tools/gen_sch.py from tools/design.py - edit design.py, not this file')],
+          ['comment', 1, Q('Generated by tools/gen_sch.py + tools/sch_layout.py from tools/design.py - edit those, not this file')],
           ['comment', 2, Q('CERN-OHL-W-2.0 (derived from FujiNet-Astrocade-Rev0 / FujiNet-INTV-Rev0 / PiNTY CARD)')],
           ['comment', 3, Q('Rev0 audit 2026-10-01: kicad-happy + datasheets; see docs/design-review-rev0.md')]]
     return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
-            ['generator_version', Q('9.0')], ['uuid', Q(sheet_uuid)], ['paper', Q(paper)], tb,
+            ['generator_version', Q('9.0')], ['uuid', Q(sheet_uuid)], ['paper', Q(sh.paper)], tb,
             lib_symbols] + items + [['embedded_fonts', 'no']]
+
+
+def netlist_parity():
+    """The written schematic's netlist (kicad-cli) against design.py, net by net:
+    the same name and the same (ref, pad) set, NC pins on KiCad's unconnected-(...) nets."""
+    import subprocess, tempfile
+    fn = os.path.join(tempfile.gettempdir(), 'fujinet-nes-sch-parity.net')
+    subprocess.run(['kicad-cli', 'sch', 'export', 'netlist', '--format', 'kicadsexpr', '-o', fn,
+                    os.path.join(PRJ, D.PROJECT + '.kicad_sch')], check=True, capture_output=True)
+    t = parse(open(fn).read())
+    got = {}
+    for n in findall(find(t, 'nets'), 'net'):
+        name = str(find(n, 'name')[1])
+        got[name] = {(str(find(nd, 'ref')[1]), str(find(nd, 'pin')[1])) for nd in findall(n, 'node')}
+    want = {n: set(v) for n, v in D.nets().items()}
+    bad = []
+    for n, v in want.items():
+        if got.get(n) != v:
+            bad.append('%s: want %s, got %s' % (n, sorted(v)[:8], sorted(got.get(n, ()))[:8]))
+    for n, v in got.items():
+        if n not in want and not (n.startswith('unconnected-') and len(v) == 1):
+            bad.append('extra net %s %s' % (n, sorted(v)[:8]))
+        if n.startswith('unconnected-'):
+            (ref, pad), = v
+            if D.BY_REF[ref].pins.get(pad) is not None:
+                bad.append('%s %s is unconnected, design.py says %s' % (ref, pad, D.BY_REF[ref].pins[pad]))
+    if bad:
+        raise SystemExit('netlist parity:\n  ' + '\n  '.join(bad[:40]))
+    print('netlist parity: %d nets match design.py' % len(want))
 
 
 NOTES = """FujiNet for the Nintendo Entertainment System - Rev0 (RP2354B)
@@ -368,28 +356,37 @@ def write_project(root_uuid, sheet_uuids):
     pro = json.load(open(fn))
     pro['meta']['filename'] = D.PROJECT + '.kicad_pro'
     pro['sheets'] = [[root_uuid, 'Root']] + [[sheet_uuids[s[0]], s[0]] for s in D.SHEETS]
+    # bus members carry local labels (CA3 under the global bus CA[0..14]) while
+    # single lines of the same net leave other sheets on global labels -- by design
+    pro['erc']['rule_severities']['same_local_global_label'] = 'ignore'
     json.dump(pro, open(fn, 'w'), indent=2)
     open(fn, 'a').write('\n')
 
 
 def main():
+    import sch_layout
     syms = load_symbols()
     verify_pin_tables(syms)
     root_uuid = str(uid('root'))
     sheet_uuids = {s[0]: str(uid('sheet', s[0])) for s in D.SHEETS}
+    pwr = {'pwr': 0, 'flg': 0}
     for stem, title, page in D.SHEETS:
         parts = [p for p in D.PARTS if p.sheet == stem]
-        flags = D.PWR_FLAG_NETS if stem == 'power' else ()
-        sch = build_sheet(stem, title, page, parts, syms, root_uuid, sheet_uuids[stem], flags)
+        sh = sch_layout.draw(stem, syms, parts)
+        sh.center()
+        sh.check()
+        sch = serialize(sh, title, root_uuid, sheet_uuids[stem], pwr)
         open(os.path.join(PRJ, stem + '.kicad_sch'), 'w').write(dump(sch) + '\n')
     root = ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
             ['generator_version', Q('9.0')], ['uuid', Q(root_uuid)], ['paper', Q('A3')],
             ['title_block', ['title', Q('FujiNet NES Rev0')], ['date', Q(DATE)], ['rev', Q('0')],
              ['company', Q('FujiNet')], ['comment', 1, Q('Generated by tools/gen_sch.py')]],
             ['lib_symbols']]
+    # sheet symbols in signal-flow order: the cart side (console -> RP -> SRAM -> glue)
+    # on the first row, the FujiNet side (S3 -> USB -> power) on the second
     for i, (stem, title, page) in enumerate(D.SHEETS):
-        x, y = 30 + i * 90, 40
-        root.append(['sheet', ['at', x, y], ['size', 63.5, 25.4], ['fields_autoplaced', 'yes'],
+        x, y = 20.32 + (i % 4) * 96.52, 35.56 + (i // 4) * 45.72
+        root.append(['sheet', ['at', x, y], ['size', 81.28, 25.4], ['fields_autoplaced', 'yes'],
                      ['stroke', ['width', 0.12], ['type', 'solid']], ['fill', ['color', 0, 0, 0, 0.0]],
                      ['uuid', Q(sheet_uuids[stem])],
                      ['property', Q('Sheetname'), Q(stem), ['at', x, y - 1, 0],
@@ -397,15 +394,24 @@ def main():
                      ['property', Q('Sheetfile'), Q(stem + '.kicad_sch'), ['at', x, y + 26.4, 0],
                       ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left', 'top']]],
                      ['instances', ['project', Q(D.PROJECT), ['path', Q('/' + root_uuid), ['page', Q(str(page))]]]]])
-        root.append(['text', Q(title), ['exclude_from_sim', 'no'], ['at', x, y + 12.7, 0],
-                     ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left']],
+        words, lines = title.split(), ['']
+        for w in words:
+            if len(lines[-1]) + len(w) > 62:
+                lines.append('')
+            lines[-1] = (lines[-1] + ' ' + w).strip()
+        root.append(['text', Q('\\n'.join(lines)), ['exclude_from_sim', 'no'], ['at', x + 2.54, y + 5.08, 0],
+                     ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left', 'top']],
                      ['uuid', uid('roottext', stem)]])
-    root.append(['text', Q(NOTES.replace('\n', '\\n')), ['exclude_from_sim', 'no'], ['at', 30, 90, 0],
+    root.append(['text', Q(NOTES.replace('\n', '\\n')), ['exclude_from_sim', 'no'], ['at', 20, 125, 0],
                  ['effects', ['font', ['size', 2, 2]], ['justify', 'left', 'top']], ['uuid', uid('notes')]])
     root.append(['sheet_instances', ['path', Q('/'), ['page', Q('1')]]])
     root.append(['embedded_fonts', 'no'])
     open(os.path.join(PRJ, D.PROJECT + '.kicad_sch'), 'w').write(dump(root) + '\n')
+    for stem in ('cart-rp2354b',):          # sheets this generator no longer writes
+        if os.path.exists(os.path.join(PRJ, stem + '.kicad_sch')):
+            os.remove(os.path.join(PRJ, stem + '.kicad_sch'))
     write_project(root_uuid, sheet_uuids)
+    netlist_parity()
     print('schematic written')
 
 

@@ -226,7 +226,7 @@ stage; `LAYOUT=1 tools/build_all.sh` adds the board:
 python3 tools/harvest_symbols.py   # stock KiCad symbols -> tools/symcache.sexpr (flattens "extends")
 python3 tools/make_edge_fp.py      # FujiNet-NES.pretty/NES_Cart_Edge_72.kicad_mod (measured geometry)
 python3 tools/make_fp_extra.py     # SOT-23-5, SOIC-8
-python3 tools/gen_sch.py           # design.py -> root + 4 sheets, FujiNet-NES.kicad_sym, .kicad_pro sheet list
+python3 tools/gen_sch.py           # design.py + sch_layout.py -> root + 7 drawn sheets, FujiNet-NES.kicad_sym, .kicad_pro sheet list
 kicad-cli sch erc --severity-all --exit-code-violations FujiNet-NES-Rev0.kicad_sch -o /dev/null
 python3 tools/check_nets.py        # netlist vs fujinet-firmware headers ($FUJINET_FIRMWARE, default ~/Workspace/fn-nes)
 python3 tools/gen_pcb.py           # outline, placement, plane islands, finger stubs, RP support copper, fan-out
@@ -270,6 +270,15 @@ Rev0 is **schematic- and layout-complete, not yet built**.
 - Schematic: audited with kicad-happy against manufacturer datasheets and redone
   (`docs/design-review-rev0.md`, Part 1). ERC clean; `tools/check_nets.py` 453/453
   against the firmware headers on fujinet-firmware `nes-bringup`.
+- Schematic drawing (2026-10-04): seven wired sheets read left to right -- edge,
+  RP2354B, SRAM, glue, ESP32-S3, USB bridge, power -- with the CPU / PPU buses as
+  KiCad buses and labels only where a signal leaves its sheet (`tools/sch_layout.py`
+  places and wires every part; `tools/sch_draw.py` checks each sheet's connectivity
+  and overlaps; `gen_sch.py` then proves the netlist equals `design.py`, net names
+  included). Nets that never leave a sheet keep their names through a small global
+  label on their wire, so the routed board, its rules and the routing scripts did not
+  change: `tools/sync_pcb_sheets.py` only re-pointed the moved footprints' sheet paths
+  (DRC with schematic parity 0 / 0 / 0).
 - Layout: 6 layers, 1.2 mm, 100 x 110 mm (NES-EWROM-01 outline), all parts on the
   label side. KiCad DRC with schematic parity: 0 errors, 0 unconnected, 0 parity
   issues. 766 vias (221 GND stitching), 3 fiducials. Reviewed with the kicad-happy
@@ -299,10 +308,11 @@ Rev0 is **schematic- and layout-complete, not yet built**.
   follows the Alliance datasheet (verified, review table).
 - Symbols: `MCU_RaspberryPi:RP2354B`, `74xx:74HCT00`, `74xx:74HCT595`,
   `Regulator_Linear:AP2112K-3.3`, `Transistor_FET:AO3401A`,
-  `MCU_Microchip_ATtiny:ATtiny13A-SS` are stock; the 74HCT14/20/32/253 use
-  the `74HC14`, `74LS20`, `74LS32`, `74LS253` symbols with the HCT part as
-  the value. `NES_Cart_Edge_72`, `AS6C4008-55TIN` and `MicroSD_TF015` are
-  drawn by `gen_sch.py` into `FujiNet-NES.kicad_sym`.
+  `MCU_Microchip_ATtiny:ATtiny13A-SS` are stock; the 74HCT14/20/32 use
+  the `74HC14`, `74LS20`, `74LS32` symbols with the HCT part as the value.
+  `NES_Cart_Edge_72` (pins grouped by function), `AS6C4008-55TIN`,
+  `MicroSD_TF015` and `74HCT253` (the stock '253 pins, numbers and names in
+  signal-flow order) are drawn by `gen_sch.py` into `FujiNet-NES.kicad_sym`.
 - Footprints: copies of the KiCad libraries in `FujiNet-NES.pretty/` (plus
   `SOT-23-5` and `SOIC-8` written by `make_fp_extra.py` to the same
   geometry), the TF-015 (EasyEDA) and the AOTA inductor (Raspberry Pi, MIT).
@@ -348,7 +358,7 @@ TF-015 from LCSC/EasyEDA C113206.
 
 | Path | Contents |
 |---|---|
-| `FujiNet-NES-Rev0.kicad_pro/.kicad_sch/.kicad_pcb/.kicad_dru` | KiCad 10 project: root sheet plus `cart-rp2354b`, `esp32s3-sd`, `usb-uart`, `power`; the board; the custom rules |
+| `FujiNet-NES-Rev0.kicad_pro/.kicad_sch/.kicad_pcb/.kicad_dru` | KiCad 10 project: root sheet plus `edge-cic`, `rp2354b`, `sram`, `glue`, `esp32s3-sd`, `usb-uart`, `power`; the board; the custom rules |
 | `FujiNet-NES.kicad_sym`, `FujiNet-NES.pretty/`, `3d/` | project symbol, footprint and 3D-model libraries (the only libraries the files need) |
 | `FujiNet-NES-Rev0-BOM.csv`, `exports/jlcpcb/` | grouped BOM (DNP flagged); JLCPCB BOM, CPL and gerbers |
 | `docs/` | schematic PDF, layout SVGs/renders, `design-review-rev0.md` |

@@ -9,9 +9,12 @@ Exports a fresh netlist with kicad-cli and reads, from fujinet-firmware
   include/pinmap/fujiversal-intv.h         PIN_RP2040_RUN/BOOTSEL, until the
                                            NES pinmap defines them itself
 and checks every one of them, plus the nesdev 72-pin edge map and the decode
-equations of pico/nes/README.md, against the pin *functions* the netlist
-reports (GPIOn on the RP2354B, IOn on the S3, An/DQn on the SRAMs, QA..QH
-on the '595) -- gate by gate for the 74HCT glue.
+equations (pico/nes/README.md as amended by the Rev0 audit: '595 /OE gating,
+one-gate PRG /WE, CIRAM /CE through the '253), against the pin *functions*
+the netlist reports (GPIOn on the RP2354B, IOn on the S3, An/DQn on the
+SRAMs, QA..QH on the '595) -- gate by gate for the 74HCT glue.  Also reads
+the edge footprint and asserts pin 1 is east on F.Cu (nesdev: label side,
+fingers down, 36..1 left to right).
 
 Usage: python3 tools/check_nets.py         exit 1 on any failure
 """
@@ -34,7 +37,8 @@ EDGE = {1: 'GND', 2: 'A11', 3: 'A10', 4: 'A9', 5: 'A8', 6: 'A7', 7: 'A6', 8: 'A5
         54: 'EXP6', 55: 'EXP5', 56: 'PPU /WR', 57: 'CIRAM /CE', 58: 'PPU /A13', 59: 'PA7',
         60: 'PA8', 61: 'PA9', 62: 'PA11', 63: 'PA10', 64: 'PA12', 65: 'PA13', 66: 'PD7',
         67: 'PD6', 68: 'PD5', 69: 'PD4', 70: 'CIC +RST', 71: 'CIC CLK', 72: 'GND'}
-UNUSED = ('EXP', 'CIC', 'SYSTEM CLK')
+UNUSED = ('EXP', 'SYSTEM CLK')
+CIC = {'CIC toPak': 'PB1', 'CIC toMB': 'PB0', 'CIC +RST': 'PB2', 'CIC CLK': 'PB3'}   # avrciczz pin map
 GATES4 = [(1, 2, 3), (4, 5, 6), (9, 10, 8), (12, 13, 11)]          # 74xx00/08/32
 INV6 = [(1, 2), (3, 4), (5, 6), (9, 8), (11, 10), (13, 12)]          # 74xx14
 
@@ -89,10 +93,12 @@ def main():
     J2 = one('microSD')
     UCP = one('CP2102N-A02-GQFN28')
     WS = one('WS2812B-2020-V6')
-    U595, U253, U14, U00, U32 = (one(v) for v in ('74HCT595', '74HCT253', '74HCT14', '74HCT00', '74HCT32'))
+    U595, U253, U14, U00, U32, U20 = (one(v) for v in ('74HCT595', '74HCT253', '74HCT14', '74HCT00', '74HCT32', '74HCT20'))
+    LDO, QFET, CIC_U = one('AP2112K-3.3'), one('AO3401A'), one('ATtiny13A-SSU')
     srams = by_value('AS6C4008-55TIN')
     for ref, what in ((U1, 'RP2354B'), (J1, 'edge'), (U2, 'ESP32-S3'), (U595, '74HCT595'), (U253, '74HCT253'),
-                      (U14, '74HCT14'), (U00, '74HCT00'), (U32, '74HCT32')):
+                      (U14, '74HCT14'), (U00, '74HCT00'), (U32, '74HCT32'), (U20, '74HCT20'), (LDO, 'AP2112K LDO'),
+                      (QFET, 'AO3401A'), (CIC_U, 'CIClone')):
         if ref is None:
             raise SystemExit('no %s in the netlist' % what)
     if len(srams) != 2:
@@ -160,6 +166,8 @@ def main():
             chk('J1.%d is GND' % p, n == 'GND')
         elif s.startswith(UNUSED):
             chk('J1.%d %s unconnected' % (p, s), unconn(n))
+        elif s in CIC:
+            chk('J1.%d %s -> CIClone %s' % (p, s, CIC[s]), n == func_net.get((CIC_U, CIC[s])) and not unconn(n))
         elif s in ('+5V', 'CIRAM A10', 'CIRAM /CE', 'PPU /RD', 'PPU /WR', 'PPU /A13') or s.startswith(('PA', 'PD')):
             chk('J1.%d %s connected' % (p, s), not unconn(n))
         elif s == 'R/W':
@@ -187,8 +195,17 @@ def main():
     chk("GP%d -> '595 SER" % P['SR_SER'], rp(P['SR_SER']) == func_net.get((U595, 'SER')))
     chk("GP%d -> '595 SRCLK" % P['SR_SCK'], rp(P['SR_SCK']) == func_net.get((U595, 'SRCLK')))
     chk("GP%d -> '595 RCLK" % P['SR_RCK'], rp(P['SR_RCK']) == func_net.get((U595, 'RCLK')))
-    chk("'595 /OE tied low", func_net.get((U595, '~{OE}')) == 'GND')
     v5 = func_net.get((U595, 'VCC'))
+    sr_oe_n = func_net.get((U595, '~{OE}'))
+    chk("'595 /OE is driven (SR_OE_N), not tied", sr_oe_n not in ('GND', v5, None))
+    pulled = {}
+    for r, (val, fp) in parts.items():
+        if r.startswith('RN') and val == '4x100k':
+            for k in range(1, 5):
+                if node_net.get((r, str(9 - k))) == 'GND':
+                    pulled[node_net.get((r, str(k)))] = r
+    for bit in SR:
+        chk("'595 %s has a 100k pull-down" % bit, Q(bit) in pulled)
     chk("'595 /SRCLR tied high", func_net.get((U595, '~{SRCLR}')) == v5)
     chk("'595 QH' unconnected", unconn(func_net.get((U595, "QH'"))))
 
@@ -216,9 +233,13 @@ def main():
     # ---- PWR_OK: console +5V (edge 36, before the OR diode) -> divider -> '14 ----
     cons = sig['+5V']
     chk('edge +5V is not the logic 5V rail (diode-OR in between)', cons != v5 and not unconn(cons))
-    chk('edge +5V -> SS34 -> logic 5V rail',
-        any(val == 'SS34' and node_net.get((r, '2')) == cons and node_net.get((r, '1')) == v5
+    vbus = node_net.get((one('USB-C'), 'A4'))
+    chk('edge +5V -> P-FET drain, source = logic 5V rail, gate = VBUS',
+        node_net.get((QFET, '3')) == cons and node_net.get((QFET, '2')) == v5 and node_net.get((QFET, '1')) == vbus)
+    chk('VBUS -> SS34 -> logic 5V rail',
+        any(val == 'SS34' and node_net.get((r, '2')) == vbus and node_net.get((r, '1')) == v5
             for r, (val, _) in parts.items()))
+    chk('VBUS held low when unplugged (sense divider to GND)', through_r(vbus, node_net.get((one('CP2102N-A02-GQFN28'), '8'))) is not None)
     vsense = next((node_net.get((U14, str(pa))) for pa, py in INV6
                    if through_r(cons, node_net.get((U14, str(pa)))) is not None), None)
     chk("a '14 input is fed from edge +5V through a resistor (VSENSE)", vsense is not None)
@@ -226,30 +247,51 @@ def main():
     chk('VSENSE divider to GND', top is not None and bot is not None)
     if top and bot:
         val = lambda s: float(s.replace('k', 'e3').replace('R', ''))
-        hi, lo = 5.25 * val(bot) / (val(top) + val(bot)), 4.75 * val(bot) / (val(top) + val(bot))
-        chk('VSENSE <= 3.3V at 5.25V (%.2f) and >= 2.0V (HCT VIH) at 4.75V (%.2f)' % (hi, lo), hi <= 3.3 and lo >= 2.0)
+        ratio = val(bot) / (val(top) + val(bot))
+        # TI SN74HCT14: VT+ max 3.13 V at VCC 4.5 V (0.70 x VCC); the '14 runs on the
+        # same rail (P-FET), so the divider must sit above 0.70 and below the
+        # input clamp when VCC is a diode drop under CONS_5V (both sources present)
+        chk('VSENSE ratio %.2f: above 0.75 (74HCT14 VT+ max 0.70 x VCC) and below 0.9' % ratio, 0.75 <= ratio <= 0.9)
     pwr_ok_n = inv(vsense)
     pwr_ok = inv(pwr_ok_n)
     chk('PWR_OK_N = !VSENSE, PWR_OK = !PWR_OK_N', pwr_ok_n is not None and pwr_ok is not None)
 
-    # ---- the decode (pico/nes/README.md) ----
+    # ---- the decode (pico/nes/README.md + the Rev0 audit) ----
     romsel = inv(sig['/ROMSEL'])
+    rw_n = inv(sig['R/W'])
     chk("ROMSEL = !(/ROMSEL) on a '14", romsel is not None)
-    chk('PRG /CE = NAND(ROMSEL, SRAM_EN)', func_net.get((PRG, '~{CE}')) == nand(romsel, Q('SRAM_EN')) != None)
+    chk("RW_N = !(R/W) on a '14", rw_n is not None)
+    def nand4(ins):
+        for pins in ((1, 2, 4, 5, 6), (9, 10, 12, 13, 8)):
+            if {node_net.get((U20, str(p))) for p in pins[:4]} == set(ins):
+                return node_net.get((U20, str(pins[4])))
+        return None
+    chk("PRG /CE = NAND(ROMSEL, SRAM_EN) ('20 gate 2, spare inputs high)",
+        func_net.get((PRG, '~{CE}')) == nand4([romsel, Q('SRAM_EN'), v5]) != None)
     chk('PRG /OE = NAND(R/W, PWR_OK)', func_net.get((PRG, '~{OE}')) == nand(sig['R/W'], pwr_ok) != None)
-    chk('PRG /WE = NAND(ROMSEL, PRG_WE_EN) | R/W',
-        func_net.get((PRG, '~{WE}')) == or_(nand(romsel, Q('PRG_WE_EN')), sig['R/W']) != None)
+    chk("PRG /WE = NAND4(M2, ROMSEL, RW_N, PRG_WE_EN): one gate after M2 ('20)",
+        func_net.get((PRG, '~{WE}')) == nand4([sig['M2'], romsel, rw_n, Q('PRG_WE_EN')]) != None)
     chk('CHR /OE = PPU /RD | PWR_OK_N', func_net.get((CHR, '~{OE}')) == or_(sig['PPU /RD'], pwr_ok_n) != None)
     chk('CHR /WE = PPU /WR | !CHR_WE_EN', func_net.get((CHR, '~{WE}')) == or_(sig['PPU /WR'], inv(Q('CHR_WE_EN'))) != None)
-    chk('CIRAM /CE = PPU /A13 | (FOURSCREEN & PWR_OK)',
-        sig['CIRAM /CE'] == or_(sig['PPU /A13'], inv(nand(Q('FOURSCREEN'), pwr_ok))) != None)
+    ce_pre = or_(sig['PPU /A13'], Q('FOURSCREEN'))
+    chk('CIRAM /CE pre-gate = PPU /A13 | FOURSCREEN', ce_pre is not None)
     m = lambda f: func_net.get((U253, f))
     chk("'253 I0a = PPU A10, I1a = PPU A11, I2a = 0, I3a = 1",
         m('I0a') == sig['PA10'] and m('I1a') == sig['PA11'] and m('I2a') == 'GND' and m('I3a') == v5)
     chk("'253 selects A0 = MIR0, A1 = MIR1", m('A0') == Q('MIR0') and m('A1') == Q('MIR1'))
     chk("'253 Za = CIRAM A10, /OEa = PWR_OK_N", m('Za') == sig['CIRAM A10'] and m('OEa') == pwr_ok_n)
-    chk("'253 half b parked", m('OEb') == v5 and unconn(m('Zb')) and
-        all(m('I%db' % i) == 'GND' for i in range(4)))
+    chk("'253 half b: I0b..I3b = CIRAM /CE pre-gate, Zb = CIRAM /CE, /OEb = PWR_OK_N",
+        all(m('I%db' % i) == ce_pre for i in range(4)) and m('Zb') == sig['CIRAM /CE'] and m('OEb') == pwr_ok_n)
+    # '595 /OE = NAND(PWR_OK, POR), POR = Schmitt of an RC that starts high with the 5V rail
+    cap_to_v5 = {node_net.get((r, '1')) if node_net.get((r, '2')) == v5 else node_net.get((r, '2'))
+                 for r, (val, _) in parts.items() if r.startswith('C') and val == '1uF'
+                 and v5 in (node_net.get((r, '1')), node_net.get((r, '2')))}
+    por_rc = next((node_net.get((U14, str(pa))) for pa, py in INV6 if node_net.get((U14, str(pa))) in cap_to_v5), None)
+    chk("POR_RC: a '14 input with 1uF to the 5V rail", por_rc is not None)
+    chk('POR_RC has 100k to GND', through_r(por_rc, 'GND') == '100k')
+    por = inv(por_rc)
+    chk("POR = !POR_RC on the '14", por is not None)
+    chk("'595 /OE = NAND(PWR_OK, POR)", sr_oe_n == nand(pwr_ok, por) != None)
     led = one('green')
     chk("'595 LED bit -> 1k -> LED anode", led is not None and through_r(Q('LED'), node_net.get((led, '2'))) == '1k'
         and node_net.get((led, '1')) == 'GND')
@@ -257,39 +299,48 @@ def main():
     chk('M2 on a test pad', any(r.startswith('TP') for (r, _, _) in nets.get(sig['M2'], [])))
     for ref in (U595, U253):
         chk('%s on the 5V rail' % parts[ref][0], func_net.get((ref, 'VCC')) == v5 and func_net.get((ref, 'GND')) == 'GND')
-    for ref in (U14, U00, U32):
+    for ref in (U14, U00, U32, U20):
         chk('%s on the 5V rail' % parts[ref][0], node_net.get((ref, '14')) == v5 and node_net.get((ref, '7')) == 'GND')
     # unused gate inputs grounded (an input that is on no checked net above)
-    for ref, table in ((U00, GATES4), (U32, GATES4), (U14, INV6)):
+    for ref, table in ((U00, GATES4), (U32, GATES4), (U14, INV6), (U20, [(1, 2, 4, 5, 6), (9, 10, 12, 13, 8)])):
         for g in table:
             ins = [node_net.get((ref, str(p))) for p in g[:-1]]
             out = node_net.get((ref, str(g[-1])))
             if unconn(out):
                 chk('%s unused gate inputs tied to GND' % ref, all(i == 'GND' for i in ins))
     # the bus touches only the edge, the RP, the SRAMs, the glue and test pads
-    glue = {J1, U1, PRG, CHR, U595, U253, U14, U00, U32}
+    glue = {J1, U1, PRG, CHR, U595, U253, U14, U00, U32, U20}
     for p, s in EDGE.items():
-        if s in ('GND', '+5V') or s.startswith(UNUSED):
+        if s in ('GND', '+5V') or s.startswith(UNUSED) or s in CIC:
             continue
         others = [(r, pin) for (r, pin, f) in nets.get(edge[p], []) if r not in glue and not r.startswith('TP')]
         chk('J1.%d %s net carries no extra parts (no pull-ups, no series R)' % (p, s), not others)
 
-    # ---- RP support ----
-    v33 = func_net.get((U1, 'IOVDD'))
-    chk('RP IOVDD rail is not the 5V rail', v33 not in (v5, None))
+    # ---- RP support: IOVDD group on the LDO rail, VREG_VIN (+AVDD) on the buck rail ----
+    v33io = func_net.get((U1, 'IOVDD'))
+    v33 = func_net.get((U1, 'VREG_VIN'))
+    chk('RP IOVDD rail is not the 5V rail', v33io not in (v5, None))
+    chk('RP IOVDD rail is the LDO output, LDO fed from the 5V rail, EN = VIN',
+        node_net.get((LDO, '5')) == v33io and node_net.get((LDO, '1')) == v5 and node_net.get((LDO, '3')) == v5)
+    chk('RP VREG_VIN on the LDO rail with IOVDD', v33 == v33io)
+    chk('VREG_AVDD from the same rail as VREG_VIN through 33R', through_r(v33, func_net.get((U1, 'VREG_AVDD'))) == '33R')
+    v33 = func_net.get((U2, '3V3'))
+    chk('S3 3V3 is the buck rail, not the LDO', v33 not in (v33io, v5, None))
     chk('RP USB_DP -> 27R -> S3 USB_D+ (IO20)', through_r(func_net.get((U1, 'USB_DP')), func_net.get((U2, 'USB_D+'))) == '27R')
     chk('RP USB_DM -> 27R -> S3 USB_D- (IO19)', through_r(func_net.get((U1, 'USB_DM')), func_net.get((U2, 'USB_D-'))) == '27R')
     run, ss = func_net.get((U1, 'RUN')), func_net.get((U1, '~{QSPI_SS}'))
     chk('S3 IO%d (PIN_RP2040_RUN) -> 1k -> RP RUN (active low, no inverter)' % run_io, through_r(s3(run_io), run) == '1k')
     chk('S3 IO%d (PIN_RP2040_BOOTSEL) -> 1k -> RP QSPI_SS' % bsel_io, through_r(s3(bsel_io), ss) == '1k')
-    chk('RUN pull-up', through_r(run, v33) == '10k')
-    chk('QSPI_SS pull-up', through_r(ss, v33) == '10k')
+    chk('RUN pull-up to the IO rail', through_r(run, v33io) == '10k')
+    chk('QSPI_SS pull-up to the IO rail', through_r(ss, v33io) == '10k')
     for f in ('QSPI_SCLK', 'QSPI_SD0', 'QSPI_SD1', 'QSPI_SD2', 'QSPI_SD3'):
         chk('RP %s unconnected (flash is in the package)' % f, unconn(func_net.get((U1, f))))
     for n, nodes in nets.items():   # every supply pin (names repeat: IOVDD x8, DVDD x3)
         for (ref, pin, f) in nodes:
-            if ref == U1 and f in ('IOVDD', 'QSPI_IOVDD', 'USB_OTP_VDD', 'ADC_AVDD', 'VREG_VIN'):
-                chk('RP %s (pin %s) on %s' % (f, pin, v33), n == v33)
+            if ref == U1 and f in ('IOVDD', 'QSPI_IOVDD', 'USB_OTP_VDD', 'ADC_AVDD'):
+                chk('RP %s (pin %s) on %s' % (f, pin, v33io), n == v33io)
+            if ref == U1 and f == 'VREG_VIN':
+                chk('RP %s (pin %s) on %s' % (f, pin, v33io), n == v33io)
             if ref == U1 and f == 'DVDD':
                 chk('RP DVDD (pin %s) on DVDD' % pin, n == func_net.get((U1, 'VREG_FB')))
             if ref == U1 and f in ('GND', 'VREG_PGND'):
@@ -312,6 +363,22 @@ def main():
         chk('S3 strapping IO%d unloaded' % io, unconn(s3(io)))
     for io in range(26, 38):
         chk('S3 IO%d (flash/PSRAM on N16R8) unused' % io, unconn(s3(io)))
+
+    # ---- CIClone (DNP): console-powered, resets with it; /RESET on a pad ----
+    chk('CIClone VCC on edge +5V (CONS_5V), GND on GND',
+        func_net.get((CIC_U, 'VCC')) == cons and func_net.get((CIC_U, 'GND')) == 'GND')
+    chk('CIClone /RESET on a test pad', any(r.startswith('TP') for (r, _, _) in nets.get(func_net.get((CIC_U, '~{RESET}/PB5')), [])))
+
+    # ---- edge footprint orientation, from the footprint file itself ----
+    fpt = open(os.path.join(PRJ, 'FujiNet-NES.pretty', 'NES_Cart_Edge_72.kicad_mod')).read()
+    pads = {m.group(1): (float(m.group(2)), m.group(3)) for m in
+            re.finditer(r'\(pad "(\d+)" smd rect\s*\(at ([-\d.]+) [-\d.]+\)\s*\(size [^)]*\)\s*\(layers "([FB])\.Cu"\)', fpt)}
+    chk('edge footprint has 72 pads', len(pads) == 72)
+    chk('edge pad 1 east (+x) on F.Cu, pad 36 west, pad 37 under pad 1 on B.Cu (nesdev: label side reads 36..1)',
+        pads.get('1', (0, ''))[0] > 0 and pads['1'][1] == 'F' and pads['36'][0] < 0 and pads['36'][1] == 'F'
+        and pads['37'][0] == pads['1'][0] and pads['37'][1] == 'B' and pads['72'][1] == 'B')
+    chk('edge pitch 2.50 mm (pads 2-3); 3.0 mm end pad sits 0.5 mm further out (pads 1-2 = 3.0)',
+        abs((pads['2'][0] - pads['3'][0]) - 2.5) < 1e-6 and abs((pads['1'][0] - pads['2'][0]) - 3.0) < 1e-6)
 
     # ---- general ----
     for n, nodes in nets.items():

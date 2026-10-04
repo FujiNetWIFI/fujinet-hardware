@@ -32,6 +32,14 @@ __pycache__/
 *.pyc
 ~*.lck
 
+# kicad-happy analyzer runs and downloaded datasheets (manifest kept)
+**/analysis/
+**/datasheets/*.pdf
+**/datasheets/extracted/
+
+# Freerouting console output written by tools/route.py
+**/exports/freerouting.log
+
 # Astrocade Rev0: kicad-happy runs and the downloaded (third-party) datasheets
 Astrocade/rev0/analysis/
 Astrocade/rev0/datasheets/

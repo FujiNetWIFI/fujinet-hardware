@@ -1,22 +1,22 @@
-# UNADAPTED copy of Astrocade/rev0/tools: encodes that board (outline, QFN-60 graft,
-# single-sided blade edge). Rework before the FujiNet-NES-Rev0 layout stage; do not run as-is.
-"""Plane fan-out for gen_pcb.py.
+"""Plane fan-out for gen_pcb.py (FujiNet-NES Rev0).
 
-Every SMD pad on a plane net (GND -> In1.Cu, +3V3 -> In2.Cu) gets a short
-stub and a via, placed here geometrically with explicit clearance checks,
-and written LOCKED so the autorouter keeps them.  QFN exposed pads get a
-via array.  Freerouting is then left with signal nets only -- it is poor at
-plane fan-out on its own.
+Every SMD pad on a plane net (GND -> In1.Cu; +3V3, +5V, +3V3_RP, DVDD ->
+the In4 plane and its islands, where gen_pcb.py has checked the island
+under the pad carries that net) gets a short stub and a via, placed here
+geometrically with explicit clearance checks, and written LOCKED so the
+autorouter keeps them.  QFN exposed pads get a via array.  Freerouting is
+then left with signal nets only -- it is poor at plane fan-out on its own.
 """
 import math
 
-PLANE_NETS = ('GND', '+3V3')
+PLANE_NETS = ('GND', '+3V3', '+5V', '+3V3_RP', 'DVDD')
 VIA_D, VIA_DRILL = 0.6, 0.3
 STUB_W = 0.3
 CLR = 0.16          # copper clearance kept by the fan-out (rules say 0.15)
 EDGE_CLR = 0.6
-EP_ARRAYS = {'U3': 2}   # exposed-pad via grid (n x n); U1's footprint carries its own
+EP_ARRAYS = {'U1': 3, 'U12': 3}   # exposed-pad via grid (n x n): RP2354B QFN-80, CP2102N QFN-28 (3.35 mm EP)
 ESCAPE = 1.2        # length of the via-free lane kept in front of fine-pitch signal pins
+FAR_VIA = {('U1', '24'), ('U1', '29')}   # supply pins whose plane via sits ~3 mm out (see plan())
 
 
 class Pad:
@@ -62,13 +62,14 @@ def plan(pads, keepouts, board_box, blade_y, holes, skip_refs=(), extra_segs=(),
         if q.th or q.net in PLANE_NETS or q.net is None or min(q.hw, q.hh) > 0.15:
             continue
         fx, fy = q.fp_xy
+        esc = ESCAPE
         if q.hh > q.hw:      # pin on a top/bottom side: escapes along y
             sgn = 1 if q.cy > fy else -1
-            ya, yb = sorted((q.cy + sgn * q.hh, q.cy + sgn * (q.hh + ESCAPE)))
+            ya, yb = sorted((q.cy + sgn * q.hh, q.cy + sgn * (q.hh + esc)))
             corridors.append((q.cx - q.hw - 0.12, ya, q.cx + q.hw + 0.12, yb))
         else:
             sgn = 1 if q.cx > fx else -1
-            xa, xb = sorted((q.cx + sgn * q.hw, q.cx + sgn * (q.hw + ESCAPE)))
+            xa, xb = sorted((q.cx + sgn * q.hw, q.cx + sgn * (q.hw + esc)))
             corridors.append((xa, q.cy - q.hh - 0.12, xb, q.cy + q.hh + 0.12))
 
     def via_ok(x, y, net, own=None):
@@ -141,8 +142,12 @@ def plan(pads, keepouts, board_box, blade_y, holes, skip_refs=(), extra_segs=(),
                 ex = min(max(mx, ep.cx - ep.hw + 0.05), ep.cx + ep.hw - 0.05)
                 ey = min(max(my, ep.cy - ep.hh + 0.05), ep.cy + ep.hh - 0.05)
                 others = [q for q in pads if q is not ep]
+                def via_clear(x0_, y0_, x1_, y1_):
+                    return not any(_pt_seg(ox, oy, x0_, y0_, x1_, y1_) < VIA_D / 2 + sw / 2 + CLR
+                                   for (ox, oy, on) in vias if on != p.net)
                 if (_seg_ok(p.cx, p.cy, mx, my, others, p, p.net, sw / 2)
-                        and _seg_ok(mx, my, ex, ey, others, p, p.net, sw / 2)):
+                        and _seg_ok(mx, my, ex, ey, others, p, p.net, sw / 2)
+                        and via_clear(p.cx, p.cy, mx, my) and via_clear(mx, my, ex, ey)):
                     segs.append((p.cx, p.cy, mx, my, p.net, sw))
                     segs.append((mx, my, ex, ey, p.net, sw))
                     continue
@@ -158,7 +163,11 @@ def plan(pads, keepouts, board_box, blade_y, holes, skip_refs=(), extra_segs=(),
             ux, uy = math.cos(a), math.sin(a)
             # distance from pad centre to its edge along (ux, uy)
             edge = min(p.hw / abs(ux) if abs(ux) > 1e-9 else 1e9, p.hh / abs(uy) if abs(uy) > 1e-9 else 1e9)
-            for extra in [0.1 * k for k in range(0, 26)]:
+            # RP2354B pins 24/29 (IOVDD) frame four 0.4 mm-pitch signal pins (CA13, CA14, PA10, PA11):
+            # with their vias at the lane ends the four escapes have 1.4 mm between the vias and
+            # need 1.55, so those two vias go ~3 mm out (the east side is kept free for it)
+            far = (p.ref, p.num) in FAR_VIA
+            for extra in ([2.4 + 0.1 * k for k in range(0, 6)] if far else []) + [0.1 * k for k in range(0, 26)]:
                 dd = edge + VIA_D / 2 + 0.15 + extra
                 vx, vy = round(p.cx + ux * dd, 3), round(p.cy + uy * dd, 3)
                 if not via_ok(vx, vy, p.net, own=p):

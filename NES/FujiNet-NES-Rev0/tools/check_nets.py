@@ -322,9 +322,10 @@ def main():
     chk('RP IOVDD rail is not the 5V rail', v33io not in (v5, None))
     chk('RP IOVDD rail is the LDO output, LDO fed from the 5V rail, EN = VIN',
         node_net.get((LDO, '5')) == v33io and node_net.get((LDO, '1')) == v5 and node_net.get((LDO, '3')) == v5)
-    chk('RP VREG_VIN on the buck 3V3 (not the LDO)', v33 not in (v33io, v5, None))
+    chk('RP VREG_VIN on the LDO rail with IOVDD', v33 == v33io)
     chk('VREG_AVDD from the same rail as VREG_VIN through 33R', through_r(v33, func_net.get((U1, 'VREG_AVDD'))) == '33R')
-    chk('S3 3V3 is the buck rail', func_net.get((U2, '3V3')) == v33)
+    v33 = func_net.get((U2, '3V3'))
+    chk('S3 3V3 is the buck rail, not the LDO', v33 not in (v33io, v5, None))
     chk('RP USB_DP -> 27R -> S3 USB_D+ (IO20)', through_r(func_net.get((U1, 'USB_DP')), func_net.get((U2, 'USB_D+'))) == '27R')
     chk('RP USB_DM -> 27R -> S3 USB_D- (IO19)', through_r(func_net.get((U1, 'USB_DM')), func_net.get((U2, 'USB_D-'))) == '27R')
     run, ss = func_net.get((U1, 'RUN')), func_net.get((U1, '~{QSPI_SS}'))
@@ -339,7 +340,7 @@ def main():
             if ref == U1 and f in ('IOVDD', 'QSPI_IOVDD', 'USB_OTP_VDD', 'ADC_AVDD'):
                 chk('RP %s (pin %s) on %s' % (f, pin, v33io), n == v33io)
             if ref == U1 and f == 'VREG_VIN':
-                chk('RP %s (pin %s) on %s' % (f, pin, v33), n == v33)
+                chk('RP %s (pin %s) on %s' % (f, pin, v33io), n == v33io)
             if ref == U1 and f == 'DVDD':
                 chk('RP DVDD (pin %s) on DVDD' % pin, n == func_net.get((U1, 'VREG_FB')))
             if ref == U1 and f in ('GND', 'VREG_PGND'):

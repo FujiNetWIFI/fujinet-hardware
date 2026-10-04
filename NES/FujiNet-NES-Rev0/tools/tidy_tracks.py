@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-# UNADAPTED copy of Astrocade/rev0/tools: encodes that board (outline, QFN-60 graft,
-# single-sided blade edge). Rework before the FujiNet-NES-Rev0 layout stage; do not run as-is.
-"""Tidy router artifacts in FujiNet-Astrocade-Rev0.kicad_pcb without changing
+"""Tidy router artifacts in FujiNet-NES-Rev0.kicad_pcb without changing
 the routing topology:
 
   1. tiny segments (< 0.05 mm) collapse onto their pad/via end, neighbours re-joined
@@ -26,8 +24,8 @@ EPS = 1e-3
 
 
 def drc_errors():
-    fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-tidy.json')
-    subprocess.run(['kicad-cli', 'pcb', 'drc', '--schematic-parity', '--format', 'json', '-o', fn, PCB],
+    fn = os.path.join(tempfile.gettempdir(), 'fujinet-nes-tidy.json')
+    subprocess.run(['kicad-cli', 'pcb', 'drc', '--refill-zones', '--schematic-parity', '--format', 'json', '-o', fn, PCB],
                    capture_output=True)
     d = json.load(open(fn))
     errs = sum(1 for v in d.get('violations', []) if v['severity'] == 'error')

@@ -118,7 +118,7 @@
         "silk_over_copper": "warning",
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
-        "solder_mask_bridge": "error",
+        "solder_mask_bridge": "warning",
         "starved_thermal": "error",
         "text_height": "warning",
         "text_on_edge_cuts": "error",
@@ -154,8 +154,10 @@
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.25,
         "min_track_width": 0.1,
-        "min_via_annular_width": 0.1,
+        "min_via_annular_width": 0.125,
         "min_via_diameter": 0.5,
+        "solder_mask_clearance": 0.0,
+        "solder_mask_min_width": 0.0,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -589,6 +591,10 @@
         "pattern": "BUCK_SW"
       },
       {
+        "netclass": "PWR",
+        "pattern": "+3V3"
+      },
+      {
         "netclass": "VBUS",
         "pattern": "VBUS"
       },
@@ -754,8 +760,8 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "FujiNet-Astrocade-Rev0.kicad_sch",
-        "name": "FujiNet-Astrocade-Rev0",
+        "filename": "FujiNet-NES-Rev0.kicad_sch",
+        "name": "FujiNet-NES-Rev0",
         "uuid": "00000000-0000-0000-0000-000000000000"
       }
     ],

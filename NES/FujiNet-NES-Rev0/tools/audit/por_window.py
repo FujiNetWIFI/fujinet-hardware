@@ -9,3 +9,4 @@ print('TI SN74HCT14 VT+ max 3.13 V at VCC 4.5 V = %.2f x VCC; VSENSE divider 100
 print('LED: (5.0 - 2.85) / 1k = %.1f mA (KT-0603G VF 2.6-3.1 V at 5 mA)' % ((5.0 - 2.85) / 1.0))
 print('AO3401A: Rds(on) < 60 mOhm at Vgs -4.5 V; 0.4 A cart load -> %.0f mV drop (SS34 was ~350 mV)' % (0.06 * 0.4 * 1e3))
 print('LDO: ~30 mA IOVDD at (5.0-3.3) V = %.0f mW' % (0.03 * 1.7 * 1e3))
+print('LDO with VREG_VIN too: ~60 mA at (5.0-3.3) V = %.0f mW; AP2112K SOT-25 ~250 C/W -> +%.0f C' % (0.06 * 1.7 * 1e3, 0.06 * 1.7 * 250))

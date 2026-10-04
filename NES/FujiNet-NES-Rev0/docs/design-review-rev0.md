@@ -16,7 +16,7 @@ This review was done with the first Rev0 schematic (commit `1c9130d`) as the bas
 |---|---|
 | Fixed | Edge footprint mirrored (pin 1 was west; nesdev + two measured references put it east on the label side) |
 | Fixed | Finger geometry guessed (1.6 x 9.5 mm, 0.5 mm in) -> measured NES-EWROM-01 (2.0 x 12 mm, ends 3.0 mm at +/-44.25, copper 1.0-13.0 mm in, front/back mask depths 6.5/11 mm) |
-| Fixed | RP pads unpowered with 5 V on them at console power-on (buck soft-start 4 ms) -> IOVDD group on a 20 us LDO |
+| Fixed | RP pads unpowered with 5 V on them at console power-on (buck soft-start 4 ms) -> the whole RP2354B (IOVDD group, VREG_VIN + VREG_AVDD) on a 20 us LDO |
 | Fixed | 74HCT595 random from power-on with /OE grounded -> /OE = NAND(PWR_OK, POR), 100k pull-downs on all bits |
 | Fixed | PRG /WE three gates behind the console's /ROMSEL decoder vs ~30 ns data hold -> NAND4 on M2 (74HCT20), one gate |
 | Fixed | CIRAM /CE driven by a '32 into a dead console -> through the '253's second half, tri-stated by PWR_OK_N |
@@ -57,9 +57,9 @@ edge 36 CONS_5V --[Q1 AO3401A P-FET, G = VBUS]--+
                                                  +--> +5V --> AS6C4008 x2, 74HCT x6, WS2812, CIClone sense
 USB-C VBUS -----[D7 SS34]------------------------+      |
                                                         +--> U14 AP63203 buck 3.3 V/2 A (6.8 uH, 3x22 uF in, 2x22 uF out)
-                                                        |      +--> +3V3: ESP32-S3, microSD, CP2102N, RP VREG_VIN (+ VREG_AVDD via 33R)
-                                                        |             +--> RP core SMPS 1.1 V (3.3 uH) -> DVDD
-                                                        +--> U15 AP2112K-3.3 LDO (20 us) --> +3V3_RP: RP IOVDD x8, QSPI_IOVDD, USB_OTP_VDD, ADC_AVDD
+                                                        |      +--> +3V3: ESP32-S3, microSD, CP2102N
+                                                        +--> U15 AP2112K-3.3 LDO (20 us) --> +3V3_RP: RP IOVDD x8, QSPI_IOVDD, USB_OTP_VDD, ADC_AVDD,
+                                                                                             VREG_VIN (+ VREG_AVDD via 33R) --> RP core SMPS 1.1 V (3.3 uH) -> DVDD
 PWR_OK = 74HCT14( 0.82 x CONS_5V )   sensed before the FET: USB-powered cart in a dead console disables every output toward it
 ```
 Regulator Vout: AP63203WU-7 fixed 3.3 V (`vref_source: fixed_suffix`), AP2112K-3.3 fixed 3.3 V. Both datasheet-verified (pin tables, Deep Review).
@@ -108,8 +108,8 @@ Edge 1-36 on F.Cu (label side), 37-72 on B.Cu, pin N under pin N+36; pin 1 is at
 ## Deep Review (28 findings, all evidence-verified)
 
 **Power / rails**
-- RP IOVDD group on the AP2112K (RP2350: "GPIOs are 5 V-tolerant (powered) and 3.3 V-failsafe (unpowered)", "tolerate voltages up to 5.5 V, provided IOVDD is powered to 3.3 V"; AP2112K start-up 20 us vs AP63203 soft-start 4 ms). ~51 mW in the SOT-23-5.
-- Supply order: only VREG_VIN + VREG_AVDD must rise together (p.444) - both on +3V3.
+- The whole RP2354B on the AP2112K (RP2350: "GPIOs are 5 V-tolerant (powered) and 3.3 V-failsafe (unpowered)", "tolerate voltages up to 5.5 V, provided IOVDD is powered to 3.3 V"; AP2112K start-up 20 us vs AP63203 soft-start 4 ms). ~60 mA, ~100 mW in the SOT-23-5 (Tj about +25 C over ambient).
+- Supply order: only VREG_VIN + VREG_AVDD must rise together (p.444) - both on +3V3_RP.
 - Console entry P-FET: Rds(on) < 60 mOhm at Vgs -4.5 V -> ~24 mV at 0.4 A; 74HCT VCC minimum 4.5 V satisfied even on a weak console rail.
 
 **5 V glue**
@@ -142,22 +142,71 @@ Edge 1-36 on F.Cu (label side), 37-72 on B.Cu, pin N under pin N+36; pin 1 is at
 
 | Rail | Caps | Notes |
 |---|---|---|
-| +3V3_RP | 11 x 100 nF (one per RP supply pin) + 10 uF + 1 uF LDO out | PDN z_min 19 mOhm at 6.8 MHz (SPICE) |
-| +3V3 | 2 x 22 uF buck out, 4.7 uF VREG_VIN, 22 uF + 100 nF S3, 10 uF SD, 4.7 uF + 100 nF CP2102N | |
+| +3V3_RP | 11 x 100 nF (one per RP supply pin) + 4.7 uF VREG_VIN + 10 uF + 1 uF LDO out | PDN z_min 19 mOhm at 6.8 MHz (SPICE, first run) |
+| +3V3 | 2 x 22 uF buck out, 22 uF + 100 nF S3, 10 uF SD, 4.7 uF + 100 nF CP2102N | |
 | DVDD | 3 x 100 nF + 4.7 uF | core SMPS output |
 | +5V | 3 x 22 uF, 100 nF buck in, 10 uF logic bulk, 100 nF per SRAM and per 74HCT (6), 100 nF WS2812, 1 uF LDO in | |
 | VBUS / CONS_5V | 1 uF + 100 nF / 100 nF | |
 
 ## Power Analysis
 
-- **Budget (analyzer estimate):** +3V3 ~250 mA typical (S3 240, CP2102N, RP core input) with WiFi bursts to ~500 mA; +3V3_RP ~30 mA; +5V: SRAMs 2 x 30 mA active, HCT, LED, plus the buck input (~0.35 A at WiFi peaks). Console-only: ~0.5 A peak from the NES 5 V rail (bring-up item: the NES 7805's headroom).
+- **Budget (analyzer estimate):** +3V3 ~250 mA typical (S3 240, CP2102N) with WiFi bursts to ~500 mA; +3V3_RP ~60 mA (RP I/O + core-regulator input); +5V: SRAMs 2 x 30 mA active, HCT, LED, plus the buck input (~0.35 A at WiFi peaks). Console-only: ~0.5 A peak from the NES 5 V rail (bring-up item: the NES 7805's headroom).
 - **Sequencing:** no EN chains; buck EN = VIN, LDO EN = VIN; PWR_OK is the only gate and it is hardware.
 - **Inrush:** 3 x 22 uF on +5V charged through the P-FET body diode / SS34 at console or cable insertion; buck output 2 x 22 uF with 4 ms soft-start.
 - **Derating:** 22 uF 25 V X5R on 5 V, 10 uF 10 V on 3.3 V, 4.7 uF 16 V - fine. R19 47k 0603 "over-designed" (VD-004) - ignored, 0603 is the board's passive size.
 
-## PCB Layout, Cross-Domain, EMC, Thermal, Gerbers
+## PCB Layout, Cross-Domain, EMC, Thermal, Gerbers (Part 2)
 
-Part 2 (`docs/design-review-rev0.md` is updated when `FujiNet-NES-Rev0.kicad_pcb` exists): `analyze_pcb.py --full --proximity`, `cross_analysis.py`, `analyze_emc.py`, `analyze_thermal.py`, `analyze_gerbers.py`.
+**Board:** `FujiNet-NES-Rev0.kicad_pcb`, generated by `tools/gen_pcb.py` + `tools/placement.py`, routed by the pipeline in `tools/build_all.sh` (locked pre-routes, Freerouting 2.4.1 x 8 passes, the A* finisher with cost-aware rip-up, DRC-gated tidy, GND stitching). Analyzer run `analysis/2026-10-04_0338`. 117 footprints (114 parts + 3 fiducials), all on the label side; 2084 track segments (7.13 m), 766 vias (0.6/0.3; 0.5/0.25 under the RP), 221 of them GND stitching; 6 layers, 1.2 mm.
+
+**Gates:** KiCad DRC (`--refill-zones --schematic-parity --severity-error`): **0 errors, 0 unconnected, 0 schematic-parity issues**. Warnings: 199 solder-mask bridges (the fingers' shared mask window, by design), 78 silkscreen overlaps/silk-over-copper (reference designators on dense 0603 rows), 11 dangling track stubs (harmless router leftovers). ERC: 0. `tools/check_nets.py`: 453/453 against the firmware headers. Freerouting's own "unrouted" counter is inflated by zone-connected items; KiCad's unconnected count is the one quoted.
+
+### Analyzer runs (kicad-happy 2.2.1)
+
+| Analyzer | Run | Result |
+|---|---|---|
+| `analyze_pcb.py --full --proximity` | yes | 64 findings (31 error, 8 warning, 25 info); routing complete, 0 unrouted nets |
+| `cross_analysis.py` | yes | 1 warning (PS-002, below) |
+| `analyze_emc.py` | yes | 72 findings (6 error, 55 warning, 11 info) |
+| `analyze_thermal.py` | yes | score 97/100; 1 warning (TS-003, below), 7 info |
+| `simulate_subcircuits.py` (ngspice) | yes | re-run on the same schematic: crystal load, VSENSE, VBUS_SNS, POR RC as in Part 1 |
+| `analyze_gerbers.py` on `exports/jlcpcb/FujiNet-NES-Rev0-gerbers.zip` | yes | complete 6-layer set (13 layers + PTH/NPTH drill), 100.1 x 110.1 mm from the job file; 2 warnings (below) |
+| lifecycle audit | no | no distributor API keys (unchanged from Part 1) |
+
+### Layout findings and dispositions
+
+The PCB, cross-domain, EMC, thermal and gerber analyzers raised 147 findings between them. Everything rated high/error is listed; warnings that led to a change are listed; the rest are grouped.
+
+| Finding | Disposition |
+|---|---|
+| VM-001 5 V / 3.3 V crossing x44, RS-001, PU-001 CHREN, DO-DET, CG-AUD J1, EP-AUD, IO-001/002 J1 | Same false positives as Part 1 (the direct 5 V bus is the design; J1 is the console's connector) |
+| FD-001 no fiducials | **Fixed**: three 1 mm / 2 mm-mask fiducials (FID1-3, board-only footprints) at the body corners, outside the shell-post areas |
+| KO-001 vias inside `shell_post_*` keep-outs x46 | False positive: the analyzer tests the keep-out's bounding box; the shell-post areas are circles and KiCad's DRC (which tests the real shape) is clean |
+| VP-001 via in pad | **Fixed in the tools**: the finisher keeps vias 0.2 mm off its own pads, `stitch_gnd.py` keeps its grid off every pad. Left on the board: the thermal via arrays under the RP2354B and CP2102N exposed pads (intended) and two Freerouting vias in D7 pad 1 (+5V) and R15 pad 1 (+3V3) -- ask for filled/capped vias or accept a small solder-wicking risk on those two |
+| TV-001 CP2102N exposed pad 4/9 vias | **Fixed in the tool**: `fanout.py` plans a 3x3 array; on the routed board only the vias DRC accepts are kept (9 of 9 on the final board: TV-001 now reports U12 adequate) |
+| RP-001 no stitching via at layer transitions x20, BE-002 71 % edge ground | **Mitigated**: `tools/stitch_gnd.py` adds a 4 mm GND via grid plus a row 1.2 mm inside every body edge, each via kept only if DRC accepts it (221 vias on the final board; vias never in or against a pad) |
+| J1 inside the tab keep-outs | By design: the finger pads are allowed on the tab; tracks, vias and pour are not |
+| DP-001 USB_DP/USB_DM skew 10.4 mm (57 ps), DP-003 layer changes, DP-004 outer layers | Accepted: every USB endpoint on this board is Full-Speed (RP2350, ESP32-S3, CP2102N: 12 Mb/s, 83 ns bit time). The analyzer applies the High-Speed 25 ps budget; 57 ps is 0.07 % of a bit. Impedance is not controlled on this stack-up in any case (0.25 mm tracks) |
+| GP-001 reference-plane coverage 77-86 % (PD0, PD2, PA13, CIRAM_*, SD_DAT2), PS-002 "GND plane has 3 islands" | Partly real: the "3 islands" are the three GND layers (In1 plane, F and B pours) counted separately, and In1 is one solid plane. Signals on In3/B.Cu reference In4, which is split into +3V3 / +5V / +3V3_RP / DVDD areas; their return path closes through the decoupling capacitors at every IC and the stitching vias. Accepted for a 1.8 MHz bus |
+| TS-003 AP2112K Tj 96 C (0.286 W assumed), TP-001 MLCCs near it | Not supported by the datasheets: RP2350 draws 11.0 mA on VREG_VIN running CoreMark at 150 MHz and 14.7 mA in `hello_usb` (RP2350 datasheet Table 1446); its core regulator is a switcher, so the LDO never sees the core current. With the bus-driving IOVDD load this is tens of mA, not 170. At a pessimistic 150 mA: 0.26 W x 184 C/W (AP2112 datasheet, SOT-25) = +47 C. Keep the SOT-23-5 |
+| DC-001 SRAM decoupling 6.4 mm from U2/U3 | Measured to the package centre; C22/C23 sit 1.3 mm from the VCC pin (pin 8) of each TSOP. False positive |
+| DC-002 no decoupling near U13 | UMH3N is a transistor pair, no supply pin. False positive |
+| PM-002 J2 0.2 mm from the edge, J3, U11 | microSD and USB-C are edge-mounted by design; the ESP32 antenna overhang is the module's keep-out |
+| CC-002 0.15 mm segments on CD1, ROMSEL_N, SRAM_EN, UART_* | Freerouting neck-downs near fine-pitch pads; above JLCPCB's 0.09 mm minimum. Accepted |
+| CK-001 CIC_CLK on an outer layer, CK-003 SD_SCK near J2 | CIC_CLK is the console's 4 MHz lockout clock on a finger (the CIClone is DNP); SD_SCK ends at the card slot it clocks |
+| XT-001 CA5/CA6, CA4/CA5 parallel within 0.5 mm | 1.8 MHz address lines; accepted |
+| TE-001 test points 6/208 nets | By design: SWCLK, SWDIO, GND, RUN, M2, SR_SPARE |
+| SW-001 / EE-00x buck harmonics, CERT-001, WL-001, OR-001, DFM-001 (100 x 110 mm) | Informational |
+
+### Gerbers
+
+- GR-002 "height varies by 16.7 mm across copper/edge layers": the copper layers stop short of the top edge under the ESP32-S3 antenna keep-out while Edge.Cuts does not -- expected.
+- GR-004 front paste 591 flashes vs 1395 copper pads (42 %): the difference is vias, fingers (no paste) and the exposed-pad via arrays -- expected.
+- Fab notes for the order: 6 layers, 1.2 mm, ENIG or hard gold on the fingers with a 30-45 degree bevel; 0.6/0.3 mm vias (0.5/0.25 under the RP); request filled-and-capped vias if the two via-in-pad spots in the table above are a concern.
+
+### Mechanical
+
+Outline, finger geometry, notches and holes are the measured NES-EWROM-01 figures (Part 1). The shell (`case/FujiNet-NES-Shell.scad`) compiles in OpenSCAD 2025 with the generated `case/board-anchors.scad`; its Game Pak envelope and post positions are VERIFY items (`case/case-spec.md`).
 
 ## Quality & Manufacturing
 
@@ -183,12 +232,19 @@ These are listed in `.kicad-happy.json` as suppressions (the schematic analyzer 
 
 ## Not Performed / Review Limits
 
-- PCB, cross-domain, EMC, thermal and gerber analyses: no board yet (Part 2).
+- PCB, cross-domain, EMC, thermal and gerber analyses: Part 2 above.
+- Impedance control: none (JLCPCB 6-layer standard stack-up, 0.2-0.25 mm tracks); all buses are 1.8 MHz / 5.4 MHz NMOS levels, USB is Full-Speed.
 - Lifecycle audit: no API keys.
 - CD74HCT20 and 74HCT00/32 datasheets: TI's and Nexperia's servers refused the download; pin order taken from the KiCad symbols and the universal 74xx standard (low risk).
 - BAT54C: verified from the package drawing, not a pin table.
 - The 2A03 write-data hold (30 ns) is the firmware's PROVISIONAL figure; nothing in CAD can settle it.
 - Structured datasheet extractions (`datasheets/extracted/`) were not produced; all pin-level claims above are direct PDF reads with page numbers in `analysis/deep_review.json`.
+
+## Verdict (layout)
+
+Ready to order as a first prototype. Routing is complete: KiCad DRC reports 0 errors, 0 unconnected items and 0 schematic-parity issues; ERC is clean; `check_nets.py` passes 453/453 against the firmware headers. No analyzer finding is an unresolved design error: each is fixed, a documented false positive, or an accepted trade-off in the table above. Open items are the Part 1 bench measurements, the two consigned parts, the shell VERIFY items, and the two via-in-pad spots (fab option).
+
+Layout notes worth keeping for Rev1: the RP2354B's 0.4 mm-pitch pin rows were the routing bottleneck. Supply-pin fan-out vias placed at the escape-lane ends left no room for 3-4 signal pins between them (pins 25-28), so `fanout.FAR_VIA` moves those vias out. The final links were closed at 0.15 mm / 0.12 mm (`finish_route.py --neck`, within JLCPCB's 0.09 mm minimum). The CHR-side glue ('32, '253) had to leave the band between the west fingers and the CHR SRAM.
 
 ## Verdict (schematic)
 

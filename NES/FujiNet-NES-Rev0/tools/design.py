@@ -14,9 +14,10 @@ nesdev "NES cartridge dimensions" (NES-EWROM-01 measured), see make_edge_fp.py.
 
 Rev0 audit (2026-10-01, kicad-happy + datasheets) changed, relative to the
 first schematic:
-  * RP IOVDD group on its own fast LDO rail +3V3_RP: the RP2350 pads are
-    5 V-tolerant only while IOVDD is powered, and the buck's soft-start
-    left the pads unpowered for ms while the console bus was already live.
+  * The RP2354B on its own fast LDO rail +3V3_RP (IOVDD group, VREG_VIN and
+    VREG_AVDD): the RP2350 pads are 5 V-tolerant only while IOVDD is powered,
+    and the buck's soft-start left the pads unpowered for ms while the
+    console bus was already live.
   * '595 /OE = NAND(PWR_OK, POR) with 100k pull-downs on every bit: the
     register is undefined from power-on until the RP loads it, and must
     not enable the SRAMs then, nor while the console is off.
@@ -52,7 +53,7 @@ RP_GPIO_PIN = {0: 77, 1: 78, 2: 79, 3: 80, 4: 1, 5: 2, 6: 3, 7: 4, 8: 6, 9: 7, 1
 RP_IOVDD_PINS = [5, 15, 24, 29, 41, 50, 60, 76]
 RP_DVDD_PINS = [10, 32, 51]
 RP_IO_RAIL = '+3V3_RP'     # IOVDD x8, QSPI_IOVDD, USB_OTP_VDD, ADC_AVDD: the fast LDO
-RP_CORE_RAIL = '+3V3'      # VREG_VIN (+ VREG_AVDD through 33R): the buck, as the datasheet pairs them
+RP_CORE_RAIL = RP_IO_RAIL  # VREG_VIN (+ VREG_AVDD through 33R) on the same LDO rail: the datasheet pairs them
 
 # nes_cart.h: all 48 GPIOs.
 RP_GPIO_NET = {g: 'CA%d' % g for g in range(13)}                    # CA0_PIN 0
@@ -204,9 +205,10 @@ def GATES4(lib_id, value, mpn, lcsc, gates, desc):
 # =========================================================================
 sheet('cart-rp2354b')
 # -- RP2354B core: the Astrocade RP2354A circuit on the QFN-80 pin-out.
-# IO supplies on +3V3_RP (the LDO, up within tens of us of the 5 V rail, so the
-# pads are powered before the console's bus levels reach them); the core
-# regulator input + its AVDD on the buck, which the datasheet asks to power together.
+# Every RP supply pin on +3V3_RP (the LDO, up within tens of us of the 5 V rail,
+# so the pads are powered before the console's bus levels reach them; VREG_VIN
+# and VREG_AVDD, which the datasheet asks to power together, come from it too:
+# ~60 mA in all, ~100 mW in the SOT-23-5).
 rp = {30: 'XIN', 31: 'XOUT', 33: 'SWCLK', 34: 'SWDIO', 35: 'RUN',
       59: RP_IO_RAIL,                                                        # ADC_AVDD
       61: 'VREG_AVDD', 62: 'GND', 63: 'RP_LX', 64: RP_CORE_RAIL, 65: 'DVDD',   # VREG: AVDD PGND LX VIN FB
@@ -228,7 +230,7 @@ C('100nF', RP_IO_RAIL, desc='QSPI_IOVDD decoupling')
 C('100nF', RP_IO_RAIL, desc='USB_OTP_VDD decoupling')
 C('100nF', RP_IO_RAIL, desc='ADC_AVDD decoupling')
 C('10uF', RP_IO_RAIL, desc='RP IO rail bulk (LDO output)')
-C('4.7uF', RP_CORE_RAIL, desc='VREG_VIN bulk')
+C('4.7uF', RP_CORE_RAIL, desc='VREG_VIN bulk (LDO rail)')
 for _ in RP_DVDD_PINS:
     C('100nF', 'DVDD', desc='DVDD decoupling')
 C('4.7uF', 'DVDD', desc='core regulator output')
@@ -446,12 +448,12 @@ add('L', 'Device:L', '6.8uH', FP('L_Sunlord_SWPA4030S'), {1: 'BUCK_SW', 2: '+3V3
     mpn='SWPA4030S6R8MT', lcsc='C62684', desc='buck inductor')
 C('22uF', '+3V3', desc='buck output')
 C('22uF', '+3V3', desc='buck output')
-# RP I/O rail: a fast LDO (AP2112K: ~20 us start-up) straight off the 5 V rail,
+# RP rail: a fast LDO (AP2112K: ~20 us start-up) straight off the 5 V rail,
 # so IOVDD tracks the console rail as it rises and the pads are never
-# unpowered with 5 V on them.  ~30 mA of GPIO drive: ~50 mW in the SOT-23-5.
+# unpowered with 5 V on them.  IO drive + core regulator input ~60 mA: ~100 mW.
 add('U', 'Regulator_Linear:AP2112K-3.3', 'AP2112K-3.3', FP('SOT-23-5'),
     {1: '+5V', 2: 'GND', 3: '+5V', 4: NC, 5: RP_IO_RAIL},
-    mpn='AP2112K-3.3TRG1', lcsc='C51118', desc='RP2354B IOVDD LDO, 3.3V 600mA, fast start')
+    mpn='AP2112K-3.3TRG1', lcsc='C51118', desc='RP2354B 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD), 600mA, fast start')
 C('1uF', '+5V', desc='LDO input')
 C('1uF', RP_IO_RAIL, desc='LDO output')
 

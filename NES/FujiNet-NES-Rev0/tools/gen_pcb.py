@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
-# UNADAPTED copy of Astrocade/rev0/tools: encodes that board (outline, QFN-60 graft,
-# single-sided blade edge). Rework before the FujiNet-NES-Rev0 layout stage; do not run as-is.
-"""Generate FujiNet-Astrocade-Rev0.kicad_pcb (placed, unrouted) from design.py.
+"""Generate FujiNet-NES-Rev0.kicad_pcb (placed, unrouted) from design.py.
 
-Board: 96 x 58 mm Astrocade cassette PCB (x 52..148, y 30..88), 6 layers
-(F.Cu / In1.Cu GND plane / In2.Cu + In3.Cu signal / In4.Cu 3V3 plane / B.Cu).  y=88 is the insertion
-edge; the 26 contact lands are on B.Cu along it and the console blade wipes
-the south 16.5 mm of the underside, so that strip is a B.Cu rule area.
-y=30 is the trailing edge: USB-C and the microSD slot exit there, the
-ESP32-S3 antenna overhangs it.
+Board: the NES-EWROM-01 outline (nesdev "NES cartridge dimensions",
+measured): 100 mm wide body, 95.5 mm tall (x 50..150, y 30..125.5), with
+the 93.5 x 14.5 mm connector tab below it (y 125.5..140); y = 140 is the
+insertion edge.  Side notches and the two shell-post holes are where
+Nintendo put them.  1.2 mm thick, 6 copper layers:
+  F.Cu signals + GND pour / In1 GND plane / In2 + In3 signals /
+  In4 +3V3 plane with a +5V island under the SRAM/HCT regions, a +3V3_RP
+  island under the RP2354B and a DVDD island under its core / B.Cu signals
+  + GND pour.
+The 72 fingers (36 per face) are the only copper on the tab; each gets a
+short locked stub into the body so the routers never enter the tab.
 
 The footprints are written as S-expressions (the SWIG pcbnew bindings are
 not reliable under Python 3.14); route.py does the DSN/SES round trip and
@@ -16,7 +19,7 @@ the zone fills through pcbnew.
 
 Usage: python3 tools/gen_pcb.py
 """
-import os, sys, math, uuid, copy
+import os, sys, math, uuid, copy, json
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sexpr import parse, dump, find, findall, Q
 import design as D
@@ -25,16 +28,41 @@ import gen_sch
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
 PCB = os.path.join(PRJ, D.PROJECT + '.kicad_pcb')
-X0, Y0, X1, Y1 = 52.0, 30.0, 148.0, 88.0
-BLADE_Y = 71.5            # B.Cu rule area: y >= BLADE_Y
-HOLES = [(55, 33), (145, 33), (55, 84), (145, 84)]
+
+# ---- geometry (mm, KiCad frame: y down) -----------------------------------
+X0, X1 = 50.0, 150.0            # body width 100
+Y0 = 30.0                       # top (trailing) edge
+TAB_Y = Y0 + 95.5               # 125.5: tab base = bottom of the body
+Y1 = TAB_Y + 14.5               # 140.0: insertion edge
+XC = (X0 + X1) / 2              # 100
+TAB_X0, TAB_X1 = XC - 46.75, XC + 46.75
+PAD_TOP_Y = Y1 - 13.0           # 127.0: finger copper starts here
+BLADE_Y = TAB_Y                 # routers: no tracks/vias at y >= BLADE_Y
+THICKNESS = 1.2
+# notches (nesdev, measured): (x, y_from, y_to) runs of the side edges
+OUTLINE = [(X0, Y0), (X1, Y0),
+           (X1, TAB_Y - 28.0), (X1 - 5.0, TAB_Y - 28.0), (X1 - 5.0, TAB_Y - 25.5), (X1 - 1.5, TAB_Y - 25.5),
+           (X1 - 1.5, TAB_Y - 19.5), (X1, TAB_Y - 19.5), (X1, TAB_Y),
+           (TAB_X1, TAB_Y), (TAB_X1, Y1), (TAB_X0, Y1), (TAB_X0, TAB_Y),
+           (X0, TAB_Y), (X0, TAB_Y - 17.0), (X0 + 1.5, TAB_Y - 17.0), (X0 + 1.5, TAB_Y - 23.0),
+           (X0 + 5.0, TAB_Y - 23.0), (X0 + 5.0, TAB_Y - 25.5), (X0, TAB_Y - 25.5)]
+HOLES = [(XC, TAB_Y - 53.5, 5.0), (XC + 5.5, TAB_Y - 63.0, 3.0)]        # (x, y, diameter): shell posts
+KEEP_CLEAR = [(XC - 45.95, TAB_Y - 33.3, 3.0), (XC + 45.95, TAB_Y - 33.3, 3.0),   # shell post pads: no parts
+              (XC, TAB_Y - 53.5, 6.5), (XC + 5.5, TAB_Y - 63.0, 4.0)]            # around the holes
+BODY = [(X0, Y0), (X1, Y0), (X1, TAB_Y), (X0, TAB_Y)]   # planes / pours (clipped by the outline)
+
+# In4 islands, in priority order (highest wins); everything else on In4 is +3V3
+RP_ISLAND = 14.0    # half-size of the +3V3_RP island under the RP2354B decoupling ring (the west column's vias sit at -13.6)
+RP_CORE = 3.6       # west edge of the DVDD island under the RP2354B core (the VREG_VIN via sits beyond it)
+DVDD_R = 4.3        # its north/east/south extent: past the DVDD pins' inward vias (4.0 + 0.25 barrel)
+UNDER = 4.6         # half-size of the square under the RP the finisher keeps off F.Cu (and via-free)
 
 # ref -> (x, y, rotation deg CCW)  -- top view, y down
 PLACE = {}
 
 
 def place(ref, x, y, rot=0):
-    PLACE[ref] = (x, y, rot)
+    PLACE[ref] = (round(x, 3), round(y, 3), rot)
 
 
 def uid(*k):
@@ -57,7 +85,7 @@ def schematic_netlist():
     board carries exactly the schematic's nets -- including KiCad's own
     unconnected-(...) names for no-connect pins."""
     import subprocess, tempfile
-    fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-gen.net')
+    fn = os.path.join(tempfile.gettempdir(), 'fujinet-nes-gen.net')
     subprocess.run(['kicad-cli', 'sch', 'export', 'netlist', '--format', 'kicadsexpr', '-o', fn,
                     os.path.join(PRJ, D.PROJECT + '.kicad_sch')], check=True, capture_output=True)
     t = parse(open(fn).read())
@@ -71,7 +99,7 @@ def schematic_netlist():
 
 NETLIST = {}
 import re as _re
-SMALL = _re.compile(r'_0603_|_0805_|SOD-523|SOT-23|SOT-363|R_Array|L_2016|Crystal_SMD|WS2812|TSOT')
+SMALL = _re.compile(r'_0603_|_0805_|SOD-523|SOT-23|SOT-363|R_Array|L_2016|Crystal_SMD|WS2812|TSOT|TestPoint')
 
 
 def instance(part, x, y, rot, path, sheetname, sheetfile, datasheet=''):
@@ -99,7 +127,6 @@ def instance(part, x, y, rot, path, sheetname, sheetfile, datasheet=''):
             pr = [e for e in pr if not (isinstance(e, list) and e and e[0] == 'uuid')]
             pr.insert(3, ['uuid', uid(part.ref, 'prop', k)])
             if k == 'Reference' and SMALL.search(part.footprint):
-                # small parts: 0.8 mm refs (JLC-legible minimum) keep the RP ring tidier
                 pr = [e for e in pr if not (isinstance(e, list) and e and e[0] == 'effects')]
                 pr.append(['effects', ['font', ['size', 0.8, 0.8], ['thickness', 0.12]]])
             out.append(pr); done.add(k)
@@ -110,11 +137,12 @@ def instance(part, x, y, rot, path, sheetname, sheetfile, datasheet=''):
                         ['effects', ['font', ['size', 1.27, 1.27], ['thickness', 0.15]]]])
     out += [['path', Q(path)], ['sheetname', Q(sheetname)], ['sheetfile', Q(sheetfile)]]
     attr = find(fp, 'attr')
-    if attr:
-        a = list(attr)
-        if not part.bom and 'exclude_from_bom' not in a:
-            a.append('exclude_from_bom')
-        out.append(a)
+    a = list(attr) if attr else ['attr', 'smd']
+    if not part.bom and 'exclude_from_bom' not in a:
+        a.append('exclude_from_bom')
+    if getattr(part, 'dnp', False) and 'dnp' not in a:
+        a.append('dnp')
+    out.append(a)
     for e in fp[2:]:
         if not isinstance(e, list) or not e:
             continue
@@ -134,7 +162,7 @@ def instance(part, x, y, rot, path, sheetname, sheetfile, datasheet=''):
             at = find(e, 'at')
             ang = (float(at[3]) if len(at) > 3 else 0) + rot
             at[:] = ['at', float(at[1]), float(at[2])] + ([ang % 360] if ang % 360 else [])
-            e = [x for x in e if not (isinstance(x, list) and x and x[0] in ('net', 'uuid'))]
+            e = [x_ for x_ in e if not (isinstance(x_, list) and x_ and x_[0] in ('net', 'uuid'))]
             num = str(e[1])
             net = part.pins.get(num)
             if num and num not in part.pins and e[2] != 'np_thru_hole':
@@ -191,7 +219,7 @@ def board_pads(board):
             elif pang not in (0.0,):
                 w = h = max(w, h)
             net = find(e, 'net')
-            layers = [str(x) for x in find(e, 'layers')[1:]]
+            layers = [str(x_) for x_ in find(e, 'layers')[1:]]
             th = e[2] in ('thru_hole', 'np_thru_hole')
             if th:
                 layers = ['F.Cu', 'B.Cu']
@@ -200,164 +228,202 @@ def board_pads(board):
     return pads, crt
 
 
-GRAFT = parse(open(os.path.join(HERE, 'rpi_core_graft.sexpr')).read())
+# ---------------------------------------------------------------------------
+def seg(x0, y0, x1, y1, w, layer, net, key, locked=True):
+    s = ['segment', ['start', round(x0, 4), round(y0, 4)], ['end', round(x1, 4), round(y1, 4)],
+         ['width', w], ['layer', Q(layer)]]
+    if locked:
+        s.append(['locked', 'yes'])
+    return s + [['net', Q(net)], ['uuid', uid(*key)]]
 
 
-def graft_copper(ux, uy):
-    """Raspberry Pi's regulator-corner copper (tools/rpi_graft.py), moved to our U1."""
+def via(x, y, net, key, size=0.6, drill=0.3):
+    return ['via', ['at', round(x, 4), round(y, 4)], ['size', size], ['drill', drill],
+            ['layers', Q('F.Cu'), Q('B.Cu')], ['locked', 'yes'], ['net', Q(net)], ['uuid', uid(*key)]]
+
+
+def finger_stubs(board):
+    """Each finger gets a 0.3 mm locked stub on its own face from 0.2 mm inside
+    its inner end up into the body (y = TAB_Y - 1.0), so the routers only
+    ever touch the stub end.  The tab itself is a track/via keepout."""
     out = []
-    for i, e in enumerate(GRAFT[1:]):
-        if e[0] == 'segment':
-            s_, t_ = find(e, 'start'), find(e, 'end')
-            if max(abs(float(s_[1])), abs(float(s_[2]))) < 3.1 or max(abs(float(t_[1])), abs(float(t_[2]))) < 3.1:
-                continue    # under the package: the +3V3 ring (rp_ring) replaces it
-            out.append(['segment', ['start', round(ux + float(s_[1]), 4), round(uy + float(s_[2]), 4)],
-                        ['end', round(ux + float(t_[1]), 4), round(uy + float(t_[2]), 4)],
-                        ['width', float(find(e, 'width')[1])], ['layer', find(e, 'layer')[1]], ['locked', 'yes'],
-                        ['net', find(e, 'net')[1]], ['uuid', uid('graft', i)]])
-        elif e[0] == 'via':
-            a = find(e, 'at')
-            out.append(['via', ['at', round(ux + float(a[1]), 4), round(uy + float(a[2]), 4)], ['size', 0.6],
-                        ['drill', 0.3], ['layers', Q('F.Cu'), Q('B.Cu')], ['locked', 'yes'],
-                        ['net', find(e, 'net')[1]], ['uuid', uid('graft', i)]])
-        elif e[0] == 'zone':
-            if str(find(e, 'net')[1]) == 'GND':
-                continue    # the board-wide GND_top pour covers this corner (solid-connected, see .kicad_dru)
-            pts = [(round(ux + float(p[1]), 4), round(uy + float(p[2]), 4)) for p in find(e, 'pts')[1:]]
-            z = ['zone', ['net', find(e, 'net')[1]], ['layer', find(e, 'layer')[1]], ['uuid', uid('graft', i)],
-                 ['name', Q('rpi_graft_%d' % i)], ['hatch', 'edge', 0.5], ['priority', int(find(e, 'priority')[1]) + 10],
-                 ['connect_pads', 'yes', ['clearance', float(find(e, 'clearance')[1])]],
-                 ['min_thickness', float(find(e, 'min_thickness')[1])],
-                 ['fill', 'yes', ['thermal_gap', 0.3], ['thermal_bridge_width', 0.3], ['island_removal_mode', 0]],
-                 ['polygon', ['pts'] + [['xy', x, y] for x, y in pts]]]
-            out.append(z)
+    j1 = [e for e in board if isinstance(e, list) and e and e[0] == 'footprint'
+          and any(p[1] == 'Reference' and p[2] == 'J1' for p in findall(e, 'property'))][0]
+    fx = float(find(j1, 'at')[1])      # J1 sits at rotation 0: pad x is footprint x + local x
+    for pd in findall(j1, 'pad'):
+        a = find(pd, 'at'); net = find(pd, 'net')
+        if not net:
+            continue
+        layer = str(find(pd, 'layers')[1])
+        x = round(fx + float(a[1]), 4)
+        out.append(seg(x, PAD_TOP_Y + 0.2, x, TAB_Y - 1.0, 0.3, layer, str(net[1]), ('fstub', str(pd[1]))))
     return out
 
 
-UNDER = 3.0   # half-size of the square under the RP2354A the finisher keeps off F.Cu/In2
-
-
-def rp_ring(board, ux, uy):
-    """Copper under the RP2354A, after Raspberry Pi's RP2350A minimal design:
-      * a +3V3 bar under the north pin row (as the reference does) joins
-        VREG_VIN (pin 49, boxed in by LX/FB and walled off from any via) to
-        pins 53/54, whose decoupling cap C8 has the plane via
-      * each DVDD pin (6, 23, 39) runs a short stub inward to a via under the
-        package, and those vias -- with the regulator's two 1V1 vias by L1 --
-        meet on a DVDD island in the In4 (+3V3) plane under the chip
-    Everything here is locked copper the routers work around."""
-    bar_y = -2.7
+def rp_support(board, ux, uy):
+    """Locked copper the RP2354B needs regardless of routing:
+      * each DVDD pin (10, 32, 51, 65 = VREG_FB) gets a stub inward to a via
+        under the package; those vias meet on a DVDD island in the In4 plane,
+        which also reaches west under the core inductor and its capacitor
+      * a +3V3_RP island on In4 under the whole decoupling ring, so every
+        IOVDD-group pin and its 100 nF reach the LDO rail through one via
+      * the exposed pad's GND via grid is left to fanout.py (EP_ARRAYS)"""
     out = []
-    for i, (x0, y0, x1, y1) in enumerate(((1.6, -3.45, 1.6, bar_y), (1.6, bar_y, -0.4, bar_y),
-                                          (0.0, -3.45, 0.0, bar_y), (-0.4, -3.45, -0.4, bar_y))):
-        out.append(['segment', ['start', round(ux + x0, 4), round(uy + y0, 4)], ['end', round(ux + x1, 4), round(uy + y1, 4)],
-                    ['width', 0.2], ['layer', Q('F.Cu')], ['locked', 'yes'], ['net', Q('+3V3')], ['uuid', uid('rpbar', i)]])
-    island = [(-2.9, -2.9), (0.0, -2.9), (0.0, -6.15), (1.0, -6.15), (1.0, -2.9), (2.9, -2.9), (2.9, 2.9), (-2.9, 2.9)]
-    out.append(['zone', ['net', Q('DVDD')], ['layer', Q('In4.Cu')], ['uuid', uid('rpdvdd')],
-                ['name', Q('rp_dvdd_island')], ['hatch', 'edge', 0.5], ['priority', 5],
-                ['connect_pads', 'yes', ['clearance', 0.2]], ['min_thickness', 0.2],
-                ['fill', 'yes', ['thermal_gap', 0.3], ['thermal_bridge_width', 0.3], ['island_removal_mode', 0]],
-                ['polygon', ['pts'] + [['xy', round(ux + dx, 4), round(uy + dy, 4)] for dx, dy in island]]])
     u1 = [e for e in board if isinstance(e, list) and e and e[0] == 'footprint'
           and any(p[1] == 'Reference' and p[2] == 'U1' for p in findall(e, 'property'))][0]
+    at = find(u1, 'at'); rot = float(at[3]) if len(at) > 3 else 0.0
     for pd in findall(u1, 'pad'):
         n = find(pd, 'net')
-        if not n or str(n[1]) != 'DVDD' or pd[2] != 'smd':
+        if not n or pd[2] != 'smd':
             continue
+        net, num, nm = str(n[1]), str(pd[1]), ''
         a = find(pd, 'at')
         px, py = float(a[1]), float(a[2])
-        if py < -3.0:        # VREG_FB (pin 50) is on the regulator's own DVDD pour already
-            continue
-        if abs(px) > abs(py):
-            vx, vy = math.copysign(2.35, px), py
+        dx, dy = rot_pt(px, py, rot)
+        if net == 'DVDD':
+            r_in = 4.0     # via radius from the centre: just inside the pad ring (4.55), clear of the EP's
+            # fan-out stubs (which cut diagonally toward the exposed pad) and of the EP itself (1.7)
+            if abs(dx) > abs(dy):
+                vx, vy = math.copysign(r_in, dx), dy
+            else:
+                vx, vy = dx, math.copysign(r_in, dy)
+            if num == '65':       # VREG_FB: further in, so its VREG_VIN neighbour's via fits beside it
+                vx, vy = math.copysign(2.8, dx), dy
+            pts = [(dx, dy), (vx, vy)]
+        elif net == '+3V3_RP' and num == '64':
+            # VREG_VIN sits between LX (63) and FB (65), both of which leave along their own
+            # axis: it reaches the island through a dog-leg stub and a via under the package
+            vx, vy = math.copysign(4.0, dx), dy + math.copysign(0.2, dy)
+            pts = [(dx, dy), (math.copysign(4.55, dx), dy), (vx, vy)]
+        elif net == 'GND' and num == '62':
+            # VREG_PGND: straight in to its own via on the GND plane (its exposed-pad stub
+            # would cut through the VREG_VIN via)
+            vx, vy = math.copysign(2.6, dx), dy
+            pts = [(dx, dy), (vx, vy)]
         else:
-            vx, vy = px, math.copysign(2.35, py)
-        num = str(pd[1])
-        out.append(['segment', ['start', round(ux + px, 4), round(uy + py, 4)], ['end', round(ux + vx, 4), round(uy + vy, 4)],
-                    ['width', 0.2], ['layer', Q('F.Cu')], ['locked', 'yes'], ['net', Q('DVDD')], ['uuid', uid('rpdv', num)]])
-        out.append(['via', ['at', round(ux + vx, 4), round(uy + vy, 4)], ['size', 0.5], ['drill', 0.25],
-                    ['layers', Q('F.Cu'), Q('B.Cu')], ['locked', 'yes'], ['net', Q('DVDD')], ['uuid', uid('rpdvv', num)]])
+            continue
+        for i in range(len(pts) - 1):
+            (x0_, y0_), (x1_, y1_) = pts[i], pts[i + 1]
+            out.append(seg(ux + x0_, uy + y0_, ux + x1_, uy + y1_, 0.2, 'F.Cu', net, ('rpdv', num, i)))
+        out.append(via(ux + vx, uy + vy, net, ('rpdvv', num), 0.5, 0.25))
+    out.append(zone('rp_dvdd_island', 'DVDD', 'In4.Cu', [(ux + x, uy + y) for x, y in dvdd_island()], priority=5))
+    out.append(zone('rp_io_island', '+3V3_RP', 'In4.Cu',
+                    [(ux - RP_ISLAND, uy - RP_ISLAND), (ux + RP_ISLAND, uy - RP_ISLAND),
+                     (ux + RP_ISLAND, uy + RP_ISLAND), (ux - RP_ISLAND, uy + RP_ISLAND)], priority=3))
     return out
 
 
-def add_fanout(board, graft):
+def dvdd_island():
+    """The DVDD island on In4, relative to the RP2354B centre (y down): the core under the
+    package out to DVDD_R, which covers the DVDD pins' inward vias (rp_support: centre
+    4.0, 0.5 mm barrel), the strip under the north pin row, and a lobe west under L1 /
+    the DVDD capacitors (placement.py keeps them there).  The notch west of the core
+    (x -5.0..-3.6, y > -4.0) stays +3V3_RP for the VREG_VIN via at (-4.0, -2.8)."""
+    # the bridge between the core and the lobe is 1.6 mm tall (y -5.6..-4.0): at 1.0 mm a
+    # neighbouring via's clearance could cut the fill in two (it did, build E 2026-10-04)
+    return [(-16.0, -5.6), (DVDD_R, -5.6), (DVDD_R, DVDD_R), (-RP_CORE, DVDD_R),
+            (-RP_CORE, -4.0), (-5.0, -4.0), (-5.0, -1.6), (-16.0, -1.6)]
+
+
+def in4_net_at(x, y, ux, uy, islands5v):
+    """Which net the In4 plane carries at (x, y)."""
+    if point_in_poly(x - ux, y - uy, dvdd_island()):
+        return 'DVDD'
+    if abs(x - ux) <= RP_ISLAND and abs(y - uy) <= RP_ISLAND:
+        return '+3V3_RP'
+    for poly in islands5v:
+        if point_in_poly(x, y, poly):
+            return '+5V'
+    return '+3V3'
+
+
+def point_in_poly(x, y, poly):
+    inside = False
+    n = len(poly)
+    for i in range(n):
+        (xa, ya), (xb, yb) = poly[i], poly[(i + 1) % n]
+        if (ya > y) != (yb > y) and x < xa + (y - ya) * (xb - xa) / (yb - ya):
+            inside = not inside
+    return inside
+
+
+def add_fanout(board, extra, islands5v):
     import fanout
     pads, crt = board_pads(board)
-    # grafted copper: obstacles for the fan-out, and U1/GND pads it already serves
+    ux, uy, _ = PLACE['U1']
     extra_segs, extra_vias, served = [], [], set()
-    for e in graft:
+    for e in extra:
         net = str(find(e, 'net')[1])
         if e[0] == 'segment':
             s_, t_ = find(e, 'start'), find(e, 'end')
-            seg = (float(s_[1]), float(s_[2]), float(t_[1]), float(t_[2]), net, float(find(e, 'width')[1]))
-            extra_segs.append(seg)
+            sg = (float(s_[1]), float(s_[2]), float(t_[1]), float(t_[2]), net, float(find(e, 'width')[1]))
+            extra_segs.append(sg)
             for p in pads:
-                if p.net == net and (p.dist(seg[0], seg[1]) < 1e-6 or p.dist(seg[2], seg[3]) < 1e-6):
+                if p.net == net and (p.dist(sg[0], sg[1]) < 1e-6 or p.dist(sg[2], sg[3]) < 1e-6):
                     served.add(id(p))
         elif e[0] == 'via':
             a = find(e, 'at')
             extra_vias.append((float(a[1]), float(a[2]), net))
-        elif e[0] == 'zone':
-            xy = [(float(q[1]), float(q[2])) for q in find(find(e, 'polygon'), 'pts')[1:]]
-            x0_, y0_ = min(q[0] for q in xy), min(q[1] for q in xy)
-            x1_, y1_ = max(q[0] for q in xy), max(q[1] for q in xy)
-            zp = fanout.Pad('graft', 'zone', net, (x0_ + x1_) / 2, (y0_ + y1_) / 2, (x1_ - x0_) / 2, (y1_ - y0_) / 2,
-                            ['F.Cu'], False, ((x0_ + x1_) / 2, (y0_ + y1_) / 2))
-            for p in pads:
-                if p.net == net and zp.dist(p.cx, p.cy) < 1e-6:
-                    served.add(id(p))
-            pads.append(zp)
-    # GND already has the graft's own vias; U1 pins on graft copper are done
-    skip = {id(p) for p in pads if id(p) in served and (p.net == 'GND' or p.ref == 'U1')}
-    keep = [crt[r] for r in ('U2', 'J2', 'J3', 'SW1', 'SW2', 'SW3', 'SW4') if r in crt]
-    ux_, uy_, _ = PLACE['U1']
-    keep.append((ux_ - 3.0, uy_ - 3.0, ux_ + 3.0, uy_ + 3.0))   # no fan-out vias under the RP2354A
-    holes = [(x, y, 1.6) for x, y in HOLES]
-    vias, segs, failed = fanout.plan(pads, keep, (X0, Y0, X1, Y1), BLADE_Y, holes, skip_refs=('J1', 'graft'),
+    # a pad only gets a plane via where the In4 plane carries its net (GND is In1, everywhere);
+    # judged where the via will sit: a fine-pitch pin's via goes straight out along its
+    # axis (fanout.plan), past the DVDD strip under the RP's pin rows
+    def via_spot(p):
+        if min(p.hw, p.hh) <= 0.15:
+            fx, fy = p.fp_xy
+            if p.hh > p.hw:
+                return p.cx, p.cy + math.copysign(2.0, p.cy - fy)
+            return p.cx + math.copysign(2.0, p.cx - fx), p.cy
+        return p.cx, p.cy
+    skip = set(served)
+    for p in pads:
+        if p.net in ('+3V3', '+3V3_RP', '+5V', 'DVDD') and in4_net_at(*via_spot(p), ux, uy, islands5v) != p.net:
+            skip.add(id(p))
+    keep = [crt[r] for r in ('U11', 'J2', 'J3', 'SW1', 'SW2', 'SW3', 'SW4') if r in crt]
+    keep.append((ux - UNDER, uy - UNDER, ux + UNDER, uy + UNDER))   # no fan-out vias under the RP2354B
+    holes = [(x, y, d / 2 + 0.5) for x, y, d in HOLES]
+    vias, segs, failed = fanout.plan(pads, keep, (X0, Y0, X1, TAB_Y), BLADE_Y, holes, skip_refs=('J1',),
                                      extra_segs=extra_segs, extra_vias=extra_vias, skip_pads=skip)
     for i, (x, y, n) in enumerate(vias):
-        board.append(['via', ['at', x, y], ['size', fanout.VIA_D], ['drill', fanout.VIA_DRILL],
-                      ['layers', Q('F.Cu'), Q('B.Cu')], ['locked', 'yes'], ['net', Q(n)], ['uuid', uid('fv', i)]])
+        board.append(via(x, y, n, ('fv', i), fanout.VIA_D, fanout.VIA_DRILL))
     for i, (x0, y0, x1, y1, n, w) in enumerate(segs):
-        board.append(['segment', ['start', round(x0, 4), round(y0, 4)], ['end', x1, y1],
-                      ['width', round(w, 3)], ['layer', Q('F.Cu')], ['locked', 'yes'], ['net', Q(n)],
-                      ['uuid', uid('fs', i)]])
+        board.append(seg(x0, y0, x1, y1, round(w, 3), 'F.Cu', n, ('fs', i)))
     print('fan-out: %d vias, %d stubs%s' % (len(vias), len(segs),
           ('; FAILED: ' + ' '.join(failed)) if failed else ''))
 
 
 def outline():
-    r = 2.0
     g = []
-    lines = [((X0 + r, Y0), (X1 - r, Y0)), ((X1, Y0 + r), (X1, Y1 - r)),
-             ((X1 - r, Y1), (X0 + r, Y1)), ((X0, Y1 - r), (X0, Y0 + r))]
-    for i, (a, b) in enumerate(lines):
+    n = len(OUTLINE)
+    for i in range(n):
+        a, b = OUTLINE[i], OUTLINE[(i + 1) % n]
         g.append(['gr_line', ['start', *a], ['end', *b], ['stroke', ['width', 0.1], ['type', 'default']],
                   ['layer', Q('Edge.Cuts')], ['uuid', uid('edge', i)]])
-    k = r * (1 - math.sqrt(0.5))
-    arcs = [((X0, Y0 + r), (X0 + k, Y0 + k), (X0 + r, Y0)), ((X1 - r, Y0), (X1 - k, Y0 + k), (X1, Y0 + r)),
-            ((X1, Y1 - r), (X1 - k, Y1 - k), (X1 - r, Y1)), ((X0 + r, Y1), (X0 + k, Y1 - k), (X0, Y1 - r))]
-    for i, (a, m, b) in enumerate(arcs):
-        g.append(['gr_arc', ['start', *a], ['mid', round(m[0], 4), round(m[1], 4)], ['end', *b],
-                  ['stroke', ['width', 0.1], ['type', 'default']], ['layer', Q('Edge.Cuts')], ['uuid', uid('arc', i)]])
+    for i, (x, y, d) in enumerate(HOLES):
+        g.append(['gr_circle', ['center', x, y], ['end', x + d / 2, y], ['stroke', ['width', 0.1], ['type', 'default']],
+                  ['fill', 'no'], ['layer', Q('Edge.Cuts')], ['uuid', uid('hole', i)]])
     return g
 
 
-def zone(name, net, layer, pts, keepout=False, priority=0):
-    z = ['zone', ['net', Q(net)] if net else ['net', Q('')], ['layer', Q(layer)], ['uuid', uid('zone', name)],
+def zone(name, net, layer, pts, keepout=False, priority=0, no_parts=False):
+    z = ['zone', ['net', Q(net)] if net else ['net', Q('')], ['layer', Q(layer)], ['uuid', uid('zone', name, layer)],
          ['name', Q(name)], ['hatch', 'edge', 0.5]]
     if priority:
         z.append(['priority', priority])
     z += [['connect_pads', ['clearance', 0 if keepout else 0.25]], ['min_thickness', 0.25]]
     if keepout:
-        z.append(['keepout', ['tracks', 'not_allowed'], ['vias', 'not_allowed'], ['pads', 'allowed'],
-                  ['copperpour', 'not_allowed'], ['footprints', 'allowed']])
+        z.append(['keepout', ['tracks', 'allowed' if no_parts else 'not_allowed'], ['vias', 'allowed' if no_parts else 'not_allowed'],
+                  ['pads', 'allowed'], ['copperpour', 'allowed' if no_parts else 'not_allowed'],
+                  ['footprints', 'not_allowed' if no_parts else 'allowed']])
         z.append(['placement', ['enabled', 'no'], ['sheetname', Q('')]])
     z.append(['fill', 'yes', ['thermal_gap', 0.3], ['thermal_bridge_width', 0.4], ['island_removal_mode', 0]]
              if not keepout else
              ['fill', ['thermal_gap', 0.5], ['thermal_bridge_width', 0.5], ['island_removal_mode', 0]])
-    z.append(['polygon', ['pts'] + [['xy', x, y] for x, y in pts]])
+    z.append(['polygon', ['pts'] + [['xy', round(x, 4), round(y, 4)] for x, y in pts]])
     return z
+
+
+def circle_pts(x, y, r, n=12):
+    return [(x + r * math.cos(2 * math.pi * i / n), y + r * math.sin(2 * math.pi * i / n)) for i in range(n)]
 
 
 def text(s, x, y, layer, size=1.0, mirror=False, rot=0):
@@ -368,26 +434,31 @@ def text(s, x, y, layer, size=1.0, mirror=False, rot=0):
 
 
 # ---------------------------------------------------------------------------
-from placement import do_placement  # noqa: E402  (placement table lives in its own file)
+from placement import do_placement, ISLANDS_5V  # noqa: E402  (placement table lives in its own file)
 
 
 NETCLASSES = [  # name, clearance, track, via dia, via drill, nets
-    ('PWR', 0.2, 0.5, 0.8, 0.4, ['+5V', 'VIN', 'BUCK_SW']),
-    # VBUS threads between the USB-C pads; 0.3 mm (~0.9 A outer) covers the board's USB draw
+    ('PWR', 0.2, 0.5, 0.8, 0.4, ['+5V', 'CONS_5V', 'BUCK_SW', '+3V3']),
     ('VBUS', 0.15, 0.3, 0.6, 0.3, ['VBUS']),
     ('USB', 0.15, 0.25, 0.6, 0.3, ['USB_DP', 'USB_DM', 'RP_USB_DP', 'RP_USB_DM', 'UBRG_DP', 'UBRG_DM']),
 ]
 
 
 def configure_project():
-    """Design rules + net classes in the .kicad_pro (JLCPCB 4-layer capable)."""
-    import json
+    """Design rules + net classes in the .kicad_pro (JLCPCB 6-layer capable)."""
     fn = os.path.join(PRJ, D.PROJECT + '.kicad_pro')
     pro = json.load(open(fn))
     r = pro['board']['design_settings']['rules']
+    # JLCPCB multilayer: trace/space 0.09, via 0.25/0.15, annular 0.125, copper-edge 0.2; the
+    # rules sit above every one of those.  No mask-bridge check: JLC opens the mask as one
+    # window across 0.4 mm-pitch pins (QFN-80, QFN-28, TSOP 0.5 mm) rather than dam them.
     r.update({'min_clearance': 0.12, 'min_copper_edge_clearance': 0.25, 'min_track_width': 0.1,
               'min_via_diameter': 0.5, 'min_through_hole_diameter': 0.25, 'min_hole_clearance': 0.25,
-              'min_hole_to_hole': 0.25, 'min_via_annular_width': 0.1})
+              'min_hole_to_hole': 0.25, 'min_via_annular_width': 0.125, 'solder_mask_min_width': 0.0,
+              'solder_mask_clearance': 0.0, 'solder_mask_to_copper_clearance': 0.0})
+    # the 72 fingers share one mask window per face (Nintendo's boards, measured): KiCad
+    # reports that as a mask bridge between nets; it is the intended gold-finger process
+    pro['board']['design_settings'].setdefault('rule_severities', {})['solder_mask_bridge'] = 'warning'
     ns = pro['net_settings']
     base = dict(ns['classes'][0])
     base.update({'name': 'Default', 'clearance': 0.15, 'track_width': 0.2, 'via_diameter': 0.6, 'via_drill': 0.3})
@@ -408,62 +479,93 @@ def configure_project():
     pro['pcbnew'].setdefault('last_paths', {})['specctra_dsn'] = ''
     json.dump(pro, open(fn, 'w'), indent=2)
     open(fn, 'a').write('\n')
-    # The grafted Raspberry Pi regulator corner is drawn at 0.12 mm; allow that
-    # there only (everything else keeps the 0.15 mm net-class clearance).
     open(os.path.join(PRJ, D.PROJECT + '.kicad_dru'), 'w').write(
         '(version 1)\n'
+        # the RP2354B core-regulator copper (0.4 mm pitch pins, 0402-class room) may use the fab minimum
         '(rule "rp2350_core_corner"\n'
         '\t(condition "A.NetName == \'DVDD\' || A.NetName == \'RP_LX\' || A.NetName == \'VREG_AVDD\'")\n'
         '\t(constraint clearance (min 0.12mm)))\n'
+        # 0.12 mm: the floor the last links at the RP's 0.4 mm-pitch pins need (finish_route --neck);
+        # the routers aim for the 0.15 mm netclass value everywhere else.  JLCPCB 6-layer minimum: 0.09
         '(rule "default_clearance"\n'
         '\t(condition "A.NetName != \'DVDD\' && A.NetName != \'RP_LX\' && A.NetName != \'VREG_AVDD\' && '
         'B.NetName != \'DVDD\' && B.NetName != \'RP_LX\' && B.NetName != \'VREG_AVDD\'")\n'
-        '\t(constraint clearance (min 0.15mm)))\n'
-        # The regulator corner's GND (C10/C15/C16 and U1's PGND + EP) joins the
-        # top GND pour solidly, as Raspberry Pi's own GND pour there did
-        '(rule "rp2350_core_gnd_solid"\n'
-        '\t(condition "A.NetName == \'GND\' && (A.memberOfFootprint(\'C10\') || A.memberOfFootprint(\'C15\') || '
-        'A.memberOfFootprint(\'C16\') || A.memberOfFootprint(\'U1\'))")\n'
-        '\t(constraint zone_connection solid))\n')
+        '\t(constraint clearance (min 0.12mm)))\n'
+        # the RP2354B exposed pad and the SRAM / regulator grounds join the pours solidly
+        '(rule "gnd_solid_under_ics"\n'
+        '\t(condition "A.NetName == \'GND\' && (A.memberOfFootprint(\'U1\') || A.memberOfFootprint(\'U2\') || '
+        'A.memberOfFootprint(\'U3\') || A.memberOfFootprint(\'U14\') || A.memberOfFootprint(\'U15\'))")\n'
+        '\t(constraint zone_connection solid))\n'
+        # the fingers are 1.0 mm from the bevelled edge by design; keep KiCad\'s edge rule at the body minimum
+        '(rule "finger_edge"\n'
+        '\t(condition "A.memberOfFootprint(\'J1\')")\n'
+        '\t(constraint edge_clearance (min 0.9mm)))\n')
 
 
 def write_case_anchors():
     """case/board-anchors.scad: the shell openings follow the placement."""
+    os.makedirs(os.path.join(PRJ, 'case'), exist_ok=True)
+
     def at(ref):
         return PLACE[ref][0], PLACE[ref][1]
-    sw1, sw2, ws, usb, sd, u2 = at('SW1'), at('SW2'), at('D3'), at('J3'), at('J2'), at('U2')
+    sw1, sw2, sw3, sw4, ws, usb, sd, s3 = (at(r) for r in ('SW1', 'SW2', 'SW3', 'SW4', 'D3', 'J3', 'J2', 'U11'))
     lines = ['// GENERATED by tools/gen_pcb.py from tools/placement.py -- do not edit.',
-             '// Board (KiCad) coordinates through bx()/byy() defined in the shell file.',
-             'sw1   = [bx(%g), byy(%g)];    // RESET  (top-face button hole)' % sw1,
-             'sw2   = [bx(%g), byy(%g)];    // BOOTSEL (pinhole)' % sw2,
-             'ws    = [bx(%g), byy(%g)];  // WS2812 light pipe' % ws,
-             'usb   = [bx(%g), byy(%g)];    // USB-C exits trailing edge' % (usb[0], Y0),
-             'sd    = [bx(%g), byy(%g)];    // microSD exits trailing edge' % (sd[0], Y0),
-             'holes = [%s];' % ', '.join('[bx(%g), byy(%g)]' % h for h in HOLES),
-             'ant_c = bx(%g);                // ESP32 antenna centre X (overhangs trailing edge)' % u2[0], '']
+             '// KiCad board frame (mm, y down): x 50..150, y 30 (top edge) .. 125.5 (tab base) .. 140 (insertion edge).',
+             'pcb_x0 = %g; pcb_x1 = %g; pcb_y0 = %g; pcb_tab_y = %g; pcb_y1 = %g; pcb_t = %g;' % (X0, X1, Y0, TAB_Y, Y1, THICKNESS),
+             'pcb_outline = [%s];' % ', '.join('[%g, %g]' % p for p in OUTLINE),
+             'pcb_holes = [%s];   // [x, y, diameter]' % ', '.join('[%g, %g, %g]' % h for h in HOLES),
+             'sw_reset   = [%g, %g];   // RESET (top face)' % sw1,
+             'sw_bootsel = [%g, %g];   // BOOTSEL (pinhole)' % sw2,
+             'sw_s3_en   = [%g, %g];   // ESP32-S3 EN' % sw3,
+             'sw_s3_boot = [%g, %g];   // ESP32-S3 BOOT' % sw4,
+             'led_ws     = [%g, %g];   // WS2812 light pipe' % ws,
+             'usb_c      = [%g, %g];   // USB-C exits the top edge' % (usb[0], Y0),
+             'microsd    = [%g, %g];   // microSD exits the top edge' % (sd[0], Y0),
+             'esp32_ant  = [%g, %g];   // ESP32 antenna centre (at the top edge)' % (s3[0], Y0), '']
     open(os.path.join(PRJ, 'case', 'board-anchors.scad'), 'w').write('\n'.join(lines))
+
+
+FIDUCIALS = [('FID1', 147.0, 34.0), ('FID2', 53.0, 82.0), ('FID3', 147.0, 120.0)]   # three corners of the body, clear of the shell-post areas
+
+
+def fiducials():
+    """Assembly fiducials (board-only footprints: not in the schematic, BOM or CPL)."""
+    out = []
+    for ref, x, y in FIDUCIALS:
+        fp = load_fp('Fiducial_1mm_Mask2mm')
+        inst = ['footprint', Q(D.LIB + ':Fiducial_1mm_Mask2mm'), ['layer', Q('F.Cu')], ['uuid', uid(ref)], ['at', x, y]]
+        for e in fp[2:]:
+            if not isinstance(e, list) or not e or e[0] in ('version', 'generator', 'generator_version', 'layer'):
+                continue
+            if e[0] == 'property':
+                e = copy.deepcopy(e)
+                if e[1] == 'Reference':
+                    e[2] = Q(ref)
+                e.insert(3, ['uuid', uid(ref, 'prop', e[1])])
+            elif e[0] == 'pad':
+                e = copy.deepcopy(e)
+                e.append(['uuid', uid(ref, 'pad', e[1])])
+            out_e = e
+            inst.append(out_e)
+        out.append(inst)
+    return out
 
 
 def main():
     configure_project()
     do_placement(place)
-    ux, uy, _ = PLACE['U1']
-    for e in GRAFT[1:]:        # the regulator corner sits where Raspberry Pi put it
-        if e[0] == 'part':
-            a = find(e, 'at')
-            PLACE[str(e[1])] = (round(ux + float(a[1]), 4), round(uy + float(a[2]), 4), float(a[3]) % 360)
     write_case_anchors()
     NETLIST.update(schematic_netlist())
     hdr = parse(open(os.path.join(HERE, 'pcb_header.sexpr')).read())
-    # 6 layers: F.Cu / In1 GND plane / In2 signal / In3 signal / In4 +3V3 plane (+ DVDD island) / B.Cu
+    find(find(hdr, 'general'), 'thickness')[1] = THICKNESS
+    setup = find(hdr, 'setup')
+    setup.insert(2, ['solder_mask_min_width', 0])
     layers = find(hdr, 'layers')
-    cu = [l for l in layers[1:] if str(l[1]).endswith('.Cu')]
     rest = [l for l in layers[1:] if not str(l[1]).endswith('.Cu')]
     kinds = {'F.Cu': 'signal', 'In1.Cu': 'power', 'In2.Cu': 'signal', 'In3.Cu': 'signal', 'In4.Cu': 'power',
              'B.Cu': 'signal'}
     ids = {'F.Cu': '0', 'B.Cu': '2', 'In1.Cu': '4', 'In2.Cu': '6', 'In3.Cu': '8', 'In4.Cu': '10'}
     layers[1:] = [[ids[n], Q(n), kinds[n]] for n in ('F.Cu', 'In1.Cu', 'In2.Cu', 'In3.Cu', 'In4.Cu', 'B.Cu')] + rest
-    root = str(gen_sch.uid('root'))
     board = hdr
     missing = [p.ref for p in D.PARTS if p.ref not in PLACE]
     if missing:
@@ -478,30 +580,36 @@ def main():
             if pr[1] == 'Datasheet':
                 ds = str(pr[2])
         board.append(instance(p, x, y, r, path, '/%s/' % p.sheet, p.sheet + '.kicad_sch', ds))
-    for i, (x, y) in enumerate(HOLES, 1):
-        h = D.Part('H', D.LIB + ':MountingHole_3.2mm_NPTH', 'M3', D.FP('MountingHole_3.2mm_NPTH'), {},
-                   None, desc='M3 shell screw', bom=False)
-        h.ref = 'H%d' % i
-        fp = instance(h, x, y, 0, '', '', '')
-        fp = [e for e in fp if not (isinstance(e, list) and e and e[0] in ('path', 'sheetname', 'sheetfile'))]
-        board.append(fp)
+    board += fiducials()
     ux, uy, _ = PLACE['U1']
-    graft = graft_copper(ux, uy)
-    board += graft
-    ring = rp_ring(board, ux, uy)
-    board += ring
-    graft = graft + ring
-    add_fanout(board, graft)
+    extra = finger_stubs(board) + rp_support(board, ux, uy)
+    board += extra
+    add_fanout(board, extra, ISLANDS_5V)
     board += outline()
-    box = [(X0, Y0), (X1, Y0), (X1, Y1), (X0, Y1)]
-    board.append(zone('blade_strip_no_copper_B', None, 'B.Cu',
-                      [(X0, BLADE_Y), (X1, BLADE_Y), (X1, Y1), (X0, Y1)], keepout=True))
-    board.append(zone('GND_plane', 'GND', 'In1.Cu', box))
-    board.append(zone('3V3_plane', '+3V3', 'In4.Cu', box))
-    board.append(text('FujiNet Astrocade Rev0', 100, 84.0, 'F.SilkS', 1.5))
-    board.append(text('RP2354A + ESP32-S3', 100, 86.2, 'F.SilkS', 1.0))
-    board.append(text('insert this edge into console', 100, 81.8, 'F.SilkS', 1.0))
-    board.append(text('contacts: keep clean', 100, 70.0, 'B.SilkS', 1.0, mirror=True))
+    # the tab: fingers only -- no tracks, vias or pour on any layer (pads allowed)
+    tab = [(TAB_X0 - 0.5, PAD_TOP_Y + 0.5), (TAB_X1 + 0.5, PAD_TOP_Y + 0.5), (TAB_X1 + 0.5, Y1 + 1), (TAB_X0 - 0.5, Y1 + 1)]
+    tab_all = [(TAB_X0 - 0.5, TAB_Y), (TAB_X1 + 0.5, TAB_Y), (TAB_X1 + 0.5, Y1 + 1), (TAB_X0 - 0.5, Y1 + 1)]
+    for L in ('F.Cu', 'B.Cu'):
+        board.append(zone('tab_fingers_only_' + L[0], None, L, tab, keepout=True))
+    for L in ('In1.Cu', 'In2.Cu', 'In3.Cu', 'In4.Cu'):
+        board.append(zone('tab_no_copper_' + L[2], None, L, tab_all, keepout=True))
+    for L in ('F.Cu', 'B.Cu'):      # and no pour on the tab at all (the stubs may cross it)
+        z = zone('tab_no_pour_' + L[0], None, L, tab_all, keepout=True)
+        find(z, 'keepout')[1:] = [['tracks', 'allowed'], ['vias', 'allowed'], ['pads', 'allowed'],
+                                  ['copperpour', 'not_allowed'], ['footprints', 'allowed']]
+        board.append(z)
+    for i, (x, y, r) in enumerate(KEEP_CLEAR):   # shell posts and the hole bosses: no parts, both faces
+        for L in ('F.Cu', 'B.Cu'):
+            board.append(zone('shell_post_%d' % i, None, L, circle_pts(x, y, r), keepout=True, no_parts=True))
+    board.append(zone('GND_plane', 'GND', 'In1.Cu', BODY))
+    board.append(zone('3V3_plane', '+3V3', 'In4.Cu', BODY))
+    for i, poly in enumerate(ISLANDS_5V):
+        board.append(zone('5V_island_%d' % i, '+5V', 'In4.Cu', poly, priority=2))
+    # silk in the gap between the SRAMs (the band above the tab is finger stubs)
+    board.append(text('FujiNet NES Rev0', XC + 6, 84.0, 'F.SilkS', 1.5))
+    board.append(text('RP2354B + ESP32-S3', XC + 6, 86.2, 'F.SilkS', 1.0))
+    board.append(text('CERN-OHL-W-2.0  fujinet.online', XC, Y0 + 3.0, 'B.SilkS', 1.0, mirror=True))
+    board.append(text('label side: pin 1 ->', XC + 6, 88.0, 'F.SilkS', 0.8))
     board.append(['embedded_fonts', 'no'])
     open(PCB, 'w').write(dump(board) + '\n')
     print('placed %d parts -> %s' % (len(D.PARTS), os.path.basename(PCB)))

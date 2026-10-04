@@ -11150,7 +11150,7 @@
 		)
 		(uuid "3966460a-6391-5bf5-86e6-367ff2e53b1d")
 	)
-	(global_label "+3V3"
+	(global_label "+3V3_RP"
 		(shape passive)
 		(at 58.42 48.26 270)
 		(fields_autoplaced yes)
@@ -17791,7 +17791,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 243.84 231.14 0)
+		(at 243.84 236.22 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17799,7 +17799,7 @@
 		(dnp no)
 		(uuid "3f4228f9-ac22-561f-9bdf-75c6f088accb")
 		(property "Reference" "C13"
-			(at 247.142 229.87 0)
+			(at 247.142 234.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17808,7 +17808,7 @@
 			)
 		)
 		(property "Value" "4.7uF"
-			(at 247.142 232.41 0)
+			(at 247.142 237.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17817,7 +17817,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-NES:C_0603_1608Metric"
-			(at 243.84 231.14 0)
+			(at 243.84 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17826,7 +17826,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 231.14 0)
+			(at 243.84 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17834,8 +17834,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "VREG_VIN bulk"
-			(at 243.84 231.14 0)
+		(property "Description" "VREG_VIN bulk (LDO rail)"
+			(at 243.84 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17844,7 +17844,7 @@
 			)
 		)
 		(property "MPN" "CL10A475KO8NNNC"
-			(at 243.84 231.14 0)
+			(at 243.84 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17853,7 +17853,7 @@
 			)
 		)
 		(property "LCSC" "C19666"
-			(at 243.84 231.14 0)
+			(at 243.84 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17876,9 +17876,9 @@
 			)
 		)
 	)
-	(global_label "+3V3"
+	(global_label "+3V3_RP"
 		(shape passive)
-		(at 243.84 227.33 270)
+		(at 243.84 232.41 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -17890,7 +17890,7 @@
 	)
 	(global_label "GND"
 		(shape passive)
-		(at 243.84 234.95 90)
+		(at 243.84 240.03 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -18346,7 +18346,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 335.28 231.14 0)
+		(at 335.28 236.22 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -18354,7 +18354,7 @@
 		(dnp no)
 		(uuid "d1e8a467-4897-50f4-8fee-c739a3882a2c")
 		(property "Reference" "R1"
-			(at 337.566 229.87 0)
+			(at 337.566 234.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18363,7 +18363,7 @@
 			)
 		)
 		(property "Value" "33R"
-			(at 337.566 232.41 0)
+			(at 337.566 237.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18372,7 +18372,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-NES:R_0603_1608Metric"
-			(at 335.28 231.14 0)
+			(at 335.28 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18381,7 +18381,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 335.28 231.14 0)
+			(at 335.28 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18390,7 +18390,7 @@
 			)
 		)
 		(property "Description" "VREG_AVDD filter"
-			(at 335.28 231.14 0)
+			(at 335.28 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18399,7 +18399,7 @@
 			)
 		)
 		(property "MPN" "0603WAF330JT5E"
-			(at 335.28 231.14 0)
+			(at 335.28 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18408,7 +18408,7 @@
 			)
 		)
 		(property "LCSC" "C23140"
-			(at 335.28 231.14 0)
+			(at 335.28 236.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18431,9 +18431,9 @@
 			)
 		)
 	)
-	(global_label "+3V3"
+	(global_label "+3V3_RP"
 		(shape passive)
-		(at 335.28 227.33 270)
+		(at 335.28 232.41 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -18445,7 +18445,7 @@
 	)
 	(global_label "VREG_AVDD"
 		(shape passive)
-		(at 335.28 234.95 90)
+		(at 335.28 240.03 90)
 		(fields_autoplaced yes)
 		(effects
 			(font

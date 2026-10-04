@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# UNADAPTED copy of Astrocade/rev0/tools: encodes that board (outline, QFN-60 graft,
-# single-sided blade edge). Rework before the FujiNet-NES-Rev0 layout stage; do not run as-is.
 """Point every footprint at a 3D model bundled in 3d/ (${KIPRJMOD}/3d/...),
 in the library AND in the board (without touching routing), so the 3D
 viewer / `kicad-cli pcb render` works on any machine -- no dependency on
 KiCad's optional 3D-model package.
 
 Model sources (see 3d/README.md): KiCad's own kicad-packages3D for stock
-footprints; LCSC/EasyEDA models (easyeda2kicad) for the parts KiCad has none
-for (RP2354A QFN-60, Abracon AOTA inductor, HRO USB-C); a simple VRML
-stand-in for the WS2812B-2020 (no vendor model published).
+footprints (copied from Astrocade/rev0/3d or fetched from the library
+repository); LCSC/EasyEDA models (easyeda2kicad) for the parts KiCad has
+none for (Abracon AOTA inductor, HRO USB-C); a simple VRML stand-in for the
+WS2812B-2020 (no vendor model published).  Footprints without a model in
+3d/ are left without one (the board still renders).
 
 Usage: python3 tools/set_models.py
 """
@@ -19,17 +19,14 @@ from sexpr import parse, dump, find, Q
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
-LIB = os.path.join(PRJ, 'FujiNet-Astrocade.pretty')
-PCB = os.path.join(PRJ, 'FujiNet-Astrocade-Rev0.kicad_pcb')
+LIB = os.path.join(PRJ, 'FujiNet-NES.pretty')
+PCB = os.path.join(PRJ, 'FujiNet-NES-Rev0.kicad_pcb')
 
 # footprint -> (model file in 3d/, offset xyz mm (KiCad 3D: +y is up), rotate xyz deg)
 MODELS = {
     'C_0603_1608Metric': ('C_0603_1608Metric.step', (0, 0, 0), (0, 0, 0)),
     'C_0805_2012Metric': ('C_0805_2012Metric.step', (0, 0, 0), (0, 0, 0)),
-    'RPI_C0402': ('C_0402_1005Metric.step', (0, 0, 0), (0, 0, 0)),
-    'RPI_C0402_wide': ('C_0402_1005Metric.step', (0, 0, 0), (0, 0, 0)),
     'R_0603_1608Metric': ('R_0603_1608Metric.step', (0, 0, 0), (0, 0, 0)),
-    'RPI_R0402': ('R_0402_1005Metric.step', (0, 0, 0), (0, 0, 0)),
     'R_Array_Convex_4x0603': ('R_Array_Convex_4x0603.step', (0, 0, 0), (0, 0, 0)),
     'LED_0603_1608Metric': ('LED_0603_1608Metric.step', (0, 0, 0), (0, 0, 0)),
     'LED_WS2812B-2020_PLCC4_2.0x2.0mm': ('LED_WS2812B-2020.wrl', (0, 0, 0), (0, 0, 0)),
@@ -42,7 +39,12 @@ MODELS = {
     'L_Sunlord_SWPA4030S': ('L_Sunlord_SWPA4030S.step', (0, 0, 0), (0, 0, 0)),
     'RPI_L_AOTA-B201610S3R3': ('AOTA-B201610S3R3.step', (0, 0, 0), (0, 0, 0)),
     'QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm': ('QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm.step', (0, 0, 0), (0, 0, 0)),
-    'RPI_RP2350A_QFN60': ('RP2354A_QFN-60_7x7.step', (0, 0, 0), (0, 0, 0)),
+    'QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm': ('QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm.step', (0, 0, 0), (0, 0, 0)),
+    'TSOP-I-32_18.4x8mm_P0.5mm': ('TSOP-I-32_18.4x8mm_P0.5mm.step', (0, 0, 0), (0, 0, 0)),
+    'SOIC-14_3.9x8.7mm_P1.27mm': ('SOIC-14_3.9x8.7mm_P1.27mm.step', (0, 0, 0), (0, 0, 0)),
+    'SOIC-16_3.9x9.9mm_P1.27mm': ('SOIC-16_3.9x9.9mm_P1.27mm.step', (0, 0, 0), (0, 0, 0)),
+    'SOIC-8_3.9x4.9mm_P1.27mm': ('SOIC-8_3.9x4.9mm_P1.27mm.step', (0, 0, 0), (0, 0, 0)),
+    'SOT-23-5': ('SOT-23-5.step', (0, 0, 0), (0, 0, 0)),
     'ESP32-S3-WROOM-1': ('ESP32-S3-WROOM-1.step', (0, 0, 0), (0, 0, 0)),
     'SW_SPST_TL3342': ('SW_SPST_TL3342.step', (0, 0, 0), (0, 0, 0)),
     # LCSC model origin is 1.42 mm behind KiCad's footprint origin (shell tabs)
@@ -70,7 +72,8 @@ for fn in sorted(os.listdir(LIB)):
     set_model(t, name)
     open(os.path.join(LIB, fn), 'w').write(dump(t) + '\n')
     for f, *_ in [MODELS[name]] if name in MODELS else []:
-        assert os.path.exists(os.path.join(PRJ, '3d', f)), f
+        if not os.path.exists(os.path.join(PRJ, '3d', f)):
+            print('no model file for %s (%s)' % (name, f))
 
 b = parse(open(PCB).read())
 n = 0

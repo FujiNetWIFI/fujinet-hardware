@@ -66,8 +66,27 @@ def soic8():
                      'SOIC-8_3.9x4.9mm_P1.27mm.step')
 
 
+def fiducial():
+    """Fiducial_1mm_Mask2mm: 1 mm bare copper dot, 2 mm mask opening, no paste (KiCad Fiducial library geometry)."""
+    name = 'Fiducial_1mm_Mask2mm'
+    return ['footprint', Q(name), ['version', 20241229], ['generator', Q('fujinet_gen')],
+            ['generator_version', Q('1.0')], ['layer', Q('F.Cu')],
+            ['descr', Q('Circular Fiducial, 1mm bare copper, 2mm solder mask opening')], ['tags', Q('fiducial')],
+            ['property', Q('Reference'), Q('REF**'), ['at', 0, -2.0, 0], ['layer', Q('F.SilkS')], ['hide', 'yes'], F()],
+            ['property', Q('Value'), Q(name), ['at', 0, 2.0, 0], ['layer', Q('F.Fab')], ['hide', 'yes'], F()],
+            ['property', Q('Footprint'), Q(''), ['at', 0, 0, 0], ['layer', Q('F.Fab')], ['hide', 'yes'], F()],
+            ['property', Q('Datasheet'), Q(''), ['at', 0, 0, 0], ['layer', Q('F.Fab')], ['hide', 'yes'], F()],
+            ['property', Q('Description'), Q(''), ['at', 0, 0, 0], ['layer', Q('F.Fab')], ['hide', 'yes'], F()],
+            ['attr', 'smd', 'board_only', 'exclude_from_pos_files', 'exclude_from_bom'],
+            ['fp_circle', ['center', 0, 0], ['end', 1.25, 0], ['stroke', ['width', 0.05], ['type', 'solid']],
+             ['fill', 'no'], ['layer', Q('F.CrtYd')]],
+            ['pad', Q('1'), 'smd', 'circle', ['at', 0, 0], ['size', 1.0, 1.0], ['layers', Q('F.Cu'), Q('F.Mask')],
+             ['solder_mask_margin', 0.5]],
+            ['embedded_fonts', 'no']]
+
+
 if __name__ == '__main__':
     lib = os.path.join(PRJ, 'FujiNet-NES.pretty')
-    for fp in (sot23_5(), soic8()):
+    for fp in (sot23_5(), soic8(), fiducial()):
         open(os.path.join(lib, str(fp[1]) + '.kicad_mod'), 'w').write(dump(fp) + '\n')
         print('wrote', fp[1])

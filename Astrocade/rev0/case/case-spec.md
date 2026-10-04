@@ -33,7 +33,7 @@ mouth. EJECT pops it back out.
   above the well rim. **VERIFY** the rim height and the well's trailing-side
   clearance on a real console.
 - The cart's **top face is fully exposed** when inserted → the RESET button
-  (SW1), BOOTSEL pinhole (SW2) and WS2812 light pipe act through the top face.
+  (SW4), BOOTSEL pinhole (SW1) and WS2812 light pipe (D3) act through the top face.
 
 ## PCB ↔ shell mapping
 

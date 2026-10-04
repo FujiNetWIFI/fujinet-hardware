@@ -155,7 +155,7 @@
         "min_through_hole_diameter": 0.25,
         "min_track_width": 0.1,
         "min_via_annular_width": 0.1,
-        "min_via_diameter": 0.5,
+        "min_via_diameter": 0.45,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -582,11 +582,11 @@
       },
       {
         "netclass": "PWR",
-        "pattern": "VIN"
+        "pattern": "CONS_5V"
       },
       {
         "netclass": "PWR",
-        "pattern": "BUCK_SW"
+        "pattern": "/power/BUCK_SW"
       },
       {
         "netclass": "VBUS",
@@ -594,27 +594,27 @@
       },
       {
         "netclass": "USB",
-        "pattern": "USB_DP"
+        "pattern": "/cart/USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "USB_DM"
+        "pattern": "/cart/USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "RP_USB_DP"
+        "pattern": "/cart/RP_USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "RP_USB_DM"
+        "pattern": "/cart/RP_USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "UBRG_DP"
+        "pattern": "/usb/UBRG_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "UBRG_DM"
+        "pattern": "/usb/UBRG_DM"
       }
     ]
   },

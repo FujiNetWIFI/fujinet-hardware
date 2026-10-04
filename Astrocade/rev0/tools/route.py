@@ -38,7 +38,8 @@ def pour(board, layer, net, name):
     z.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
     ol = z.Outline()
     ol.NewOutline()
-    for x, y in ((52, 30), (148, 30), (148, 88), (52, 88)):
+    import gen_pcb as G
+    for x, y in G.BODY:
         ol.Append(pcbnew.FromMM(x), pcbnew.FromMM(y))
     board.Add(z)
 
@@ -57,7 +58,7 @@ def strip_pours():
 
 def unconnected():
     fn = os.path.join(tempfile.gettempdir(), 'fujinet-astrocade-route-drc.json')
-    subprocess.run(['kicad-cli', 'pcb', 'drc', '--format', 'json', '-o', fn, PCB], capture_output=True)
+    subprocess.run(['kicad-cli', 'pcb', 'drc', '--refill-zones', '--format', 'json', '-o', fn, PCB], capture_output=True)
     return len(json.load(open(fn)).get('unconnected_items', []))
 
 
@@ -66,7 +67,7 @@ def main():
     ap.add_argument('--passes', type=int, default=60)
     ap.add_argument('--rounds', type=int, default=1)
     ap.add_argument('--jar', default=os.path.expanduser('~/.local/share/freerouting/freerouting-2.4.1.jar'))
-    ap.add_argument('--timeout', type=int, default=3000)
+    ap.add_argument('--timeout', type=int, default=7200)
     ap.add_argument('--strategy', default=None, help='freerouting -us (greedy|global|hybrid)')
     a = ap.parse_args()
     os.makedirs(EXP, exist_ok=True)

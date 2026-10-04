@@ -1,27 +1,72 @@
 #!/usr/bin/env python3
-"""One-time helper: collect the flattened schematic symbols this board uses
-into tools/symcache.sexpr (so gen_sch.py never depends on another project).
+"""Refresh tools/symcache.sexpr: the flattened stock KiCad symbols gen_sch.py
+embeds in the sheets, so the generator never depends on another project.
 
-Sources: symbol caches of the INTV Rev0 sheets (CERN-OHL-W, stock KiCad
-symbols as flattened by eeschema) and of the previous Astrocade sheets.
+Two sources:
+  * the existing cache (symbols harvested from the INTV Rev0 sheets: stock
+    symbols as flattened by eeschema), kept for every symbol it already has;
+  * the installed KiCad symbol libraries (/usr/share/kicad/symbols) for the
+    rest.  Derived symbols ("extends") are flattened the way eeschema does
+    it: the parent's units and drawings under the derived name, the derived
+    symbol's own properties on top.
+
+Usage: python3 tools/harvest_symbols.py        (rewrites tools/symcache.sexpr)
 """
-import os, sys
-sys.path.insert(0, os.path.dirname(__file__))
-from sexpr import parse, dump, find, findall
+import copy, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sexpr import parse, dump, find, findall, Q
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = [os.path.join(HERE, '../../../INTV/FujiNet-INTV-Rev0', f) for f in
-       ('cart-rp2354a.kicad_sch', 'esp32s3-sd.kicad_sch', 'usb-uart.kicad_sch', 'power.kicad_sch')]
-SRC += [os.path.join(HERE, '..', f) for f in ('cart-rp2040.kicad_sch',)]
-WANT = sys.argv[1:]
-got = {}
-for fn in SRC:
-    if not os.path.exists(fn):
-        continue
-    t = parse(open(fn).read())
-    for s in findall(find(t, 'lib_symbols'), 'symbol'):
-        if s[1] not in got:
+CACHE = os.path.join(HERE, 'symcache.sexpr')
+KICAD_SYMS = os.environ.get('KICAD_SYMBOL_DIR', '/usr/share/kicad/symbols')
+
+# lib -> symbols to (re)flatten from the stock libraries
+STOCK = {
+    'Regulator_Linear': ['AP2112K-3.3'],              # RP2354A LDO (+3V3_RP)
+    'power': ['GND', '+3V3', '+5V', 'VBUS', 'PWR_FLAG'],
+}
+# symbols the old cache carries that this board does not use
+DROP = {'FujiNet-INTV:INTV_Cart_Edge_44', 'MCU_RaspberryPi:RP2040', 'Memory_Flash:W25Q32JVSS',
+        '74xx:74LS245', 'Transistor_BJT:BC847', 'Connector:Micro_SD_Card', 'Device:C_Polarized'}
+
+
+def flatten(lib, name, syms):
+    s = syms[name]
+    ext = find(s, 'extends')
+    if not ext:
+        out = copy.deepcopy(s)
+    else:
+        out = flatten(lib, str(ext[1]), syms)
+        parent = out[1].split(':', 1)[1]
+        # the derived symbol's properties replace the parent's of the same name
+        mine = {str(p[1]): p for p in findall(s, 'property')}
+        for i, e in enumerate(out):
+            if isinstance(e, list) and e and e[0] == 'property' and str(e[1]) in mine:
+                out[i] = copy.deepcopy(mine.pop(str(e[1])))
+        first_sub = next(i for i, e in enumerate(out) if isinstance(e, list) and e and e[0] == 'symbol')
+        for p in mine.values():
+            out.insert(first_sub, copy.deepcopy(p)); first_sub += 1
+        for sub in findall(out, 'symbol'):
+            sub[1] = Q(name + str(sub[1])[len(parent):])
+    out[1] = Q(lib + ':' + name)
+    return out
+
+
+def main():
+    got = {}
+    for s in parse(open(CACHE).read())[1:]:
+        if s[1] not in DROP:
             got[s[1]] = s
-out = ['symcache'] + [got[k] for k in sorted(got)]
-open(os.path.join(HERE, 'symcache.sexpr'), 'w').write(dump(out) + '\n')
-print('\n'.join(sorted(got)))
+    for lib, names in STOCK.items():
+        t = parse(open(os.path.join(KICAD_SYMS, lib + '.kicad_sym')).read())
+        syms = {str(s[1]): s for s in t[1:] if isinstance(s, list) and s[0] == 'symbol'}
+        for n in names:
+            f = flatten(lib, n, syms)
+            got[f[1]] = f
+    out = ['symcache'] + [got[k] for k in sorted(got)]
+    open(CACHE, 'w').write(dump(out) + '\n')
+    print('\n'.join(sorted(got)))
+
+
+if __name__ == '__main__':
+    main()

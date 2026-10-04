@@ -1,0 +1,48 @@
+// kicad-happy project config for FujiNet-Astrocade Rev0 (JSONC)
+{
+  "version": 1,
+  "project": {
+    "name": "FujiNet-Astrocade Rev0",
+    "revision": "0",
+    "company": "FujiNet",
+    "market": "us",
+    "emc_standard": "fcc-class-b",
+    "pdn_transient_current_a": 0.5
+  },
+  "preferred_suppliers": ["lcsc"],
+  "bom": { "field_priority": ["MPN", "LCSC"], "group_by": "value+footprint" },
+  "design_intent": {
+    "product_class": "prototype",
+    "target_market": "hobby",
+    "ipc_class": 2,
+    "preferred_passive_size": "0603",
+    "operating_temp_range": [0, 70]
+  },
+  "analysis": {
+    "output_dir": "analysis",
+    "retention": 5,
+    "auto_diff": true,
+    "track_in_git": false,
+    "power_rails": {
+      // divider nodes that only look like rails by name
+      "ignore": ["VBUS_SNS", "VSENSE"],
+      "voltage_overrides": { "+3V3_RP": 3.3, "+5V": 5.0, "CONS_5V": 5.0, "DVDD": 1.1 }
+    }
+  },
+  "suppressions": [
+    {
+      "rule_id": "VM-001",
+      "reason": "Deliberate: the RP2354A sits on the 5 V cart bus through its 5 V-tolerant (FT) pads, datasheet 5.5 V with IOVDD powered; IOVDD is +3V3_RP from an LDO that tracks the console rail. The console only reads the cart; RP 3.3 V outputs meet the Z80's TTL VIH."
+    },
+    { "rule_id": "RS-001", "nets": ["VBUS_SNS"],
+      "reason": "Divider node into the CP2102N VBUS sense pin (power_in by symbol), not a rail." },
+    { "rule_id": "PU-001", "components": ["U3"],
+      "reason": "CP2102N CHREN/CHR0/CHR1 are charger-detect outputs, left open as in the ESP32-S3-DevKitC-1 reference." },
+    { "rule_id": "LB-001",
+      "reason": "Hierarchical label + sheet pin of the same net on two sheets (the root block diagram's wiring); KiCad joins them by design." },
+    { "rule_id": "CG-AUD", "components": ["J1"],
+      "reason": "Console-defined 26-contact Astrocade edge: three GND contacts by Bally's pinout." },
+    { "rule_id": "EP-AUD", "components": ["J1", "J2"],
+      "reason": "J1 is the console bus (no ESD devices on any Videocade); J2 microSD sits inside the shell." }
+  ]
+}

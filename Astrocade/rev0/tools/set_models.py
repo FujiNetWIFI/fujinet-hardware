@@ -36,6 +36,7 @@ MODELS = {
     'SOT-23': ('SOT-23.step', (0, 0, 0), (0, 0, 0)),
     'SOT-363_SC-70-6': ('SOT-363_SC-70-6.step', (0, 0, 0), (0, 0, 0)),
     'TSOT-23-6': ('TSOT-23-6.step', (0, 0, 0), (0, 0, 0)),
+    'SOT-23-5': ('SOT-23-5.step', (0, 0, 0), (0, 0, 0)),
     'Crystal_SMD_3225-4Pin_3.2x2.5mm': ('Crystal_SMD_3225-4Pin_3.2x2.5mm.step', (0, 0, 0), (0, 0, 0)),
     'L_Sunlord_SWPA4030S': ('L_Sunlord_SWPA4030S.step', (0, 0, 0), (0, 0, 0)),
     'RPI_L_AOTA-B201610S3R3': ('AOTA-B201610S3R3.step', (0, 0, 0), (0, 0, 0)),

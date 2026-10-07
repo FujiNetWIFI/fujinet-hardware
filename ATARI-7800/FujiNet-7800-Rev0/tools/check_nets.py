@@ -62,7 +62,7 @@ def main():
     node_net, func_net, nets, parts = N.node_net, N.func_net, N.nets, N.parts
     one = N.one
     U1, J1, S3 = one('RP2354B'), one('Atari7800_Cart_Edge_32'), one('ESP32-S3-WROOM-1-N16R8')
-    J2, UCP, WS = one('microSD'), one('CP2102N-A02-GQFN28'), one('WS2812B-2020-V6')
+    J2, UCP, WS = one('microSD'), one('CP2102N-A02-GQFN28'), one('WS2812C-2020-V1')
     U14, LDO, QFET, QI = one('74HCT14'), one('AP2112K-3.3'), one('AO3401A'), one('2N7002')
     srams = N.by_value('AS6C4008-55TIN')
     for ref, what in ((U1, 'RP2354B'), (J1, 'edge'), (S3, 'ESP32-S3'), (U14, '74HCT14'), (LDO, 'AP2112K LDO'),
@@ -73,6 +73,7 @@ def main():
         raise SystemExit('expected one AS6C4008-55TIN, found %r' % srams)
     S = srams[0]
     glue = {r for r, (v, _) in parts.items() if v in GLUE}
+    tps = {r for r in parts if re.match(r'TP\d+$', r)}         # bring-up / SWD test pads (no BOM part)
 
     def rp(gpio):
         for (ref, f), n in func_net.items():
@@ -151,6 +152,9 @@ def main():
             chk('J1.31 /IRQ = 2N7002 drain', n == func_net.get((QI, 'D')) and not unconn(n))
         elif s == 'EAUDIO':
             chk('J1.18 EAUDIO connected', not unconn(n))
+        elif s == '/HALT':      # MARIA's weak MOS output: a series 1k at the finger, the RP behind it
+            g = P[STROBE_PIN[s]]
+            chk('J1.%d %s -> 1k -> GP%d' % (p, s, g), through_r(n, rp(g)) == '1k' and not unconn(n))
         elif s in STROBE_PIN:
             g = P[STROBE_PIN[s]]
             chk('J1.%d %s -> GP%d' % (p, s, g), n == rp(g) and not unconn(n))
@@ -166,10 +170,16 @@ def main():
     chk('edge GND pins 14 and 30 are one net', edge[14] == edge[30] == 'GND')
     chk('the PIO table index (A0_PIN + 13..15, a78_pio.c) is the edge A13-A15',
         all(rp(P['A0'] + 13 + i) == sig['A%d' % (13 + i)] for i in range(3)))
-    for s in ('R/W', 'PHI2', '/HALT') + tuple('A%d' % i for i in range(16)):
-        chk('%s net carries no extra parts (no pull-ups, no series R)' % s,
-            not others(sig[s], {J1, U1, S} | glue))
-    chk('/HALT goes to the RP only (observed, never driven)', not others(sig['/HALT'], {J1, U1}))
+    for s in ('R/W', 'PHI2') + tuple('A%d' % i for i in range(16)):
+        chk('%s net carries no extra parts (no pull-ups, no series R; test pads allowed)' % s,
+            not others(sig[s], {J1, U1, S} | glue | tps))
+    rh = [r for r, _ in others(sig['/HALT'], {J1})]
+    chk('/HALT at the finger: its 1k and nothing else (the console\'s HALT is a weak MOS output)',
+        len(rh) == 1 and rh[0].startswith('R'))
+    if len(rh) == 1:
+        hr = rp(P['HALT'])
+        chk('/HALT behind the 1k: the RP (observed, never driven) and a test pad only',
+            not others(hr, {U1, rh[0]} | tps))
     chk('console A8 does not reach the SRAM directly', func_net.get((S, 'A8')) != sig['A8'])
     for i in range(8):
         chk('D%d net: edge, the SRAM, the series pack only' % i,
@@ -202,8 +212,9 @@ def main():
     if r1 and c1:
         fc = 1 / (2 * math.pi * VAL(r1) * VAL(c1))
         chk('audio low-pass corner %.1f kHz within 5-20 kHz' % (fc / 1e3), 5e3 <= fc <= 20e3)
-    chk('audio nets carry nothing else', all(len(nets.get(n, [])) == 2 for n in (lvl,)) and
-        len(nets.get(edge[18], [])) == 2 and len(nets.get(pwm, [])) == 2 and len(nets.get(lp, [])) == 3)
+    real = lambda n: [x for x in nets.get(n, []) if x[0] not in tps]
+    chk('audio nets carry nothing else (EAUDIO: a test pad allowed)', all(len(real(n)) == 2 for n in (lvl,)) and
+        len(real(edge[18])) == 2 and len(real(pwm)) == 2 and len(real(lp)) == 3)
 
     # ---- SRAM: 512K, console address and data, the slot lines ----
     for i in range(13):
@@ -226,10 +237,20 @@ def main():
     glue_in = lambda n: any(r in glue and N.ptype.get((r, pin)) == 'input' for (r, pin, f) in nets.get(n, []))
     for k in ('ROM_EN', 'RAM_EN', 'A8MASK'):
         chk('GP%d (%s) -> a 74HCT glue input' % (slot[k], k), glue_in(rp(slot[k])))
+    def pulldown(n):
+        """refs of resistors from n to GND"""
+        return {r for r, (v, _) in parts.items() if re.match(r'R\d+$', r) and
+                {node_net.get((r, '1')), node_net.get((r, '2'))} == {n, 'GND'}}
+    for k in ('ROM_EN', 'RAM_EN', 'A8MASK'):   # RP2350-E9 (stepping A2): an external pull-down <= 8.2k
+        pd = pulldown(rp(slot[k]))
+        chk('GP%d (%s) pulled down by <= 8.2k until the PIO table runs (RP2350-E9)' % (slot[k], k),
+            len(pd) == 1 and VAL(parts[next(iter(pd))][0]) <= 8.2e3)
     for k, g in sorted(slot.items(), key=lambda kv: kv[1]):
+        pd = pulldown(rp(g))
         bad = [(r, pin, N.ptype.get((r, pin))) for (r, pin, f) in nets.get(rp(g), [])
-               if r != U1 and N.ptype.get((r, pin)) != 'input']
-        chk('GP%d (%s): drives only 5 V CMOS inputs' % (g, k), not bad and len(nets.get(rp(g), [])) >= 2)
+               if r != U1 and N.ptype.get((r, pin)) != 'input' and r not in pd]
+        chk('GP%d (%s): drives only 5 V CMOS inputs (and its pull-down)' % (g, k),
+            not bad and len(nets.get(rp(g), [])) >= 2)
 
     # ---- GPIO40-47 are not 5 V tolerant: 5 V-rail inputs or the 3.3 V debug header only ----
     for g in range(40, 48):
@@ -237,8 +258,8 @@ def main():
         if unconn(n):
             continue
         bad = [(r, pin, N.ptype.get((r, pin))) for (r, pin, f) in nets.get(n, [])
-               if r != U1 and N.ptype.get((r, pin)) != 'input' and r != hdr]
-        chk('GP%d (%s): nothing but inputs or the 3.3 V debug header on the net' % (g, n), not bad)
+               if r != U1 and N.ptype.get((r, pin)) != 'input' and r != hdr and r not in pulldown(n)]
+        chk('GP%d (%s): nothing but inputs, its pull-down or the 3.3 V debug header on the net' % (g, n), not bad)
         chk('GP%d (%s): never an edge signal' % (g, n), n not in edge.values())
 
     # ---- PWR_OK: console +5V -> divider -> '14 -> '14 -> GP27 and the glue ----
@@ -333,16 +354,19 @@ def main():
     for io in range(26, 38):
         chk('S3 IO%d (flash/PSRAM on N16R8) unused' % io, unconn(s3(io)))
 
-    # ---- edge footprint: 2.54 mm, pins 1-16 F.Cu, 17-32 B.Cu, k over 33-k, pin 1 west (ASSUMED) ----
-    fpt = open(os.path.join(PRJ, 'FujiNet-7800.pretty', 'Atari7800_Cart_Edge_32.kicad_mod')).read()
-    pads = {int(m.group(1)): (float(m.group(2)), m.group(3)) for m in
-            re.finditer(r'\(pad "(\d+)" smd rect\s*\(at ([-\d.]+) [-\d.]+\)\s*\(size [^)]*\)\s*\(layers "([FB])\.Cu"\)', fpt)}
+    # ---- edge footprint: 18 positions at 2.54 mm with key slots at positions 3 and 16; pins 1-16
+    # F.Cu (component side, console rear), 17-32 B.Cu, k over 33-k, pin 1 left (audit/edge_orientation.py
+    # holds the sources) ----
+    from sexpr import parse as sparse, findall as sfindall, find as sfind
+    fpe = sparse(open(os.path.join(PRJ, 'FujiNet-7800.pretty', 'Atari7800_Cart_Edge_32.kicad_mod')).read())
+    pads = {int(p[1]): (float(sfind(p, 'at')[1]), sfind(p, 'layers')[1][0]) for p in sfindall(fpe, 'pad')}
     chk('edge footprint has 32 pads', sorted(pads) == list(range(1, 33)))
     if sorted(pads) == list(range(1, 33)):
         chk('edge: pins 1-16 on F.Cu, 17-32 on B.Cu, pin k over pin 33-k',
             all(pads[k][1] == 'F' and pads[33 - k][1] == 'B' and pads[k][0] == pads[33 - k][0] for k in range(1, 17)))
-        chk('edge: 2.54 mm pitch, pin 1 west (-x), pin 16 east',
-            all(abs((pads[k + 1][0] - pads[k][0]) - 2.54) < 1e-6 for k in range(1, 16)) and pads[1][0] < 0 < pads[16][0])
+        steps = [round(pads[k + 1][0] - pads[k][0], 3) for k in range(1, 16)]
+        chk('edge: 2.54 mm pitch with a key position (5.08 mm step) between pins 2-3 and 14-15, '
+            'pin 1 at the left (-x)', steps == [2.54, 5.08] + [2.54] * 11 + [5.08, 2.54] and pads[1][0] < 0 < pads[16][0])
         chk('edge: 2600 pins in the middle (7800 pins 3-14 centred)', abs(pads[3][0] + pads[14][0]) < 1e-6)
 
     # ---- general ----

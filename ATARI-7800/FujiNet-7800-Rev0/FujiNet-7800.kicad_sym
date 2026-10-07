@@ -10,7 +10,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "J"
-			(at 0 41.91 0)
+			(at 0 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18,7 +18,7 @@
 			)
 		)
 		(property "Value" "Atari7800_Cart_Edge_32"
-			(at 0 -45.72 0)
+			(at 0 -50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -43,7 +43,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Atari 7800 32-pin cartridge edge, 2.54 mm pitch; pins 1-16 one face, 17-32 the other, pin k over pin 33-k; pins 3-14 / 19-30 are the 2600 edge (face and pin-1 end ASSUMED)"
+		(property "Description" "Atari 7800 32-pin cartridge edge: 18 positions at 2.54 mm per face, key slots at 3 and 16; pins 1-16 on the component side (console rear), 17-32 behind, pin k over pin 33-k; pins 3-14 / 19-30 are the 2600 edge"
 			(at 0 0 0)
 			(effects
 				(font
@@ -54,8 +54,8 @@
 		)
 		(symbol "Atari7800_Cart_Edge_32_0_1"
 			(rectangle
-				(start -10.16 40.64)
-				(end 10.16 -40.64)
+				(start -10.16 45.72)
+				(end 10.16 -45.72)
 				(stroke
 					(width 0.254)
 					(type default)
@@ -67,7 +67,7 @@
 		)
 		(symbol "Atari7800_Cart_Edge_32_1_1"
 			(pin passive line
-				(at 12.7 38.1 180)
+				(at 12.7 43.18 180)
 				(length 2.54)
 				(name "A0"
 					(effects
@@ -85,7 +85,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 35.56 180)
+				(at 12.7 40.64 180)
 				(length 2.54)
 				(name "A1"
 					(effects
@@ -103,7 +103,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 33.02 180)
+				(at 12.7 38.1 180)
 				(length 2.54)
 				(name "A2"
 					(effects
@@ -121,7 +121,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 30.48 180)
+				(at 12.7 35.56 180)
 				(length 2.54)
 				(name "A3"
 					(effects
@@ -139,7 +139,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 27.94 180)
+				(at 12.7 33.02 180)
 				(length 2.54)
 				(name "A4"
 					(effects
@@ -157,7 +157,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 25.4 180)
+				(at 12.7 30.48 180)
 				(length 2.54)
 				(name "A5"
 					(effects
@@ -175,7 +175,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 22.86 180)
+				(at 12.7 27.94 180)
 				(length 2.54)
 				(name "A6"
 					(effects
@@ -193,7 +193,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 20.32 180)
+				(at 12.7 25.4 180)
 				(length 2.54)
 				(name "A7"
 					(effects
@@ -211,7 +211,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 17.78 180)
+				(at 12.7 22.86 180)
 				(length 2.54)
 				(name "A8"
 					(effects
@@ -229,7 +229,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 15.24 180)
+				(at 12.7 20.32 180)
 				(length 2.54)
 				(name "A9"
 					(effects
@@ -247,7 +247,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 12.7 180)
+				(at 12.7 17.78 180)
 				(length 2.54)
 				(name "A10"
 					(effects
@@ -265,7 +265,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 10.16 180)
+				(at 12.7 15.24 180)
 				(length 2.54)
 				(name "A11"
 					(effects
@@ -283,7 +283,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 7.62 180)
+				(at 12.7 12.7 180)
 				(length 2.54)
 				(name "A12"
 					(effects
@@ -301,7 +301,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 5.08 180)
+				(at 12.7 10.16 180)
 				(length 2.54)
 				(name "A13"
 					(effects
@@ -319,7 +319,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 2.54 180)
+				(at 12.7 7.62 180)
 				(length 2.54)
 				(name "A14"
 					(effects
@@ -337,7 +337,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 0 180)
+				(at 12.7 5.08 180)
 				(length 2.54)
 				(name "A15"
 					(effects
@@ -355,7 +355,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -5.08 180)
+				(at 12.7 0 180)
 				(length 2.54)
 				(name "D0"
 					(effects
@@ -373,7 +373,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -7.62 180)
+				(at 12.7 -2.54 180)
 				(length 2.54)
 				(name "D1"
 					(effects
@@ -391,7 +391,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -10.16 180)
+				(at 12.7 -5.08 180)
 				(length 2.54)
 				(name "D2"
 					(effects
@@ -409,7 +409,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -12.7 180)
+				(at 12.7 -7.62 180)
 				(length 2.54)
 				(name "D3"
 					(effects
@@ -427,7 +427,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -15.24 180)
+				(at 12.7 -10.16 180)
 				(length 2.54)
 				(name "D4"
 					(effects
@@ -445,7 +445,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -17.78 180)
+				(at 12.7 -12.7 180)
 				(length 2.54)
 				(name "D5"
 					(effects
@@ -463,7 +463,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -20.32 180)
+				(at 12.7 -15.24 180)
 				(length 2.54)
 				(name "D6"
 					(effects
@@ -481,7 +481,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -22.86 180)
+				(at 12.7 -17.78 180)
 				(length 2.54)
 				(name "D7"
 					(effects
@@ -499,7 +499,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -27.94 180)
+				(at 12.7 -22.86 180)
 				(length 2.54)
 				(name "R/~{W}"
 					(effects
@@ -517,7 +517,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -30.48 180)
+				(at 12.7 -27.94 180)
 				(length 2.54)
 				(name "PHI2"
 					(effects
@@ -553,7 +553,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -35.56 180)
+				(at 12.7 -38.1 180)
 				(length 2.54)
 				(name "~{IRQ}"
 					(effects
@@ -571,7 +571,7 @@
 				)
 			)
 			(pin passive line
-				(at 12.7 -38.1 180)
+				(at 12.7 -43.18 180)
 				(length 2.54)
 				(name "EAUDIO"
 					(effects
@@ -589,7 +589,7 @@
 				)
 			)
 			(pin passive line
-				(at -5.08 -43.18 90)
+				(at -5.08 -48.26 90)
 				(length 2.54)
 				(name "GND"
 					(effects
@@ -607,7 +607,7 @@
 				)
 			)
 			(pin passive line
-				(at -2.54 -43.18 90)
+				(at -2.54 -48.26 90)
 				(length 2.54)
 				(name "GND"
 					(effects
@@ -625,7 +625,7 @@
 				)
 			)
 			(pin passive line
-				(at -5.08 43.18 270)
+				(at -5.08 48.26 270)
 				(length 2.54)
 				(name "+5V"
 					(effects

@@ -1,12 +1,12 @@
 (footprint "Atari7800_Cart_Edge_32"
 	(version 20241229)
 	(generator "fujinet_gen")
-	(generator_version "1.0")
+	(generator_version "2.0")
 	(layer "F.Cu")
-	(descr "Atari 7800 32-pin cartridge edge: 2 x 16 fingers, 2.54 mm pitch, pins 1-16 F.Cu (console rear, pin 1 west), pins 17-32 B.Cu, pin k over pin 33-k; pins 3-14 / 19-30 are the 2600 edge.  ASSUMED face assignment, PROVISIONAL geometry: verify against a real 7800 cartridge PCB.  Hard gold, bevel.")
+	(descr "Atari 7800 32-pin cartridge edge: 18 positions at 2.54 mm per face, positions 3 and 16 are key slots (board notches, drawn by gen_pcb); pins 1-16 F.Cu (component side, console rear, pin 1 left), pins 17-32 B.Cu, pin k over pin 33-k; pins 3-14 / 19-30 are the 2600 edge.  Fingers 1.5 x 7.0 mm from 0.5 mm in.  Hard gold, bevel.")
 	(tags "atari 7800 prosystem cartridge edge connector")
 	(property "Reference" "REF**"
-		(at 0 -11.5 0)
+		(at 0 -13.5 0)
 		(layer "F.SilkS")
 		(effects
 			(font
@@ -16,7 +16,7 @@
 		)
 	)
 	(property "Value" "Atari7800_Cart_Edge_32"
-		(at 0 -13.5 0)
+		(at 0 -15.5 0)
 		(layer "F.Fab")
 		(effects
 			(font
@@ -26,19 +26,126 @@
 		)
 	)
 	(attr smd exclude_from_pos_files exclude_from_bom allow_soldermask_bridges)
-	(fp_rect
-		(start -21.3 0)
-		(end 21.3 -10)
+	(fp_line
+		(start -23.5 -12)
+		(end -23.5 -1)
 		(stroke
 			(width 0.1)
 			(type solid)
 		)
-		(fill no)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -23.5 -1)
+		(end -22.5 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -22.5 0)
+		(end -17.71 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -17.71 0)
+		(end -17.71 -10)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -17.71 -10)
+		(end -15.31 -10)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -15.31 -10)
+		(end -15.31 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -15.31 0)
+		(end 15.31 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 15.31 0)
+		(end 15.31 -10)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 15.31 -10)
+		(end 17.71 -10)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 17.71 -10)
+		(end 17.71 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 17.71 0)
+		(end 22.5 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 22.5 0)
+		(end 23.5 -1)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 23.5 -1)
+		(end 23.5 -12)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
 		(layer "F.Fab")
 	)
 	(fp_rect
-		(start -21.3 0)
-		(end 21.3 -10)
+		(start -23.5 0)
+		(end 23.5 -12)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -47,8 +154,8 @@
 		(layer "F.CrtYd")
 	)
 	(fp_rect
-		(start -21.3 0)
-		(end 21.3 -10)
+		(start -23.5 0)
+		(end 23.5 -12)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -57,8 +164,8 @@
 		(layer "B.CrtYd")
 	)
 	(fp_rect
-		(start -21.3 0.2)
-		(end 21.3 -8)
+		(start -22.84 0.2)
+		(end 22.84 -8)
 		(stroke
 			(width 0)
 			(type solid)
@@ -67,8 +174,8 @@
 		(layer "F.Mask")
 	)
 	(fp_rect
-		(start -21.3 0.2)
-		(end 21.3 -8)
+		(start -22.84 0.2)
+		(end 22.84 -8)
 		(stroke
 			(width 0)
 			(type solid)
@@ -77,7 +184,7 @@
 		(layer "B.Mask")
 	)
 	(fp_text user "1"
-		(at -19.05 -10.9 0)
+		(at -21.59 -9.2 0)
 		(layer "F.SilkS")
 		(effects
 			(font
@@ -87,7 +194,7 @@
 		)
 	)
 	(fp_text user "16"
-		(at 19.05 -10.9 0)
+		(at 21.59 -9.2 0)
 		(layer "F.SilkS")
 		(effects
 			(font
@@ -97,7 +204,7 @@
 		)
 	)
 	(fp_text user "32"
-		(at -19.05 -10.9 0)
+		(at -21.59 -9.2 0)
 		(layer "B.SilkS")
 		(effects
 			(font
@@ -108,7 +215,7 @@
 		)
 	)
 	(fp_text user "17"
-		(at 19.05 -10.9 0)
+		(at 21.59 -9.2 0)
 		(layer "B.SilkS")
 		(effects
 			(font
@@ -119,162 +226,162 @@
 		)
 	)
 	(pad "1" smd rect
-		(at -19.05 -4)
+		(at -21.59 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "32" smd rect
-		(at -19.05 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "2" smd rect
-		(at -16.51 -4)
+		(at -19.05 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "31" smd rect
-		(at -16.51 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "3" smd rect
 		(at -13.97 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
 	)
-	(pad "30" smd rect
-		(at -13.97 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
-	)
 	(pad "4" smd rect
 		(at -11.43 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "29" smd rect
-		(at -11.43 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "5" smd rect
 		(at -8.89 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
 	)
-	(pad "28" smd rect
-		(at -8.89 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
-	)
 	(pad "6" smd rect
 		(at -6.35 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "27" smd rect
-		(at -6.35 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "7" smd rect
 		(at -3.81 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
 	)
-	(pad "26" smd rect
-		(at -3.81 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
-	)
 	(pad "8" smd rect
 		(at -1.27 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "25" smd rect
-		(at -1.27 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "9" smd rect
 		(at 1.27 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
 	)
-	(pad "24" smd rect
-		(at 1.27 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
-	)
 	(pad "10" smd rect
 		(at 3.81 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "23" smd rect
-		(at 3.81 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "11" smd rect
 		(at 6.35 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
 	)
-	(pad "22" smd rect
-		(at 6.35 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
-	)
 	(pad "12" smd rect
 		(at 8.89 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
-	)
-	(pad "21" smd rect
-		(at 8.89 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
 	)
 	(pad "13" smd rect
 		(at 11.43 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
 	)
-	(pad "20" smd rect
-		(at 11.43 -4)
-		(size 1.5 7)
-		(layers "B.Cu")
-	)
 	(pad "14" smd rect
 		(at 13.97 -4)
 		(size 1.5 7)
 		(layers "F.Cu")
+	)
+	(pad "15" smd rect
+		(at 19.05 -4)
+		(size 1.5 7)
+		(layers "F.Cu")
+	)
+	(pad "16" smd rect
+		(at 21.59 -4)
+		(size 1.5 7)
+		(layers "F.Cu")
+	)
+	(pad "17" smd rect
+		(at 21.59 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "18" smd rect
+		(at 19.05 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
 	)
 	(pad "19" smd rect
 		(at 13.97 -4)
 		(size 1.5 7)
 		(layers "B.Cu")
 	)
-	(pad "15" smd rect
-		(at 16.51 -4)
-		(size 1.5 7)
-		(layers "F.Cu")
-	)
-	(pad "18" smd rect
-		(at 16.51 -4)
+	(pad "20" smd rect
+		(at 11.43 -4)
 		(size 1.5 7)
 		(layers "B.Cu")
 	)
-	(pad "16" smd rect
-		(at 19.05 -4)
+	(pad "21" smd rect
+		(at 8.89 -4)
 		(size 1.5 7)
-		(layers "F.Cu")
+		(layers "B.Cu")
 	)
-	(pad "17" smd rect
-		(at 19.05 -4)
+	(pad "22" smd rect
+		(at 6.35 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "23" smd rect
+		(at 3.81 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "24" smd rect
+		(at 1.27 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "25" smd rect
+		(at -1.27 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "26" smd rect
+		(at -3.81 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "27" smd rect
+		(at -6.35 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "28" smd rect
+		(at -8.89 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "29" smd rect
+		(at -11.43 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "30" smd rect
+		(at -13.97 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "31" smd rect
+		(at -19.05 -4)
+		(size 1.5 7)
+		(layers "B.Cu")
+	)
+	(pad "32" smd rect
+		(at -21.59 -4)
 		(size 1.5 7)
 		(layers "B.Cu")
 	)

@@ -26,6 +26,7 @@ KICAD_SYMS = os.environ.get('KICAD_SYMBOL_DIR', '/usr/share/kicad/symbols')
 STOCK = {
     'Transistor_FET': ['2N7002'],                 # console /IRQ pull-down
     'Connector_Generic': ['Conn_01x03'],          # RP debug UART header
+    'power': ['+1V1'],                            # DVDD (the RP2350 core rail) drawn as a power symbol
 }
 # symbols the NES cache carries that this board does not use
 DROP = {'74xx:74HCT595', '74xx:74LS32', 'MCU_Microchip_ATtiny:ATtiny13A-SS'}

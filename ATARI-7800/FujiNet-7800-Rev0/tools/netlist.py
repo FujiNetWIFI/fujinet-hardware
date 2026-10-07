@@ -8,6 +8,11 @@ PRJ = os.path.dirname(HERE)
 SCH = os.path.join(PRJ, 'FujiNet-7800-Rev0.kicad_sch')
 
 
+def canon(n):
+    """KiCad's net name -> design.py's: /NET, /sheet/NET and NET all name NET."""
+    return n if n.startswith('unconnected') else n.rsplit('/', 1)[-1]
+
+
 class Netlist:
     def __init__(self):
         fd, fn = tempfile.mkstemp(prefix='fujinet-7800-', suffix='.xml')
@@ -19,8 +24,12 @@ class Netlist:
         finally:
             os.remove(fn)
         self.node_net, self.func_net, self.nets, self.ptype = {}, {}, {}, {}
+        full = {}
         for n in t.iter('net'):
-            name = n.get('name')
+            name = canon(n.get('name'))
+            if name in full:
+                raise SystemExit('netlist: %s and %s are separate nets' % (full[name], n.get('name')))
+            full[name] = n.get('name')
             for nd in n.iter('node'):
                 ref, pin, f = nd.get('ref'), nd.get('pin'), (nd.get('pinfunction') or '')
                 f = re.sub(r'_%s$' % re.escape(pin), '', f)   # kicad-cli appends _<pin> to repeated names

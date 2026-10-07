@@ -3,15 +3,15 @@
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "c7712c0e-cda6-5898-b3a1-77515981b1dc")
-	(paper "A3")
+	(paper "A4")
 	(title_block
-		(title "FujiNet 7800 Rev0 - ESP32-S3, microSD, status LED")
-		(date "2026-10-06")
+		(title "FujiNet 7800 Rev0 - ESP32-S3 FujiNet, microSD, LED")
+		(date "2026-10-07")
 		(rev "0")
 		(company "FujiNet")
 		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
 		(comment 2 "CERN-OHL-W-2.0 (derived from FujiNet-SMS-Rev0 / FujiNet-NES-Rev0 and their sources)")
-		(comment 3 "Schematic only: no board laid out or built")
+		(comment 3 "Rev0 audit 2026-10-07: kicad-happy + datasheets, see docs/design-review-rev0.md")
 	)
 	(lib_symbols
 		(symbol "Device:C"
@@ -2726,7 +2726,7 @@
 	)
 	(symbol
 		(lib_id "RF_Module:ESP32-S3-WROOM-1")
-		(at 190.5 124.46 0)
+		(at 127 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2734,7 +2734,7 @@
 		(dnp no)
 		(uuid "d4bd85ed-f695-5b19-98f3-b401efb1073c")
 		(property "Reference" "U7"
-			(at 177.8 95.25 0)
+			(at 114.3 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2743,7 +2743,7 @@
 			)
 		)
 		(property "Value" "ESP32-S3-WROOM-1-N16R8"
-			(at 167.64 154.94 0)
+			(at 104.14 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2752,7 +2752,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:ESP32-S3-WROOM-1"
-			(at 190.5 124.46 0)
+			(at 127 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2761,7 +2761,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf"
-			(at 190.5 124.46 0)
+			(at 127 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2770,7 +2770,7 @@
 			)
 		)
 		(property "Description" "FujiNet core (fujiversal-atari7800)"
-			(at 190.5 124.46 0)
+			(at 127 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2779,7 +2779,7 @@
 			)
 		)
 		(property "MPN" "ESP32-S3-WROOM-1-N16R8"
-			(at 190.5 124.46 0)
+			(at 127 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2788,7 +2788,7 @@
 			)
 		)
 		(property "LCSC" "C2913202"
-			(at 190.5 124.46 0)
+			(at 127 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2930,7 +2930,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 200.66 90.17 0)
+		(at 137.16 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2938,7 +2938,7 @@
 		(dnp no)
 		(uuid "0ef2c249-54a2-5661-a0b9-97a78800f165")
 		(property "Reference" "C30"
-			(at 203.962 88.9 0)
+			(at 140.462 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2947,7 +2947,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 203.962 91.44 0)
+			(at 140.462 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2956,7 +2956,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:C_0603_1608Metric"
-			(at 200.66 90.17 0)
+			(at 137.16 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2965,7 +2965,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 90.17 0)
+			(at 137.16 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2974,7 +2974,7 @@
 			)
 		)
 		(property "Description" "S3 decoupling"
-			(at 200.66 90.17 0)
+			(at 137.16 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2983,7 +2983,7 @@
 			)
 		)
 		(property "MPN" "CC0603KRX7R9BB104"
-			(at 200.66 90.17 0)
+			(at 137.16 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2992,7 +2992,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 200.66 90.17 0)
+			(at 137.16 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3017,7 +3017,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 213.36 90.17 0)
+		(at 149.86 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3025,7 +3025,7 @@
 		(dnp no)
 		(uuid "08e8b341-18e6-5365-8dde-379d3dc8b6cc")
 		(property "Reference" "C29"
-			(at 216.662 88.9 0)
+			(at 153.162 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3034,7 +3034,7 @@
 			)
 		)
 		(property "Value" "22uF"
-			(at 216.662 91.44 0)
+			(at 153.162 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3043,7 +3043,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:C_0805_2012Metric"
-			(at 213.36 90.17 0)
+			(at 149.86 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3052,7 +3052,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 90.17 0)
+			(at 149.86 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3061,7 +3061,7 @@
 			)
 		)
 		(property "Description" "S3 bulk (WiFi TX bursts)"
-			(at 213.36 90.17 0)
+			(at 149.86 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3070,7 +3070,7 @@
 			)
 		)
 		(property "MPN" "CL21A226MAQNNNE"
-			(at 213.36 90.17 0)
+			(at 149.86 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3079,7 +3079,7 @@
 			)
 		)
 		(property "LCSC" "C45783"
-			(at 213.36 90.17 0)
+			(at 149.86 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3104,15 +3104,15 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 162.56 80.01 0)
+		(at 99.06 34.29 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "cff52f4c-6e91-5e4e-ba84-123ad33e45da")
-		(property "Reference" "R16"
-			(at 164.846 78.74 0)
+		(uuid "5d3e8c3c-cca3-53db-b9e0-71c8ece239a4")
+		(property "Reference" "R20"
+			(at 101.346 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3121,7 +3121,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 164.846 81.28 0)
+			(at 101.346 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3130,7 +3130,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:R_0603_1608Metric"
-			(at 162.56 80.01 0)
+			(at 99.06 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3139,7 +3139,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 162.56 80.01 0)
+			(at 99.06 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3148,7 +3148,7 @@
 			)
 		)
 		(property "Description" "EN pull-up"
-			(at 162.56 80.01 0)
+			(at 99.06 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3157,7 +3157,7 @@
 			)
 		)
 		(property "MPN" "0603WAF1002T5E"
-			(at 162.56 80.01 0)
+			(at 99.06 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3166,7 +3166,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 162.56 80.01 0)
+			(at 99.06 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3175,15 +3175,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "7f1d75f4-9b71-5132-bc03-50826e3d6be8")
+			(uuid "1e3d387b-c9b4-5465-9bda-7d896db118e2")
 		)
 		(pin "2"
-			(uuid "8501cd75-62d2-5c4f-890f-7ee3ee4b0642")
+			(uuid "f004596e-fe7e-5e53-8da0-dc8e949e7e95")
 		)
 		(instances
 			(project "FujiNet-7800-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "R16")
+					(reference "R20")
 					(unit 1)
 				)
 			)
@@ -3191,7 +3191,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 152.4 87.63 0)
+		(at 88.9 41.91 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3199,7 +3199,7 @@
 		(dnp no)
 		(uuid "9f2fa20a-dece-54c2-8ba8-6f350cb8c18b")
 		(property "Reference" "C31"
-			(at 155.702 86.36 0)
+			(at 92.202 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3208,7 +3208,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 155.702 88.9 0)
+			(at 92.202 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3217,7 +3217,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:C_0603_1608Metric"
-			(at 152.4 87.63 0)
+			(at 88.9 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3226,7 +3226,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 152.4 87.63 0)
+			(at 88.9 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3235,7 +3235,7 @@
 			)
 		)
 		(property "Description" "EN power-on delay"
-			(at 152.4 87.63 0)
+			(at 88.9 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3244,7 +3244,7 @@
 			)
 		)
 		(property "MPN" "CL10A105KB8NNNC"
-			(at 152.4 87.63 0)
+			(at 88.9 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3253,7 +3253,7 @@
 			)
 		)
 		(property "LCSC" "C15849"
-			(at 152.4 87.63 0)
+			(at 88.9 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3278,7 +3278,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push")
-		(at 142.24 88.9 270)
+		(at 78.74 43.18 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3286,7 +3286,7 @@
 		(dnp no)
 		(uuid "a448a609-dcaa-532b-a05e-c9ed7d1219c5")
 		(property "Reference" "SW3"
-			(at 140.462 87.63 90)
+			(at 76.962 41.91 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3295,7 +3295,7 @@
 			)
 		)
 		(property "Value" "S3_RST"
-			(at 140.462 90.17 90)
+			(at 76.962 44.45 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3303,8 +3303,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "FujiNet-7800:SW_SPST_TL3342"
-			(at 142.24 88.9 90)
+		(property "Footprint" "FujiNet-7800:SW_SPST_TS-1187A"
+			(at 78.74 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3313,7 +3313,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 142.24 88.9 90)
+			(at 78.74 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3322,7 +3322,7 @@
 			)
 		)
 		(property "Description" "ESP32-S3 EN"
-			(at 142.24 88.9 90)
+			(at 78.74 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3330,8 +3330,8 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "TL3342F160QG"
-			(at 142.24 88.9 90)
+		(property "MPN" "TS-1187A-B-A-B"
+			(at 78.74 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3339,8 +3339,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2886898"
-			(at 142.24 88.9 90)
+		(property "LCSC" "C318884"
+			(at 78.74 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3365,7 +3365,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push")
-		(at 147.32 111.76 270)
+		(at 83.82 66.04 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3373,7 +3373,7 @@
 		(dnp no)
 		(uuid "357d1af0-4469-5b54-8e72-05cd74d7418d")
 		(property "Reference" "SW4"
-			(at 145.542 110.49 90)
+			(at 82.042 64.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3382,7 +3382,7 @@
 			)
 		)
 		(property "Value" "S3_BOOT"
-			(at 145.542 113.03 90)
+			(at 82.042 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3390,8 +3390,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "FujiNet-7800:SW_SPST_TL3342"
-			(at 147.32 111.76 90)
+		(property "Footprint" "FujiNet-7800:SW_SPST_TS-1187A"
+			(at 83.82 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3400,7 +3400,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 147.32 111.76 90)
+			(at 83.82 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3409,7 +3409,7 @@
 			)
 		)
 		(property "Description" "ESP32-S3 BOOT (IO0)"
-			(at 147.32 111.76 90)
+			(at 83.82 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3417,8 +3417,8 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "TL3342F160QG"
-			(at 147.32 111.76 90)
+		(property "MPN" "TS-1187A-B-A-B"
+			(at 83.82 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3426,8 +3426,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C2886898"
-			(at 147.32 111.76 90)
+		(property "LCSC" "C318884"
+			(at 83.82 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3452,7 +3452,7 @@
 	)
 	(symbol
 		(lib_id "FujiNet-7800:MicroSD_TF015")
-		(at 266.7 134.62 0)
+		(at 203.2 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3460,7 +3460,7 @@
 		(dnp no)
 		(uuid "f1c2a25a-1103-5125-9043-8567dd66a451")
 		(property "Reference" "J3"
-			(at 279.4 161.29 0)
+			(at 215.9 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3469,7 +3469,7 @@
 			)
 		)
 		(property "Value" "microSD"
-			(at 279.4 163.83 0)
+			(at 215.9 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3478,7 +3478,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:TF-SMD_TF-015"
-			(at 266.7 134.62 0)
+			(at 203.2 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3487,7 +3487,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 266.7 134.62 0)
+			(at 203.2 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3496,7 +3496,7 @@
 			)
 		)
 		(property "Description" "microSD push-push, SPI mode"
-			(at 266.7 134.62 0)
+			(at 203.2 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3505,7 +3505,7 @@
 			)
 		)
 		(property "MPN" "TF-015"
-			(at 266.7 134.62 0)
+			(at 203.2 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3514,7 +3514,7 @@
 			)
 		)
 		(property "LCSC" "C113206"
-			(at 266.7 134.62 0)
+			(at 203.2 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3572,7 +3572,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Pack04")
-		(at 233.68 116.84 90)
+		(at 170.18 81.28 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3581,7 +3581,7 @@
 		(dnp no)
 		(uuid "235175a8-75f7-5e34-b9dd-ae66b4695690")
 		(property "Reference" "RN3"
-			(at 233.68 106.172 90)
+			(at 170.18 70.612 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3589,7 +3589,7 @@
 			)
 		)
 		(property "Value" "4x10k"
-			(at 233.68 108.712 90)
+			(at 170.18 73.152 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3597,7 +3597,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:R_Array_Convex_4x0603"
-			(at 233.68 116.84 90)
+			(at 170.18 81.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3606,7 +3606,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 233.68 116.84 90)
+			(at 170.18 81.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3615,7 +3615,7 @@
 			)
 		)
 		(property "Description" "SD pull-ups"
-			(at 233.68 116.84 90)
+			(at 170.18 81.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3624,7 +3624,7 @@
 			)
 		)
 		(property "MPN" "4D03WGJ0103T5E"
-			(at 233.68 116.84 90)
+			(at 170.18 81.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3633,7 +3633,7 @@
 			)
 		)
 		(property "LCSC" "C29718"
-			(at 233.68 116.84 90)
+			(at 170.18 81.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3676,15 +3676,15 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 294.64 152.4 0)
+		(at 231.14 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7091040f-79a8-538a-bab0-111bcc43cd71")
-		(property "Reference" "R17"
-			(at 296.926 151.13 0)
+		(uuid "ef0dea50-4110-54b5-9751-76a951ec0d10")
+		(property "Reference" "R21"
+			(at 233.426 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3693,7 +3693,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 296.926 153.67 0)
+			(at 233.426 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3702,7 +3702,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:R_0603_1608Metric"
-			(at 294.64 152.4 0)
+			(at 231.14 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3711,7 +3711,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 294.64 152.4 0)
+			(at 231.14 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3720,7 +3720,7 @@
 			)
 		)
 		(property "Description" "card-detect pull-up"
-			(at 294.64 152.4 0)
+			(at 231.14 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3729,7 +3729,7 @@
 			)
 		)
 		(property "MPN" "0603WAF1002T5E"
-			(at 294.64 152.4 0)
+			(at 231.14 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3738,7 +3738,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 294.64 152.4 0)
+			(at 231.14 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3747,15 +3747,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "53327770-6df6-5e84-856f-b7d3ed9850d6")
+			(uuid "333de7c8-e393-53c6-a019-a120c24417fa")
 		)
 		(pin "2"
-			(uuid "a40fe792-4d88-588f-a34c-b521a1a1a305")
+			(uuid "dcedacf0-9762-56de-81a7-bfbb87c9366c")
 		)
 		(instances
 			(project "FujiNet-7800-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "R17")
+					(reference "R21")
 					(unit 1)
 				)
 			)
@@ -3763,7 +3763,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 284.48 152.4 0)
+		(at 220.98 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3771,7 +3771,7 @@
 		(dnp no)
 		(uuid "3eabffe8-f162-536f-9f61-1ead2c28fa86")
 		(property "Reference" "C32"
-			(at 287.782 151.13 0)
+			(at 224.282 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3780,7 +3780,7 @@
 			)
 		)
 		(property "Value" "10uF"
-			(at 287.782 153.67 0)
+			(at 224.282 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3789,7 +3789,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:C_0603_1608Metric"
-			(at 284.48 152.4 0)
+			(at 220.98 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3798,7 +3798,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 284.48 152.4 0)
+			(at 220.98 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3807,7 +3807,7 @@
 			)
 		)
 		(property "Description" "microSD supply"
-			(at 284.48 152.4 0)
+			(at 220.98 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3816,7 +3816,7 @@
 			)
 		)
 		(property "MPN" "CL10A106KP8NNNC"
-			(at 284.48 152.4 0)
+			(at 220.98 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3825,7 +3825,7 @@
 			)
 		)
 		(property "LCSC" "C19702"
-			(at 284.48 152.4 0)
+			(at 220.98 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3850,15 +3850,15 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 218.44 185.42 90)
+		(at 154.94 139.7 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "cec5b42f-b70c-576f-90fe-4823136d2189")
-		(property "Reference" "R18"
-			(at 218.44 188.214 90)
+		(uuid "8f37c51d-b609-5dd8-b794-369c6550572c")
+		(property "Reference" "R22"
+			(at 154.94 142.494 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3866,7 +3866,7 @@
 			)
 		)
 		(property "Value" "330R"
-			(at 218.44 190.754 90)
+			(at 154.94 145.034 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3874,7 +3874,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:R_0603_1608Metric"
-			(at 218.44 185.42 90)
+			(at 154.94 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3883,7 +3883,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 218.44 185.42 90)
+			(at 154.94 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3892,7 +3892,7 @@
 			)
 		)
 		(property "Description" "WS2812 data series"
-			(at 218.44 185.42 90)
+			(at 154.94 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3901,7 +3901,7 @@
 			)
 		)
 		(property "MPN" "0603WAF3300T5E"
-			(at 218.44 185.42 90)
+			(at 154.94 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3910,7 +3910,7 @@
 			)
 		)
 		(property "LCSC" "C23138"
-			(at 218.44 185.42 90)
+			(at 154.94 139.7 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3919,15 +3919,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "5898f768-b364-56f5-8a02-56cf6fc76c37")
+			(uuid "f90c27e8-15cf-55c8-b215-d6d5ffcdd317")
 		)
 		(pin "2"
-			(uuid "134b2234-b4cf-5ed9-8494-88257a162dbf")
+			(uuid "220714df-ba70-5630-a005-d5254ae662a8")
 		)
 		(instances
 			(project "FujiNet-7800-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "R18")
+					(reference "R22")
 					(unit 1)
 				)
 			)
@@ -3935,7 +3935,7 @@
 	)
 	(symbol
 		(lib_id "LED:WS2812B-2020")
-		(at 243.84 185.42 0)
+		(at 180.34 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3943,7 +3943,7 @@
 		(dnp no)
 		(uuid "652aaf8c-341c-503d-b0b2-c4d19576d241")
 		(property "Reference" "D3"
-			(at 250.19 184.15 0)
+			(at 186.69 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3951,8 +3951,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "WS2812B-2020-V6"
-			(at 250.19 186.69 0)
+		(property "Value" "WS2812C-2020-V1"
+			(at 186.69 140.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3961,7 +3961,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:LED_WS2812B-2020_PLCC4_2.0x2.0mm"
-			(at 243.84 185.42 0)
+			(at 180.34 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3969,8 +3969,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf"
-			(at 243.84 185.42 0)
+		(property "Datasheet" "http://www.world-semi.com/DownLoadFile/1132"
+			(at 180.34 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3979,7 +3979,7 @@
 			)
 		)
 		(property "Description" "status LED on +5V (datasheet VDD 3.7-5.3 V; VIH 2.7 V takes the S3 3.3 V data directly)"
-			(at 243.84 185.42 0)
+			(at 180.34 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3987,8 +3987,8 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "WS2812B-2020-V6"
-			(at 243.84 185.42 0)
+		(property "MPN" "WS2812C-2020-V1"
+			(at 180.34 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3996,8 +3996,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C52917434"
-			(at 243.84 185.42 0)
+		(property "LCSC" "C2976072"
+			(at 180.34 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4028,7 +4028,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 271.78 185.42 0)
+		(at 208.28 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4036,7 +4036,7 @@
 		(dnp no)
 		(uuid "52fa6c7e-976e-5c5e-a1e7-df696ff3976f")
 		(property "Reference" "C33"
-			(at 275.082 184.15 0)
+			(at 211.582 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4045,7 +4045,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 275.082 186.69 0)
+			(at 211.582 140.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4054,7 +4054,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-7800:C_0603_1608Metric"
-			(at 271.78 185.42 0)
+			(at 208.28 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4063,7 +4063,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 271.78 185.42 0)
+			(at 208.28 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4072,7 +4072,7 @@
 			)
 		)
 		(property "Description" "WS2812 decoupling"
-			(at 271.78 185.42 0)
+			(at 208.28 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4081,7 +4081,7 @@
 			)
 		)
 		(property "MPN" "CC0603KRX7R9BB104"
-			(at 271.78 185.42 0)
+			(at 208.28 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4090,7 +4090,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 271.78 185.42 0)
+			(at 208.28 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4115,15 +4115,15 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 190.5 86.36 0)
+		(at 127 40.64 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "f610a8e3-25bc-511a-ab50-49778673a616")
-		(property "Reference" "#PWR064"
-			(at 190.5 80.01 0)
+		(uuid "1cdfbb3c-b5c1-5955-8b04-f86a483768fa")
+		(property "Reference" "#PWR067"
+			(at 127 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4132,7 +4132,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 190.5 82.55 0)
+			(at 127 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4140,7 +4140,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 190.5 86.36 0)
+			(at 127 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4149,7 +4149,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 190.5 86.36 0)
+			(at 127 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4158,202 +4158,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 190.5 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9f3fc7b7-49a0-5e51-8366-d0cbe2e3b69b")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR064")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 200.66 93.98 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "dd24b674-b909-5bb4-b1cd-4844afa56fc5")
-		(property "Reference" "#PWR065"
-			(at 200.66 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 200.66 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 200.66 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 200.66 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 200.66 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c41a23a4-aa3f-5106-917e-ad9127918e62")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR065")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 213.36 93.98 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "24e59a7d-fd27-51a0-8049-6b5c35ef7ebe")
-		(property "Reference" "#PWR066"
-			(at 213.36 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 213.36 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 213.36 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 213.36 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 213.36 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "6396dbfb-9995-5b7f-9414-b6a1da0b78ac")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR066")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 190.5 152.4 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "37c2265e-8f77-5675-bb6c-8f58aa94ed4c")
-		(property "Reference" "#PWR067"
-			(at 190.5 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 190.5 156.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 190.5 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 190.5 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 190.5 152.4 0)
+			(at 127 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4374,6 +4179,461 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 137.16 48.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "bdb639ab-cf53-5b0e-95a5-c5ac9248ff9b")
+		(property "Reference" "#PWR068"
+			(at 137.16 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 137.16 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 137.16 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "31b95c75-4591-53e2-8e81-5eeecbfb5cc8")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR068")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 149.86 48.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "e290a0c3-8a56-5dd8-bbaf-3d790f062eb9")
+		(property "Reference" "#PWR069"
+			(at 149.86 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 149.86 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 149.86 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 149.86 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 149.86 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9f4aac1b-1fce-50a6-b354-0aba76d3fddd")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR069")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 127 106.68 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "180d8805-4aea-5482-b242-2e81e3c8d287")
+		(property "Reference" "#PWR070"
+			(at 127 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 127 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 127 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 127 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f7a1fd03-e4e4-5913-b358-038c4ae53712")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR070")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 99.06 30.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "c66ecdaf-391d-5fb9-8241-7483c7cdc4ca")
+		(property "Reference" "#PWR071"
+			(at 99.06 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 99.06 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 99.06 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 99.06 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 99.06 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c1b86cbc-794c-5796-aa56-a1d90b270d8f")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR071")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 88.9 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "a9df26cf-b8df-5af4-8ffa-bdfc872c2495")
+		(property "Reference" "#PWR072"
+			(at 88.9 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 88.9 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 88.9 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "da8e5b9d-3d07-5fca-b7fb-3f2472062d17")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR072")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 78.74 48.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "3e40cd14-b0d3-58fe-94dd-a16dbc0970f0")
+		(property "Reference" "#PWR073"
+			(at 78.74 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 78.74 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 78.74 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 78.74 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 78.74 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d507750b-3037-57ca-8d47-b6b6fd735909")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR073")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 83.82 71.12 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "ce8859a0-65e8-5af8-9d6b-225ccc7cc82d")
+		(property "Reference" "#PWR074"
+			(at 83.82 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 83.82 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 83.82 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 83.82 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 83.82 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "625bb654-f57d-5229-be39-5182e527ffda")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR074")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 162.56 76.2 0)
 		(unit 1)
@@ -4382,7 +4642,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "efad636e-b55a-5704-b495-add4d45ffaf3")
-		(property "Reference" "#PWR068"
+		(property "Reference" "#PWR075"
 			(at 162.56 69.85 0)
 			(effects
 				(font
@@ -4427,461 +4687,6 @@
 			)
 		)
 		(pin "1"
-			(uuid "31b95c75-4591-53e2-8e81-5eeecbfb5cc8")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR068")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 152.4 91.44 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "b8521388-95dc-5f4e-ae86-089535e4a454")
-		(property "Reference" "#PWR069"
-			(at 152.4 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 152.4 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 152.4 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 152.4 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 152.4 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9f4aac1b-1fce-50a6-b354-0aba76d3fddd")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR069")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 142.24 93.98 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "4c8b5a99-3c9e-5112-bb01-ea96195423e8")
-		(property "Reference" "#PWR070"
-			(at 142.24 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 142.24 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 142.24 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 142.24 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 142.24 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "f7a1fd03-e4e4-5913-b358-038c4ae53712")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR070")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 147.32 116.84 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "58350644-3f3f-5fd9-969e-049976434a9f")
-		(property "Reference" "#PWR071"
-			(at 147.32 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 147.32 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 147.32 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 147.32 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 147.32 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c1b86cbc-794c-5796-aa56-a1d90b270d8f")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR071")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 226.06 111.76 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "d0948302-d4c1-55ea-aed3-615fdc4e74ba")
-		(property "Reference" "#PWR072"
-			(at 226.06 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 226.06 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 226.06 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 226.06 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 226.06 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "da8e5b9d-3d07-5fca-b7fb-3f2472062d17")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR072")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 294.64 148.59 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "c7d7f4a6-3cf4-5ba2-a656-c8a24e335f84")
-		(property "Reference" "#PWR073"
-			(at 294.64 142.24 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 294.64 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 294.64 148.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 294.64 148.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 294.64 148.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d507750b-3037-57ca-8d47-b6b6fd735909")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR073")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 251.46 152.4 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "3329d989-05d0-5212-ada6-e6aaaf7a569e")
-		(property "Reference" "#PWR074"
-			(at 251.46 146.05 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 245.874 152.4 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 251.46 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 251.46 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 251.46 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "625bb654-f57d-5229-be39-5182e527ffda")
-		)
-		(instances
-			(project "FujiNet-7800-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
-					(reference "#PWR074")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 251.46 154.94 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "ac0ce3ce-d03f-5e6f-a62b-b3bb00ebe68a")
-		(property "Reference" "#PWR075"
-			(at 251.46 161.29 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 246.4455 154.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 251.46 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 251.46 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 251.46 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
 			(uuid "6832d77e-5f43-5c92-9487-023ef4c8df70")
 		)
 		(instances
@@ -4894,16 +4699,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 264.16 162.56 0)
+		(lib_id "power:+3V3")
+		(at 231.14 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "b1c120a5-346c-5538-9e2c-4dcb79f319ad")
+		(uuid "c1f6879a-2748-5af0-87c7-1b88b79db4ea")
 		(property "Reference" "#PWR076"
-			(at 264.16 168.91 0)
+			(at 231.14 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4911,8 +4716,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 264.16 166.37 0)
+		(property "Value" "+3V3"
+			(at 231.14 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4920,7 +4725,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 264.16 162.56 0)
+			(at 231.14 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4929,7 +4734,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 264.16 162.56 0)
+			(at 231.14 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4938,7 +4743,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 264.16 162.56 0)
+			(at 231.14 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4960,15 +4765,15 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 284.48 148.59 0)
+		(at 187.96 116.84 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "192892d8-b9eb-599a-89bd-2017b91fe4a6")
+		(uuid "034a50ff-7926-595c-b2af-5c348a29be11")
 		(property "Reference" "#PWR077"
-			(at 284.48 142.24 0)
+			(at 187.96 110.49 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4977,7 +4782,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 284.48 144.78 0)
+			(at 182.374 116.84 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4985,7 +4790,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 284.48 148.59 0)
+			(at 187.96 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4994,7 +4799,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 284.48 148.59 0)
+			(at 187.96 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5003,7 +4808,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 284.48 148.59 0)
+			(at 187.96 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5025,15 +4830,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 284.48 156.21 0)
+		(at 187.96 119.38 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "64a8023f-8579-5a14-bc55-9bf70068b965")
+		(uuid "542f9e05-35ef-50b3-a3e5-3752a4679f5c")
 		(property "Reference" "#PWR078"
-			(at 284.48 162.56 0)
+			(at 187.96 125.73 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5042,7 +4847,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 284.48 160.02 0)
+			(at 182.9455 119.38 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5050,7 +4855,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 284.48 156.21 0)
+			(at 187.96 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5059,7 +4864,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 284.48 156.21 0)
+			(at 187.96 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5068,7 +4873,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 284.48 156.21 0)
+			(at 187.96 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5089,16 +4894,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
-		(at 243.84 177.8 0)
+		(lib_id "power:GND")
+		(at 200.66 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "7381f75e-f1f4-5444-a115-95baf7407d23")
+		(uuid "029f4409-e7ae-50c7-9037-7871f73319b6")
 		(property "Reference" "#PWR079"
-			(at 243.84 171.45 0)
+			(at 200.66 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5106,8 +4911,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+5V"
-			(at 243.84 173.99 0)
+		(property "Value" "GND"
+			(at 200.66 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5115,7 +4920,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 243.84 177.8 0)
+			(at 200.66 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5124,7 +4929,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 177.8 0)
+			(at 200.66 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5133,7 +4938,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 243.84 177.8 0)
+			(at 200.66 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5154,16 +4959,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 243.84 193.04 0)
+		(lib_id "power:+3V3")
+		(at 220.98 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "12276589-467d-5d40-adc8-5499844fedab")
+		(uuid "c5745b3e-1033-52a1-b925-5b0a35d5ab45")
 		(property "Reference" "#PWR080"
-			(at 243.84 199.39 0)
+			(at 220.98 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5171,8 +4976,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 243.84 196.85 0)
+		(property "Value" "+3V3"
+			(at 220.98 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5180,7 +4985,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 243.84 193.04 0)
+			(at 220.98 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5189,7 +4994,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 193.04 0)
+			(at 220.98 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5198,7 +5003,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 243.84 193.04 0)
+			(at 220.98 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5219,16 +5024,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
-		(at 271.78 181.61 0)
+		(lib_id "power:GND")
+		(at 220.98 120.65 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "3c6bd56d-d1e4-5796-b873-306418afb570")
+		(uuid "808156c4-a70c-52dc-8679-d94ed4ae2b17")
 		(property "Reference" "#PWR081"
-			(at 271.78 175.26 0)
+			(at 220.98 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5236,8 +5041,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+5V"
-			(at 271.78 177.8 0)
+		(property "Value" "GND"
+			(at 220.98 124.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5245,7 +5050,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 271.78 181.61 0)
+			(at 220.98 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5254,7 +5059,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 271.78 181.61 0)
+			(at 220.98 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5263,7 +5068,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 271.78 181.61 0)
+			(at 220.98 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5284,16 +5089,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 271.78 189.23 0)
+		(lib_id "power:+5V")
+		(at 180.34 132.08 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "b81f00fd-12a2-50e7-969d-e3d2e447e5e5")
+		(uuid "b661ab34-ba10-5724-8a05-2ba0c692c03f")
 		(property "Reference" "#PWR082"
-			(at 271.78 195.58 0)
+			(at 180.34 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5301,8 +5106,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 271.78 193.04 0)
+		(property "Value" "+5V"
+			(at 180.34 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5310,7 +5115,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 271.78 189.23 0)
+			(at 180.34 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5319,7 +5124,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 271.78 189.23 0)
+			(at 180.34 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5328,7 +5133,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 271.78 189.23 0)
+			(at 180.34 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5348,923 +5153,976 @@
 			)
 		)
 	)
+	(symbol
+		(lib_id "power:GND")
+		(at 180.34 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "15fff19b-c1b2-5856-ab92-8c17800b61b6")
+		(property "Reference" "#PWR083"
+			(at 180.34 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 180.34 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 180.34 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 180.34 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 180.34 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8c9f33ff-7df9-5840-ad6f-183ddb246e9c")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR083")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 208.28 135.89 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "8cc87850-35e5-540a-84a2-cc1044f04ece")
+		(property "Reference" "#PWR084"
+			(at 208.28 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 208.28 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 208.28 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "23caa731-cd42-5762-be70-98478ac24e29")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR084")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 208.28 143.51 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "2e162585-aaa8-5209-935c-773e63a65879")
+		(property "Reference" "#PWR085"
+			(at 208.28 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 208.28 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 208.28 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fd7c729e-e170-58e8-835a-ee834c3e524b")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/c7712c0e-cda6-5898-b3a1-77515981b1dc"
+					(reference "#PWR085")
+					(unit 1)
+				)
+			)
+		)
+	)
 	(wire
 		(pts
+			(xy 127 50.8)
+			(xy 127 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3966df5-d206-5629-aaa2-427ebef65e52")
+	)
+	(wire
+		(pts
+			(xy 127 40.64)
+			(xy 137.16 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "037c6bd4-2709-5ae0-9232-9332c5c28a3f")
+	)
+	(wire
+		(pts
+			(xy 137.16 40.64)
+			(xy 149.86 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cf464a1-f544-50a1-89c8-a24acb4e35c5")
+	)
+	(wire
+		(pts
+			(xy 111.76 55.88)
+			(xy 106.68 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f7e0da46-61af-52d9-aa96-cbaae1b5bc65")
+	)
+	(wire
+		(pts
+			(xy 106.68 55.88)
+			(xy 106.68 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d0b8e94-adcc-537b-a0eb-f530ed9d501b")
+	)
+	(wire
+		(pts
+			(xy 106.68 38.1)
+			(xy 99.06 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2dbb8ed9-17a5-5f55-8472-10a2db4cec2c")
+	)
+	(wire
+		(pts
+			(xy 99.06 38.1)
+			(xy 88.9 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6141c1d4-9d7b-56db-8cf5-5eb5b76bd039")
+	)
+	(wire
+		(pts
+			(xy 88.9 38.1)
+			(xy 78.74 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9f09fe7-b86a-5a9c-a208-2c62222f5f0b")
+	)
+	(wire
+		(pts
+			(xy 78.74 38.1)
+			(xy 60.96 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a917ce63-c175-5257-a1e6-e9ea77f79d70")
+	)
+	(wire
+		(pts
+			(xy 111.76 60.96)
+			(xy 83.82 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cb178b3-34ab-5d83-ba61-37d53933996d")
+	)
+	(wire
+		(pts
+			(xy 83.82 60.96)
+			(xy 60.96 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f7fab28-ca5c-53a7-ac94-7348089fc622")
+	)
+	(wire
+		(pts
+			(xy 111.76 71.12)
+			(xy 106.68 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20d93bd5-1d96-5608-ad52-4cdc0738c33e")
+	)
+	(wire
+		(pts
+			(xy 111.76 73.66)
+			(xy 106.68 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "92de4ab3-8e2a-5747-9d52-eb8166bde44f")
+	)
+	(wire
+		(pts
+			(xy 142.24 55.88)
+			(xy 233.68 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c206c41-d53f-55db-862e-744b7c55093b")
+	)
+	(wire
+		(pts
+			(xy 142.24 58.42)
+			(xy 233.68 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71d9c336-ff90-5e40-8398-50c6dc5a8155")
+	)
+	(wire
+		(pts
+			(xy 142.24 66.04)
+			(xy 233.68 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d34c911-d0d8-595f-8f14-eb3cef654a79")
+	)
+	(wire
+		(pts
+			(xy 142.24 68.58)
+			(xy 233.68 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f34a7a9-f19d-52da-bfe3-e86c4fa4b8ea")
+	)
+	(wire
+		(pts
+			(xy 142.24 81.28)
+			(xy 160.02 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a83d1be-4a53-5f56-8734-e3cb40dd0db0")
+	)
+	(wire
+		(pts
+			(xy 160.02 81.28)
+			(xy 160.02 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc9281db-2f26-5e01-88e6-c404047aacf7")
+	)
+	(wire
+		(pts
+			(xy 160.02 91.44)
+			(xy 190.5 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3e8032af-1e12-553c-bca0-31f373bd3984")
+	)
+	(wire
+		(pts
+			(xy 142.24 83.82)
+			(xy 157.48 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5a0902e-ef4c-5250-a13d-00025f32a73c")
+	)
+	(wire
+		(pts
+			(xy 157.48 83.82)
+			(xy 157.48 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa95e2da-0b9b-5990-9340-29ba7c83c335")
+	)
+	(wire
+		(pts
+			(xy 157.48 96.52)
 			(xy 190.5 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d05a091d-aed1-5b2d-af77-61d99a128273")
+	)
+	(wire
+		(pts
+			(xy 142.24 86.36)
+			(xy 154.94 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9be5cc3b-e730-5bf4-b6e3-7ec8eafb174a")
+	)
+	(wire
+		(pts
+			(xy 154.94 86.36)
+			(xy 154.94 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6b9acec-6375-5ff1-aced-c63632edc7cf")
+	)
+	(wire
+		(pts
+			(xy 154.94 101.6)
+			(xy 190.5 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77000eae-b905-558a-babd-9037fdeee186")
+	)
+	(wire
+		(pts
+			(xy 142.24 88.9)
+			(xy 152.4 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ebc1bd12-4bbb-54bc-b458-765532b4f701")
+	)
+	(wire
+		(pts
+			(xy 152.4 88.9)
+			(xy 152.4 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5f0cbc1-1c55-5651-b8fc-519c31f8c81a")
+	)
+	(wire
+		(pts
+			(xy 152.4 106.68)
+			(xy 190.5 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6acf80b-3c6b-535c-ac8d-df850be75a0f")
+	)
+	(wire
+		(pts
+			(xy 142.24 91.44)
+			(xy 149.86 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "85d21073-f564-51ab-91a1-ae3a97c73931")
+	)
+	(wire
+		(pts
+			(xy 149.86 91.44)
+			(xy 149.86 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb9b4600-9633-5d4e-b21f-42d3ad0016b7")
+	)
+	(wire
+		(pts
+			(xy 149.86 111.76)
+			(xy 190.5 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed947c56-7a65-524c-aede-bc4000faba6a")
+	)
+	(wire
+		(pts
+			(xy 175.26 81.28)
+			(xy 190.5 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c2904078-1669-549c-af6a-3204fa208333")
+	)
+	(wire
+		(pts
+			(xy 175.26 83.82)
+			(xy 177.8 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f73f265-dbd7-515b-bbef-9eb91bceec2d")
+	)
+	(wire
+		(pts
+			(xy 177.8 83.82)
+			(xy 177.8 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e37c3387-e811-5391-987e-7648b0e82ab1")
+	)
+	(wire
+		(pts
+			(xy 177.8 86.36)
 			(xy 190.5 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "87fcfd90-5496-508b-b509-5145f01ede8b")
+		(uuid "08b46b6b-bf9d-5146-bd5a-48a5f18b959b")
 	)
 	(wire
 		(pts
-			(xy 190.5 86.36)
-			(xy 200.66 86.36)
+			(xy 175.26 76.2)
+			(xy 177.8 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0c72b2e8-aeb7-56a0-aefd-af66601b21a5")
+		(uuid "981b0a29-c7b2-5239-8524-5ed3d0029d03")
 	)
 	(wire
 		(pts
-			(xy 200.66 86.36)
-			(xy 213.36 86.36)
+			(xy 175.26 78.74)
+			(xy 177.8 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "05beca67-b6a2-5277-946e-aa8d55d9ff26")
+		(uuid "09893026-6cda-5ff2-b89e-3390c1a063c0")
 	)
 	(wire
 		(pts
-			(xy 175.26 101.6)
-			(xy 170.18 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7373c057-7648-5b1d-9081-4e419ae075dd")
-	)
-	(wire
-		(pts
-			(xy 170.18 101.6)
-			(xy 170.18 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b87d0885-35e1-566d-8a52-65ce08f07e66")
-	)
-	(wire
-		(pts
-			(xy 170.18 83.82)
+			(xy 165.1 83.82)
 			(xy 162.56 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "00989a6b-bc5c-5bcb-b5e7-accca34cebeb")
+		(uuid "a91fabbd-6003-5f21-be7e-45434aa7aff0")
 	)
 	(wire
 		(pts
+			(xy 165.1 81.28)
+			(xy 162.56 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9cba850-a337-5e69-84de-353ccbe247fe")
+	)
+	(wire
+		(pts
+			(xy 165.1 78.74)
+			(xy 162.56 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "292cac9d-e6a6-5781-937f-ee7e85a3dce1")
+	)
+	(wire
+		(pts
+			(xy 165.1 76.2)
+			(xy 162.56 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c2576ed2-3bcc-56c0-b5cb-06ace0d89a15")
+	)
+	(wire
+		(pts
+			(xy 162.56 76.2)
+			(xy 162.56 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "414bd739-7aed-56be-8b65-bb1626f50bef")
+	)
+	(wire
+		(pts
+			(xy 162.56 78.74)
+			(xy 162.56 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "443f13ca-2805-517c-9eda-4977e3a4ac4a")
+	)
+	(wire
+		(pts
+			(xy 162.56 81.28)
 			(xy 162.56 83.82)
-			(xy 152.4 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "04d52f16-6758-5f50-9b83-f9640be9cbac")
+		(uuid "903a0bee-1d88-5718-bffe-86fca9e3e1e6")
 	)
 	(wire
 		(pts
-			(xy 152.4 83.82)
-			(xy 142.24 83.82)
+			(xy 231.14 120.65)
+			(xy 231.14 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5a615745-8bbd-5c4d-9eeb-e3d789b04cdf")
+		(uuid "d8acadfe-ba49-512f-8f2b-6f36ba828d9f")
 	)
 	(wire
 		(pts
-			(xy 142.24 83.82)
-			(xy 127 83.82)
+			(xy 190.5 116.84)
+			(xy 187.96 116.84)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e0445b94-74ff-59a4-93cb-0d519e5708c0")
+		(uuid "46b02048-c692-5c1d-800b-27d5c987f9f6")
 	)
 	(wire
 		(pts
-			(xy 175.26 106.68)
-			(xy 147.32 106.68)
+			(xy 190.5 119.38)
+			(xy 187.96 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "11be88ce-8741-5b47-89a7-c13f84d21c18")
+		(uuid "62827af5-f12f-517c-a715-8309bc142c8f")
 	)
 	(wire
 		(pts
-			(xy 147.32 106.68)
-			(xy 137.16 106.68)
+			(xy 200.66 124.46)
+			(xy 203.2 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "00bccc09-a854-58ac-a2f9-7c8384a090f6")
+		(uuid "2c723a9e-e703-5153-8bca-92f55e452a2a")
 	)
 	(wire
 		(pts
-			(xy 175.26 116.84)
-			(xy 172.72 116.84)
+			(xy 203.2 124.46)
+			(xy 205.74 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c8b21714-4608-5487-8e69-43f3c5e3bc16")
+		(uuid "de31009d-4844-5233-aaa8-424c6d7d0921")
 	)
 	(wire
 		(pts
-			(xy 175.26 119.38)
-			(xy 172.72 119.38)
+			(xy 205.74 124.46)
+			(xy 208.28 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2f0ccf9e-23e6-50d0-aa07-73aee4769953")
+		(uuid "7e3642ad-46e4-50ec-ba94-f666d67e0eee")
 	)
 	(wire
 		(pts
-			(xy 205.74 101.6)
-			(xy 208.28 101.6)
+			(xy 200.66 124.46)
+			(xy 200.66 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0689c883-8387-5155-ab1c-bab922ea0e19")
+		(uuid "3b6d5718-fa78-553f-9040-b63cb651f0ab")
 	)
 	(wire
 		(pts
-			(xy 205.74 104.14)
-			(xy 208.28 104.14)
+			(xy 142.24 101.6)
+			(xy 147.32 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10b61efc-805a-58f5-ac0c-7b759b39b55d")
+		(uuid "b73a5768-e593-5929-966f-d7d881789af4")
 	)
 	(wire
 		(pts
-			(xy 205.74 111.76)
-			(xy 208.28 111.76)
+			(xy 147.32 101.6)
+			(xy 147.32 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bf784049-870d-55bf-a2bf-9f1631442cb9")
+		(uuid "90de638b-0b97-5d88-87aa-11c85b7bef6c")
 	)
 	(wire
 		(pts
-			(xy 205.74 114.3)
-			(xy 208.28 114.3)
+			(xy 147.32 139.7)
+			(xy 151.13 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "07f099ac-80d8-565a-9b58-35150f72e7d2")
+		(uuid "b66eb40d-c75c-546c-9361-162dcf5c51ce")
 	)
 	(wire
 		(pts
-			(xy 205.74 127)
-			(xy 223.52 127)
+			(xy 158.75 139.7)
+			(xy 172.72 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9c6e4cc3-9db3-539f-930c-05e22af1e190")
-	)
-	(wire
-		(pts
-			(xy 223.52 127)
-			(xy 254 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d1017cbe-7917-524d-a93f-a8856517bd8f")
-	)
-	(wire
-		(pts
-			(xy 209.55 127)
-			(xy 209.55 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7807073d-1a70-5872-a506-7ef1a17b3160")
-	)
-	(wire
-		(pts
-			(xy 205.74 129.54)
-			(xy 220.98 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0c16e8c4-a0cf-5ea8-9451-1592dcde7624")
-	)
-	(wire
-		(pts
-			(xy 220.98 129.54)
-			(xy 220.98 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "916772d3-5e7f-5ddd-b9a2-cf0b5d7b260b")
-	)
-	(wire
-		(pts
-			(xy 220.98 132.08)
-			(xy 254 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a9bff358-9ac8-5268-b7fe-9e8c4a8f0985")
-	)
-	(wire
-		(pts
-			(xy 228.6 132.08)
-			(xy 228.6 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e66e2562-79c3-5fbb-a5ed-4d14ed1e4200")
-	)
-	(wire
-		(pts
-			(xy 205.74 132.08)
-			(xy 218.44 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b1418d84-500f-5edd-abb3-25c4884e3e36")
-	)
-	(wire
-		(pts
-			(xy 218.44 132.08)
-			(xy 218.44 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "561004e7-2e4a-5a52-900a-fa292e1f8066")
-	)
-	(wire
-		(pts
-			(xy 218.44 137.16)
-			(xy 254 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b59d979e-e1cf-525a-874b-7524201d85a6")
-	)
-	(wire
-		(pts
-			(xy 228.6 137.16)
-			(xy 228.6 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "df8e5925-df7c-5657-b316-47edf02a2494")
-	)
-	(wire
-		(pts
-			(xy 205.74 134.62)
-			(xy 215.9 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "099e74db-83a5-56ef-af04-b5e523af1fd0")
-	)
-	(wire
-		(pts
-			(xy 215.9 134.62)
-			(xy 215.9 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "390d1edd-bb35-55ef-94a0-7cfa39772fe7")
-	)
-	(wire
-		(pts
-			(xy 215.9 142.24)
-			(xy 254 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f6e74f4-5f33-5415-9f92-5989200244d0")
-	)
-	(wire
-		(pts
-			(xy 228.6 142.24)
-			(xy 228.6 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6cd8254a-19b1-5be0-a4c7-d56f4e4ee606")
-	)
-	(wire
-		(pts
-			(xy 205.74 137.16)
-			(xy 213.36 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a71863c4-77cf-5b7b-adbc-14e0ce755c3b")
-	)
-	(wire
-		(pts
-			(xy 213.36 137.16)
-			(xy 213.36 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "116111d4-91b6-589f-9e5e-e1108b8297e6")
-	)
-	(wire
-		(pts
-			(xy 213.36 147.32)
-			(xy 254 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "546cf0ac-1f8d-5610-888c-9a4ada7a3e3f")
-	)
-	(wire
-		(pts
-			(xy 228.6 147.32)
-			(xy 228.6 144.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "51868eed-7e94-580c-881a-1960f756c81c")
-	)
-	(wire
-		(pts
-			(xy 238.76 116.84)
-			(xy 254 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d59f834f-6fcc-5445-916a-9d44bfd3c982")
-	)
-	(wire
-		(pts
-			(xy 238.76 119.38)
-			(xy 241.3 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d948c2ea-f50f-587d-91bc-3e36ce2f0a54")
-	)
-	(wire
-		(pts
-			(xy 241.3 119.38)
-			(xy 241.3 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "82804c72-cc4b-5772-af26-2fdb23dd60dd")
-	)
-	(wire
-		(pts
-			(xy 241.3 121.92)
-			(xy 254 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9caa98a9-6f69-55a4-b82b-3bcd4a9df00f")
-	)
-	(wire
-		(pts
-			(xy 243.84 116.84)
-			(xy 243.84 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "05b1ecee-500e-5a25-8f61-5b60614cc687")
-	)
-	(wire
-		(pts
-			(xy 243.84 121.92)
-			(xy 243.84 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "429a1196-e443-5322-965f-c2f984371d31")
-	)
-	(wire
-		(pts
-			(xy 238.76 111.76)
-			(xy 241.3 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a66e15a1-3368-5b79-8cf9-bd8b98f6485e")
-	)
-	(wire
-		(pts
-			(xy 238.76 114.3)
-			(xy 241.3 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "36f7d0cb-eed8-562e-8ff5-fe25db4dea64")
-	)
-	(wire
-		(pts
-			(xy 228.6 119.38)
-			(xy 226.06 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "249768f9-4b76-5bc3-bd38-ef8f1f567c24")
-	)
-	(wire
-		(pts
-			(xy 228.6 116.84)
-			(xy 226.06 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8a7e1dc3-29f6-5b74-8a16-78c683f9aa31")
-	)
-	(wire
-		(pts
-			(xy 228.6 114.3)
-			(xy 226.06 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d290c5e8-a29c-5006-83ac-374e983d6ee8")
-	)
-	(wire
-		(pts
-			(xy 228.6 111.76)
-			(xy 226.06 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "51055bf2-4520-5eef-a254-3a31bfd48d97")
-	)
-	(wire
-		(pts
-			(xy 226.06 111.76)
-			(xy 226.06 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "03577081-1322-5437-b516-b0d8fd4cbeee")
-	)
-	(wire
-		(pts
-			(xy 226.06 114.3)
-			(xy 226.06 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a425a548-d7ae-523d-a1d0-d77484344e61")
-	)
-	(wire
-		(pts
-			(xy 226.06 116.84)
-			(xy 226.06 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f226c157-79d3-5428-a02f-dfcc230786ab")
-	)
-	(wire
-		(pts
-			(xy 294.64 156.21)
-			(xy 294.64 158.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "08372d63-4fdf-5f24-bdbc-4ac6cdfa8c7e")
-	)
-	(wire
-		(pts
-			(xy 254 152.4)
-			(xy 251.46 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cc9e196f-ed2a-58d3-b786-771d1d3221e4")
-	)
-	(wire
-		(pts
-			(xy 254 154.94)
-			(xy 251.46 154.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a1e6fc9c-7a5b-55ad-a35c-1a0516aac8ba")
-	)
-	(wire
-		(pts
-			(xy 264.16 160.02)
-			(xy 266.7 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7ac0970e-dd74-5dbc-bb35-9e1fd35097c8")
-	)
-	(wire
-		(pts
-			(xy 266.7 160.02)
-			(xy 269.24 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4c5cb9ec-a0e0-5804-b28b-b961cf775fc5")
-	)
-	(wire
-		(pts
-			(xy 269.24 160.02)
-			(xy 271.78 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b8025df3-c3fb-5b6a-a669-5a9ab13f9c42")
-	)
-	(wire
-		(pts
-			(xy 264.16 160.02)
-			(xy 264.16 162.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "eb0b7ffb-12be-5a50-98cf-1a6bdba77729")
-	)
-	(wire
-		(pts
-			(xy 205.74 147.32)
-			(xy 210.82 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fbbbb828-c641-546a-8b55-5ff5d4cfcecb")
-	)
-	(wire
-		(pts
-			(xy 210.82 147.32)
-			(xy 210.82 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "19824041-c062-5719-84b4-bdf785d3e17b")
-	)
-	(wire
-		(pts
-			(xy 210.82 185.42)
-			(xy 214.63 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "133db035-27f0-5cc4-8e5d-4b812c46b899")
-	)
-	(wire
-		(pts
-			(xy 210.82 166.37)
-			(xy 208.28 166.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b28bbecc-7f4c-5f21-936e-ba4b58fdb260")
-	)
-	(wire
-		(pts
-			(xy 222.25 185.42)
-			(xy 236.22 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4de9578a-aa07-55c0-b770-02ce054eb6a5")
-	)
-	(wire
-		(pts
-			(xy 224.79 185.42)
-			(xy 224.79 182.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "49a7e08c-ff63-507e-8148-34bd2f957a3c")
+		(uuid "b7d39512-386e-5174-afc5-6f63d56231e1")
 	)
 	(junction
-		(at 142.24 83.82)
+		(at 78.74 38.1)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a1c3485b-b395-5768-abe3-b56eec1f1208")
+		(uuid "f21d15f6-99ef-5326-b083-863e31f7fec2")
 	)
 	(junction
-		(at 147.32 106.68)
+		(at 83.82 60.96)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "400c27b4-1e55-53b6-a324-6cba67f1d2af")
+		(uuid "42e9af1e-6efa-50bb-b53d-ff4b3dbae2af")
 	)
 	(junction
-		(at 152.4 83.82)
+		(at 88.9 38.1)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "05af11fa-d79b-5259-b4e5-cd94fc13cda5")
+		(uuid "22824936-5791-5203-a30b-1829a54fe8df")
 	)
 	(junction
-		(at 162.56 83.82)
+		(at 99.06 38.1)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "64f82bde-a36e-5dca-94d1-2f465a5a2770")
+		(uuid "ff1ee6df-dad9-5b77-bfbe-e9aa7996f562")
 	)
 	(junction
-		(at 200.66 86.36)
+		(at 137.16 40.64)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "83ae8c5e-79e4-5180-802d-8ef962db0efa")
+		(uuid "726bd904-eca5-5d6f-8277-9285ec7e476c")
 	)
 	(junction
-		(at 209.55 127)
+		(at 162.56 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "6fd17d18-7c1f-5749-a620-97e7a0f31f8d")
+		(uuid "ae0d33bb-4edf-50ed-aea4-776d98b7bbde")
 	)
 	(junction
-		(at 210.82 166.37)
+		(at 162.56 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e1ec2803-3c1a-5701-bee1-b5160cd198f5")
+		(uuid "d92e8248-e024-5ae6-aafe-2e9357958653")
 	)
 	(junction
-		(at 224.79 185.42)
+		(at 200.66 124.46)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "98444f20-f9b8-5369-a4de-45244483dbf4")
+		(uuid "47ef6438-7a5f-5a9a-a780-7f8e9061c3d5")
 	)
 	(junction
-		(at 226.06 114.3)
+		(at 203.2 124.46)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "3607f4b8-c0b4-571c-b634-8f69942fb4c4")
+		(uuid "22000963-9197-5543-a4cc-ca0da5bc1577")
 	)
 	(junction
-		(at 226.06 116.84)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d586806b-e29c-5c11-b9c9-03249be1d424")
-	)
-	(junction
-		(at 228.6 132.08)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "927feee9-ea9f-51f3-924a-de71925fe8a6")
-	)
-	(junction
-		(at 228.6 137.16)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ab0bd7e3-aca3-5001-a397-5f48c61ff08e")
-	)
-	(junction
-		(at 228.6 142.24)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d5d40851-9a4d-59db-85cd-39d4dbf820c1")
-	)
-	(junction
-		(at 228.6 147.32)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "40d5674a-1a3b-5c19-bfc6-5bb0351353ff")
-	)
-	(junction
-		(at 243.84 116.84)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "91c3f797-e040-5000-a9cf-4357e978551d")
-	)
-	(junction
-		(at 243.84 121.92)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "99bda471-c1b3-5ec6-9f8f-286a2285b33b")
-	)
-	(junction
-		(at 264.16 160.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "976c58b3-fb93-5c31-96d2-f6517dfa7442")
-	)
-	(junction
-		(at 266.7 160.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2d947b6d-24f9-53e2-8040-ac592d11dcf0")
-	)
-	(junction
-		(at 269.24 160.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4f97d68a-d51e-5c89-a5ed-56313097864b")
-	)
-	(no_connect
-		(at 175.26 121.92)
-		(uuid "bbefef10-55bb-53de-b6b4-42ea2a422444")
-	)
-	(no_connect
-		(at 175.26 124.46)
-		(uuid "6ab9567b-89c3-5c2d-90c3-cbf3d4749fb3")
-	)
-	(no_connect
-		(at 175.26 144.78)
-		(uuid "e08a2ede-7f1d-5bfd-8efb-d50a4766bff3")
-	)
-	(no_connect
-		(at 175.26 147.32)
-		(uuid "6922a261-5892-5643-a421-26d449551b15")
-	)
-	(no_connect
-		(at 205.74 106.68)
-		(uuid "75377af8-03fe-5b73-a1f3-7a2332cab655")
-	)
-	(no_connect
-		(at 205.74 109.22)
-		(uuid "848d2d6c-40e2-5bdd-947d-9634017a2cc7")
-	)
-	(no_connect
-		(at 175.26 127)
-		(uuid "ad245978-8feb-5520-af82-ba0204b70500")
-	)
-	(no_connect
-		(at 175.26 114.3)
-		(uuid "0bde13b0-e2c0-56ff-b549-c51d8c6486a5")
-	)
-	(no_connect
-		(at 205.74 142.24)
-		(uuid "efa8e206-730b-53d7-9bf9-6d8544211ed8")
-	)
-	(no_connect
-		(at 175.26 129.54)
-		(uuid "cf9fa484-f6cd-58b2-8c9e-c5d390cd005e")
-	)
-	(no_connect
-		(at 175.26 132.08)
-		(uuid "d7e2ac31-ac34-5785-a7dd-1619aae85746")
-	)
-	(no_connect
-		(at 175.26 134.62)
-		(uuid "2972c8fe-615d-5aef-a6d5-5e70d96293c4")
-	)
-	(no_connect
-		(at 175.26 137.16)
-		(uuid "7c849309-1ab0-58b4-bf55-f870d77e66ee")
-	)
-	(no_connect
-		(at 175.26 139.7)
-		(uuid "bad77a0a-3412-5164-8a7e-7204478d0738")
-	)
-	(no_connect
-		(at 175.26 142.24)
-		(uuid "295938e3-f507-504f-a6c8-bf35707c9cb0")
-	)
-	(no_connect
-		(at 205.74 116.84)
-		(uuid "8e4c7f67-28bf-5a3b-82a3-2cced5151f59")
-	)
-	(no_connect
-		(at 205.74 144.78)
-		(uuid "f2a86a38-0ac1-52b4-9be4-073a224aa28b")
-	)
-	(no_connect
-		(at 205.74 139.7)
-		(uuid "0d5211ba-d31d-5ebd-8446-b341d207d82a")
-	)
-	(no_connect
-		(at 205.74 119.38)
-		(uuid "6418a943-5a7c-5691-8386-94ca598ce7ea")
-	)
-	(no_connect
-		(at 205.74 121.92)
-		(uuid "e6eff2b5-9393-5836-9b59-7c5b6b3192f8")
-	)
-	(no_connect
 		(at 205.74 124.46)
-		(uuid "934b1b56-bb97-5b46-8dce-251dc8c1c5f7")
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "da3d48fb-de45-5bae-af77-d9a76f3814c7")
 	)
 	(no_connect
-		(at 175.26 111.76)
-		(uuid "0781bfb7-b71b-58f5-911b-c5128685a9c9")
+		(at 111.76 76.2)
+		(uuid "bdab61fd-8e07-5e94-a54f-74bcbfd52405")
 	)
 	(no_connect
-		(at 175.26 109.22)
-		(uuid "890bf1e7-60ce-5fb6-85da-0565e9429b63")
+		(at 111.76 78.74)
+		(uuid "45ee9ac9-2e4f-5c08-9393-70bc7bea5c63")
 	)
 	(no_connect
-		(at 251.46 185.42)
-		(uuid "7c405bbd-4135-5bcb-906e-56715b48ac28")
+		(at 111.76 99.06)
+		(uuid "91c83ebd-47d3-5d31-a05c-591fb5aed13a")
 	)
-	(global_label "S3_EN"
+	(no_connect
+		(at 111.76 101.6)
+		(uuid "e894f39d-99a1-59fd-8087-47ebe41df3d1")
+	)
+	(no_connect
+		(at 142.24 60.96)
+		(uuid "df6668f3-aadd-5765-8f0a-f230f0ac2d6e")
+	)
+	(no_connect
+		(at 142.24 63.5)
+		(uuid "13c4a266-af13-51f7-bc58-b08654ee8934")
+	)
+	(no_connect
+		(at 111.76 81.28)
+		(uuid "9a749772-0557-560a-8254-8b54cfb690d3")
+	)
+	(no_connect
+		(at 111.76 68.58)
+		(uuid "95353974-1649-5a3e-a81f-b823881d4291")
+	)
+	(no_connect
+		(at 142.24 96.52)
+		(uuid "f4280dc7-adac-5995-b129-91b88538e8ff")
+	)
+	(no_connect
+		(at 111.76 83.82)
+		(uuid "f5f83ede-a0ab-5bac-a306-43371e11d0e4")
+	)
+	(no_connect
+		(at 111.76 86.36)
+		(uuid "76a91db2-463a-5935-b9a5-719f87a8e879")
+	)
+	(no_connect
+		(at 111.76 88.9)
+		(uuid "4ffcf1d1-ffba-5f73-b397-44a0c6262f3f")
+	)
+	(no_connect
+		(at 111.76 91.44)
+		(uuid "fec74b1f-81d7-549a-bd0e-232910a5e59d")
+	)
+	(no_connect
+		(at 111.76 93.98)
+		(uuid "30dd83f1-0544-5c14-87e7-717f5f4493a9")
+	)
+	(no_connect
+		(at 111.76 96.52)
+		(uuid "6ba32b9d-f34e-54be-9fc1-bb760b222b8a")
+	)
+	(no_connect
+		(at 142.24 71.12)
+		(uuid "c6a6d184-bda5-5e99-8d67-dab543a84c27")
+	)
+	(no_connect
+		(at 142.24 99.06)
+		(uuid "3b4fc57d-713d-5300-82c9-2ecb3d2fcada")
+	)
+	(no_connect
+		(at 142.24 93.98)
+		(uuid "de6aaf71-eb9b-5b12-9833-caab3f1ea690")
+	)
+	(no_connect
+		(at 142.24 73.66)
+		(uuid "9701a919-fd06-5382-ac6b-7711546d52dc")
+	)
+	(no_connect
+		(at 142.24 76.2)
+		(uuid "7a6101b2-f0f8-58ba-b127-16986645cd7f")
+	)
+	(no_connect
+		(at 142.24 78.74)
+		(uuid "2ef891b0-671c-588b-96cc-d09e4c8912c5")
+	)
+	(no_connect
+		(at 111.76 66.04)
+		(uuid "bfc29dbf-f239-5f72-b39d-332581afb6cd")
+	)
+	(no_connect
+		(at 111.76 63.5)
+		(uuid "f31db5d6-e19d-5a16-9962-89db1fd6e341")
+	)
+	(no_connect
+		(at 187.96 139.7)
+		(uuid "e37a8c52-1199-5153-a9e7-fc5df8209ec4")
+	)
+	(hierarchical_label "S3_EN"
 		(shape bidirectional)
-		(at 127 83.82 180)
+		(at 60.96 38.1 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6272,11 +6130,11 @@
 			)
 			(justify right)
 		)
-		(uuid "b707686a-d2f5-5e33-8788-0b71f0ba877a")
+		(uuid "68b45ebf-c49b-5de2-93f5-1697b7d7f14f")
 	)
-	(global_label "S3_IO0"
+	(hierarchical_label "S3_IO0"
 		(shape bidirectional)
-		(at 137.16 106.68 180)
+		(at 60.96 60.96 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6284,11 +6142,11 @@
 			)
 			(justify right)
 		)
-		(uuid "88a2bc5b-66b0-514d-b486-cfbfa3e00a85")
+		(uuid "37dd886a-9b00-577a-b496-48f5c66eedca")
 	)
-	(global_label "RUN_CTL"
+	(hierarchical_label "RUN_CTL"
 		(shape output)
-		(at 172.72 116.84 180)
+		(at 106.68 71.12 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6296,11 +6154,11 @@
 			)
 			(justify right)
 		)
-		(uuid "5b510382-e5a1-5fdf-9734-a1b18c81e570")
+		(uuid "dfcd9564-20c0-52bc-b511-c2f1b2f60fb6")
 	)
-	(global_label "BOOTSEL_CTL"
+	(hierarchical_label "BOOTSEL_CTL"
 		(shape output)
-		(at 172.72 119.38 180)
+		(at 106.68 73.66 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6308,11 +6166,11 @@
 			)
 			(justify right)
 		)
-		(uuid "c463870b-04f9-5a61-939b-3b30c23a39a2")
+		(uuid "3e5b0248-8d49-517a-88a8-41e242bf12ff")
 	)
-	(global_label "S3_TXD"
+	(hierarchical_label "S3_TXD"
 		(shape output)
-		(at 208.28 101.6 0)
+		(at 233.68 55.88 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6320,11 +6178,11 @@
 			)
 			(justify left)
 		)
-		(uuid "05b6007e-ccde-55fc-988d-e5c644f1ef79")
+		(uuid "7840ef4b-2681-5cb9-94d2-9117fb1f0aca")
 	)
-	(global_label "S3_RXD"
+	(hierarchical_label "S3_RXD"
 		(shape input)
-		(at 208.28 104.14 0)
+		(at 233.68 58.42 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6332,11 +6190,11 @@
 			)
 			(justify left)
 		)
-		(uuid "f4cf3cb8-840f-557c-b145-19e5b35bf6df")
+		(uuid "da042e02-5769-5fc1-8cda-aac99520ce25")
 	)
-	(global_label "USB_DM"
+	(hierarchical_label "USB_DM"
 		(shape bidirectional)
-		(at 208.28 111.76 0)
+		(at 233.68 66.04 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6344,11 +6202,11 @@
 			)
 			(justify left)
 		)
-		(uuid "85117ef5-4638-58a9-8b54-94098ffb67ad")
+		(uuid "14a84c44-f191-52ae-befa-5762c86aebe6")
 	)
-	(global_label "USB_DP"
+	(hierarchical_label "USB_DP"
 		(shape bidirectional)
-		(at 208.28 114.3 0)
+		(at 233.68 68.58 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6356,151 +6214,127 @@
 			)
 			(justify left)
 		)
-		(uuid "2ee9e8ba-0661-5bd6-980f-d261ba3fcc6f")
+		(uuid "23ad2a5f-cf1c-55a1-a9a0-731b588a6ab5")
 	)
-	(global_label "SD_MOSI"
-		(shape passive)
-		(at 209.55 124.46 0)
-		(fields_autoplaced yes)
+	(label "SD_MOSI"
+		(at 165.1 91.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "1524a9d1-9972-5857-8b16-3eb3f121df90")
+		(uuid "7dfc3385-9274-5629-8029-5541770004c4")
 	)
-	(global_label "SD_SCK"
-		(shape passive)
-		(at 228.6 129.54 0)
-		(fields_autoplaced yes)
+	(label "SD_SCK"
+		(at 165.1 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "67b23d3e-1f62-5975-8b6e-8104c6b37beb")
+		(uuid "2e84f571-30a8-54c1-b741-850d7fd49c03")
 	)
-	(global_label "SD_MISO"
-		(shape passive)
-		(at 228.6 134.62 0)
-		(fields_autoplaced yes)
+	(label "SD_MISO"
+		(at 165.1 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "a1ef89f5-1c4f-5d49-b03e-cfeb7790c85b")
+		(uuid "7a77e56f-6f4a-5012-baaa-faa14622e945")
 	)
-	(global_label "SD_CS"
-		(shape passive)
-		(at 228.6 139.7 0)
-		(fields_autoplaced yes)
+	(label "SD_CS"
+		(at 165.1 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "54c3c3c1-45ea-5b7e-b646-8f695d2bc05b")
+		(uuid "7a6e40d8-1b8c-52eb-aea9-e4eb4eceddef")
 	)
-	(global_label "SD_CD"
-		(shape passive)
-		(at 228.6 144.78 0)
-		(fields_autoplaced yes)
+	(label "SD_CD"
+		(at 165.1 111.76 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "d63870be-f010-5cd9-a585-727269950b4a")
+		(uuid "25670c20-e7c8-54af-93c3-4b58718a02e5")
 	)
-	(global_label "SD_DAT1"
-		(shape passive)
-		(at 243.84 119.38 0)
-		(fields_autoplaced yes)
+	(label "SD_DAT1"
+		(at 180.34 81.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "458932d2-45f5-5b09-95a8-4f8f01f52d2b")
+		(uuid "cff04286-2c23-5fdb-8ff5-da9d0b4f18dd")
 	)
-	(global_label "SD_DAT2"
-		(shape passive)
-		(at 243.84 124.46 0)
-		(fields_autoplaced yes)
+	(label "SD_DAT2"
+		(at 180.34 86.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "87d41970-41c6-5017-8eb7-104f2f274676")
+		(uuid "3f7ce63b-a88d-594e-81a1-4fb3245ba53b")
 	)
-	(global_label "SD_CS"
-		(shape passive)
-		(at 241.3 111.76 0)
-		(fields_autoplaced yes)
+	(label "SD_CS"
+		(at 177.8 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "60695505-552e-58ac-9952-989ce362139b")
+		(uuid "92f77413-844b-5730-8f0b-8d093ca8b7f9")
 	)
-	(global_label "SD_MISO"
-		(shape passive)
-		(at 241.3 114.3 0)
-		(fields_autoplaced yes)
+	(label "SD_MISO"
+		(at 177.8 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "484131e7-a3b6-5b3b-8acb-f5134514d81a")
+		(uuid "156bfa4c-43d4-5a5b-b779-1b7938a0d581")
 	)
-	(global_label "SD_CD"
-		(shape passive)
-		(at 294.64 158.75 270)
-		(fields_autoplaced yes)
+	(label "SD_CD"
+		(at 231.14 123.19 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify right bottom)
 		)
-		(uuid "2868235f-ebb8-5abe-83e4-dc080dc44f73")
+		(uuid "a23ad3b8-bc9b-5e3a-8cb7-3b7f4d4c668a")
 	)
-	(global_label "LED_STRIP"
-		(shape passive)
-		(at 208.28 166.37 180)
-		(fields_autoplaced yes)
+	(label "LED_STRIP"
+		(at 147.32 132.08 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left bottom)
 		)
-		(uuid "9b5868ab-2d71-5a0d-a013-591727a48dc6")
+		(uuid "3b51d376-bd92-5a55-b4dc-ed2ce6f1b939")
 	)
-	(global_label "WS_DIN"
-		(shape passive)
-		(at 224.79 182.88 0)
-		(fields_autoplaced yes)
+	(label "WS_DIN"
+		(at 161.29 139.7 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left bottom)
 		)
-		(uuid "5f97c7c1-e0bb-51e2-9445-af2f2c069cae")
+		(uuid "7381414e-91e7-58d0-90b1-18df186f5de5")
 	)
 	(embedded_fonts no)
 )

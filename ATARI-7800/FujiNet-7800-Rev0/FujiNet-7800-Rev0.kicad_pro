@@ -470,7 +470,7 @@
       "pin_not_driven": "error",
       "pin_to_pin": "warning",
       "power_pin_not_driven": "error",
-      "same_local_global_label": "ignore",
+      "same_local_global_label": "warning",
       "similar_label_and_power": "warning",
       "similar_labels": "warning",
       "similar_power": "warning",
@@ -516,7 +516,7 @@
       },
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.15,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -542,11 +542,11 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "USB",
+        "name": "VBUS",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
+        "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.25,
+        "track_width": 0.3,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -561,11 +561,11 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "VBUS",
+        "name": "USB",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
+        "priority": 2,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.3,
+        "track_width": 0.25,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -588,7 +588,7 @@
       },
       {
         "netclass": "PWR",
-        "pattern": "BUCK_SW"
+        "pattern": "/power/BUCK_SW"
       },
       {
         "netclass": "PWR",
@@ -600,27 +600,27 @@
       },
       {
         "netclass": "USB",
-        "pattern": "USB_DP"
+        "pattern": "/USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "USB_DM"
+        "pattern": "/USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "RP_USB_DP"
+        "pattern": "/rp2354b/RP_USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "RP_USB_DM"
+        "pattern": "/rp2354b/RP_USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "UBRG_DP"
+        "pattern": "/usb-uart/UBRG_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "UBRG_DM"
+        "pattern": "/usb-uart/UBRG_DM"
       }
     ]
   },
@@ -782,12 +782,12 @@
       "rp2354b"
     ],
     [
-      "f22eb0f2-edb2-55e4-a3af-193519524be3",
-      "sram"
-    ],
-    [
       "25444489-b319-5465-993c-6d0280d7b795",
       "glue"
+    ],
+    [
+      "f22eb0f2-edb2-55e4-a3af-193519524be3",
+      "sram"
     ],
     [
       "c7712c0e-cda6-5898-b3a1-77515981b1dc",

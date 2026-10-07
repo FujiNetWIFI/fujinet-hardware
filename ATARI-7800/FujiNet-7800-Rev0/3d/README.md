@@ -1,4 +1,4 @@
-# 3D models bundled with FujiNet-SMS Rev0
+# 3D models bundled with FujiNet-7800 Rev0
 
 `tools/set_models.py` points every footprint at `${KIPRJMOD}/3d/<file>`, so
 the board renders (`kicad-cli pcb render`, the 3D viewer) without KiCad's
@@ -11,7 +11,11 @@ optional model package.
 | `AOTA-B201610S3R3.step` | Abracon model via LCSC/EasyEDA (easyeda2kicad) | vendor model, redistributed as supplied |
 | `TF-015.step` | SOFNG model via LCSC/EasyEDA C113206 | vendor model |
 | `USB-C_HRO_TYPE-C-31-M-12.step` | HRO model via LCSC/EasyEDA C165948 | vendor model |
-| `LED_WS2812B-2020.wrl` | simple stand-in (no vendor model published) | CERN-OHL-W-2.0 (this project) |
+| `LED_WS2812B-2020.wrl` | simple stand-in (no vendor model published); used for the WS2812C-2020, same 2.0 x 2.0 mm package | CERN-OHL-W-2.0 (this project) |
 
-No model: `SMS_Cart_Edge_50`, `TestPoint_Pad_D1.5mm`, `MountingHole_*`, `Fiducial_*` and the
-(DNP) `PinHeader_1x03` debug header.  Copied from `NES/FujiNet-NES-Rev0/3d/`.
+`SW_SPST_TS-1187A` (XKB TS-1187A, 5.1 x 5.1 x 1.5 mm) uses `SW_SPST_TL3342.step` (5.2 x 5.2 x 1.5 mm)
+as a stand-in: neither KiCad nor EasyEDA has a model for it.
+
+No model: `Atari7800_Cart_Edge_32`, `TestPoint_Pad_D1.5mm`, `MountingHole_*`, `Fiducial_*` and the
+(DNP) `PinHeader_1x03` debug header.  Copied from `SMS/FujiNet-SMS-Rev0/3d/` (itself from
+`NES/FujiNet-NES-Rev0/3d/`).

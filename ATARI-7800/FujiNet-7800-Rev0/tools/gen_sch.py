@@ -437,6 +437,9 @@ def write_project(root_uuid, sheet_uuids):
     pro = json.load(open(fn))
     pro['meta']['filename'] = D.PROJECT + '.kicad_pro'
     pro['sheets'] = [[root_uuid, 'Root']] + [[sheet_uuids[s[0]], s[0]] for s in D.SHEETS]
+    # the template's project file named the NES root here; KiCad 10 opens the schematic by this entry
+    pro['schematic']['top_level_sheets'] = [{'filename': D.PROJECT + '.kicad_sch', 'name': D.PROJECT,
+                                             'uuid': '00000000-0000-0000-0000-000000000000'}]
     pro['erc']['rule_severities']['same_local_global_label'] = 'warning'   # no global labels left
     json.dump(pro, open(fn, 'w'), indent=2)
     open(fn, 'a').write('\n')

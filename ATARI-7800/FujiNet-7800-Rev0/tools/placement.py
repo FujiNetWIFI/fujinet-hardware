@@ -13,7 +13,8 @@ east; D0-D3 at its south-west corner (pins 77-80), A13-A15 at its south-east cor
 PHI2, /HALT, PWR_OK on its east side (25-28), the slot table (SA13-SA18, ROM_EN, RAM_EN, A8MASK)
 along its north side.
 
-Regions (variant A, the default; PLACE_VARIANT=B mirrors the cart side):
+Regions (the cart side as variant A of the 2026-10-07 sweep: 948 ratsnest crossings, 4065 mm; with the
+SRAM east of the RP instead, as on SMS Rev0, 1103 / 4145 mm, dropped):
   lower body    the RP2354B over the address fingers, its decoupling ring and core-regulator
                 corner as on NES / SMS Rev0; the SRAM upright over the data fingers, its DQ / A0-A3
                 end toward them; the D0-D7 100R packs between; the console 5V P-FET by finger 13,
@@ -28,8 +29,7 @@ The shell screws (gen_pcb.HOLES) keep 3 mm rings clear.
 import os
 
 RING = 10.0              # decoupling ring radius (NES Rev0: 10, not 9 -- a second via column fits)
-V = os.environ.get('PLACE_VARIANT', 'A')
-RX, RY = (108.0, 112.0) if V == 'A' else (92.0, 112.0)    # RP2354B centre (sweep 2026-10-07: 983 crossings)
+RX, RY = 108.0, 112.0     # RP2354B centre
 RX = float(os.environ.get('RP_X', RX))      # tuning knobs (tools/plot_placement.py compares the results)
 RY = float(os.environ.get('RP_Y', RY))
 GLUE = os.environ.get('GLUE_ORDER', 'INV,NAND2,CSEL,STROBE').split(',')
@@ -91,27 +91,20 @@ def do_placement(place, fiducials):
     # ---------------- edge ----------------
     place('J_EDGE', 100.0, 150.0, 0)
 
-    if V == 'A':
-        # ---------------- cart side, variant A: SRAM west over the data fingers ----------------
-        rx, ry = RX, RY
-        ring(place, rx, ry, (rx - 13.5, ry + 13.5))
-        # SRAM upright, pins 17-32 (A0-A3, DQ0-7, A10, /OE) south toward the data fingers
-        sx, sy = SRAM_XY
-        place('U_SRAM', sx, sy, 270)
-        place('C_SRAM', sx, sy - 12.5, 0)        # by VCC (pin 8, north end)
-        place('C_SRAMBULK', 79.5, 97.5, 0)
-        # D0-D7 100R packs between the RP's south-west corner and the data fingers
-        place('RN_D0', 86.5, 126.5, 0)
-        place('RN_D4', 90.0, 126.5, 0)
-    else:
-        # ---------------- variant B: RP over the data fingers, SRAM east (SMS-like) ----------------
-        rx, ry = RX, RY
-        ring(place, rx, ry, (rx - 13.5, ry + 13.5))
-        place('U_SRAM', 126.5, 112.0, 270)
-        place('C_SRAM', 126.5, 99.5, 0)
-        place('C_SRAMBULK', 132.5, 99.5, 0)
-        place('RN_D0', 88.0, 126.5, 0)
-        place('RN_D4', 92.0, 126.5, 0)
+    # ---------------- cart side: the RP over the address fingers, the SRAM west of it ----------------
+    rx, ry = RX, RY
+    ring(place, rx, ry, (rx - 13.5, ry + 13.5))
+    # SRAM upright, pins 17-32 (A0-A3, DQ0-7, A10, /OE) south toward the data fingers
+    sx, sy = SRAM_XY
+    place('U_SRAM', sx, sy, 270)
+    place('C_SRAM', sx, sy - 12.5, 0)        # by VCC (pin 8, north end)
+    place('C_SRAMBULK', 79.5, 97.5, 0)
+    # D0-D7 100R packs between the RP's south-west corner and the data fingers, rotated so their
+    # RP side (pins 1-4) faces east toward GPIO0-7 and their D side west toward the SRAM and the
+    # fingers.  At rotation 0 RP_D4-D7 had to wrap round RN_D4 into the 1.7 mm channel RN_D0's
+    # D0-D3 also need, and every route left RP_D5 open (design review Part 2, Routing).
+    place('RN_D0', 85.5, 126.5, 180)       # 1 mm west of the 86.5 first tried: room for a via column
+    place('RN_D4', 90.0, 126.5, 180)
 
     # console 5V P-FET by finger 13 (x 111.4), its bulk beside it
     place('Q_CONS', 111.0, 128.8, 270)
@@ -122,15 +115,11 @@ def do_placement(place, fiducials):
     place('C_AUDLP', 126.2, 129.0, 90)
     place('R_AUDLVL', 124.4, 129.0, 90)
     place('C_AUDDC', 122.6, 129.0, 90)
-    # /HALT's 1k right at finger 2 (x 81.0): the console sees only the stub to it
+    # /HALT's 10k right at finger 2 (x 81.0): the console sees only the stub to it
     place('R_HALT', 83.5, 130.8, 90)
     # /IRQ FET by finger 31 (x 81.0), its gate pull-down beside it
-    if V == 'A':
-        place('Q_IRQ', 80.5, 128.6, 270)
-        place('R_IRQ', 77.0, 128.6, 90)
-    else:
-        place('Q_IRQ', 83.5, 129.6, 270)
-        place('R_IRQ', 80.5, 130.0, 90)
+    place('Q_IRQ', 80.5, 128.6, 270)
+    place('R_IRQ', 77.0, 128.6, 90)
     # console 5V sense divider by finger 13 too (VSENSE runs to the '14)
     place('R_VSH', 118.5, 128.8, 90)
     place('R_VSL', 120.3, 128.8, 90)
@@ -198,7 +187,7 @@ def do_placement(place, fiducials):
     place('SW_BOOTSEL', 68.6, Y0 + 48.6, 0)
     place('D_RST', 74.5, Y0 + 42.4, 0)
     # bring-up / SWD test pads: one block right above the glue row (short stubs off PHI2, R/W and
-    # the strobes, which pass the glue; ~66 mm above the edge, outside the console's slot), two rows
+    # the strobes, which pass the glue; 68-71 mm above the edge, outside the console's slot), two rows
     tps = ['TP_PHI2', 'TP_RW', 'TP_HALT', 'TP_EAUDIO', 'TP_CONS5V', 'TP_GNDBUS', 'TP_CSEL', 'TP_OE', 'TP_WE',
            'TP_SA8', 'TP_PWROK', 'TP_5V', 'TP_3V3', 'TP_3V3RP', 'TP_SWCLK', 'TP_SWDIO', 'TP_GND', 'TP_RUN']
     for i, k in enumerate(tps):

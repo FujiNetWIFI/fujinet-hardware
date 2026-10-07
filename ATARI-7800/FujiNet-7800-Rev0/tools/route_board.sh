@@ -3,14 +3,15 @@
 # finish it: the RP2354B corner pre-route, Freerouting, the grid A* finisher for
 # what it leaves, clean-up, GND stitching, 3D models, silkscreen, and the DRC
 # gate.  Called by build_all.sh (LAYOUT=1).
-# PASSES (default 10: SMS Rev0 plateaued by pass 8) sets Freerouting's pass budget, STRATEGY its -us option.
+# PASSES sets Freerouting's pass budget, STRATEGY its -us option; the defaults (12, hybrid) are what
+# routed the committed board (2026-10-07: five variants, design review Part 2).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PCB=FujiNet-7800-Rev0.kicad_pcb
 # the core regulator and the crystal on the empty board, locked (the SWD pads sit in the
 # bring-up block in the upper body, far from the RP: SWCLK / SWDIO are Freerouting's)
 python3 tools/finish_route.py --nets=RP_LX,DVDD,VREG_AVDD,XIN,XOUT,XOUT_Y --lock || true
-python3 tools/route.py --passes "${PASSES:-10}" ${STRATEGY:+--strategy "$STRATEGY"}
+python3 tools/route.py --passes "${PASSES:-12}" --strategy "${STRATEGY:-hybrid}"
 python3 tools/drc_fix.py                  # drop router copper that breaks DRC; the finisher redoes it
 python3 tools/finish_route.py || true
 python3 tools/drc_fix.py                  # again: a rip-up transaction can leave a crossing behind

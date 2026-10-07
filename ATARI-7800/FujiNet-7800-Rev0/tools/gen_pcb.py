@@ -43,7 +43,7 @@ import edge_geom as EG
 XC = 100.0
 X0, X1 = XC - EG.BODY_W / 2, XC + EG.BODY_W / 2     # body 72.4 wide
 Y1 = 150.0                      # insertion edge
-TAB_D = 16.5                    # tab depth: Otaku-flash's 16.51 (a working 7800 cart)
+TAB_D = EG.TAB_D                # tab depth 16.5 (edge_geom)
 TAB_Y = Y1 - TAB_D              # 133.5: tab base = bottom of the body
 Y0 = TAB_Y - float(os.environ.get('BODY_H', 98.5))  # top (trailing) edge: USB-C, microSD, the S3 antenna
 TAB_HW = EG.TAB_W / 2           # 47.0 mm tab
@@ -566,7 +566,7 @@ def configure_project():
               'min_via_diameter': 0.5, 'min_through_hole_diameter': 0.25, 'min_hole_clearance': 0.25,
               'min_hole_to_hole': 0.25, 'min_via_annular_width': 0.125, 'solder_mask_min_width': 0.0,
               'solder_mask_clearance': 0.0, 'solder_mask_to_copper_clearance': 0.0})
-    # the 25 fingers per face share one mask window (as every cart board): KiCad reports that
+    # the 16 fingers per face share one mask window (as every cart board): KiCad reports that
     # as a mask bridge between nets; it is the intended gold-finger process
     pro['board']['design_settings'].setdefault('rule_severities', {})['solder_mask_bridge'] = 'warning'
     ns = pro['net_settings']
@@ -739,8 +739,8 @@ def main():
     board.append(zone('GND_plane', 'GND', 'In1.Cu', BODY))
     board.append(zone('3V3_plane', '+3V3', 'In4.Cu', BODY))
     board.append(zone('5V_island_0', '+5V', 'In4.Cu', five_v_island(), priority=2))
-    board.append(text('FujiNet SMS Rev0', 82.0, 63.0, 'F.SilkS', 1.5))       # the open patch under the S3
-    board.append(text('RP2354B + ESP32-S3', 82.0, 65.4, 'F.SilkS', 1.0))
+    board.append(text('FujiNet 7800 Rev0', 82.6, 63.0, 'F.SilkS', 1.5))      # the open patch under the S3, clear of SW3
+    board.append(text('RP2354B + ESP32-S3', 82.6, 65.4, 'F.SilkS', 1.0))
     board.append(text('CERN-OHL-W-2.0  fujinet.online', 82.0, 69.0, 'B.SilkS', 1.0, mirror=True))
     board.append(['embedded_fonts', 'no'])
     open(PCB, 'w').write(dump(board) + '\n')

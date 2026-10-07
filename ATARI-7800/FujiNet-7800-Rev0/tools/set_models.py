@@ -45,6 +45,9 @@ MODELS = {
     'SOT-23-5': ('SOT-23-5.step', (0, 0, 0), (0, 0, 0)),
     'ESP32-S3-WROOM-1': ('ESP32-S3-WROOM-1.step', (0, 0, 0), (0, 0, 0)),
     'SW_SPST_TL3342': ('SW_SPST_TL3342.step', (0, 0, 0), (0, 0, 0)),
+    # TS-1187A (5.1 x 5.1 x 1.5 mm): the TL3342's model (5.2 x 5.2 x 1.5) stands in -- no KiCad or
+    # EasyEDA model for C318884; the renders only need the body
+    'SW_SPST_TS-1187A': ('SW_SPST_TL3342.step', (0, 0, 0), (0, 0, 0)),
     # LCSC model origin is 1.42 mm behind KiCad's footprint origin (shell tabs)
     'USB_C_Receptacle_HRO_TYPE-C-31-M-12': ('USB-C_HRO_TYPE-C-31-M-12.step', (0, 1.42, 0), (0, 0, 180)),
     'TF-SMD_TF-015': ('TF-015.step', (0, 0, 0), (0, 0, 0)),
@@ -64,21 +67,26 @@ def set_model(fp, name):
         fp.insert(k, model(name))
 
 
-for fn in sorted(os.listdir(LIB)):
-    name = fn[:-len('.kicad_mod')]
-    t = parse(open(os.path.join(LIB, fn)).read())
-    set_model(t, name)
-    open(os.path.join(LIB, fn), 'w').write(dump(t) + '\n')
-    for f, *_ in [MODELS[name]] if name in MODELS else []:
-        if not os.path.exists(os.path.join(PRJ, '3d', f)):
-            print('no model file for %s (%s)' % (name, f))
+def main():
+    for fn in sorted(os.listdir(LIB)):
+        name = fn[:-len('.kicad_mod')]
+        t = parse(open(os.path.join(LIB, fn)).read())
+        set_model(t, name)
+        open(os.path.join(LIB, fn), 'w').write(dump(t) + '\n')
+        for f, *_ in [MODELS[name]] if name in MODELS else []:
+            if not os.path.exists(os.path.join(PRJ, '3d', f)):
+                print('no model file for %s (%s)' % (name, f))
 
-b = parse(open(PCB).read())
-n = 0
-for e in b:
-    if isinstance(e, list) and e and e[0] == 'footprint':
-        set_model(e, str(e[1]).split(':')[1])
-        n += 1
-open(PCB, 'w').write(dump(b) + '\n')
-missing = sorted({fn[:-10] for fn in os.listdir(LIB)} - set(MODELS))
-print('models set on %d board footprints; no model (by design): %s' % (n, ', '.join(missing)))
+    b = parse(open(PCB).read())
+    n = 0
+    for e in b:
+        if isinstance(e, list) and e and e[0] == 'footprint':
+            set_model(e, str(e[1]).split(':')[1])
+            n += 1
+    open(PCB, 'w').write(dump(b) + '\n')
+    missing = sorted({fn[:-10] for fn in os.listdir(LIB)} - set(MODELS))
+    print('models set on %d board footprints; no model (by design): %s' % (n, ', '.join(missing)))
+
+
+if __name__ == '__main__':
+    main()

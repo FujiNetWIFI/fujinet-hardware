@@ -62,6 +62,21 @@ def groups():
     return sorted(g.items(), key=lambda kv: ref_key(kv[1][0].ref))
 
 
+KIND = {'R': 'Resistor', 'RN': 'Resistor array', 'C': 'Capacitor', 'L': 'Inductor', 'Y': 'Crystal',
+        'SW': 'Tactile switch', 'J': 'Connector'}
+
+
+def pcbway_desc(val, fp, ps):
+    """A line's description for PCBWay's sourcing: what the part is (kind, value, package), and its
+    function only when every designator on the line shares it -- a 26-capacitor line must not read
+    as 'IOVDD decoupling'."""
+    pkg = re.sub(r'_\d+Metric$', '', fp.split(':')[1])
+    kind = KIND.get(ps[0].prefix)
+    head = '%s %s %s' % (kind, val, pkg) if kind else '%s %s' % (val, pkg)
+    descs = {p.desc for p in ps}
+    return head + ('; ' + ps[0].desc if len(descs) == 1 and ps[0].desc else '')
+
+
 def boms():
     rows = groups()
     refs = lambda ps: ','.join(sorted((p.ref for p in ps), key=ref_key))
@@ -93,7 +108,7 @@ def boms():
             note = ''
             if mpn == 'AS6C4008-55TIN':
                 note = 'TSOP-I 8x20 mm (Type I); 0 at LCSC on 2026-10-07: source from DigiKey / Mouser, or consign'
-            w.writerow([line, len(ps), refs(ps), mpn, mfr, '%s %s' % (val, ps[0].desc), fp.split(':')[1],
+            w.writerow([line, len(ps), refs(ps), mpn, mfr, pcbway_desc(val, fp, ps), fp.split(':')[1],
                         'THT' if THT.search(fp) else 'SMD', lcsc, note])
     return {p.ref for p in D.PARTS if p.bom and not p.dnp}
 

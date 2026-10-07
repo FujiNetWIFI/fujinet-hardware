@@ -15,6 +15,7 @@ Usage: python3 tools/make_fp_extra.py
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sexpr import dump, Q
+from set_models import set_model
 
 PRJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F = lambda s=1.0: ['effects', ['font', ['size', s, s], ['thickness', 0.15 if s >= 1 else 0.1]]]
@@ -88,5 +89,6 @@ def ts1187a():
 if __name__ == '__main__':
     lib = os.path.join(PRJ, 'FujiNet-7800.pretty')
     for fp in (header_1x03(), ts1187a()):
+        set_model(fp, str(fp[1]))     # its 3D model (set_models.MODELS), so a rebuild keeps it
         open(os.path.join(lib, str(fp[1]) + '.kicad_mod'), 'w').write(dump(fp) + '\n')
         print('wrote', fp[1])

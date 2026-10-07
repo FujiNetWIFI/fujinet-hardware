@@ -7,10 +7,11 @@ Exports a fresh netlist with kicad-cli and reads
   $FUJINET_FIRMWARE/pico/atari-7800/firmware/include/a78map.h     slot-word bits (SLOT_PIN + bit)
       (default ~/Workspace/fujinet-firmware)
   $FUJINET_A78_BOARD/include/pinmap/fujiversal-atari7800.h       S3 SD / LED / UART pins
-      (default ~/Workspace/fn-7800-board); until it exists, the SMS board's
+      (default ~/Workspace/fn-7800-board; if it is missing, the SMS board's
       $FUJINET_SMS_BOARD/include/pinmap/fujiversal-sms.h, whose S3 contract
-      this board copies (default ~/Workspace/fn-sms-board), and
-      fujiversal-intv.h there for PIN_RP2040_RUN/BOOTSEL
+      this board copies, default ~/Workspace/fn-sms-board), and
+      fujiversal-intv.h there for PIN_RP2040_RUN/BOOTSEL, which
+      fujiversal-atari7800.h does not define yet
 and checks every GPIO of both chips against the pin *functions* the netlist
 reports (GPIOn on the RP2354B, IOn on the S3, An/DQn on the SRAM), the
 7800 32-pin edge map (its own copy of the pin list), the 5 V-tolerance rule
@@ -152,9 +153,9 @@ def main():
             chk('J1.31 /IRQ = 2N7002 drain', n == func_net.get((QI, 'D')) and not unconn(n))
         elif s == 'EAUDIO':
             chk('J1.18 EAUDIO connected', not unconn(n))
-        elif s == '/HALT':      # MARIA's weak MOS output: a series 1k at the finger, the RP behind it
+        elif s == '/HALT':      # MARIA's weak MOS output: a series 10k at the finger, the RP behind it
             g = P[STROBE_PIN[s]]
-            chk('J1.%d %s -> 1k -> GP%d' % (p, s, g), through_r(n, rp(g)) == '1k' and not unconn(n))
+            chk('J1.%d %s -> 10k -> GP%d' % (p, s, g), through_r(n, rp(g)) == '10k' and not unconn(n))
         elif s in STROBE_PIN:
             g = P[STROBE_PIN[s]]
             chk('J1.%d %s -> GP%d' % (p, s, g), n == rp(g) and not unconn(n))
@@ -174,11 +175,11 @@ def main():
         chk('%s net carries no extra parts (no pull-ups, no series R; test pads allowed)' % s,
             not others(sig[s], {J1, U1, S} | glue | tps))
     rh = [r for r, _ in others(sig['/HALT'], {J1})]
-    chk('/HALT at the finger: its 1k and nothing else (the console\'s HALT is a weak MOS output)',
+    chk('/HALT at the finger: its 10k and nothing else (the console\'s HALT is a weak MOS output)',
         len(rh) == 1 and rh[0].startswith('R'))
     if len(rh) == 1:
         hr = rp(P['HALT'])
-        chk('/HALT behind the 1k: the RP (observed, never driven) and a test pad only',
+        chk('/HALT behind the 10k: the RP (observed, never driven) and a test pad only',
             not others(hr, {U1, rh[0]} | tps))
     chk('console A8 does not reach the SRAM directly', func_net.get((S, 'A8')) != sig['A8'])
     for i in range(8):

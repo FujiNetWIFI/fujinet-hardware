@@ -83,7 +83,7 @@ def edge(sh):
         sh.wire(p, t)
         sh.wire(t, (col, p[1]))
         sh.hlabel(Pt(col, p[1]), net, 'R', 'output')
-    # /HALT through its 1k at the finger, the pad behind it
+    # /HALT through its 10k at the finger, the pad behind it
     p = sh.N(J, 'HALT_N')
     sh.place('R_HALT', 116.84, p[1], rot=90, fields='above')
     sh.wire(p, sh.N('R_HALT', 'HALT_N'))
@@ -158,7 +158,7 @@ def edge(sh):
             'Cart audio: GPIO29 PWM (833 kHz carrier) -> 1.5k / 10n (fc 10.6 kHz) -> 10k level -> 1u -> EAUDIO; the console adds\n'
             '0.1u + 6.8k into its audio sum (C10, R5), as a POKEY cart\'s 1k pull-up + 12k does.  /IRQ: the 2N7002 pulls it low only\n'
             'while GPIO28 is high (the firmware never does); console pull-up R32 2.2k.  /HALT (MARIA\'s weak MOS output) through\n'
-            '1k to the RP: observed only.  While the console\'s BIOS is mapped its U4 (74LS08) holds A15, A14, A12 low at this edge.')
+            '10k to the RP: observed only.  While the console\'s BIOS is mapped its U4 (74LS08) holds A15, A14, A12 low at this edge.')
 
 
 # =========================================================================

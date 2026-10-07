@@ -51,13 +51,11 @@ MASK_Y1 = LAND_Y1 + 0.5          # one mask window per face, edge .. here
 SLOT_W, SLOT_D = 2.4, 10.0
 SLOT_X = [pos_x(p) for p in KEY_POS]          # (-16.51, +16.51)
 
-# lower board profile (the stock 7800 "T-bar" board, tdididit a78-flashcartplus):
-#   47.0 wide from the edge to 33.0 mm in, 41.3 wide (the stock neck, its rib notches dropped:
-#   our shell is printed) to 49.5 mm in, then the 72.4 mm body.
+# lower board: the 47.0 mm tab, 16.5 mm deep (Otaku-flash's 16.51, a working 7800 cart), then
+# straight out to the body width; the stock T-bar's neck and rib notches are dropped (our shell
+# is printed, case/case-spec.md)
 TAB_W = 47.0
-TAB_TOP = 33.0                   # y where the tab width ends
-NECK_W = 41.3
-NECK_TOP = 49.5                  # y where the body starts (stock T-bar transition)
+TAB_D = 16.5                     # tab depth: insertion edge to the body's lower edge
 BODY_W = 72.4                    # stock T-bar body width
 CH_TAB = 1.0                     # 45-degree chamfer on the tab's outer corners (insertion lead-in)
 

@@ -70,4 +70,4 @@ the bosses.
    - The two keys must reach the board's key slots.
 6. **Width just above the tab.** The board is 72.4 mm wide from 16.5 mm above the edge. Otaku-flash proves about 54-58 mm at that height. Check that nothing in the console meets the 72.4 mm body.
 7. **Height.** The shell rises about 125 mm, against a stock cartridge's roughly 100. Check that nothing on the console top (the switches) is in the way.
-8. **Insertion depth vs the bring-up pads.** The test-pad block sits about 80 mm above the edge. It must be outside the console when a bare board is plugged in for bring-up.
+8. **Insertion depth vs the bring-up pads.** The test-pad block sits 68-71 mm above the edge (pad rows at y 81.6 / 79.0, edge at y 150). It must be outside the console when a bare board is plugged in for bring-up.

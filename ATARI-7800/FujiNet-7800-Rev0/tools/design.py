@@ -234,25 +234,28 @@ add('J', '%s:Atari7800_Cart_Edge_32' % LIB, 'Atari7800_Cart_Edge_32', FP('Atari7
     {k: v[0] for k, v in EDGE.items()}, desc='Atari 7800 32-pin cartridge edge, 18 positions at 2.54 mm '
     'with key slots at 3 and 16', bom=False, key='J_EDGE')
 # /HALT: MARIA's HALT output (GCC1702B spec: "One MOS load", Ioh 100 uA at 2.4 V, 30 ns into
-# 25 pF; console J1-2 also carries Q13's emitter) is observed only.  1k at the finger hides the
-# trace to the RP's east side, the RP pin and its bring-up pad from that weak output.
-R('1k', 'HALT_N', 'HALT_RP', desc='/HALT isolation: the console sees only the finger stub', key='R_HALT')
+# 25 pF; console J1-2 also carries Q13's emitter) is observed only.  10k at the finger hides the
+# trace to the RP's east side, the RP pin and its bring-up pad (~17 pF) from that weak output:
+# J1-2 rises in 23.5 ns with it, 40 ns without, 49 ns behind a 1k (tools/audit/spice_checks.py);
+# the RP sees the edge ~80 ns later.
+R('10k', 'HALT_N', 'HALT_RP', desc='/HALT isolation: the console sees only the finger stub', key='R_HALT')
 # /IRQ: GPIO28 high = the 2N7002 pulls console /IRQ low.  Fitted, never asserted by the
 # firmware; the gate pull-down keeps /IRQ released until the firmware drives GPIO28 low.
 add('Q', 'Transistor_FET:2N7002', '2N7002', FP('SOT-23'), {1: 'IRQ_GATE', 2: 'GND', 3: 'IRQ_N'},
     mpn='2N7002', lcsc='C8545', desc='console /IRQ pull-down (G = GPIO28); never asserted', key='Q_IRQ')
 R('10k', 'IRQ_GATE', 'GND', desc='/IRQ released from power-on until the firmware drives GPIO28', key='R_IRQ')
 # cart audio: GPIO29 PWM (833 kHz carrier, a78 fuji_audio.c) -> 1.5k / 10n (fc 10.6 kHz)
-# -> 10k level (PROVISIONAL) -> 1u DC block -> edge 18 EAUDIO
+# -> 10k level -> 1u DC block -> edge 18 EAUDIO; into the console's C10 0.1u + R5 6.8k this is
+# within +-0.7 dB of a POKEY cart (1k pull-up, 12k series) to 5 kHz (tools/audit/spice_checks.py)
 R('1.5k', 'AUD_PWM', 'AUD_LP', desc='audio PWM low-pass, fc 10.6 kHz', key='R_AUDLP')
 C('10nF', 'AUD_LP', desc='audio PWM low-pass, fc 10.6 kHz', key='C_AUDLP')
-R('10k', 'AUD_LP', 'AUD_LVL', desc='EAUDIO level (PROVISIONAL)', key='R_AUDLVL')
+R('10k', 'AUD_LP', 'AUD_LVL', desc='EAUDIO level: a POKEY cart\'s, +-0.7 dB (spice_checks.py)', key='R_AUDLVL')
 C('1uF', 'AUD_LVL', 'EAUDIO', desc='EAUDIO DC block', key='C_AUDDC')
 # bring-up: the console's bus strobes, audio and rail, on pads in the upper body (outside the
 # console's slot), with a scope ground beside them
 TP('PHI2', 'PHI2', desc='bring-up: console PHI2', key='TP_PHI2')
 TP('RW', 'R/W', desc='bring-up: console R/W', key='TP_RW')
-TP('HALT_RP', '/HALT', desc='bring-up: console /HALT (MARIA DMA), behind its 1k', key='TP_HALT')
+TP('HALT_RP', '/HALT', desc='bring-up: console /HALT (MARIA DMA), behind its 10k', key='TP_HALT')
 TP('EAUDIO', 'EAUDIO', desc='bring-up: cart audio at the edge', key='TP_EAUDIO')
 TP('CONS_5V', 'CONS_5V', desc='bring-up: console +5V at the edge', key='TP_CONS5V')
 TP('GND', 'GND', desc='bring-up: scope ground by the bus pads', key='TP_GNDBUS')

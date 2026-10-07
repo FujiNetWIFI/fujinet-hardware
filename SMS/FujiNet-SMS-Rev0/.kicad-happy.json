@@ -1,8 +1,9 @@
 // kicad-happy project config for FujiNet-SMS Rev0 (JSONC)
 // Net patterns are fnmatch globs written to match both today's flat names (VBUS_SNS) and the
 // hierarchy-prefixed names the redrawn schematic will carry (/usb-uart/VBUS_SNS, /edge/A0).
-// The schematic analyzer reports suppressed findings regardless; the PCB / EMC / thermal
-// analyzers honour this file. Triage of every suppression: docs/design-review-rev0.md, Part 1.
+// kicad-happy 2.2.1 applies these in the EMC and thermal analyzers only: the schematic and PCB
+// analyzers report suppressed rules anyway. Triage of every finding, suppressed or not:
+// docs/design-review-rev0.md, Parts 1 and 2.
 {
   "version": 1,
   "project": {
@@ -48,8 +49,6 @@
     },
     { "rule_id": "RS-001", "nets": ["PWR_OK", "*/PWR_OK", "PWR_OK_N", "*/PWR_OK_N", "VBUS_SNS", "*/VBUS_SNS"],
       "reason": "Logic outputs of the 74HCT14 and the CP2102N VBUS sense divider node (22k/47k), not rails." },
-    { "rule_id": "NT-001", "nets": ["*/A[0-9]*", "*/D[0-7]", "*/SA1[3-9]"],
-      "reason": "Analyzer artifact: these are bus members joined across sheets by the global bus labels A[0..15] / D[0..7] / SA[13..19]; the kicad-cli netlist joins them (A0 = J1.25, U1.77, U2.20, U3.20). kicad-happy 2.2.1 does not expand global bus labels." },
     { "rule_id": "PU-001", "components": ["U10"],
       "reason": "CP2102N CHREN/CHR0/CHR1 are charger-detect outputs, left open as in the ESP32-S3-DevKitC-1 reference." },
     { "rule_id": "CG-AUD", "components": ["J1"],
@@ -59,6 +58,12 @@
     { "rule_id": "DC-002", "components": ["U11"],
       "reason": "UMH3N is a dual pre-biased transistor (auto-program); it has no supply pin to decouple." },
     { "rule_id": "VD-004", "components": ["R20"],
-      "reason": "0603 is the board's passive size; the 47k is not power-sized." }
+      "reason": "0603 is the board's passive size; the 47k is not power-sized." },
+    { "rule_id": "KO-001", "components": ["J1", "H1", "H2", "H3", "H4"],
+      "reason": "Deliberate rule areas: the tab keep-outs forbid tracks, vias and pour but allow pads (the gold fingers belong there); the screw keep-outs keep copper off the M3 holes, which are the footprints inside them." },
+    { "rule_id": "PM-002", "components": ["J1", "J3", "J4", "U9"],
+      "reason": "At the edge by design: the cart fingers, the microSD and USB-C mouths on the top edge, the ESP32-S3 antenna flush with the top edge over its keep-out." },
+    { "rule_id": "CC-002",
+      "reason": "Signal nets necked down to 0.15 mm only for their last link at the RP2354B's 0.4 mm-pitch pins (finish_route --neck); logic currents of a few mA." }
   ]
 }

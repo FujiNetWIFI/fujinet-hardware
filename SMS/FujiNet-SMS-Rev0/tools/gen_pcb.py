@@ -719,9 +719,9 @@ def main():
     board.append(zone('GND_plane', 'GND', 'In1.Cu', BODY))
     board.append(zone('3V3_plane', '+3V3', 'In4.Cu', BODY))
     board.append(zone('5V_island_0', '+5V', 'In4.Cu', five_v_island(), priority=2))
-    board.append(text('FujiNet SMS Rev0', XC + 20.0, 99.0, 'F.SilkS', 1.5))
-    board.append(text('RP2354B + ESP32-S3', XC + 20.0, 101.2, 'F.SilkS', 1.0))
-    board.append(text('CERN-OHL-W-2.0  fujinet.online', XC, Y0 + 4.0, 'B.SilkS', 1.0, mirror=True))
+    board.append(text('FujiNet SMS Rev0', 82.0, 63.0, 'F.SilkS', 1.5))       # the open patch under the S3
+    board.append(text('RP2354B + ESP32-S3', 82.0, 65.4, 'F.SilkS', 1.0))
+    board.append(text('CERN-OHL-W-2.0  fujinet.online', 82.0, 69.0, 'B.SilkS', 1.0, mirror=True))
     board.append(['embedded_fonts', 'no'])
     open(PCB, 'w').write(dump(board) + '\n')
     print('placed %d parts -> %s' % (len(D.PARTS), os.path.basename(PCB)))

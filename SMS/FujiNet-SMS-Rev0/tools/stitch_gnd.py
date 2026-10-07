@@ -24,8 +24,28 @@ def inside(x, y):
     return G.point_in_poly(x, y, G.OUTLINE)
 
 
-def candidates():
-    pts = []
+# return-path vias: a GND via beside every via of these nets (kicad-happy RP-001 wants one within
+# 1 mm of each layer change), offered at 0.95 mm in eight directions and DRC-filtered like the grid.
+# None goes inside the RP / DVDD-island exclusion below: a GND through-via there would cut the island,
+# so the USB vias beside the RP (F.Cu <-> In3.Cu) return through its decoupling ring instead
+NEAR_NETS = ('USB_DP', 'USB_DM', 'RP_USB_DP', 'RP_USB_DM', 'UBRG_DP', 'UBRG_DM')
+NEAR_R = 0.95
+
+
+def near_points(board):
+    nets = {G.NET(n) for n in NEAR_NETS}
+    pts = set()
+    for e in board:
+        if isinstance(e, list) and e and e[0] == 'via' and str(find(e, 'net')[1]) in nets:
+            ax, ay = float(find(e, 'at')[1]), float(find(e, 'at')[2])
+            for k in range(8):
+                t = math.radians(45 * k + 22.5)
+                pts.add((round(ax + NEAR_R * math.cos(t), 2), round(ay + NEAR_R * math.sin(t), 2)))
+    return pts
+
+
+def candidates(extra=()):
+    pts = list(extra)
     ux, uy, _ = G.PLACE[G.K['U_RP']] if G.PLACE else (0, 0, 0)
     # grid over the body (tab excluded), staggered every other row
     y = G.Y0 + EDGE + PITCH / 2
@@ -73,8 +93,10 @@ def candidates():
 
 
 def via(x, y, i):
+    # keyed by position, not by list index: a second run's new vias must never reuse an earlier
+    # run's uuids (DRC reports items by uuid, so a rejected new via took a good old one with it)
     return ['via', ['at', x, y], ['size', VIA_D], ['drill', VIA_DRILL], ['locked', 'yes'],
-            ['layers', Q('F.Cu'), Q('B.Cu')], ['net', Q('GND')], ['uuid', Q(str(G.uid('stitch', i)))]]
+            ['layers', Q('F.Cu'), Q('B.Cu')], ['net', Q('GND')], ['uuid', Q(str(G.uid('stitch', x, y)))]]
 
 
 def drc_uuids():
@@ -103,7 +125,7 @@ def main():
     def off_pads(x, y):
         return all(max(abs(x - p.cx) - p.hw, 0) ** 2 + max(abs(y - p.cy) - p.hh, 0) ** 2 > (VIA_D / 2 + 0.2) ** 2
                    for p in pads)
-    allc0 = set(candidates())
+    allc0 = set(candidates(near_points(board)))
     # an earlier run's stitching vias inside pads go
     board = [e for e in board if not (isinstance(e, list) and e and e[0] == 'via' and str(find(e, 'net')[1]) == 'GND'
              and (round(float(find(e, 'at')[1]), 2), round(float(find(e, 'at')[2]), 2)) in allc0

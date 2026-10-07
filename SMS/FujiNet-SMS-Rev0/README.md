@@ -19,12 +19,13 @@ All-in-one **Sega Master System / SMS2 FujiNet cartridge**: one board in the
   **WS2812B-2020** status LED, RESET / BOOTSEL / S3 EN / S3 BOOT buttons: the
   NES Rev0 FujiNet half.
 
-**Status (2026-10-06): designed, not built.** Nothing has run on a console.
+**Status (2026-10-07): designed and routed, not built.** Nothing has run on a console.
 
 - Schematic: ERC 0 errors / 0 warnings; `tools/check_nets.py` 437/437
   against the firmware headers; `tools/check_glue.py` 8192/8192 input
   combinations against the firmware's own glue functions.
-- Board: 6 layers, {{LAYOUT_STATUS}}.
+- Board: 6 layers, 100 x 93 mm, routed; KiCad DRC at every severity: 0
+  violations, 0 unconnected, 0 schematic-parity issues.
 - Shell: an OpenSCAD clamshell on the original cartridge's base (`case/`).
 - Audit: kicad-happy + manufacturer datasheets, `docs/design-review-rev0.md`.
   Part 1 is the schematic, Part 2 the layout.
@@ -257,7 +258,14 @@ Netclasses:
 - USB pairs: 0.25 mm.
 
 The 0.4 mm-pitch RP pins' final links neck down to 0.15 / 0.12 mm (JLCPCB's
-6-layer minimum is 0.09). {{ROUTING_STATS}}
+6-layer minimum is 0.09).
+
+The routed board:
+- 184 nets, all routed: Freerouting (10 passes) plus the finisher for the
+  last 7 links;
+- 1996 segments and 5266 mm of track;
+- 756 vias, 284 of them GND stitching (a 4 mm grid, an edge guard row, and
+  return vias beside the USB vias).
 
 ## Shell
 

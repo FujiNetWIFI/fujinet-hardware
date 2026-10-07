@@ -1,0 +1,9 @@
+(version 1)
+(rule "default_clearance"
+	(constraint clearance (min 0.12mm)))
+(rule "gnd_solid_under_ics"
+	(condition "A.NetName == 'GND' && (A.memberOfFootprint('U1') || A.memberOfFootprint('U3') || A.memberOfFootprint('U5') || A.memberOfFootprint('U6'))")
+	(constraint zone_connection solid))
+(rule "finger_edge"
+	(condition "A.memberOfFootprint('J1')")
+	(constraint edge_clearance (min 0.4mm)))

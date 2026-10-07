@@ -1,0 +1,106 @@
+(footprint "RPI_C0402"
+	(version 20241229)
+	(generator "fujinet_gen")
+	(generator_version "1.0")
+	(layer "F.Cu")
+	(descr "From Raspberry Pi RP2350A minimal design (MIT): RPI_COMPILED:generic_capc1005x50")
+	(property "Reference" "REF**"
+		(at 0 -1 180)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 0.8 0.5)
+				(thickness 0.125)
+				(bold yes)
+			)
+		)
+	)
+	(property "Value" "RPI_C0402"
+		(at 0 1)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(effects
+			(font
+				(size 0.8 0.5)
+				(thickness 0.01)
+				(bold yes)
+			)
+		)
+	)
+	(units
+		(unit
+			(name "A")
+			(pins "1" "2")
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -0.5 -0.25)
+		(end 0.5 0.25)
+		(stroke
+			(width 0.01)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "04756a01-b490-4afc-9d75-d39f9737eed5")
+	)
+	(fp_rect
+		(start -0.5 -0.25)
+		(end 0.5 0.25)
+		(stroke
+			(width 0.01)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "9f1d783d-be3f-4878-a568-e19f580b51ea")
+	)
+	(fp_rect
+		(start -0.25 -0.25)
+		(end 0.25 0.25)
+		(stroke
+			(width 0.01)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "d607b7c0-3d2d-45a7-bb6c-7fbb4314e429")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 0.8 0.5)
+				(thickness 0.01)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -0.475 0)
+		(size 0.55 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "2" smd rect
+		(at 0.475 0)
+		(size 0.55 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(model "${KIPRJMOD}/3d/C_0402_1005Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+	(embedded_fonts no)
+)

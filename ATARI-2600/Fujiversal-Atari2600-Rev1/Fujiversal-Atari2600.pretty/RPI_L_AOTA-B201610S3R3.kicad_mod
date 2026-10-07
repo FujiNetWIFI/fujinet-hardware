@@ -1,0 +1,126 @@
+(footprint "RPI_L_AOTA-B201610S3R3"
+	(version 20241229)
+	(generator "fujinet_gen")
+	(generator_version "1.0")
+	(layer "F.Cu")
+	(descr "From Raspberry Pi RP2350A minimal design (MIT): RPI_COMPILED:abracon_aota-b201610s3r3-101-t")
+	(property "Reference" "REF**"
+		(at 0 -1.55)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 0.8 0.5)
+				(thickness 0.125)
+			)
+		)
+	)
+	(property "Value" "RPI_L_AOTA-B201610S3R3"
+		(at 0 0.8)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(effects
+			(font
+				(size 0.8 0.5)
+				(thickness 0.01)
+			)
+		)
+	)
+	(units
+		(unit
+			(name "A")
+			(pins "1" "2")
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_circle
+		(center -1.4 0.7)
+		(end -1.25 0.7)
+		(stroke
+			(width 0.01)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "60ca362d-1729-42a9-b403-368cd7b4c9c3")
+	)
+	(fp_rect
+		(start -1.1 0.9)
+		(end 1.1 -0.9)
+		(stroke
+			(width 0.01)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "fed4a8d0-2d13-4095-877f-3f8e1c83e183")
+	)
+	(fp_rect
+		(start -1 0.8)
+		(end 1 -0.8)
+		(stroke
+			(width 0.01)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "5cfc320e-9bc5-46fd-8175-20366651a2f9")
+	)
+	(fp_rect
+		(start -0.4 0.8)
+		(end 0.4 -0.8)
+		(stroke
+			(width 0.01)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "1da00c4b-6b23-4623-bc6b-bf804b3d79e5")
+	)
+	(fp_circle
+		(center -0.7 0.55)
+		(end -0.6 0.55)
+		(stroke
+			(width 0.01)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Fab")
+		(uuid "80ee5c32-b144-4b1f-b17d-9142e3ed2475")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 0.8 0.5)
+				(thickness 0.01)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -0.7 0)
+		(size 0.7 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(pad "2" smd rect
+		(at 0.7 0)
+		(size 0.7 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+	)
+	(model "${KIPRJMOD}/3d/AOTA-B201610S3R3.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+	(embedded_fonts no)
+)

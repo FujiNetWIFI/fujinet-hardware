@@ -1,0 +1,3033 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "9eeae63a-1566-58ff-b304-5075c4325b29")
+	(paper "A3")
+	(title_block
+		(title "FujiNet 7800 Rev0 - 32-pin 7800 cart edge, cart audio")
+		(date "2026-10-06")
+		(rev "0")
+		(company "FujiNet")
+		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
+		(comment 2 "CERN-OHL-W-2.0 (derived from FujiNet-SMS-Rev0 / FujiNet-NES-Rev0 and their sources)")
+		(comment 3 "Schematic only: no board laid out or built")
+	)
+	(lib_symbols
+		(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762)
+						(xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762)
+						(xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "FujiNet-7800:Atari7800_Cart_Edge_32"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 41.91 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Atari7800_Cart_Edge_32"
+				(at 0 -45.72 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "FujiNet-7800:Atari7800_Cart_Edge_32"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Atari 7800 32-pin cartridge edge, 2.54 mm pitch; pins 1-16 one face, 17-32 the other, pin k over pin 33-k; pins 3-14 / 19-30 are the 2600 edge (face and pin-1 end ASSUMED)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Atari7800_Cart_Edge_32_0_1"
+				(rectangle
+					(start -10.16 40.64)
+					(end 10.16 -40.64)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "Atari7800_Cart_Edge_32_1_1"
+				(pin passive line
+					(at 12.7 38.1 180)
+					(length 2.54)
+					(name "A0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "26"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 35.56 180)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "25"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 33.02 180)
+					(length 2.54)
+					(name "A2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "24"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 30.48 180)
+					(length 2.54)
+					(name "A3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "23"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 27.94 180)
+					(length 2.54)
+					(name "A4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "22"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 25.4 180)
+					(length 2.54)
+					(name "A5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "21"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 22.86 180)
+					(length 2.54)
+					(name "A6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 20.32 180)
+					(length 2.54)
+					(name "A7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 17.78 180)
+					(length 2.54)
+					(name "A8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 15.24 180)
+					(length 2.54)
+					(name "A9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 12.7 180)
+					(length 2.54)
+					(name "A10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 10.16 180)
+					(length 2.54)
+					(name "A11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 7.62 180)
+					(length 2.54)
+					(name "A12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 5.08 180)
+					(length 2.54)
+					(name "A13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 2.54 180)
+					(length 2.54)
+					(name "A14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 0 180)
+					(length 2.54)
+					(name "A15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -5.08 180)
+					(length 2.54)
+					(name "D0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "27"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -7.62 180)
+					(length 2.54)
+					(name "D1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "28"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -10.16 180)
+					(length 2.54)
+					(name "D2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "29"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -12.7 180)
+					(length 2.54)
+					(name "D3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -15.24 180)
+					(length 2.54)
+					(name "D4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -17.78 180)
+					(length 2.54)
+					(name "D5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -20.32 180)
+					(length 2.54)
+					(name "D6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -22.86 180)
+					(length 2.54)
+					(name "D7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -27.94 180)
+					(length 2.54)
+					(name "R/~{W}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -30.48 180)
+					(length 2.54)
+					(name "PHI2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "32"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -33.02 180)
+					(length 2.54)
+					(name "~{HALT}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -35.56 180)
+					(length 2.54)
+					(name "~{IRQ}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "31"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 -38.1 180)
+					(length 2.54)
+					(name "EAUDIO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -43.18 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -2.54 -43.18 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "30"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 43.18 270)
+					(length 2.54)
+					(name "+5V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "power:+5V"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "+5V"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+5V\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "+5V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27)
+						(xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54)
+						(xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0)
+						(xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+5V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:GND"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0)
+						(xy 0 -1.27)
+						(xy 1.27 -1.27)
+						(xy 0 -2.54)
+						(xy -1.27 -1.27)
+						(xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(symbol
+		(lib_id "FujiNet-7800:Atari7800_Cart_Edge_32")
+		(at 187.96 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "7d5b9a85-e113-5766-9460-a33d519f6538")
+		(property "Reference" "J1"
+			(at 176.53 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Atari7800_Cart_Edge_32"
+			(at 176.53 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "FujiNet-7800:Atari7800_Cart_Edge_32"
+			(at 187.96 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 187.96 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Atari 7800 32-pin cartridge edge, 2.54 mm pitch"
+			(at 187.96 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1fc23ede-4160-5a24-bfc3-010a4621cc51")
+		)
+		(pin "10"
+			(uuid "a3d82993-9928-515e-ba1f-5c653e5041ec")
+		)
+		(pin "11"
+			(uuid "baafccff-d8fd-57c8-8d7f-7102be511452")
+		)
+		(pin "12"
+			(uuid "62265b68-f740-5869-ac45-0ede022509f8")
+		)
+		(pin "13"
+			(uuid "0d759ce3-1c90-54be-8cc8-ec537ca76fbc")
+		)
+		(pin "14"
+			(uuid "5e3a077a-33c1-5436-8318-6e72cecccb44")
+		)
+		(pin "15"
+			(uuid "ff41f630-3c16-5d86-aadd-33ebd82b4824")
+		)
+		(pin "16"
+			(uuid "a021d77b-66d5-591c-9302-5cc9d1f23f53")
+		)
+		(pin "17"
+			(uuid "c089c743-ee30-5246-b18d-280c18362bb7")
+		)
+		(pin "18"
+			(uuid "22a4bb8b-ed74-52de-a238-c32a076e1c6b")
+		)
+		(pin "19"
+			(uuid "0c019fd5-e713-5302-b9ec-df92528c47f0")
+		)
+		(pin "2"
+			(uuid "c8f04211-3129-5529-a00e-88fc4f828fad")
+		)
+		(pin "20"
+			(uuid "ec3244a9-d0ea-5e2a-9db5-60ad525dbbdd")
+		)
+		(pin "21"
+			(uuid "9b3f6edf-7318-540f-8a23-1c66789e243f")
+		)
+		(pin "22"
+			(uuid "e40a465e-f2eb-50fd-a3cb-5028e08120ee")
+		)
+		(pin "23"
+			(uuid "d381ca69-d54f-5ecb-9592-faa785ab84cf")
+		)
+		(pin "24"
+			(uuid "78cdcf48-6292-5081-b5e5-41f9a3b01fec")
+		)
+		(pin "25"
+			(uuid "f709eaea-2dfa-579f-b4e1-bbd985ddb742")
+		)
+		(pin "26"
+			(uuid "7e06f395-f518-5497-8c33-cbe993215846")
+		)
+		(pin "27"
+			(uuid "6373d137-a130-5de9-917b-5ae998b7305c")
+		)
+		(pin "28"
+			(uuid "8db3f79b-8c50-50a1-87f7-dc721809cdbb")
+		)
+		(pin "29"
+			(uuid "4aa48642-75ef-5b6c-be4a-eac1ff511001")
+		)
+		(pin "3"
+			(uuid "54506bd0-d301-5c4d-95cb-ce66b8cb68f9")
+		)
+		(pin "30"
+			(uuid "dd7fb95e-fd73-5db5-9908-be59db8462e4")
+		)
+		(pin "31"
+			(uuid "fddee5d9-c41b-59e8-8967-1aeafaca4a86")
+		)
+		(pin "32"
+			(uuid "dd18eac4-9a57-5b3c-82e9-2bc5a897b051")
+		)
+		(pin "4"
+			(uuid "9ccbb4d7-1ad9-55c8-b239-99fad5447871")
+		)
+		(pin "5"
+			(uuid "09133e3f-e0b0-57cf-bc0e-48ecf7381d28")
+		)
+		(pin "6"
+			(uuid "a70fd424-de0e-5da7-900e-3447b749b0af")
+		)
+		(pin "7"
+			(uuid "3435db60-959c-5680-9893-ce71cbeeedc6")
+		)
+		(pin "8"
+			(uuid "e454d0e0-7088-50bf-9826-63bc063fa42e")
+		)
+		(pin "9"
+			(uuid "c77b023e-569d-5e81-a499-56106184cacf")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 210.82 205.74 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ac4c1503-1404-50c5-8589-2de3925f8edb")
+		(property "Reference" "C22"
+			(at 210.82 209.55 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1uF"
+			(at 210.82 212.09 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-7800:C_0603_1608Metric"
+			(at 210.82 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 210.82 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "EAUDIO DC block"
+			(at 210.82 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL10A105KB8NNNC"
+			(at 210.82 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 210.82 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2f1a9d22-a956-5d0c-9ca4-0e06173e3ca1")
+		)
+		(pin "2"
+			(uuid "02e8ca49-f747-53ab-a557-e0fe63ef3ec3")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "C22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 226.06 205.74 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fa181bb4-341f-5178-aae1-4d660893cc64")
+		(property "Reference" "R13"
+			(at 226.06 208.534 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 226.06 211.074 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-7800:R_0603_1608Metric"
+			(at 226.06 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "EAUDIO level (PROVISIONAL)"
+			(at 226.06 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF1002T5E"
+			(at 226.06 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C25804"
+			(at 226.06 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c1e6ae53-e1df-5b48-8d5a-33ae2b0d5542")
+		)
+		(pin "2"
+			(uuid "36086226-4d90-5ff7-8c15-569832130112")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 248.92 205.74 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "52ae9ae4-ad9e-524a-8ab8-4aab24ee821e")
+		(property "Reference" "R12"
+			(at 248.92 208.534 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1.5k"
+			(at 248.92 211.074 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-7800:R_0603_1608Metric"
+			(at 248.92 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 248.92 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "audio PWM low-pass, fc 10.6 kHz"
+			(at 248.92 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF1501T5E"
+			(at 248.92 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22843"
+			(at 248.92 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e2e943ae-15b2-544e-bb5e-d800f451e86e")
+		)
+		(pin "2"
+			(uuid "4f3f56f6-565c-5fa2-9e56-6d2798d9c0a8")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "R12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 237.49 209.55 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "bea2618c-19ad-5929-a941-747ffd04531a")
+		(property "Reference" "C21"
+			(at 240.792 208.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10nF"
+			(at 240.792 210.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "FujiNet-7800:C_0603_1608Metric"
+			(at 237.49 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 237.49 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "audio PWM low-pass, fc 10.6 kHz"
+			(at 237.49 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603B103K500NT"
+			(at 237.49 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C57112"
+			(at 237.49 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "cd12d047-1d16-544b-99ab-3f2a7fa9fa4d")
+		)
+		(pin "2"
+			(uuid "9eb08bd5-ee08-5bb8-9c6c-c24526a5a491")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "C21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 237.49 213.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "e20a715e-3e90-59d2-a01c-2df5e71932e3")
+		(property "Reference" "#PWR001"
+			(at 237.49 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 237.49 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 237.49 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 237.49 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 237.49 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "82021e84-1b04-52dd-a6a6-cfaabf73601e")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "#PWR001")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 182.88 114.3 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "71b0d13c-193b-520e-b423-8a295ccd57db")
+		(property "Reference" "#PWR002"
+			(at 182.88 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "CONS_5V"
+			(at 182.88 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d07254cb-c663-59e3-b99c-97a653da47cf")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "#PWR002")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 182.88 203.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "896a242d-7c7d-562a-b280-24822d9d3d8b")
+		(property "Reference" "#PWR003"
+			(at 182.88 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 182.88 207.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4b71afd7-508f-571f-ae32-a065ed8fb818")
+		)
+		(instances
+			(project "FujiNet-7800-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/9eeae63a-1566-58ff-b304-5075c4325b29"
+					(reference "#PWR003")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 200.66 119.38)
+			(xy 215.9 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7dbaae3a-cb90-5ee4-bad3-953e63ffd474")
+	)
+	(wire
+		(pts
+			(xy 200.66 121.92)
+			(xy 215.9 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98a8d3fb-e1b3-51dc-b3fa-78e32e28ed7b")
+	)
+	(wire
+		(pts
+			(xy 200.66 124.46)
+			(xy 215.9 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbc94476-b79f-52df-adf3-7f589c5f58cb")
+	)
+	(wire
+		(pts
+			(xy 200.66 127)
+			(xy 215.9 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbef6fb1-cea8-5a6e-9acb-8aa93b4f104c")
+	)
+	(wire
+		(pts
+			(xy 200.66 129.54)
+			(xy 215.9 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d2fd263-7963-5caa-979e-dba2fb2edd99")
+	)
+	(wire
+		(pts
+			(xy 200.66 132.08)
+			(xy 215.9 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c3a7982-6c40-50f4-ad11-659bacfb7a9e")
+	)
+	(wire
+		(pts
+			(xy 200.66 134.62)
+			(xy 215.9 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20b0c94b-55b4-5c2c-b3d9-28d125971a71")
+	)
+	(wire
+		(pts
+			(xy 200.66 137.16)
+			(xy 215.9 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3568cea6-c914-5569-8449-d86c567af5c2")
+	)
+	(wire
+		(pts
+			(xy 200.66 139.7)
+			(xy 215.9 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97d74b40-b834-5788-b8f0-fb0c1ea079cf")
+	)
+	(wire
+		(pts
+			(xy 200.66 142.24)
+			(xy 215.9 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eea98c73-41e2-5654-a881-ac95e1ca4b93")
+	)
+	(wire
+		(pts
+			(xy 200.66 144.78)
+			(xy 215.9 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "204d299e-305d-5238-915c-e88cdbcbfdec")
+	)
+	(wire
+		(pts
+			(xy 200.66 147.32)
+			(xy 215.9 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e190b2c-fdc5-5dbe-960d-4c3d9cf222b8")
+	)
+	(wire
+		(pts
+			(xy 200.66 149.86)
+			(xy 215.9 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d69cc377-0c99-58ef-a0fc-2164ac5bd040")
+	)
+	(wire
+		(pts
+			(xy 200.66 152.4)
+			(xy 215.9 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09ca86b4-c39a-50b1-b243-fe9af0c331e5")
+	)
+	(wire
+		(pts
+			(xy 200.66 154.94)
+			(xy 215.9 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bcbfed0-91fa-558f-a775-c911c756642b")
+	)
+	(wire
+		(pts
+			(xy 200.66 157.48)
+			(xy 215.9 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45effbc8-ba64-54ee-b788-82d477e93416")
+	)
+	(wire
+		(pts
+			(xy 200.66 162.56)
+			(xy 215.9 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34253a33-6d27-5230-937e-7391241ff7c1")
+	)
+	(wire
+		(pts
+			(xy 200.66 165.1)
+			(xy 215.9 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b45a893-5081-5f5e-bd18-08caca520aa7")
+	)
+	(wire
+		(pts
+			(xy 200.66 167.64)
+			(xy 215.9 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa88f1ca-ce65-5494-b81b-78c195671467")
+	)
+	(wire
+		(pts
+			(xy 200.66 170.18)
+			(xy 215.9 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37c0578c-8e15-535d-b657-dcaf16d34597")
+	)
+	(wire
+		(pts
+			(xy 200.66 172.72)
+			(xy 215.9 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8381b655-8db0-5b40-8a2e-3a5eac1cded9")
+	)
+	(wire
+		(pts
+			(xy 200.66 175.26)
+			(xy 215.9 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecfc9880-3ccf-5d47-b6c5-2dea21a94246")
+	)
+	(wire
+		(pts
+			(xy 200.66 177.8)
+			(xy 215.9 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a10db4dd-a461-5de4-9141-f271bda00506")
+	)
+	(wire
+		(pts
+			(xy 200.66 180.34)
+			(xy 215.9 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10f69f04-b51e-5734-93c2-a2c298cdf2c4")
+	)
+	(wire
+		(pts
+			(xy 200.66 185.42)
+			(xy 231.14 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2896060b-1393-52b4-b2e3-7b4795fc8742")
+	)
+	(wire
+		(pts
+			(xy 200.66 187.96)
+			(xy 231.14 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b97d9efe-120b-5dce-b393-74bd72e1f9ab")
+	)
+	(wire
+		(pts
+			(xy 200.66 190.5)
+			(xy 231.14 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "195c7421-366b-55e9-8440-80787c2eecab")
+	)
+	(wire
+		(pts
+			(xy 200.66 193.04)
+			(xy 231.14 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05ea836d-05a7-592f-88b4-9392ac006a08")
+	)
+	(wire
+		(pts
+			(xy 200.66 195.58)
+			(xy 203.2 195.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64f68904-414f-59aa-9f44-f7dd52ebc40b")
+	)
+	(wire
+		(pts
+			(xy 203.2 195.58)
+			(xy 203.2 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b06d0458-6069-5f06-b3d3-dc0cacb8fa2a")
+	)
+	(wire
+		(pts
+			(xy 203.2 205.74)
+			(xy 207.01 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c424cf82-5366-5434-89b6-9802e0d13e5e")
+	)
+	(wire
+		(pts
+			(xy 214.63 205.74)
+			(xy 222.25 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c58b7fd-e3b2-5ae5-a0dd-43016c974317")
+	)
+	(wire
+		(pts
+			(xy 229.87 205.74)
+			(xy 237.49 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9054fd6-78ee-5e97-8ad4-e941d1b1d8f3")
+	)
+	(wire
+		(pts
+			(xy 237.49 205.74)
+			(xy 245.11 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6038e4c-b1e5-5dd8-be34-3a38faf89a56")
+	)
+	(wire
+		(pts
+			(xy 252.73 205.74)
+			(xy 257.81 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "087f5e9e-990b-5091-be38-cc8fdfeeb0a5")
+	)
+	(wire
+		(pts
+			(xy 203.2 200.66)
+			(xy 205.74 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07903fa7-60c0-5f04-93d6-a212e2322eed")
+	)
+	(wire
+		(pts
+			(xy 218.44 205.74)
+			(xy 218.44 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "677b90e2-411b-5f48-9775-389287575be5")
+	)
+	(wire
+		(pts
+			(xy 240.03 205.74)
+			(xy 240.03 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9024a11-0fec-5430-a2ba-4be4dfa4e91c")
+	)
+	(wire
+		(pts
+			(xy 182.88 200.66)
+			(xy 182.88 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28acd208-bc0b-5d09-94f7-80faa54d110f")
+	)
+	(wire
+		(pts
+			(xy 182.88 203.2)
+			(xy 185.42 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2fea579d-4afe-5c7c-b39f-5e9532b4bbbe")
+	)
+	(wire
+		(pts
+			(xy 185.42 203.2)
+			(xy 185.42 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2b9ac4e-b3ca-5e8c-9de1-2d65cfc4881e")
+	)
+	(bus
+		(pts
+			(xy 218.44 116.84)
+			(xy 218.44 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97031bd3-bcf6-5aff-ba54-a9281695625c")
+	)
+	(bus
+		(pts
+			(xy 218.44 116.84)
+			(xy 231.14 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "72ae2d29-063c-50e5-a89b-046bb4c1da58")
+	)
+	(bus
+		(pts
+			(xy 218.44 160.02)
+			(xy 218.44 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "509158f8-c662-590f-86e8-cb1c7f90d8e0")
+	)
+	(bus
+		(pts
+			(xy 218.44 160.02)
+			(xy 231.14 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcbcd11c-7939-5e90-89b1-ff8927037298")
+	)
+	(bus_entry
+		(at 215.9 119.38)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20c6ab21-910c-5665-93f7-56a603248c0c")
+	)
+	(bus_entry
+		(at 215.9 121.92)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ade31cb-8bbb-5891-a946-d304bbfbb506")
+	)
+	(bus_entry
+		(at 215.9 124.46)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66f8e542-945e-5bc4-9660-144c899c015b")
+	)
+	(bus_entry
+		(at 215.9 127)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57aa9cb8-ee37-53a8-aac8-cbc8efd8d526")
+	)
+	(bus_entry
+		(at 215.9 129.54)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04f25958-d0d8-5aca-a958-dfd30ef90606")
+	)
+	(bus_entry
+		(at 215.9 132.08)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7cff718-c9b2-537e-84e0-aeb925fec21a")
+	)
+	(bus_entry
+		(at 215.9 134.62)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b92baac-a8f6-52dd-90cf-b8acf601fedb")
+	)
+	(bus_entry
+		(at 215.9 137.16)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5ce4ee7-0c41-52f5-b99a-aa2f0769e69a")
+	)
+	(bus_entry
+		(at 215.9 139.7)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fd63d58d-568d-55e3-8450-4e47397942fc")
+	)
+	(bus_entry
+		(at 215.9 142.24)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f11ca46-2470-5f3d-ad33-7e436e4220cb")
+	)
+	(bus_entry
+		(at 215.9 144.78)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f42f82a-c563-5974-8ea7-32c94b2e2f84")
+	)
+	(bus_entry
+		(at 215.9 147.32)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66e17246-4856-567f-b4ff-11e4f0519aed")
+	)
+	(bus_entry
+		(at 215.9 149.86)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c024496-6034-5e41-a84b-aefa2253041f")
+	)
+	(bus_entry
+		(at 215.9 152.4)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8782280-0af5-5bc5-9271-b032ea32f013")
+	)
+	(bus_entry
+		(at 215.9 154.94)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "91b05349-7aeb-5e7f-a9a3-97dfda263c40")
+	)
+	(bus_entry
+		(at 215.9 157.48)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0fe9348f-a73d-5578-a630-0662702c6507")
+	)
+	(bus_entry
+		(at 215.9 162.56)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "026bc9cd-2782-5fc8-9cc5-abdf17af8163")
+	)
+	(bus_entry
+		(at 215.9 165.1)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a87ead3c-7dd1-57dc-8df9-1e166b3c2f76")
+	)
+	(bus_entry
+		(at 215.9 167.64)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "50e4b34a-ae94-502b-8e79-bb64f130d9d3")
+	)
+	(bus_entry
+		(at 215.9 170.18)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "17ce3cf3-b92e-5a5c-b0fc-cc5559ec1565")
+	)
+	(bus_entry
+		(at 215.9 172.72)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f63850f4-b06c-5d55-906f-8a2fc9e3e7e7")
+	)
+	(bus_entry
+		(at 215.9 175.26)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6399f9cb-e1b8-5fc3-95a8-cbda13e268b6")
+	)
+	(bus_entry
+		(at 215.9 177.8)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "404598c3-5c04-5617-83f7-5349ee096ba0")
+	)
+	(bus_entry
+		(at 215.9 180.34)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b76072b9-3e54-590b-8a16-1a2c94aaef44")
+	)
+	(junction
+		(at 203.2 200.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "91ef96ba-cb8a-5651-88ad-31480f44e060")
+	)
+	(junction
+		(at 218.44 205.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "20887730-58ff-5e6e-a1c0-baad889f699a")
+	)
+	(junction
+		(at 237.49 205.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1f5378de-82aa-5a74-ac12-90d3e2c6e75f")
+	)
+	(junction
+		(at 240.03 205.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fb654d0e-a419-50e1-a5be-ab6ce1404ebe")
+	)
+	(label "A0"
+		(at 201.93 119.38 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "667c38b6-d007-5f1b-96ee-c74135814f7b")
+	)
+	(label "A1"
+		(at 201.93 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "df9f6cde-24f4-5021-a302-677fcdd34de9")
+	)
+	(label "A2"
+		(at 201.93 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fa313c60-4000-535a-9041-e506aa85e435")
+	)
+	(label "A3"
+		(at 201.93 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5f7bcd4a-68c4-573a-a2b8-aa7faa914f75")
+	)
+	(label "A4"
+		(at 201.93 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cff2e171-3470-5924-b408-1a08c512e21d")
+	)
+	(label "A5"
+		(at 201.93 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "39d17f5c-748e-5d64-8016-b096cb3ad60e")
+	)
+	(label "A6"
+		(at 201.93 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "808b773c-10e0-5952-be03-403a4193609d")
+	)
+	(label "A7"
+		(at 201.93 137.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b1ec3140-f1fb-51cc-bdbc-aaedc6d975a5")
+	)
+	(label "A8"
+		(at 201.93 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e6bedaab-990a-5dab-9370-0e65417ea7c4")
+	)
+	(label "A9"
+		(at 201.93 142.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d7e9c310-ffc1-52d8-b4eb-583e59a81034")
+	)
+	(label "A10"
+		(at 201.93 144.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9df25880-8b1b-544f-850b-9335db9db886")
+	)
+	(label "A11"
+		(at 201.93 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7d9b19f6-c3ab-51a2-995c-9f82e96a7609")
+	)
+	(label "A12"
+		(at 201.93 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8fccdb34-1d8d-5214-b907-7eba41fc894e")
+	)
+	(label "A13"
+		(at 201.93 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "620291ef-76f1-52e6-b68e-1284aaacabe5")
+	)
+	(label "A14"
+		(at 201.93 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3d54e255-c3f1-5dc3-9f23-d5c394b0bb7c")
+	)
+	(label "A15"
+		(at 201.93 157.48 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a075c979-691e-565b-9eca-68ce16979d6a")
+	)
+	(global_label "A[0..15]"
+		(shape output)
+		(at 231.14 116.84 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a9782e22-7df5-581b-8ded-88c13dcf77a2")
+	)
+	(label "D0"
+		(at 201.93 162.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "97c5d8b5-d0cf-5178-bf6b-928abe23f88d")
+	)
+	(label "D1"
+		(at 201.93 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bc81543c-a51f-5ef1-a60f-afbf676a753d")
+	)
+	(label "D2"
+		(at 201.93 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fcb8450e-43bd-59fc-b011-311ae9b76bc6")
+	)
+	(label "D3"
+		(at 201.93 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8656be9f-9897-5ea8-bef7-31832df9a1ce")
+	)
+	(label "D4"
+		(at 201.93 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "def7e883-945a-5cc1-909c-219f6c93b882")
+	)
+	(label "D5"
+		(at 201.93 175.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0a0676cf-5fa3-5923-b48f-eeab9b7d72c6")
+	)
+	(label "D6"
+		(at 201.93 177.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3ac8e3f7-4b16-5713-8a57-7c90a409b40b")
+	)
+	(label "D7"
+		(at 201.93 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "30d98afa-6354-5bcf-a9a4-9a7768289742")
+	)
+	(global_label "D[0..7]"
+		(shape bidirectional)
+		(at 231.14 160.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "75429e1b-98ea-5561-979c-02ce0ad8ba25")
+	)
+	(global_label "RW"
+		(shape output)
+		(at 231.14 185.42 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dece2946-23a1-5dfe-97d3-e90fc1d5d8f1")
+	)
+	(global_label "PHI2"
+		(shape output)
+		(at 231.14 187.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3792a87a-ebca-5ffb-be3c-25be7f6dc9de")
+	)
+	(global_label "HALT_N"
+		(shape output)
+		(at 231.14 190.5 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c3c95216-2045-5907-b276-140bdc046dfa")
+	)
+	(global_label "IRQ_N"
+		(shape input)
+		(at 231.14 193.04 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f81e1e31-fce9-5822-b730-63092fbe8ec6")
+	)
+	(global_label "AUD_PWM"
+		(shape input)
+		(at 257.81 205.74 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "504253be-b352-53db-9a89-c886ffc9b566")
+	)
+	(global_label "EAUDIO"
+		(shape passive)
+		(at 205.74 200.66 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "116d54b8-45b1-5eab-9b20-8c036ddaadf3")
+	)
+	(global_label "AUD_LVL"
+		(shape passive)
+		(at 218.44 203.2 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5d4d064c-143b-5671-a3e6-dd81009e1ca4")
+	)
+	(global_label "AUD_LP"
+		(shape passive)
+		(at 240.03 203.2 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6cefc645-5efd-5376-8a74-0cc93f31295f")
+	)
+	(text "Atari 7800 32-pin cartridge edge, drawn by function (finger numbers on the pins).\nPins 1-16 face pins 32-17 (k over 33-k); 3-14 and 19-30 are the 2600 edge.  ASSUMED, verify\non a real cart PCB: pins 1-16 on the console-rear face, pin 1 at the LEFT seen from that face\nwith the fingers down.  No chip select, no reset: the glue decodes A15-A11 itself."
+		(exclude_from_sim no)
+		(at 157.48 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "cdd9abca-498c-5c85-9cf2-850dfce81e89")
+	)
+	(text "Cart audio: GPIO29 PWM (833 kHz carrier) -> 1.5k / 10n (fc 10.6 kHz) -> 10k -> 1u -> EAUDIO.\nThe 10k level is PROVISIONAL (match a POKEY cart on a real console); the 1u keeps the\nconsole's audio node at its no-cart DC level."
+		(exclude_from_sim no)
+		(at 157.48 223.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "ac77b256-fab0-52e6-b489-559be9f00e1d")
+	)
+	(embedded_fonts no)
+)

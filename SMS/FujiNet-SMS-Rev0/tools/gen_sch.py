@@ -3,11 +3,14 @@
 
 design.py says what connects to what; sch_layout.py says how each sheet is
 drawn: parts placed left to right in signal-flow order and joined by wires,
-the address / data buses as KiCad buses, rails as power symbols, global
-labels only where a net leaves the sheet (sch_draw.py has the conventions).
-Each sheet is connectivity-checked as it is drawn (sch_draw.Sheet.check) and
-the written schematic is checked once more through kicad-cli's netlist
-against design.py, net by net, names included.  Symbols come from
+the address / data buses as KiCad buses, rails as power symbols, and
+hierarchical labels where a net leaves a sheet, wired on the root's block
+diagram (sch_draw.py has the conventions).  Each sheet is connectivity-checked
+as it is drawn (sch_draw.Sheet.check), the hierarchy against design.py
+(check_hierarchy: every net that crosses sheets leaves each of its sheets on
+a hierarchical label and every label has its sheet pin), and the written
+schematic once more through kicad-cli's netlist against design.py, net by
+net, names included (the last element of KiCad's /sheet/NET path).  Symbols come from
 tools/symcache.sexpr (stock KiCad symbols as flattened by eeschema, see
 harvest_symbols.py) plus the project library, which this script also
 (re)writes: FujiNet-SMS.kicad_sym.  The sheet list in the .kicad_pro is kept
@@ -24,6 +27,7 @@ import sch_draw
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
 DATE = '2026-10-06'
+COMMENT3 = 'Rev0 audit 2026-10-06: kicad-happy + datasheets, see docs/design-review-rev0.md'
 NS = uuid.UUID('3c0b5e2a-9d41-4f6a-8c1e-5a6d2f7b9e10')
 
 
@@ -268,12 +272,12 @@ def serialize(sh, title, root_uuid, sheet_uuid, pwr):
     for kind, net, x, y, ang, shape in sh.labels:
         just = 'left' if ang in (0, 90) else 'right'
         e = [kind, Q(net)]
-        if kind == 'global_label':
+        if kind != 'label':
             e.append(['shape', shape])
         e += [['at', x, y, ang]]
-        if kind == 'global_label':
+        if kind != 'label':
             e.append(['fields_autoplaced', 'yes'])
-        e += [['effects', ['font', ['size', 1.27, 1.27]], ['justify', just] if kind == 'global_label'
+        e += [['effects', ['font', ['size', 1.27, 1.27]], ['justify', just] if kind != 'label'
                else ['justify', just, 'bottom']], ['uuid', uid(stem, kind, net, x, y)]]
         items.append(e)
     for s, x, y, size, j in sh.texts:
@@ -284,10 +288,113 @@ def serialize(sh, title, root_uuid, sheet_uuid, pwr):
           ['rev', Q('0')], ['company', Q('FujiNet')],
           ['comment', 1, Q('Generated from tools/design.py + tools/sch_layout.py - edit those, not this file')],
           ['comment', 2, Q('CERN-OHL-W-2.0 (derived from FujiNet-NES-Rev0 and its sources)')],
-          ['comment', 3, Q('Schematic only: no board laid out or built')]]
+          ['comment', 3, Q(COMMENT3)]]
     return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
             ['generator_version', Q('9.0')], ['uuid', Q(sheet_uuid)], ['paper', Q(sh.paper)], tb,
             lib_symbols] + items + [['embedded_fonts', 'no']]
+
+
+def serialize_root(sh, root_uuid, sheet_uuids):
+    """The root: the block diagram (sheet symbols with their pins, the wires and
+    buses between them, net labels on every wire) and the notes."""
+    items = []
+    page = {s: pg for s, t, pg in D.SHEETS}
+    title = {s: t for s, t, pg in D.SHEETS}
+    st = ['stroke', ['width', 0], ['type', 'default']]
+    for b in sh.blocks:
+        stem, x, y, w, h = b['stem'], b['x'], b['y'], b['w'], b['h']
+        e = ['sheet', ['at', x, y], ['size', w, h], ['exclude_from_sim', 'no'], ['in_bom', 'yes'],
+             ['on_board', 'yes'], ['dnp', 'no'], ['fields_autoplaced', 'yes'],
+             ['stroke', ['width', 0.1524], ['type', 'solid']], ['fill', ['color', 255, 255, 225, 1.0]],
+             ['uuid', Q(sheet_uuids[stem])],
+             ['property', Q('Sheetname'), Q(stem), ['at', x, round(y - 0.7, 3), 0],
+              ['effects', ['font', ['size', 1.524, 1.524], 'bold'], ['justify', 'left', 'bottom']]],
+             ['property', Q('Sheetfile'), Q(stem + '.kicad_sch'), ['at', x, round(y + h + 0.6, 3), 0],
+              ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left', 'top']]]]
+        for nm, pt in b['pins'].items():
+            left = pt.dx < 0
+            e.append(['pin', Q(nm), b['shapes'][nm], ['at', pt[0], pt[1], 180 if left else 0],
+                      ['uuid', uid('rootpin', stem, nm)],
+                      ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left' if left else 'right']]])
+        e.append(['instances', ['project', Q(D.PROJECT), ['path', Q('/' + root_uuid), ['page', Q(str(page[stem]))]]]])
+        items.append(e)
+    for a, b in sh.wires:
+        items.append(['wire', ['pts', ['xy', a[0], a[1]], ['xy', b[0], b[1]]], st, ['uuid', uid('root', 'w', a, b)]])
+    for a, b in sh.buses:
+        items.append(['bus', ['pts', ['xy', a[0], a[1]], ['xy', b[0], b[1]]], st, ['uuid', uid('root', 'b', a, b)]])
+    for (x, y), (dx, dy) in sh.entries:
+        items.append(['bus_entry', ['at', x, y], ['size', dx, dy], st, ['uuid', uid('root', 'e', x, y)]])
+    for (x, y) in sh.junctions:
+        items.append(['junction', ['at', x, y], ['diameter', 0], ['color', 0, 0, 0, 0], ['uuid', uid('root', 'j', x, y)]])
+    for kind, net, x, y, ang, shape in sh.labels:
+        assert kind == 'label', kind
+        items.append(['label', Q(net), ['at', x, y, ang],
+                      ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left' if ang in (0, 90) else 'right', 'bottom']],
+                      ['uuid', uid('root', 'label', net, x, y)]])
+    for s_, x, y, size, j in sh.texts:
+        items.append(['text', Q(s_.replace('\n', '\\n')), ['exclude_from_sim', 'no'], ['at', x, y, 0],
+                      ['effects', ['font', ['size', size, size]], ['justify', j, 'top']], ['uuid', uid('root', 'text', x, y)]])
+    tb = ['title_block', ['title', Q('FujiNet SMS Rev0')], ['date', Q(DATE)], ['rev', Q('0')],
+          ['company', Q('FujiNet')],
+          ['comment', 1, Q('Generated from tools/design.py + tools/sch_layout.py - edit those, not this file')],
+          ['comment', 2, Q('CERN-OHL-W-2.0 (derived from FujiNet-NES-Rev0 and its sources)')],
+          ['comment', 3, Q(COMMENT3)]]
+    return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
+            ['generator_version', Q('9.0')], ['uuid', Q(root_uuid)], ['paper', Q(sh.paper)], tb,
+            ['lib_symbols']] + items + [['sheet_instances', ['path', Q('/'), ['page', Q('1')]]],
+                                        ['embedded_fonts', 'no']]
+
+
+def bus_members(name):
+    """'A[0..15]' -> ['A0', ..., 'A15']."""
+    m = re.match(r'(\w+)\[(\d+)\.\.(\d+)\]$', name)
+    if not m:
+        raise SystemExit('bad bus name %r' % name)
+    return ['%s%d' % (m.group(1), i) for i in range(int(m.group(2)), int(m.group(3)) + 1)]
+
+
+def check_hierarchy(sheets, root):
+    """Every net that has pins on two or more sheets (rails aside) leaves each of
+    those sheets on a hierarchical label -- its own, or a bus label whose vector
+    holds it with the member's local label on the sheet; no other net does; each
+    sheet's hierarchical labels are exactly its block's pins on the root; and a
+    bus has one vector everywhere (KiCad joins differing vectors by position)."""
+    where = D.sheet_nets()
+    cross = {n for n, ss in where.items() if len(ss) > 1 and n not in D.RAIL_NETS}
+    bad, vectors = [], {}
+    for stem, sh in sheets.items():
+        hier = {l[1] for l in sh.labels if l[0] == 'hierarchical_label'}
+        local = {l[1] for l in sh.labels if l[0] == 'label'}
+        covered = {n for n in hier if '[' not in n}
+        for b in (n for n in hier if '[' in n):
+            vectors.setdefault(re.match(r'\w+', b).group(0), set()).add(b)
+            covered |= {m for m in bus_members(b) if m in local}
+        mine = {n for n in cross if stem in where[n]}
+        for n in sorted(mine - covered):
+            bad.append('%s: net %s (also on %s) has no hierarchical label' % (stem, n, sorted(where[n] - {stem})))
+        for n in sorted(covered - mine):
+            bad.append('%s: hierarchical %s carries no net that crosses sheets here' % (stem, n))
+        blk = next((b for b in root.blocks if b['stem'] == stem), None)
+        if blk is None:
+            bad.append('root: no block for %s' % stem)
+        elif set(blk['pins']) != hier:
+            bad.append('root: %s pins %s / labels %s' % (stem, sorted(set(blk['pins']) - hier),
+                                                         sorted(hier - set(blk['pins']))))
+    for b in root.blocks:
+        for nm in b['pins']:
+            if '[' in nm:
+                vectors.setdefault(re.match(r'\w+', nm).group(0), set()).add(nm)
+    for base, vs in vectors.items():
+        if len(vs) > 1:
+            bad.append('bus %s used with different vectors %s' % (base, sorted(vs)))
+    if bad:
+        raise SystemExit('hierarchy:\n  ' + '\n  '.join(bad))
+
+
+def canon(n):
+    """KiCad's net name -> design.py's: /NET (root label), /sheet/NET (a sheet's
+    own net) and NET (power symbols) all name NET; unconnected-(...) stays."""
+    return n if n.startswith('unconnected-') else n.rsplit('/', 1)[-1]
 
 
 def netlist_parity():
@@ -302,9 +409,12 @@ def netlist_parity():
         t = parse(open(fn).read())
     finally:
         os.remove(fn)
-    got = {}
+    got, full = {}, {}
     for n in findall(find(t, 'nets'), 'net'):
-        name = str(find(n, 'name')[1])
+        name = canon(str(find(n, 'name')[1]))
+        if name in got:    # two KiCad nets, one design net: a missing sheet pin or label
+            raise SystemExit('netlist parity: %s and %s are separate nets' % (full[name], str(find(n, 'name')[1])))
+        full[name] = str(find(n, 'name')[1])
         got[name] = {(str(find(nd, 'ref')[1]), str(find(nd, 'pin')[1])) for nd in findall(n, 'node')}
     want = {n: set(v) for n, v in D.nets().items()}
     bad = []
@@ -323,28 +433,12 @@ def netlist_parity():
     print('netlist parity: %d nets match design.py' % len(want))
 
 
-NOTES = """FujiNet for the Sega Master System / SMS2 - Rev0 (RP2354B).  SCHEMATIC ONLY: no board laid out or built.
-
-RP2354B (48 GPIO) sits on the 5V cart bus through its 5V-tolerant pads: A0-A15, /RD /WR /MREQ /CE /IORQ /RESET /M1
-CLK in; D0-D7 through 100R; /WAIT through a 2N7002 (gate pulled up: the Z80 waits from power-on until the
-firmware lets it run).  It serves the mailbox arena and the loader itself and drives SRAM A13-A19 (GPIO41-47;
-A19 picks the chip) from the live mapper's page table.  Pin map: fujinet-firmware pico/sms sms_cart.h.
-2 x AS6C4008 (1 MB) on +5V, console A0-A12 and D0-D7 direct.  Five 74HCT packages make SRAM /OE and /WE
-from A15-A12, the console strobes and the RP's mode bits (GAME MBOX RAM_WE LOAD): sms_glue_oe / sms_glue_we,
-checked gate by gate by tools/check_glue.py.  PWR_OK (console +5V sense, 74HCT14) gates both.
-ESP32-S3-WROOM-1-N16R8 runs FujiNet (fujiversal-sms), USB host of the RP; S3 IO4/IO5 force RP RUN/QSPI_SS.
-USB-C: power + CP2102N UART bridge.  microSD on S3 SPI.  Power: console 5V via P-FET, USB via SS34.
-Edge: 50 pins, 2.54 mm, odd pins on the component side, pin 1 at the right (PROVISIONAL, verify on a real cart)."""
-
-
 def write_project(root_uuid, sheet_uuids):
     fn = os.path.join(PRJ, D.PROJECT + '.kicad_pro')
     pro = json.load(open(fn))
     pro['meta']['filename'] = D.PROJECT + '.kicad_pro'
     pro['sheets'] = [[root_uuid, 'Root']] + [[sheet_uuids[s[0]], s[0]] for s in D.SHEETS]
-    # bus members carry local labels (A3 under the global bus A[0..15]) while
-    # single lines of the same net leave other sheets on global labels -- by design
-    pro['erc']['rule_severities']['same_local_global_label'] = 'ignore'
+    pro['erc']['rule_severities']['same_local_global_label'] = 'warning'   # no global labels left
     json.dump(pro, open(fn, 'w'), indent=2)
     open(fn, 'a').write('\n')
 
@@ -356,43 +450,19 @@ def main():
     root_uuid = str(uid('root'))
     sheet_uuids = {s[0]: str(uid('sheet', s[0])) for s in D.SHEETS}
     pwr = {'pwr': 0, 'flg': 0}
+    drawn = {}
     for stem, title, page in D.SHEETS:
         parts = [p for p in D.PARTS if p.sheet == stem]
         sh = sch_layout.draw(stem, syms, parts)
         sh.center()
         sh.check()
+        drawn[stem] = sh
         sch = serialize(sh, title, root_uuid, sheet_uuids[stem], pwr)
         open(os.path.join(PRJ, stem + '.kicad_sch'), 'w').write(dump(sch) + '\n')
-    root = ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
-            ['generator_version', Q('9.0')], ['uuid', Q(root_uuid)], ['paper', Q('A3')],
-            ['title_block', ['title', Q('FujiNet SMS Rev0')], ['date', Q(DATE)], ['rev', Q('0')],
-             ['company', Q('FujiNet')], ['comment', 1, Q('Generated by tools/gen_sch.py')]],
-            ['lib_symbols']]
-    # sheet symbols in signal-flow order: the cart side (console -> RP -> SRAM -> glue)
-    # on the first row, the FujiNet side (S3 -> USB -> power) on the second
-    for i, (stem, title, page) in enumerate(D.SHEETS):
-        x, y = 20.32 + (i % 4) * 96.52, 35.56 + (i // 4) * 45.72
-        root.append(['sheet', ['at', x, y], ['size', 81.28, 25.4], ['fields_autoplaced', 'yes'],
-                     ['stroke', ['width', 0.12], ['type', 'solid']], ['fill', ['color', 0, 0, 0, 0.0]],
-                     ['uuid', Q(sheet_uuids[stem])],
-                     ['property', Q('Sheetname'), Q(stem), ['at', x, y - 1, 0],
-                      ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left', 'bottom']]],
-                     ['property', Q('Sheetfile'), Q(stem + '.kicad_sch'), ['at', x, y + 26.4, 0],
-                      ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left', 'top']]],
-                     ['instances', ['project', Q(D.PROJECT), ['path', Q('/' + root_uuid), ['page', Q(str(page))]]]]])
-        words, lines = title.split(), ['']
-        for w in words:
-            if len(lines[-1]) + len(w) > 62:
-                lines.append('')
-            lines[-1] = (lines[-1] + ' ' + w).strip()
-        root.append(['text', Q('\\n'.join(lines)), ['exclude_from_sim', 'no'], ['at', x + 2.54, y + 5.08, 0],
-                     ['effects', ['font', ['size', 1.27, 1.27]], ['justify', 'left', 'top']],
-                     ['uuid', uid('roottext', stem)]])
-    root.append(['text', Q(NOTES.replace('\n', '\\n')), ['exclude_from_sim', 'no'], ['at', 20, 125, 0],
-                 ['effects', ['font', ['size', 2, 2]], ['justify', 'left', 'top']], ['uuid', uid('notes')]])
-    root.append(['sheet_instances', ['path', Q('/'), ['page', Q('1')]]])
-    root.append(['embedded_fonts', 'no'])
-    open(os.path.join(PRJ, D.PROJECT + '.kicad_sch'), 'w').write(dump(root) + '\n')
+    root = sch_layout.draw_root(syms)
+    root.check()
+    check_hierarchy(drawn, root)
+    open(os.path.join(PRJ, D.PROJECT + '.kicad_sch'), 'w').write(dump(serialize_root(root, root_uuid, sheet_uuids)) + '\n')
     write_project(root_uuid, sheet_uuids)
     netlist_parity()
     print('schematic written')

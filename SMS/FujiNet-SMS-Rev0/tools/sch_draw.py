@@ -13,11 +13,17 @@ exactly one design.py net and carries that net's name.  A pin lying on the
 run of a wire it does not end on, a wire through a symbol body, overlapping
 symbols or texts, and a dangling wire end are errors too.
 
-Net names stay exactly design.py's: rails are power symbols whose Value is
-the net (GND, +5V, +3V3, +3V3_RP, CONS_5V, VBUS); every other net is named by
-global labels -- at the page edge where it enters or leaves the sheet, or one
-tag on its wire when it lives on one sheet; bus members by a local label on
-their entry wire under a global bus label.
+Hierarchy: the sheets join only through hierarchical labels, wired to the
+sheet pins of the root's block diagram (Sheet.block).  Rails and the board's
+plane / island nets are power symbols whose Value is the net (GND, +5V, +3V3,
++3V3_RP, CONS_5V, VBUS, DVDD) and stay global.  A net that leaves a sheet does
+so on a hierarchical label at the page edge; a net that lives on one sheet is
+named by a local label on a short stub (KiCad then calls it /sheet/NET, the
+tools compare the last path element).  Bus members carry local labels on
+their wires and leave under one hierarchical bus label (A[0..15]) on a free
+bus stub; every sheet uses the same full vector for a bus, because KiCad joins
+buses of different vectors by POSITION, not by member name (checked in a
+prototype, 2026-10-06: A[2..3] wired to A[0..3] put A2 on A0).
 """
 import math, os
 from collections import defaultdict
@@ -126,7 +132,7 @@ def overlap(a, b, gap=0.0):
 # ---------------------------------------------------------------------------
 class Sheet:
     RAILS = {'GND': 'power:GND', '+5V': 'power:+5V', '+3V3': 'power:+3V3', '+3V3_RP': 'power:+3V3',
-             'CONS_5V': 'power:+5V', 'VBUS': 'power:VBUS'}
+             'CONS_5V': 'power:+5V', 'VBUS': 'power:VBUS', 'DVDD': 'power:+1V1'}
 
     def __init__(self, stem, syms, parts, paper='A3'):
         self.stem, self.syms, self.paper = stem, syms, paper
@@ -138,6 +144,7 @@ class Sheet:
         self.rails = []            # (net, x, y, rot)
         self.flags = []            # (net, x, y)
         self.ncs, self.texts = [], []
+        self.blocks = []           # root sheet symbols: dict(stem, x, y, w, h, pins={name: Pt}, shapes={name: shape})
         self.errors = []
         self.lint = True           # geometry lint (overlaps); connectivity is always checked
 
@@ -238,26 +245,29 @@ class Sheet:
         return Pt(e[0], e[1], pin.dx, pin.dy)
 
     # -- names ----------------------------------------------------------------
-    def glabel(self, pt, net, dirn=None, shape='passive'):
-        """Global label at pt, its body pointing away along dirn ('L','R','U','D');
-        pt may be a pin (direction from the pin)."""
+    def _label(self, kind, pt, net, dirn, shape):
         if dirn is None:
             dirn = {(-1, 0): 'L', (1, 0): 'R', (0, -1): 'U', (0, 1): 'D'}[(pt.dx, pt.dy)]
         ang = {'R': 0, 'U': 90, 'L': 180, 'D': 270}[dirn]
-        self.labels.append(('global_label', net, snap(pt[0]), snap(pt[1]), ang, shape))
+        self.labels.append((kind, net, snap(pt[0]), snap(pt[1]), ang, shape))
 
-    def tag(self, pin, net, n=2.54, dirn=None, shape='passive'):
-        """Wire stub out of a pin + global label."""
+    def hlabel(self, pt, net, dirn=None, shape='bidirectional'):
+        """Hierarchical label at pt, its body pointing away along dirn ('L','R','U','D');
+        pt may be a pin (direction from the pin)."""
+        self._label('hierarchical_label', pt, net, dirn, shape)
+
+    def port(self, pin, net, n=2.54, dirn=None, shape='bidirectional'):
+        """Wire stub out of a pin + hierarchical label (the net leaves the sheet)."""
         e = self.stub(pin, n) if n else pin
-        self.glabel(e, net, dirn, shape)
+        self.hlabel(e, net, dirn, shape)
         return e
 
     def name(self, pt, net, dirn='U', flag='R', n=2.54):
-        """Name a net drawn on one sheet: a short stub off its wire at pt and a
-        global label on the stub (a local label would rename the net /sheet/...)."""
+        """Name a net drawn on this sheet only: a short stub off its wire at pt and
+        a local label on the stub's end (KiCad calls the net /sheet/NET)."""
         dx, dy = {'U': (0, -1), 'D': (0, 1), 'L': (-1, 0), 'R': (1, 0)}[dirn]
         e = self.wire(pt, (pt[0] + dx * n, pt[1] + dy * n))
-        self.glabel(e, net, flag)
+        self.label(e, net, flag)
         return e
 
     def label(self, pt, net, dirn='R'):
@@ -288,6 +298,28 @@ class Sheet:
 
     def text(self, pt, s, size=1.27, justify='left'):
         self.texts.append((s, snap(pt[0]), snap(pt[1]), size, justify))
+
+    # -- root block diagram ---------------------------------------------------
+    def block(self, stem, x, y, w, h, left=(), right=()):
+        """A sheet symbol for sub-sheet stem at (x, y) size (w, h); left / right:
+        [(name, shape) or None (a 2.54 gap)] from the top, 5.08 below the top edge.
+        Returns {pin name: Pt} (pins point out of the box)."""
+        x, y, w, h = snap(x), snap(y), snap(w), snap(h)
+        pins, shapes = {}, {}
+        for side, lst in (('L', left), ('R', right)):
+            py = y + 5.08
+            for e in lst:
+                if e:
+                    nm, shape = e
+                    assert nm not in pins, (stem, nm)
+                    pins[nm] = Pt(x if side == 'L' else x + w, py, -1 if side == 'L' else 1, 0, (stem, nm))
+                    shapes[nm] = shape
+                py += 2.54
+            if py > y + h:
+                raise ValueError('%s: %s pins overflow the block' % (stem, side))
+        b = dict(stem=stem, x=x, y=y, w=w, h=h, pins=pins, shapes=shapes)
+        self.blocks.append(b)
+        return pins
 
     # -- buses ----------------------------------------------------------------
     def bus(self, *pts):
@@ -323,7 +355,7 @@ class Sheet:
             for (fx, fy, j), s in zip(d['fields'], (d['ref'], d['part'].value)):
                 boxes.append(('field %s %s' % (d['ref'], s), text_box(fx, fy, s, 1.27, j)))
         for kind, net, x, y, ang, shape in self.labels:
-            w = 0.9 * 1.27 * len(net) + (2.5 if kind == 'global_label' else 0.6)
+            w = 0.9 * 1.27 * len(net) + (0.6 if kind == 'label' else 2.5)
             h = 1.6
             if ang == 0:
                 bx = (x, y - h / 2, x + w, y + h / 2)
@@ -348,6 +380,11 @@ class Sheet:
         for s, x, y, size, j in self.texts:
             for i, line in enumerate(s.split('\n')):
                 boxes.append(('text', text_box(x, y + i * size * 1.6, line, size, j)))
+        for b in self.blocks:
+            boxes.append(('block ' + b['stem'], (b['x'], b['y'] - 2.5, b['x'] + b['w'], b['y'] + b['h'] + 2.5)))
+        for net, x, y in self.flags:      # PWR_FLAG: body above the pin, its value above that
+            boxes.append(('flag %s' % net, (x - 1.3, y - 2.6, x + 1.3, y - 0.3)))
+            boxes.append(('flag text %s' % net, text_box(x, y - 3.81, 'PWR_FLAG', 1.27, None)))
         return boxes
 
     def translate(self, dx, dy):
@@ -367,6 +404,9 @@ class Sheet:
         self.flags = [(n,) + mv((x, y)) for n, x, y in self.flags]
         self.ncs = [mv(p) for p in self.ncs]
         self.texts = [(s,) + mv((x, y)) + (z, j) for s, x, y, z, j in self.texts]
+        for b in self.blocks:
+            b['x'], b['y'] = snap(b['x'] + dx), snap(b['y'] + dy)
+            b['pins'] = {n: Pt(p[0] + dx, p[1] + dy, p.dx, p.dy, p.owner) for n, p in b['pins'].items()}
 
     def center(self):
         """Centre the drawing in the frame, clear of the title block."""
@@ -396,17 +436,27 @@ class Sheet:
 
         def U(a, b):
             par[F(a)] = F(b)
+        is_bus = lambda n: '[' in n
         pin_at = defaultdict(list)       # point -> [(ref, num, net)]
         for d in self.placed.values():
             for num, pt in d['pins'].items():
                 pin_at[tuple(pt)].append((d['ref'], num, d['part'].pins.get(num)))
+        bus_pin_at = defaultdict(list)   # root: sheet pins carrying a bus
+        for b in self.blocks:
+            for nm, pt in b['pins'].items():
+                (bus_pin_at if is_bus(nm) else pin_at)[tuple(pt)].append(('sheet ' + b['stem'], nm, nm))
+        for kind, net, *_ in self.labels:
+            if kind == 'global_label':
+                err.append('global label %s: sheets join through hierarchical labels only' % net)
+        wlabels = {(l[2], l[3]) for l in self.labels if not is_bus(l[1])}
+        blabels = [l for l in self.labels if is_bus(l[1])]
+        railpts = {(r[1], r[2]) for r in self.rails}
         # wire ends, and the points that lie on a run
         ends = defaultdict(int)
         for a, b in self.wires:
             ends[a] += 1; ends[b] += 1
             U(a, b)
-        pts = set(pin_at) | set(ends) | {(l[2], l[3]) for l in self.labels} | \
-            {(r[1], r[2]) for r in self.rails} | {(f[1], f[2]) for f in self.flags}
+        pts = set(pin_at) | set(ends) | wlabels | railpts | {(f[1], f[2]) for f in self.flags}
         for e in self.entries:
             pts.add(e[0])
         juncs = set()
@@ -417,29 +467,65 @@ class Sheet:
             if a[1] == b[1] == p[1]:
                 return min(a[0], b[0]) < p[0] < max(a[0], b[0])
             return False
+        flagpts = {(f[1], f[2]) for f in self.flags}
         for a, b in self.wires:
             for p in pts:
                 if on_run(p, a, b):
-                    if p in ends or p in {(l[2], l[3]) for l in self.labels} or \
-                            p in {(r[1], r[2]) for r in self.rails}:
+                    if p in ends or p in wlabels:
                         U(p, a)
                         if p in ends:
                             juncs.add(p)
+                    # eeschema joins a pin (power symbols and flags included) only at a wire's end
                     if p in pin_at:
                         err.append('pin %s on the run of wire %s-%s' % (pin_at[p], a, b))
+                    if (p in railpts or p in flagpts) and p not in ends:
+                        err.append('power symbol / flag at %s on the run of wire %s-%s, not at an end' % (p, a, b))
         for p, n in ends.items():
             k = n + len(pin_at.get(p, []))
             if k >= 3:
                 juncs.add(p)
-            if n == 1 and p not in pin_at and p not in juncs and \
-                    p not in {(l[2], l[3]) for l in self.labels} and p not in {(r[1], r[2]) for r in self.rails} and \
+            if n == 1 and p not in pin_at and p not in juncs and p not in wlabels and p not in railpts and \
                     p not in {e[0] for e in self.entries} and p not in {f[1:] for f in self.flags}:
                 err.append('dangling wire end at %s' % (p,))
+        # buses: their own graph (a bus point is ('b', x, y)); T joins need a junction
+        bends = defaultdict(int)
+        for a, b in self.buses:
+            bends[a] += 1; bends[b] += 1
+            U(('b',) + a, ('b',) + b)
+        bpts = set(bends) | set(bus_pin_at) | {(l[2], l[3]) for l in blabels}
+        for a, b in self.buses:
+            for p in bpts:
+                if on_run(p, a, b):
+                    U(('b',) + p, ('b',) + a)
+                    if p in bends:
+                        juncs.add(p)
+        for p, n in bends.items():
+            if n >= 3 or (n == 2 and p in bus_pin_at):
+                juncs.add(p)
+        for p in bus_pin_at:
+            if p not in bends:
+                err.append('bus sheet pin %s at %s not on a bus' % (bus_pin_at[p], p))
+        bnames, bmembers = defaultdict(set), defaultdict(list)
+        for kind, net, x, y, ang, shape in blabels:
+            if (x, y) not in bends and not any(on_run((x, y), a, b) for a, b in self.buses):
+                err.append('bus label %s at %s not on a bus' % (net, (x, y)))
+            bnames[F(('b', x, y))].add(net)
+        for p, lst in bus_pin_at.items():
+            bmembers[F(('b',) + p)] += lst
+        for g in set(bnames) | set(bmembers):
+            nm, mem = bnames.get(g, set()), {n for _, _, n in bmembers.get(g, [])}
+            if len(nm) > 1:
+                err.append('two names on one bus: %s' % sorted(nm))
+            if mem and not nm:
+                err.append('unnamed bus joining %s' % sorted(bmembers[g]))
+            if mem and nm and mem != nm:
+                err.append('bus %s joins sheet pins %s' % (sorted(nm), sorted(mem)))
         self.junctions = sorted(juncs)
         # groups
         names = defaultdict(set)
         for kind, net, x, y, ang, shape in self.labels:
-            names[F((x, y))].add(net)
+            if not is_bus(net):
+                names[F((x, y))].add(net)
         for net, x, y, rot in self.rails:
             names[F((x, y))].add(net)
         for net, x, y in self.flags:
@@ -466,7 +552,7 @@ class Sheet:
                 err.append('net %s named %s' % (sorted(nets), sorted(nm)))
             if nets and not nm:
                 err.append('unnamed group %s: %s' % (sorted(nets), sorted(members[g])[:6]))
-        # every design pin on this sheet placed and reached
+        # every design pin on this sheet placed and reached; every sheet pin wired
         for d in self.placed.values():
             for num, pt in d['pins'].items():
                 net = d['part'].pins.get(num)
@@ -476,24 +562,31 @@ class Sheet:
                         err.append('%s pin %s: NC without a flag' % (d['ref'], num))
                 elif g not in names:
                     err.append('%s pin %s (%s) floats' % (d['ref'], num, net))
+        via_entry = {F(e[0]) for e in self.entries}       # a bus member broken out on an entry
+        for b in self.blocks:
+            for nm, pt in b['pins'].items():
+                g = F(tuple(pt))
+                if not is_bus(nm) and (tuple(pt) not in ends or (len(members[g]) < 2 and g not in via_entry)):
+                    err.append('sheet pin %s %s is not wired to another sheet' % (b['stem'], nm))
         for ref, p in self.parts.items():
             sym = self.syms[p.lib_id]
             for u in units_of(sym):
                 if (ref, u) not in self.placed:
                     err.append('%s unit %d not placed' % (ref, u))
-        # wires through bodies
-        for d in self.placed.values():
-            x0, y0, x1, y1 = d['body']
-            own = {tuple(p) for p in d['pins'].values()}
-            for a, b in self.wires:
+        # wires / buses through bodies and blocks
+        bodies = [(d['ref'], d['body'], {tuple(p) for p in d['pins'].values()}) for d in self.placed.values()]
+        bodies += [('sheet ' + b['stem'], (b['x'], b['y'], b['x'] + b['w'], b['y'] + b['h']), set())
+                   for b in self.blocks]
+        for ref, (x0, y0, x1, y1), own in bodies:
+            for a, b in self.wires + self.buses:
                 if a in own or b in own:      # a pin's own stub may start inside the drawing
                     continue
                 if a[0] == b[0] and x0 + 0.01 < a[0] < x1 - 0.01 and \
                         max(min(a[1], b[1]), y0) < min(max(a[1], b[1]), y1) - 0.01:
-                    err.append('wire %s-%s through %s' % (a, b, d['ref']))
+                    err.append('wire %s-%s through %s' % (a, b, ref))
                 if a[1] == b[1] and y0 + 0.01 < a[1] < y1 - 0.01 and \
                         max(min(a[0], b[0]), x0) < min(max(a[0], b[0]), x1) - 0.01:
-                    err.append('wire %s-%s through %s' % (a, b, d['ref']))
+                    err.append('wire %s-%s through %s' % (a, b, ref))
         boxes = self.boxes()
         for i in range(len(boxes) if self.lint else 0):
             for k in range(i + 1, len(boxes)):
@@ -510,7 +603,7 @@ class Sheet:
             if b[0] < 10 or b[1] < 10 or b[2] > W - 10 or b[3] > H - 40 and b[2] > W - 180:
                 err.append('off the page / under the title block: %s %s' % (name, b))
         if err:
-            msg = '%s:\n  %s' % (self.stem, '\n  '.join(err[:60]))
+            msg = '%s:\n  %s' % (self.stem, '\n  '.join(err[:80]))
             if os.environ.get('SCH_DRAFT'):     # layout work: report, write anyway
                 print(msg)
             else:

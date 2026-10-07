@@ -160,7 +160,9 @@ def main():
     chk('GP%d (WAIT) -> 2N7002 gate, source GND' % P['WAIT'],
         gate == func_net.get((QW, 'G')) and func_net.get((QW, 'S')) == 'GND')
     v33io = func_net.get((U1, 'IOVDD'))
-    chk('2N7002 gate pulled up to the RP IO rail (/WAIT held from power-on)', through_r(gate, v33io) == '10k')
+    # 4.7k, not 10k: it must beat GPIO34's reset pull-down (36-113k) past the 2N7002's 2.5 V max VGS(th)
+    # (docs/design-review-rev0.md, tools/audit/spice_checks.py)
+    chk('2N7002 gate pulled up to the RP IO rail by 4.7k (/WAIT held from power-on)', through_r(gate, v33io) == '4.7k')
     led = one('red')
     chk('GP%d (LED) -> 1k -> LED anode, cathode GND' % P['LED'],
         led is not None and through_r(rp(P['LED']), node_net.get((led, '2'))) == '1k' and node_net.get((led, '1')) == 'GND')
@@ -291,15 +293,16 @@ def main():
     for io in range(26, 38):
         chk('S3 IO%d (flash/PSRAM on N16R8) unused' % io, unconn(s3(io)))
 
-    # ---- edge footprint: 2.54 mm, odd pins one face, even the other, pin 1 east (PROVISIONAL) ----
+    # ---- edge footprint: 2.54 mm, even pins on the component side (F.Cu), pins 1/2 east ----
+    # (sources in make_edge_fp.py and tools/audit/edge_orientation.py)
     fpt = open(os.path.join(PRJ, 'FujiNet-SMS.pretty', 'SMS_Cart_Edge_50.kicad_mod')).read()
     pads = {int(m.group(1)): (float(m.group(2)), m.group(3)) for m in
             re.finditer(r'\(pad "(\d+)" smd rect\s*\(at ([-\d.]+) [-\d.]+\)\s*\(size [^)]*\)\s*\(layers "([FB])\.Cu"\)', fpt)}
     chk('edge footprint has 50 pads', sorted(pads) == list(range(1, 51)))
-    chk('edge: odd pads on F.Cu, even on B.Cu, pin 2k-1 over pin 2k',
-        all(pads[2 * k - 1][1] == 'F' and pads[2 * k][1] == 'B' and pads[2 * k - 1][0] == pads[2 * k][0] for k in range(1, 26)))
-    chk('edge: 2.54 mm pitch, pin 1 east (+x), pin 49 west',
-        all(abs((pads[2 * k - 1][0] - pads[2 * k + 1][0]) - 2.54) < 1e-6 for k in range(1, 25)) and pads[1][0] > 0 > pads[49][0])
+    chk('edge: even pads on F.Cu (component / label side), odd on B.Cu, pin 2k-1 behind pin 2k',
+        all(pads[2 * k][1] == 'F' and pads[2 * k - 1][1] == 'B' and pads[2 * k - 1][0] == pads[2 * k][0] for k in range(1, 26)))
+    chk('edge: 2.54 mm pitch, pins 1/2 east (+x), pins 49/50 west',
+        all(abs((pads[2 * k - 1][0] - pads[2 * k + 1][0]) - 2.54) < 1e-6 for k in range(1, 25)) and pads[2][0] > 0 > pads[50][0])
 
     # ---- general ----
     for n, nodes in nets.items():

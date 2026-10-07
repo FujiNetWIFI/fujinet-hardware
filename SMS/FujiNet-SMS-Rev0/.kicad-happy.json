@@ -1,0 +1,64 @@
+// kicad-happy project config for FujiNet-SMS Rev0 (JSONC)
+// Net patterns are fnmatch globs written to match both today's flat names (VBUS_SNS) and the
+// hierarchy-prefixed names the redrawn schematic will carry (/usb-uart/VBUS_SNS, /edge/A0).
+// The schematic analyzer reports suppressed findings regardless; the PCB / EMC / thermal
+// analyzers honour this file. Triage of every suppression: docs/design-review-rev0.md, Part 1.
+{
+  "version": 1,
+  "project": {
+    "name": "FujiNet-SMS Rev0",
+    "revision": "0",
+    "company": "FujiNet",
+    "market": "us",
+    "emc_standard": "fcc-class-b",
+    "pdn_transient_current_a": 0.6
+  },
+  "preferred_suppliers": ["lcsc"],
+  "bom": { "field_priority": ["MPN", "LCSC"], "group_by": "value+footprint" },
+  "design_intent": {
+    "product_class": "prototype",
+    "target_market": "hobby",
+    "ipc_class": 2,
+    "preferred_passive_size": "0603",
+    "operating_temp_range": [0, 70]
+  },
+  "analysis": {
+    "output_dir": "analysis",
+    "retention": 5,
+    "auto_diff": true,
+    "track_in_git": false,
+    "power_rails": {
+      // logic outputs and divider nodes that only look like rails by name
+      "ignore": ["PWR_OK", "*/PWR_OK", "PWR_OK_N", "*/PWR_OK_N", "VBUS_SNS", "*/VBUS_SNS", "VSENSE", "*/VSENSE"],
+      "voltage_overrides": { "+3V3_RP": 3.3, "+3V3": 3.3, "+5V": 5.0, "CONS_5V": 5.0, "VBUS": 5.0, "DVDD": 1.1, "VREG_AVDD": 3.3 }
+    }
+  },
+  "suppressions": [
+    {
+      "rule_id": "VM-001",
+      "nets": ["RD_N", "*/RD_N", "WR_N", "*/WR_N", "CE_N", "*/CE_N", "MREQ_N", "*/MREQ_N", "IORQ_N", "*/IORQ_N",
+               "M1_N", "*/M1_N", "RESET_N", "*/RESET_N", "CLK", "*/CLK", "A[0-9]*", "*/A[0-9]*", "D[0-7]", "*/D[0-7]",
+               "PWR_OK", "*/PWR_OK"],
+      "reason": "Console 5 V outputs (and the 74HCT14's PWR_OK) into RP2354B GPIO0-39, all 'Digital IO (FT)': VPIN_FT 5.5 V while IOVDD = 3.3 V (RP2350 datasheet p.1340); IOVDD comes from the AP2112K LDO that tracks the 5 V rail. Deliberate, no level shifter."
+    },
+    {
+      "rule_id": "VM-001",
+      "nets": ["GAME", "*/GAME", "MBOX", "*/MBOX", "RAM_WE", "*/RAM_WE", "LOAD", "*/LOAD", "SA1[3-9]", "*/SA1[3-9]"],
+      "reason": "RP2354B 3.3 V outputs into 74HCT inputs (VIH 2.0 V) and AS6C4008 inputs (VIH 2.4 V at VCC 4.5-5.5 V); RP VOH >= 2.62 V at rated load, ~3.3 V into these CMOS loads. Inputs never drive back, so GPIO40-47 (not FT) never see 5 V (tools/check_nets.py asserts it)."
+    },
+    { "rule_id": "RS-001", "nets": ["PWR_OK", "*/PWR_OK", "PWR_OK_N", "*/PWR_OK_N", "VBUS_SNS", "*/VBUS_SNS"],
+      "reason": "Logic outputs of the 74HCT14 and the CP2102N VBUS sense divider node (22k/47k), not rails." },
+    { "rule_id": "NT-001", "nets": ["*/A[0-9]*", "*/D[0-7]", "*/SA1[3-9]"],
+      "reason": "Analyzer artifact: these are bus members joined across sheets by the global bus labels A[0..15] / D[0..7] / SA[13..19]; the kicad-cli netlist joins them (A0 = J1.25, U1.77, U2.20, U3.20). kicad-happy 2.2.1 does not expand global bus labels." },
+    { "rule_id": "PU-001", "components": ["U10"],
+      "reason": "CP2102N CHREN/CHR0/CHR1 are charger-detect outputs, left open as in the ESP32-S3-DevKitC-1 reference." },
+    { "rule_id": "CG-AUD", "components": ["J1"],
+      "reason": "Console-defined 50-pin SMS slot: three GND pins (19-21) by Sega's pinout." },
+    { "rule_id": "EP-AUD", "components": ["J1", "J2", "J3"],
+      "reason": "J1 is the console bus (no SMS cart carries ESD parts; RP2350 FT pads have enhanced ESD protection); J2 is the DNP bring-up UART header; J3 microSD sits inside the shell." },
+    { "rule_id": "DC-002", "components": ["U11"],
+      "reason": "UMH3N is a dual pre-biased transistor (auto-program); it has no supply pin to decouple." },
+    { "rule_id": "VD-004", "components": ["R20"],
+      "reason": "0603 is the board's passive size; the 47k is not power-sized." }
+  ]
+}

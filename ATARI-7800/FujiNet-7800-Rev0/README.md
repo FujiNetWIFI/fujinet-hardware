@@ -157,7 +157,11 @@ level on the console).
   USB; with USB only its body diode remains, so USB never back-feeds the
   console); USB VBUS through an **SS34**. Both meet on **+5V**. A Schottky on
   the console side would leave the 74HCT parts at or under their 4.5 V VCC
-  minimum (why NES Rev0 moved to the FET).
+  minimum (why NES Rev0 moved to the FET). R24 (4.7k, VBUS to GND) holds the
+  gate at 0 V without a cable: the SS34 is reverse-biased whenever the console
+  powers the cart, and its leakage (0.5 mA max at 25 C) would otherwise lift
+  the gate through the 69k sense divider alone and turn the FET off (the
+  SMS Rev0 audit's finding; NES Rev0 R22 and 2600 Rev1 R_VBPD are the same fix).
 - **+5V:** the SRAM, the four 74HCT packages, the WS2812B, the AP63203 buck and
   the AP2112K LDO. **+3V3** (buck): ESP32-S3, microSD, CP2102N. **+3V3_RP**
   (LDO, tracks the 5 V rail): every RP2354B supply pin, so its pads are powered

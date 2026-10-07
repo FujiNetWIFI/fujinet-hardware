@@ -96,7 +96,7 @@ RES = {'27R': ('0603WAF270JT5E', 'C25190'), '33R': ('0603WAF330JT5E', 'C23140'),
        '1.5k': ('0603WAF1501T5E', 'C22843'),
        '5.1k': ('0603WAF5101T5E', 'C23186'), '10k': ('0603WAF1002T5E', 'C25804'),
        '22k': ('0603WAF2202T5E', 'C31850'), '47k': ('0603WAF4702T5E', 'C25819'),
-       '100k': ('0603WAF1003T5E', 'C25803')}
+       '100k': ('0603WAF1003T5E', 'C25803'), '4.7k': ('0603WAF4701T5E', 'C23162')}
 CAP = {'15pF': (C0603, 'CL10C150JB8NNNC', 'C1644'),
        '10nF': (C0603, '0603B103K500NT', 'C57112'),
        '100nF': (C0603, 'CC0603KRX7R9BB104', 'C14663'),
@@ -394,6 +394,14 @@ add('Q', 'Transistor_FET:AO3401A', 'AO3401A', FP('SOT-23'), {1: 'VBUS', 2: '+5V'
     mpn='AO3401A', lcsc='C15127', desc='console 5V switch: G = VBUS, S = +5V, D = CONS_5V; body diode CONS_5V -> +5V')
 add('D', 'Diode:SS34', 'SS34', FP('D_SMA'), {1: '+5V', 2: 'VBUS'}, mpn='SS34', lcsc='C8678',
     desc='USB VBUS OR-ing (no back-feed into the console)')
+# The SS34 is reverse-biased by +5V whenever the console powers the cart, and
+# its leakage (datasheet: 0.5 mA max at 25 C / 20 mA at 100 C, at 40 V) flows
+# into VBUS -- the P-FET's gate.  The 69k VBUS sense divider alone would let a
+# warm diode lift the gate past the FET's -1.3 V threshold (the console then
+# feeds the cart through the body diode, ~0.7 V down, under the 74HCT minimum);
+# 4.7k keeps VGS under -2.7 V up to 500 uA of leakage.  Same fix as NES Rev0
+# R22, SMS Rev0 and 2600 Rev1 R_VBPD.
+R('4.7k', 'VBUS', 'GND', desc='P-FET gate pull-down against the SS34 reverse leakage')
 C('100nF', 'CONS_5V', desc='edge 5V HF bypass')
 C('22uF', '+5V', desc='buck input')
 C('22uF', '+5V', desc='buck input')

@@ -20,7 +20,7 @@ DRAW = {}
 NES_FIRST = {
     'esp32s3-sd': {'U': 11, 'C': 32, 'R': 14, 'SW': 3, 'J': 2, 'RN': 3, 'D': 3},
     'usb-uart': {'J': 3, 'R': 17, 'D': 4, 'C': 37, 'U': 12},
-    'power': {'Q': 1, 'D': 7, 'C': 41, 'U': 14, 'L': 2},
+    'power': {'Q': 1, 'D': 7, 'C': 41, 'U': 14, 'L': 2, 'R': 22},
 }
 
 
@@ -652,10 +652,13 @@ def power(sh):
     sh.flag((33.02, sh.P('C41', 2)[1]), 'GND')
     # USB VBUS -> gate, and through the SS34 onto +5V
     sh.place('D7', 76.2, yv, rot=180, fields='below')
-    sh.wire((25.4, yv), (45.72, yv), (g[0], yv), sh.P('D7', 2))
+    sh.wire((25.4, yv), (35.56, yv), (45.72, yv), (g[0], yv), sh.P('D7', 2))
     sh.wire((g[0], yv), g)
     sh.sup((25.4, yv), 'VBUS')
     sh.flag((45.72, yv), 'VBUS')
+    # the gate's pull-down against the SS34's reverse leakage
+    sh.place('R22', 35.56, yv + 3.81, fields='right')
+    sh.gnd(sh.P('R22', 2))
     k = sh.P('D7', 1)
     sh.wire(k, (86.36, yv), (86.36, y5))
     # +5V: bulk + the buck's input caps, a branch down to the RP LDO

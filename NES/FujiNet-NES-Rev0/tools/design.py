@@ -125,7 +125,8 @@ RES = {'27R': ('0603WAF270JT5E', 'C25190'), '33R': ('0603WAF330JT5E', 'C23140'),
        '330R': ('0603WAF3300T5E', 'C23138'), '1k': ('0603WAF1001T5E', 'C21190'),
        '5.1k': ('0603WAF5101T5E', 'C23186'), '10k': ('0603WAF1002T5E', 'C25804'),
        '22k': ('0603WAF2202T5E', 'C31850'), '47k': ('0603WAF4702T5E', 'C25819'),
-       '100k': ('0603WAF1003T5E', 'C25803'), '150k': ('0603WAF1503T5E', 'C22807')}
+       '100k': ('0603WAF1003T5E', 'C25803'), '150k': ('0603WAF1503T5E', 'C22807'),
+       '4.7k': ('0603WAF4701T5E', 'C23162')}
 CAP = {'15pF': (C0603, 'CL10C150JB8NNNC', 'C1644'),
        '100nF': (C0603, 'CC0603KRX7R9BB104', 'C14663'),
        '1uF': (C0603, 'CL10A105KB8NNNC', 'C15849'),
@@ -439,12 +440,21 @@ sheet('power')
 # console's 5 V).  With VBUS present the gate is at VBUS, the FET is off and
 # only its body diode remains, pointing into the cart: nothing back-feeds the
 # console.  With both present USB wins through the SS34 (0.35 V < 0.7 V).
-# The gate is VBUS itself: the 22k/47k VBUS sense divider on the usb-uart
-# sheet holds it at 0 V when no cable is in, and the SS34 keeps +5V off it.
+# The gate is VBUS itself, held at 0 V when no cable is in by R22 below (the
+# 22k/47k VBUS sense divider on the usb-uart sheet alone is not enough).
 add('Q', 'Transistor_FET:AO3401A', 'AO3401A', FP('SOT-23'), {1: 'VBUS', 2: '+5V', 3: 'CONS_5V'},
     mpn='AO3401A', lcsc='C15127', desc='console 5V switch: G = VBUS, S = +5V, D = CONS_5V; body diode CONS_5V -> +5V')
 add('D', 'Diode:SS34', 'SS34', FP('D_SMA'), {1: '+5V', 2: 'VBUS'}, mpn='SS34', lcsc='C8678',
     desc='USB VBUS OR-ing (no back-feed into the console)')
+# The SS34 is reverse-biased by +5V whenever the console powers the cart, and
+# its leakage (datasheet: 0.5 mA max at 25 C / 20 mA at 100 C, at 40 V) flows
+# into VBUS -- the P-FET's gate.  The 69k VBUS sense divider alone would let a
+# warm diode lift the gate past the FET's -1.3 V threshold (at >= 100 uA the FET
+# is off and the console feeds the cart through the body diode, ~0.7 V down);
+# 4.7k keeps VGS under -2.7 V up to 500 uA of leakage and pulls VBUS back down
+# in ~4 ms after the cable is unplugged.  Costs 1.06 mA from USB.  Declared
+# after every other resistor, so it is R22 and no reference moves.
+R('4.7k', 'VBUS', 'GND', desc='P-FET gate pull-down against the SS34 reverse leakage')
 C('100nF', 'CONS_5V', desc='edge 5V HF bypass')
 C('22uF', '+5V', desc='buck input')
 C('22uF', '+5V', desc='buck input')

@@ -24,6 +24,7 @@ This review was done with the first Rev0 schematic (commit `1c9130d`) as the bas
 | Fixed | WS2812B-2020 on 3.3 V against a 3.7-5.3 V datasheet rating -> on +5V (VIH 2.7 V accepts the 3.3 V data) |
 | Fixed | 74HCT rail one Schottky drop under console 5 V (4.5 V minimum) -> AO3401A P-FET, ~24 mV |
 | Fixed | No VBUS decoupling at the USB-C -> 1 uF + 100 nF |
+| Fixed (2026-10-07) | SS34 reverse leakage could lift the P-FET gate (VBUS, pulled down only by the 69k sense divider) -> R22 4.7k VBUS-GND; see Post-layout change |
 | New | CIClone (ATtiny13A, DNP) on the four CIC fingers so a stock NES-001 can run the cart once lockout firmware exists |
 | Open | PRG write-data hold margin is +2 ns worst-case on a PROVISIONAL 30 ns 2A03 figure (bring-up scope item) |
 | Open | AS6C4008 and every 74HCT253 out of JLCPCB stock (see Sourcing) |
@@ -60,6 +61,7 @@ USB-C VBUS -----[D7 SS34]------------------------+      |
                                                         |      +--> +3V3: ESP32-S3, microSD, CP2102N
                                                         +--> U15 AP2112K-3.3 LDO (20 us) --> +3V3_RP: RP IOVDD x8, QSPI_IOVDD, USB_OTP_VDD, ADC_AVDD,
                                                                                              VREG_VIN (+ VREG_AVDD via 33R) --> RP core SMPS 1.1 V (3.3 uH) -> DVDD
+Q1 gate = VBUS, held at 0 V without a cable by R22 4.7k to GND (against the SS34's reverse leakage)
 PWR_OK = 74HCT14( 0.82 x CONS_5V )   sensed before the FET: USB-powered cart in a dead console disables every output toward it
 ```
 Regulator Vout: AP63203WU-7 fixed 3.3 V (`vref_source: fixed_suffix`), AP2112K-3.3 fixed 3.3 V. Both datasheet-verified (pin tables, Deep Review).
@@ -134,7 +136,7 @@ Edge 1-36 on F.Cu (label side), 37-72 on B.Cu, pin N under pin N+36; pin 1 is at
 - **Crystal:** 12 MHz ABM8-272-T3, 2 x 15 pF, 1k series on XOUT, CL 10.5 pF (SPICE).
 - **Protection:** ESD5Z5.0 on D+, D-, VBUS at the USB-C; CC 5.1k x2 (UFP). No ESD on the edge (console bus) or microSD (inside the shell) - accepted.
 - **LEDs:** D2 green 1k from the '595 (2.1 mA); D3 WS2812B-2020 on +5V with 330R data series.
-- **Transistors:** Q1 P-FET console switch; U13 dual pre-biased NPN auto-program (DevKitC-1 pattern, verified).
+- **Transistors:** Q1 P-FET console switch (gate = VBUS, R22 4.7k pull-down); U13 dual pre-biased NPN auto-program (DevKitC-1 pattern, verified).
 - **Differential pairs:** RP_USB_DP/DM (27R series, RP internal termination), USB_DP/DM to the S3 host pads, UBRG_DP/DM (CP2102N, ESD).
 - **Simulation:** ngspice verified 15 subcircuits, 15 pass, 0 warn/fail/skip (two dividers, one RC, crystal load, three protection devices, six decoupling networks, two inrush models).
 
@@ -239,6 +241,20 @@ These are listed in `.kicad-happy.json` as suppressions (the schematic analyzer 
 - BAT54C: verified from the package drawing, not a pin table.
 - The 2A03 write-data hold (30 ns) is the firmware's PROVISIONAL figure; nothing in CAD can settle it.
 - Structured datasheet extractions (`datasheets/extracted/`) were not produced; all pin-level claims above are direct PDF reads with page numbers in `analysis/deep_review.json`.
+
+## Post-layout change (2026-10-07): R22 VBUS pull-down
+
+Found by the FujiNet-SMS Rev0 audit, which has the same power path (`SMS/FujiNet-SMS-Rev0/docs/design-review-rev0.md`, Part 1 finding 1); the Fujiversal-Atari2600 Rev1 audit had found it first (`R_VBPD`).
+
+- **The problem.** Q1's gate is VBUS. With no cable, VBUS was pulled down only through the CP2102N sense divider, R19/R20 22k/47k (69k). Whenever the console powers the cart, the SS34 (D7) is reverse-biased by +5V and leaks into VBUS: 0.5 mA max at 25 C and 20 mA at 100 C (SS34 datasheet p.2).
+  - At 50 uA, VGS is about -1.55 V and the FET is weakly on.
+  - At 100 uA or more, VGS passes the AO3401A's -0.5 to -1.3 V threshold, so the FET turns off. The console then feeds the cart through the body diode, about 0.7 V down, which puts the 74HCTs and SRAMs under their 4.5 V minimum.
+- **The fix.** R22, 4.7k from VBUS to GND (0603WAF4701T5E, C23162). It holds VGS at -2.8 V or beyond up to 500 uA of leakage, pulls VBUS back down about 4 ms after the cable is unplugged, and costs 1.06 mA from USB.
+- **Schematic.** R22 is declared after every other resistor, so no reference changed. ERC is clean and `check_nets.py` passes 453/453.
+- **Board.** R22 was inserted into the routed board without re-routing. It sits at (141.45, 59.6), beside the F.Cu VBUS run into D7, with a 1 mm VBUS stub and a GND via to In1 under pin 2. `placement.py` carries its position for a full `LAYOUT=1` rebuild.
+  - `fix_silk.py` moved the C45 and R22 references.
+  - KiCad DRC at every severity: 0 violations, 0 unconnected, 0 schematic-parity issues.
+  - The exports were regenerated: 105 BOM refs and 105 CPL rows.
 
 ## Verdict (layout)
 

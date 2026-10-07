@@ -180,6 +180,7 @@ def do_placement(place):
     place('C47', 129.5, 54.0, 90)             # buck out 22 uF x2 (+3V3 plane)
     place('C48', 129.5, 58.0, 90)
     place('D7', 140.0, 66.0, 0)               # SS34 VBUS -> +5V (island)
+    place('R22', 141.45, 59.6, 0)             # VBUS (P-FET gate) pull-down, beside the VBUS run into D7
     place('C44', 144.6, 67.0, 90)             # +5V bulk
     place('D3', 121.0, 66.0, 0)               # WS2812 status LED (light pipe)
     place('R16', 117.5, 66.0, 0)

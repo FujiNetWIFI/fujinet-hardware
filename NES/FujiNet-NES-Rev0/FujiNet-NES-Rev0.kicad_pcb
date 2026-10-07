@@ -20328,6 +20328,169 @@
 			)
 		)
 	)
+	(footprint "FujiNet-NES:R_0603_1608Metric"
+		(layer "F.Cu")
+		(uuid "be52a2cd-a2ad-509c-ae18-2ccbbd71cc04")
+		(at 141.45 59.6)
+		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
+		(tags "resistor")
+		(property "Reference" "R22"
+			(at 0 1.5836 0)
+			(layer "F.SilkS")
+			(uuid "59ac9f38-6be6-59d8-86dd-96feb01d1de1")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 0 1.43 0)
+			(layer "F.Fab")
+			(uuid "0b0a5715-af8f-56a2-9f81-8ab5d685ab6e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "797562d1-0cc9-5e67-b6e7-e9a18115e1a7")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Description" "P-FET gate pull-down against the SS34 reverse leakage"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8236208a-8b11-5cb0-b0ee-930651258929")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "MPN" "0603WAF4701T5E"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4179676c-8426-54b2-8518-567b6a482eb2")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" "C23162"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "92bdd83f-4249-52d6-bf87-5664a3a47ca1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(path "/d44cc47e-bd9a-52ed-901d-413852c5812b/26d8a76d-658d-5cf2-a3a7-abcf3e462d14")
+		(sheetname "/power/")
+		(sheetfile "power.kicad_sch")
+		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -0.237258 -0.5225)
+			(end 0.237258 -0.5225)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "53a99d5d-9ad8-46dc-b961-d73f86ff91a1")
+		)
+		(fp_line
+			(start -0.237258 0.5225)
+			(end 0.237258 0.5225)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "62402e26-187f-4d74-be76-1670c4f848b6")
+		)
+		(fp_rect
+			(start -1.48 -0.73)
+			(end 1.48 0.73)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "9c096dbf-09d1-4382-a4d0-54a94b4ac2bd")
+		)
+		(fp_rect
+			(start -0.8 -0.4125)
+			(end 0.8 0.4125)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "a9c54210-8d03-4c92-89f8-713524ab446f")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "9725e45b-1765-4a03-a0bc-66fc0612b8d9")
+			(effects
+				(font
+					(size 0.4 0.4)
+					(thickness 0.06)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.825 0)
+			(size 0.8 0.95)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "VBUS")
+			(uuid "a1ead476-a4da-51b6-9a85-d06f4c942c81")
+		)
+		(pad "2" smd roundrect
+			(at 0.825 0)
+			(size 0.8 0.95)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.25)
+			(net "GND")
+			(uuid "34ba8edc-611a-574d-a5e4-5c68e065d1fd")
+		)
+		(embedded_fonts no)
+		(model "${KIPRJMOD}/3d/R_0603_1608Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
 	(footprint "FujiNet-NES:C_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "c20aa888-43f2-55a6-8824-7f739ac348cb")
@@ -22671,7 +22834,7 @@
 		(descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor")
 		(property "Reference" "C45"
-			(at 0 -1.43 90)
+			(at 0 1.5836 90)
 			(layer "F.SilkS")
 			(uuid "ce79ffb6-9299-56ac-8328-418e095fb72a")
 			(effects
@@ -28692,6 +28855,15 @@
 		(uuid "81ea9dba-7580-5e69-804a-397b38451fce")
 	)
 	(segment
+		(start 142.275 59.6)
+		(end 142.275 60.85)
+		(width 0.3)
+		(locked yes)
+		(layer "F.Cu")
+		(net "GND")
+		(uuid "861962b8-183a-5edd-b3fc-ff4577215370")
+	)
+	(segment
 		(start 100.625 102.8)
 		(end 99.725 102.8)
 		(width 0.3)
@@ -29804,6 +29976,15 @@
 		(locked yes)
 		(net "GND")
 		(uuid "36a5a4aa-e3e5-523a-bbf2-71993236efef")
+	)
+	(via
+		(at 142.275 60.85)
+		(size 0.6)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(locked yes)
+		(net "GND")
+		(uuid "379afa79-be66-5cf4-83a7-4495ab4734bf")
 	)
 	(via
 		(at 95.2 33.2)
@@ -35150,6 +35331,15 @@
 		(layer "F.Cu")
 		(net "VBUS")
 		(uuid "2ca86510-b42e-479b-aa47-480a74082bde")
+	)
+	(segment
+		(start 140.625 59.6)
+		(end 139.5831 59.6)
+		(width 0.3)
+		(locked yes)
+		(layer "F.Cu")
+		(net "VBUS")
+		(uuid "39759b20-6e2b-55a2-8f6d-5c1eb529844b")
 	)
 	(segment
 		(start 126.6049 37.5861)

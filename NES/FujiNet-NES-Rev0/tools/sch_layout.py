@@ -662,10 +662,13 @@ def power(sh):
     sh.flag((33.02, sh.P('C41', 2)[1]), 'GND')
     # USB VBUS -> gate, and through the SS34 onto +5V
     sh.place('D7', 76.2, yv, rot=180, fields='below')
-    sh.wire((25.4, yv), (45.72, yv), (g[0], yv), sh.P('D7', 2))
+    sh.wire((25.4, yv), (35.56, yv), (45.72, yv), (g[0], yv), sh.P('D7', 2))
     sh.wire((g[0], yv), g)
     sh.sup((25.4, yv), 'VBUS')
     sh.flag((45.72, yv), 'VBUS')
+    # the gate's pull-down against the SS34's reverse leakage
+    sh.place('R22', 35.56, yv + 3.81, fields='right')
+    sh.gnd(sh.P('R22', 2))
     k = sh.P('D7', 1)
     sh.wire(k, (86.36, yv), (86.36, y5))
     # +5V: bulk + the buck's input caps, a branch down to the RP LDO

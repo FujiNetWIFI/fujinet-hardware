@@ -139,7 +139,11 @@ the first draft was 110 ns), and `FOURSCREEN` is a '595 bit with a pull-down.
   P-FET** whose gate is VBUS: with no cable it is fully on (~24 mV at
   0.4 A), with USB present it is off and only its body diode remains,
   pointing into the cart, so USB never back-feeds the console. USB VBUS
-  comes in through an SS34. Both meet on **+5V**.
+  comes in through an SS34. Both meet on **+5V**. R22 (4.7k, VBUS to GND)
+  holds the gate at 0 V with no cable: the SS34 is reverse-biased whenever
+  the console powers the cart, and its leakage (0.5 mA max at 25 C) would
+  otherwise lift the gate through the 69k sense divider alone and turn the
+  FET off (added 2026-10-07, after layout; found by the SMS Rev0 audit).
 - **+5V** feeds the two SRAMs, the six 74HCT packages (VCC minimum 4.5 V,
   which the Schottky drop of the first draft left no margin for), the
   WS2812B (datasheet VDD 3.7-5.3 V), the AP63203 buck and the AP2112K LDO.

@@ -542,11 +542,11 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "USB",
+        "name": "VBUS",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
+        "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.25,
+        "track_width": 0.3,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -561,11 +561,11 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "VBUS",
+        "name": "USB",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
+        "priority": 2,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.3,
+        "track_width": 0.25,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -608,19 +608,19 @@
       },
       {
         "netclass": "USB",
-        "pattern": "/rp2354b/RP_USB_DP"
+        "pattern": "/rp-core/RP_USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "/rp2354b/RP_USB_DM"
+        "pattern": "/rp-core/RP_USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "/usb-uart/UBRG_DP"
+        "pattern": "/usb/UBRG_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "/usb-uart/UBRG_DM"
+        "pattern": "/usb/UBRG_DM"
       }
     ]
   },
@@ -774,28 +774,20 @@
       "Root"
     ],
     [
-      "9eeae63a-1566-58ff-b304-5075c4325b29",
-      "edge"
+      "939ffe3b-7677-5731-9e90-9579025f1901",
+      "cart-bus"
     ],
     [
-      "de9ba0fb-e9c8-53f2-8fde-708b261ea26e",
-      "rp2354b"
+      "79894676-f4e2-5f4e-8a47-bacbde8a380d",
+      "rp-core"
     ],
     [
-      "f22eb0f2-edb2-55e4-a3af-193519524be3",
-      "sram"
+      "33557b77-e315-5510-b965-3e3c5287ccdf",
+      "fujinet"
     ],
     [
-      "25444489-b319-5465-993c-6d0280d7b795",
-      "glue"
-    ],
-    [
-      "c7712c0e-cda6-5898-b3a1-77515981b1dc",
-      "esp32s3-sd"
-    ],
-    [
-      "eaa17ed8-2afb-5a2a-aa7a-b6de3fe5d03b",
-      "usb-uart"
+      "19092f5a-1e49-5206-9bc4-25f1617567a8",
+      "usb"
     ],
     [
       "113877c5-6a44-5bff-9a74-179e8fd72159",

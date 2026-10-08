@@ -3,9 +3,9 @@
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "113877c5-6a44-5bff-9a74-179e8fd72159")
-	(paper "A4")
+	(paper "A3")
 	(title_block
-		(title "FujiNet SMS Rev0 - Power: 5V OR, 3.3V buck, RP LDO")
+		(title "FujiNet SMS Rev0 - Power: console 5V / USB OR, 3.3V buck, RP LDO")
 		(date "2026-10-06")
 		(rev "0")
 		(company "FujiNet")
@@ -14,6 +14,129 @@
 		(comment 3 "Rev0 audit 2026-10-06: kicad-happy + datasheets, see docs/design-review-rev0.md")
 	)
 	(lib_symbols
+		(symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -1802,126 +1925,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:PWR_FLAG"
-			(power global)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#FLG"
-				(at 0 1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "PWR_FLAG"
-				(at 0 3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Special symbol for telling ERC where power comes from"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "flag power"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "PWR_FLAG_0_0"
-				(pin power_out line
-					(at 0 0 90)
-					(length 0)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "PWR_FLAG_0_1"
-				(polyline
-					(pts
-						(xy 0 0)
-						(xy 0 1.27)
-						(xy -1.016 1.905)
-						(xy 0 2.54)
-						(xy 1.016 1.905)
-						(xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "power:VBUS"
 			(power global)
 			(pin_numbers
@@ -2066,8 +2069,1439 @@
 		)
 	)
 	(symbol
+		(lib_id "Regulator_Switching:AP63203WU")
+		(at 58.42 124.46 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3e4f9ec7-343e-5574-8442-1c6aca91f50c")
+		(property "Reference" "U5"
+			(at 58.42 115.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AP63203WU"
+			(at 58.42 117.602 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:TSOT-23-6"
+			(at 58.42 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP63200-AP63201-AP63203-AP63205.pdf"
+			(at 58.42 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "3.3V 2A buck"
+			(at 58.42 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "AP63203WU-7"
+			(at 58.42 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Diodes Incorporated"
+			(at 58.42 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C780769"
+			(at 58.42 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1788c4a5-8aeb-5760-ae54-d87e23b39789")
+		)
+		(pin "2"
+			(uuid "722e163b-48de-5a4e-b7c1-e8d93d73ecf9")
+		)
+		(pin "3"
+			(uuid "d1eb1df8-b127-578c-b725-cd6e8dc980d4")
+		)
+		(pin "4"
+			(uuid "91ff4fe6-6793-5361-8c4a-9bfb7ab3d942")
+		)
+		(pin "5"
+			(uuid "0e47d118-017f-5572-9cd3-c725a02412dc")
+		)
+		(pin "6"
+			(uuid "af00d180-1cc3-538c-884e-7ff18c126554")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "U5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Regulator_Linear:AP2112K-3.3")
+		(at 109.22 123.19 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7311ab58-cfe8-5a54-a87d-11bb602e9ae2")
+		(property "Reference" "U6"
+			(at 109.22 114.427 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AP2112K-3.3"
+			(at 109.22 116.967 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:SOT-23-5"
+			(at 109.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2112.pdf"
+			(at 109.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "RP2354B 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD), 600mA, fast start"
+			(at 109.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "AP2112K-3.3TRG1"
+			(at 109.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Diodes Incorporated"
+			(at 109.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C51118"
+			(at 109.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9ac1daf1-724c-5db9-87a7-29921739a09f")
+		)
+		(pin "2"
+			(uuid "68955b64-1d3d-5aa1-b5c1-7b9a05b9b805")
+		)
+		(pin "3"
+			(uuid "b264e9f7-193a-500a-92d8-bfcef5d0a865")
+		)
+		(pin "4"
+			(uuid "f4340946-ae79-5332-b4a6-e4733263e964")
+		)
+		(pin "5"
+			(uuid "c82e8c9b-6a80-584a-96c7-e2a787b7af69")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "U6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 140.97 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d0a51aee-ceb3-51a9-9943-b414e3118516")
+		(property "Reference" "C6"
+			(at 140.97 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 140.97 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
+			(at 140.97 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 140.97 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "+5V bulk"
+			(at 140.97 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL21A226MAQNNNE"
+			(at 140.97 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 140.97 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 140.97 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b58653a5-e907-5e40-9d72-804a5c338f3d")
+		)
+		(pin "2"
+			(uuid "64232c03-9867-5739-b956-2fe0c169fb65")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 152.4 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "af709d6e-1c16-5247-bcca-a01faf77937c")
+		(property "Reference" "C15"
+			(at 152.4 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 152.4 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
+			(at 152.4 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "bootstrap"
+			(at 152.4 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CC0603KRX7R9BB104"
+			(at 152.4 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 152.4 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 152.4 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "07102d0f-8c4c-541c-9856-68edf8dd61a7")
+		)
+		(pin "2"
+			(uuid "3cfd9fe2-234a-584a-8430-cbafba982e4b")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 163.83 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7076d714-025d-5a29-ad23-219ef5de5c89")
+		(property "Reference" "C16"
+			(at 163.83 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 163.83 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
+			(at 163.83 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 163.83 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck input"
+			(at 163.83 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL21A226MAQNNNE"
+			(at 163.83 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 163.83 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 163.83 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6af13c6d-efea-5ba8-b832-38a5ceb50b91")
+		)
+		(pin "2"
+			(uuid "a2be131b-5151-5305-a4b0-45a6dd8b5ddf")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 175.26 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "46af6ff4-24be-5e06-974f-3ae9efc515d7")
+		(property "Reference" "C17"
+			(at 175.26 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 175.26 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
+			(at 175.26 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck input"
+			(at 175.26 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL21A226MAQNNNE"
+			(at 175.26 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 175.26 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 175.26 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bd97639d-7e23-529d-9437-371703e6b749")
+		)
+		(pin "2"
+			(uuid "7e93c013-ea56-5262-929c-2f92321adc6b")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 187.96 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00e33cc1-f1af-5a15-bb0e-fc29fb01bf7c")
+		(property "Reference" "C24"
+			(at 187.96 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 187.96 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
+			(at 187.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 187.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck output"
+			(at 187.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL21A226MAQNNNE"
+			(at 187.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 187.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 187.96 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d6372d4a-82c2-5e86-9115-6725b56651bd")
+		)
+		(pin "2"
+			(uuid "0ae94946-85e5-5728-a546-8ef8a194a6f6")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 199.39 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a09f2fa8-83eb-5e0b-83d2-42f64e17e516")
+		(property "Reference" "C25"
+			(at 199.39 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 199.39 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
+			(at 199.39 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 199.39 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck output"
+			(at 199.39 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL21A226MAQNNNE"
+			(at 199.39 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 199.39 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C45783"
+			(at 199.39 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2ab8001f-09cd-5280-abd6-932acbe8be3a")
+		)
+		(pin "2"
+			(uuid "de743f26-b44b-5261-8602-cb431a7ddc14")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 210.82 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2ff2c876-2b4b-5b9d-9136-c3671ddc8a7b")
+		(property "Reference" "C26"
+			(at 210.82 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 210.82 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
+			(at 210.82 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 210.82 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck input HF"
+			(at 210.82 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CC0603KRX7R9BB104"
+			(at 210.82 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 210.82 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 210.82 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b282c7fa-896f-5246-9c75-771f4f1d9475")
+		)
+		(pin "2"
+			(uuid "2501b719-b4d1-520a-9570-62288ec72528")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 222.25 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f7c7021e-8563-5cf3-a1ef-1a165619b0e7")
+		(property "Reference" "C35"
+			(at 222.25 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1uF"
+			(at 222.25 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
+			(at 222.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 222.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO input"
+			(at 222.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL10A105KB8NNNC"
+			(at 222.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 222.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 222.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c67743f9-135e-5546-a9d2-696ac2b8a3cd")
+		)
+		(pin "2"
+			(uuid "9178de1d-8411-5baa-8b4e-bd3afdfc6b46")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 233.68 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "31ff938b-e7c1-5a11-979d-62505fbb974d")
+		(property "Reference" "C36"
+			(at 233.68 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1uF"
+			(at 233.68 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
+			(at 233.68 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 233.68 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO output"
+			(at 233.68 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL10A105KB8NNNC"
+			(at 233.68 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 233.68 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 233.68 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b4f476b7-64c6-5981-80fa-0ed48ce92c3f")
+		)
+		(pin "2"
+			(uuid "031f4fa1-3dae-5cf0-bc92-aa1fb38c3857")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 246.38 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6468cde4-a821-505e-838d-9c452b3b8969")
+		(property "Reference" "C47"
+			(at 246.38 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 246.38 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
+			(at 246.38 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 246.38 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "edge 5V HF bypass"
+			(at 246.38 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CC0603KRX7R9BB104"
+			(at 246.38 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 246.38 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 246.38 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "30e22220-06cb-5abf-8a28-fbcae12d1d3f")
+		)
+		(pin "2"
+			(uuid "4d25e512-b751-59de-bd13-9ab67b2625fe")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C47")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 257.81 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9e201cdf-df35-59bc-9d26-fe6cde6653bb")
+		(property "Reference" "C48"
+			(at 257.81 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10uF"
+			(at 257.81 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
+			(at 257.81 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 257.81 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "edge 5V bulk"
+			(at 257.81 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
+			(at 257.81 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 257.81 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C19702"
+			(at 257.81 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bb594fb3-d53e-56b5-8005-d3221bb935d1")
+		)
+		(pin "2"
+			(uuid "dfe5d9d9-6b70-5a07-ba32-30485fbe62e4")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "C48")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:SS34")
+		(at 280.67 120.65 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9d3265a1-b24b-5852-8111-b936f2a1b7e0")
+		(property "Reference" "D1"
+			(at 280.352 115.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SS34"
+			(at 280.352 117.602 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:D_SMA"
+			(at 280.67 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/88751/ss32.pdf"
+			(at 280.67 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "USB VBUS OR-ing (no back-feed into the console)"
+			(at 280.67 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "SS34"
+			(at 280.67 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "MDD (Microdiode Semiconductor)"
+			(at 280.67 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C8678"
+			(at 280.67 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "27ffc325-3cd3-5870-9313-d869ac008c2a")
+		)
+		(pin "2"
+			(uuid "9fe2a947-f0a0-5480-93f3-36d558dd5803")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:L")
+		(at 303.53 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2d8b213e-3bdd-536b-8c69-19a28c304d92")
+		(property "Reference" "L2"
+			(at 303.846 131.572 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "6.8uH"
+			(at 303.846 134.112 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:L_Sunlord_SWPA4030S"
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "buck inductor"
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "SWPA4030S6R8MT"
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Sunlord"
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C62684"
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "be4c9b64-11fb-54b8-8900-5b2c1f6c695f")
+		)
+		(pin "2"
+			(uuid "fceabf82-5d7a-5583-97fe-5c02235decae")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "L2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Transistor_FET:AO3401A")
-		(at 88.9 63.5 90)
+		(at 327.66 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2075,7 +3509,7 @@
 		(dnp no)
 		(uuid "37a73d31-00ce-59f9-bdb0-fd5a6b0ed19c")
 		(property "Reference" "Q2"
-			(at 88.9 54.737 90)
+			(at 328.612 132.588 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2083,7 +3517,7 @@
 			)
 		)
 		(property "Value" "AO3401A"
-			(at 88.9 57.277 90)
+			(at 328.612 135.128 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2091,7 +3525,7 @@
 			)
 		)
 		(property "Footprint" "FujiNet-SMS:SOT-23"
-			(at 88.9 63.5 90)
+			(at 327.66 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2100,7 +3534,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3401A.pdf"
-			(at 88.9 63.5 90)
+			(at 327.66 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2109,7 +3543,7 @@
 			)
 		)
 		(property "Description" "console 5V switch: G = VBUS, S = +5V, D = CONS_5V; body diode CONS_5V -> +5V"
-			(at 88.9 63.5 90)
+			(at 327.66 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2118,7 +3552,7 @@
 			)
 		)
 		(property "MPN" "AO3401A"
-			(at 88.9 63.5 90)
+			(at 327.66 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2127,7 +3561,7 @@
 			)
 		)
 		(property "Manufacturer" "Alpha & Omega Semiconductor"
-			(at 88.9 63.5 90)
+			(at 327.66 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2136,7 +3570,7 @@
 			)
 		)
 		(property "LCSC" "C15127"
-			(at 88.9 63.5 90)
+			(at 327.66 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2163,320 +3597,32 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 60.96 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "f99c1ba0-0c1f-5b67-8eac-0890ac17000f")
-		(property "Reference" "C38"
-			(at 57.658 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10uF"
-			(at 57.658 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
-			(at 60.96 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "edge 5V bulk"
-			(at 60.96 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL10A106KP8NNNC"
-			(at 60.96 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 60.96 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C19702"
-			(at 60.96 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7014c938-6eea-5b08-a49e-216d8a969f33")
-		)
-		(pin "2"
-			(uuid "2e490d3e-2541-5d7c-babb-cb0d4b01fa37")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C38")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 68.58 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8b7b448f-14a7-5d25-90c2-548fe6691ad0")
-		(property "Reference" "C39"
-			(at 71.882 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 71.882 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
-			(at 68.58 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 68.58 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "edge 5V HF bypass"
-			(at 68.58 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CC0603KRX7R9BB104"
-			(at 68.58 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "YAGEO"
-			(at 68.58 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 68.58 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c62e2c52-4987-552e-81ee-95c17844dcf7")
-		)
-		(pin "2"
-			(uuid "bcefaddc-ff97-57a9-bd9f-f7370f6af533")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C39")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:SS34")
-		(at 104.14 88.9 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "e9b091a4-e781-5e24-a7f4-5b5bbc276286")
-		(property "Reference" "D7"
-			(at 104.458 91.948 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SS34"
-			(at 104.458 94.488 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:D_SMA"
-			(at 104.14 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.vishay.com/docs/88751/ss32.pdf"
-			(at 104.14 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "USB VBUS OR-ing (no back-feed into the console)"
-			(at 104.14 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "SS34"
-			(at 104.14 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "MDD (Microdiode Semiconductor)"
-			(at 104.14 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C8678"
-			(at 104.14 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ddc1b310-c72f-5645-b040-725085b70766")
-		)
-		(pin "2"
-			(uuid "9a55f522-5a61-5c27-a30b-8d9cc0acb5ea")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "D7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
-		(at 63.5 92.71 0)
+		(at 341.63 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e60f795c-3b55-5fa5-9da5-565e1a4ffc0f")
-		(property "Reference" "R22"
-			(at 61.214 91.44 0)
+		(uuid "1c3dff57-1580-58f1-8042-9e5612c8d6bf")
+		(property "Reference" "R3"
+			(at 341.63 127.762 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Value" "4.7k"
-			(at 61.214 93.98 0)
+			(at 341.63 130.302 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" "FujiNet-SMS:R_0603_1608Metric"
-			(at 63.5 92.71 0)
+			(at 341.63 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2485,7 +3631,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 63.5 92.71 0)
+			(at 341.63 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2494,7 +3640,7 @@
 			)
 		)
 		(property "Description" "P-FET gate pull-down against the SS34 reverse leakage"
-			(at 63.5 92.71 0)
+			(at 341.63 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2503,7 +3649,7 @@
 			)
 		)
 		(property "MPN" "0603WAF4701T5E"
-			(at 63.5 92.71 0)
+			(at 341.63 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2512,7 +3658,7 @@
 			)
 		)
 		(property "Manufacturer" "UNI-ROYAL"
-			(at 63.5 92.71 0)
+			(at 341.63 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2521,7 +3667,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 63.5 92.71 0)
+			(at 341.63 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2530,1219 +3676,47 @@
 			)
 		)
 		(pin "1"
-			(uuid "207a226c-c854-5799-8aeb-52e29ce72615")
+			(uuid "75014302-9951-5cf4-96ee-950a0a198867")
 		)
 		(pin "2"
-			(uuid "a09aca5d-94d0-5b19-a51f-e9d1c4f4a6a1")
+			(uuid "77b6c299-a140-5220-ba7f-fd2efa1e1d7b")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "R22")
+					(reference "R3")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 124.46 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "64a4c1f7-97c5-53f9-9533-6e1d84859aef")
-		(property "Reference" "C40"
-			(at 127.762 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF"
-			(at 127.762 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
-			(at 124.46 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 124.46 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "buck input"
-			(at 124.46 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL21A226MAQNNNE"
-			(at 124.46 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 124.46 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C45783"
-			(at 124.46 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e7e4f82a-3335-5237-9bc0-464d770d16fc")
-		)
-		(pin "2"
-			(uuid "5025cb5e-0fcc-53fd-9ce9-f500ce62b773")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C40")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 134.62 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ba1039bb-5794-58f4-8307-550c14201aef")
-		(property "Reference" "C41"
-			(at 137.922 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF"
-			(at 137.922 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
-			(at 134.62 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "buck input"
-			(at 134.62 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL21A226MAQNNNE"
-			(at 134.62 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 134.62 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C45783"
-			(at 134.62 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e233f45d-c53f-5809-9ef6-f316003a6617")
-		)
-		(pin "2"
-			(uuid "1599274b-e652-5dc4-9f19-b2952380bae4")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C41")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 144.78 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ad191f34-bfe0-5c18-a6a7-5df29481d6f0")
-		(property "Reference" "C42"
-			(at 148.082 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF"
-			(at 148.082 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
-			(at 144.78 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 144.78 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "+5V bulk"
-			(at 144.78 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL21A226MAQNNNE"
-			(at 144.78 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 144.78 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C45783"
-			(at 144.78 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "f04552e0-9614-5499-88c3-add23821bddc")
-		)
-		(pin "2"
-			(uuid "301beb4c-2d3a-5a71-876f-d61e5fd69d0e")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C42")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 154.94 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6891d5c5-9345-59e0-b76b-75d2107b800d")
-		(property "Reference" "C43"
-			(at 158.242 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 158.242 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
-			(at 154.94 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 154.94 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "buck input HF"
-			(at 154.94 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CC0603KRX7R9BB104"
-			(at 154.94 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "YAGEO"
-			(at 154.94 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 154.94 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7eb74b33-ca78-53db-adc0-fca9cae629a7")
-		)
-		(pin "2"
-			(uuid "aa528a28-f3bf-5140-a77a-6e904f03761b")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C43")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Regulator_Switching:AP63203WU")
-		(at 187.96 63.5 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a8514284-b4a3-535a-9609-d4211edd2dc8")
-		(property "Reference" "U12"
-			(at 177.8 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "AP63203WU"
-			(at 175.26 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:TSOT-23-6"
-			(at 187.96 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP63200-AP63201-AP63203-AP63205.pdf"
-			(at 187.96 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "3.3V 2A buck"
-			(at 187.96 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "AP63203WU-7"
-			(at 187.96 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Diodes Incorporated"
-			(at 187.96 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C780769"
-			(at 187.96 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "60525d8a-4444-575f-8a59-cde86c53da74")
-		)
-		(pin "2"
-			(uuid "503d0c8e-de09-5ab4-b790-30c2f1c77938")
-		)
-		(pin "3"
-			(uuid "3454f511-cf58-5267-a725-0f466cdd3dce")
-		)
-		(pin "4"
-			(uuid "bea5745e-a712-576f-a9cc-477ecdf27968")
-		)
-		(pin "5"
-			(uuid "e66a89ac-3443-5adf-8e30-afc6a4c07235")
-		)
-		(pin "6"
-			(uuid "b12200f2-97b2-5430-a96c-c99fff16ae8e")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "U12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 210.82 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "dc944265-8f25-5878-84db-6b9ae0439e3f")
-		(property "Reference" "C44"
-			(at 214.122 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 214.122 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
-			(at 210.82 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "bootstrap"
-			(at 210.82 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CC0603KRX7R9BB104"
-			(at 210.82 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "YAGEO"
-			(at 210.82 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 210.82 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "6f1c70c6-16dc-5223-accb-6af6737d1106")
-		)
-		(pin "2"
-			(uuid "977d19a0-c9d5-511f-a584-1a74bc0b9c36")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C44")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:L")
-		(at 220.98 60.96 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "2d8b213e-3bdd-536b-8c69-19a28c304d92")
-		(property "Reference" "L2"
-			(at 220.98 56.0097 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "6.8uH"
-			(at 220.98 58.5497 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:L_Sunlord_SWPA4030S"
-			(at 220.98 60.96 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 220.98 60.96 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "buck inductor"
-			(at 220.98 60.96 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "SWPA4030S6R8MT"
-			(at 220.98 60.96 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Sunlord"
-			(at 220.98 60.96 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C62684"
-			(at 220.98 60.96 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "be4c9b64-11fb-54b8-8900-5b2c1f6c695f")
-		)
-		(pin "2"
-			(uuid "fceabf82-5d7a-5583-97fe-5c02235decae")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "L2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 234.95 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a40ecc2e-d86b-536b-a5d2-d18e56b97d8b")
-		(property "Reference" "C45"
-			(at 238.252 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF"
-			(at 238.252 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
-			(at 234.95 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 234.95 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "buck output"
-			(at 234.95 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL21A226MAQNNNE"
-			(at 234.95 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 234.95 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C45783"
-			(at 234.95 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7a9ff345-277d-5046-9816-3f6d5e568439")
-		)
-		(pin "2"
-			(uuid "99f8f79a-0a7e-5fbc-9fbb-39f0df4c06a4")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C45")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 245.11 64.77 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b8bc2d98-ebd3-548c-85e7-39c06b233b50")
-		(property "Reference" "C46"
-			(at 248.412 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF"
-			(at 248.412 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0805_2012Metric"
-			(at 245.11 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 245.11 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "buck output"
-			(at 245.11 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL21A226MAQNNNE"
-			(at 245.11 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 245.11 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C45783"
-			(at 245.11 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a56a3477-d5e3-55d0-9ca9-e49601f9e814")
-		)
-		(pin "2"
-			(uuid "1ed4f0d3-4828-5322-947e-bf3908c96123")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C46")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Regulator_Linear:AP2112K-3.3")
-		(at 180.34 114.3 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "42a8c16d-bd04-52cd-a0a8-e0c8c313bed4")
-		(property "Reference" "U13"
-			(at 172.72 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "AP2112K-3.3"
-			(at 172.72 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:SOT-23-5"
-			(at 180.34 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2112.pdf"
-			(at 180.34 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "RP2354B 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD), 600mA, fast start"
-			(at 180.34 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "AP2112K-3.3TRG1"
-			(at 180.34 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Diodes Incorporated"
-			(at 180.34 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C51118"
-			(at 180.34 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "58b6c7b2-9089-5e35-9edb-a69ee297dcb9")
-		)
-		(pin "2"
-			(uuid "0a128589-0187-587f-8ff4-a1dc66072a1a")
-		)
-		(pin "3"
-			(uuid "d6f1697e-32b6-5aee-8cbf-55b22061fd8e")
-		)
-		(pin "4"
-			(uuid "5c555e59-055b-5184-adb5-d9372ac79815")
-		)
-		(pin "5"
-			(uuid "02c68d86-4c70-5baf-91ff-46de486e90cb")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "U13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 165.1 115.57 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6468cde4-a821-505e-838d-9c452b3b8969")
-		(property "Reference" "C47"
-			(at 161.798 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "1uF"
-			(at 161.798 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
-			(at 165.1 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 165.1 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "LDO input"
-			(at 165.1 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL10A105KB8NNNC"
-			(at 165.1 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 165.1 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C15849"
-			(at 165.1 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "30e22220-06cb-5abf-8a28-fbcae12d1d3f")
-		)
-		(pin "2"
-			(uuid "4d25e512-b751-59de-bd13-9ab67b2625fe")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C47")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 195.58 115.57 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9e201cdf-df35-59bc-9d26-fe6cde6653bb")
-		(property "Reference" "C48"
-			(at 198.882 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF"
-			(at 198.882 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "FujiNet-SMS:C_0603_1608Metric"
-			(at 195.58 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 195.58 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "LDO output"
-			(at 195.58 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "CL10A105KB8NNNC"
-			(at 195.58 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 195.58 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C15849"
-			(at 195.58 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "bb594fb3-d53e-56b5-8005-d3221bb935d1")
-		)
-		(pin "2"
-			(uuid "dfe5d9d9-6b70-5a07-ba32-30485fbe62e4")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "C48")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 48.26 60.96 0)
+		(lib_id "Connector:TestPoint")
+		(at 350.52 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp no)
-		(uuid "e8a5c596-bb27-528b-ae32-39d59c8dc45c")
-		(property "Reference" "#PWR105"
-			(at 48.26 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "CONS_5V"
-			(at 48.26 57.15 0)
+		(uuid "cc3a584e-be5f-5bfa-a729-7d54cebb0353")
+		(property "Reference" "TP2"
+			(at 350.52 114.808 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 48.26 60.96 0)
+		(property "Value" "+3V3"
+			(at 350.52 117.348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:TestPoint_Pad_D1.5mm"
+			(at 350.52 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3751,7 +3725,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 48.26 60.96 0)
+			(at 350.52 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3759,8 +3733,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 48.26 60.96 0)
+		(property "Description" "bring-up pad: +3V3"
+			(at 350.52 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3769,45 +3743,44 @@
 			)
 		)
 		(pin "1"
-			(uuid "c9f9f634-0218-5e5f-9e22-10636dbc346c")
+			(uuid "70754cf4-634d-5e29-9557-6c11b47c70ff")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR105")
+					(reference "TP2")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 60.96 68.58 0)
+		(lib_id "Connector:TestPoint")
+		(at 359.41 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp no)
-		(uuid "0ad6a63f-ec04-54b2-b2f7-c50b2bff1331")
-		(property "Reference" "#PWR106"
-			(at 60.96 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 60.96 72.39 0)
+		(uuid "0a1472cc-988c-582f-9d5e-9d7a136c247c")
+		(property "Reference" "TP7"
+			(at 359.41 114.808 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 60.96 68.58 0)
+		(property "Value" "+3V3_RP"
+			(at 359.41 117.348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:TestPoint_Pad_D1.5mm"
+			(at 359.41 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3816,7 +3789,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 60.96 68.58 0)
+			(at 359.41 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3824,73 +3797,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 60.96 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4c3773f8-ca4e-5b70-ad1d-accd57745d9b")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR106")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 68.58 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "a1a41585-dc93-56dd-a8ef-35aea8da6f9e")
-		(property "Reference" "#PWR107"
-			(at 68.58 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 68.58 72.39 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 68.58 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 68.58 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 68.58 68.58 0)
+		(property "Description" "bring-up pad: +3V3_RP"
+			(at 359.41 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3899,240 +3807,44 @@
 			)
 		)
 		(pin "1"
-			(uuid "77a84498-9201-5e8f-98a7-6343590ce199")
+			(uuid "2320c6ad-4e9a-5a5f-94dd-52f3f4bf7ab0")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR107")
+					(reference "TP7")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 48.26 109.22 0)
+		(lib_id "Connector:TestPoint")
+		(at 368.3 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp no)
-		(uuid "e56e5fbf-32ae-524e-b931-6c21c1ad99dd")
-		(property "Reference" "#PWR108"
-			(at 48.26 115.57 0)
+		(uuid "703b6255-8bf0-5007-8f2c-d6946d57b75f")
+		(property "Reference" "TP11"
+			(at 368.3 114.808 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 48.26 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 48.26 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 48.26 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 48.26 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "526fac79-b3d0-5173-84e3-cd8431943bdc")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR108")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:VBUS")
-		(at 53.34 88.9 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "ad2d9ba0-9897-577c-8b12-5f66da701719")
-		(property "Reference" "#PWR109"
-			(at 53.34 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VBUS"
-			(at 53.34 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 53.34 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 53.34 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 53.34 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "f8e9111f-90af-5481-bf23-d8454343deb1")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR109")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 63.5 96.52 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "58c64507-b456-5686-9807-16eeaebf36d4")
-		(property "Reference" "#PWR110"
-			(at 63.5 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 63.5 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 63.5 96.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 63.5 96.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 63.5 96.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1d06612e-b8ec-5330-b8c9-e60fdbdb985b")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR110")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 114.3 60.96 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "0d055351-0d57-5f41-821d-6caf89b35a2c")
-		(property "Reference" "#PWR111"
-			(at 114.3 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
 			)
 		)
 		(property "Value" "+5V"
-			(at 114.3 57.15 0)
+			(at 368.3 117.348 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 114.3 60.96 0)
+		(property "Footprint" "FujiNet-SMS:TestPoint_Pad_D1.5mm"
+			(at 368.3 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4141,7 +3853,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 114.3 60.96 0)
+			(at 368.3 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4149,8 +3861,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 114.3 60.96 0)
+		(property "Description" "bring-up pad: +5V"
+			(at 368.3 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4159,45 +3871,44 @@
 			)
 		)
 		(pin "1"
-			(uuid "19c39ceb-5ad1-5e38-953b-c5c2596db1f6")
+			(uuid "3dc0763f-b6fc-55d2-ace2-e62dbc5483ce")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR111")
+					(reference "TP11")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 124.46 68.58 0)
+		(lib_id "Connector:TestPoint")
+		(at 378.46 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp no)
-		(uuid "8bd3bb52-f39e-5429-8e63-c5d9298a61d2")
-		(property "Reference" "#PWR112"
-			(at 124.46 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 124.46 72.39 0)
+		(uuid "30bbb6a2-4dd9-51ef-b7c0-832f4c41687a")
+		(property "Reference" "TP14"
+			(at 378.46 114.808 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 124.46 68.58 0)
+		(property "Value" "CONS_5V"
+			(at 378.46 117.348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FujiNet-SMS:TestPoint_Pad_D1.5mm"
+			(at 378.46 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4206,7 +3917,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 124.46 68.58 0)
+			(at 378.46 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4214,73 +3925,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 124.46 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "44e3ff5e-6277-520e-93bd-b75fa8fdae2e")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR112")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 134.62 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "fb567c84-1896-59b2-8dc6-e21f10f5ddfb")
-		(property "Reference" "#PWR113"
-			(at 134.62 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 134.62 72.39 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 134.62 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 134.62 68.58 0)
+		(property "Description" "bring-up pad: console 5V"
+			(at 378.46 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4289,207 +3935,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "01370d28-5a9a-5031-abcf-5ff4f18e9c7e")
+			(uuid "ec5120f4-6302-577f-b810-6858e10439c4")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR113")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 144.78 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "d070c4f5-4c9b-5fd9-acfb-d4e8e5005973")
-		(property "Reference" "#PWR114"
-			(at 144.78 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 144.78 72.39 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 144.78 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 144.78 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 144.78 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "70342f27-4347-52a4-9e8b-cd1a7d79618c")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR114")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 154.94 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "156d25fe-79c3-5394-96bd-6a8a499f6286")
-		(property "Reference" "#PWR115"
-			(at 154.94 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 154.94 72.39 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 154.94 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 154.94 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 154.94 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a598f2e6-0d39-5426-8b58-4e2e2e336401")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR115")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 187.96 71.12 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "5e850623-0660-592a-b4eb-ba88fb28bdd0")
-		(property "Reference" "#PWR116"
-			(at 187.96 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 187.96 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 187.96 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 187.96 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 187.96 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "cda622f8-659b-5f37-9aac-07993f45307b")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR116")
+					(reference "TP14")
 					(unit 1)
 				)
 			)
@@ -4497,15 +3948,15 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 229.87 60.96 0)
+		(at 71.12 127 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "6bde9d84-c43a-5169-a223-948fcd20f7d4")
-		(property "Reference" "#PWR117"
-			(at 229.87 54.61 0)
+		(uuid "5f33b38b-8981-546d-b2f8-396cd0cad5a8")
+		(property "Reference" "#PWR176"
+			(at 71.12 120.65 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4514,7 +3965,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 229.87 57.15 0)
+			(at 76.706 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4522,7 +3973,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 229.87 60.96 0)
+			(at 71.12 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4531,7 +3982,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 60.96 0)
+			(at 71.12 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4540,7 +3991,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 60.96 0)
+			(at 71.12 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4549,12 +4000,142 @@
 			)
 		)
 		(pin "1"
-			(uuid "8a4bc25e-e794-5b28-bb92-2f3fa7be5e24")
+			(uuid "5f8d971a-42ff-5856-9d40-1ff15672f670")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR117")
+					(reference "#PWR176")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 45.72 127 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "10774f57-ac36-5294-99b5-378f892ab1f7")
+		(property "Reference" "#PWR177"
+			(at 45.72 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 40.7055 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 45.72 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 45.72 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "55af4c67-c0f2-5565-901c-33961e72c439")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR177")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 45.72 121.92 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "bd49f626-c4c5-51b6-b949-64cb7e520369")
+		(property "Reference" "#PWR178"
+			(at 45.72 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 40.7055 121.92 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 45.72 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 45.72 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "00749ca3-dff2-5971-90b6-244360196e2b")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR178")
 					(unit 1)
 				)
 			)
@@ -4562,15 +4143,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 234.95 68.58 0)
+		(at 58.42 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "cfb7e8e8-f173-55ad-8bba-6553ee3b15f1")
-		(property "Reference" "#PWR118"
-			(at 234.95 74.93 0)
+		(uuid "4da56a95-545f-5f77-96f9-e42eed5a4930")
+		(property "Reference" "#PWR179"
+			(at 58.42 140.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4579,7 +4160,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 234.95 72.39 0)
+			(at 58.42 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4587,7 +4168,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 234.95 68.58 0)
+			(at 58.42 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4596,7 +4177,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 234.95 68.58 0)
+			(at 58.42 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4605,7 +4186,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 234.95 68.58 0)
+			(at 58.42 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4614,12 +4195,77 @@
 			)
 		)
 		(pin "1"
-			(uuid "07fdb9b7-12ee-5cd3-a13b-a721ad2ea15f")
+			(uuid "5deb5871-c28c-5302-a1d4-7d59f5045bd7")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR118")
+					(reference "#PWR179")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 99.06 120.65 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "ef53ef57-3fb3-59c1-a933-bdd5d3d5fa4a")
+		(property "Reference" "#PWR180"
+			(at 99.06 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 94.0455 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 99.06 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 99.06 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 99.06 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1483be56-c6bb-5ed2-a8e3-5e3fe52987f6")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR180")
 					(unit 1)
 				)
 			)
@@ -4627,15 +4273,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 245.11 68.58 0)
+		(at 109.22 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "910a5cf1-1c27-57ba-8099-2f0760dbe6ff")
-		(property "Reference" "#PWR119"
-			(at 245.11 74.93 0)
+		(uuid "a81e7f7f-348c-5c32-8a4c-22548a7cbb5e")
+		(property "Reference" "#PWR181"
+			(at 109.22 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4644,7 +4290,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 245.11 72.39 0)
+			(at 109.22 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4652,7 +4298,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 245.11 68.58 0)
+			(at 109.22 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4661,7 +4307,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 245.11 68.58 0)
+			(at 109.22 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4670,7 +4316,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 245.11 68.58 0)
+			(at 109.22 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4679,28 +4325,28 @@
 			)
 		)
 		(pin "1"
-			(uuid "3e733008-a9c8-5635-bab7-8e2875da6bd1")
+			(uuid "ba59c948-1d2b-5ec4-b197-5f0919c3d1e6")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR119")
+					(reference "#PWR181")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 165.1 119.38 0)
+		(lib_id "power:+5V")
+		(at 99.06 123.19 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "64498968-2035-5e66-bb66-40b1212d62dd")
-		(property "Reference" "#PWR120"
-			(at 165.1 125.73 0)
+		(uuid "6fc39f00-0236-5466-8669-e22803ec577f")
+		(property "Reference" "#PWR182"
+			(at 99.06 116.84 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4708,8 +4354,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 165.1 123.19 0)
+		(property "Value" "+5V"
+			(at 94.0455 123.19 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4717,7 +4363,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 165.1 119.38 0)
+			(at 99.06 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4726,7 +4372,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 165.1 119.38 0)
+			(at 99.06 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4735,7 +4381,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 165.1 119.38 0)
+			(at 99.06 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4744,142 +4390,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "69d4f583-a4cd-5d33-8d58-2803b0bb69a4")
+			(uuid "af67e7c1-2171-5957-846c-55013feeb6ad")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR120")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 180.34 121.92 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "6cba64f0-c492-59e6-b968-7a9dc1c78300")
-		(property "Reference" "#PWR121"
-			(at 180.34 128.27 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 180.34 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 180.34 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 180.34 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 180.34 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7bfa0573-0b18-580f-be8c-ef81075c1730")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR121")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 195.58 119.38 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp no)
-		(uuid "c0227238-6160-5349-9994-ec2b4930e753")
-		(property "Reference" "#PWR122"
-			(at 195.58 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 195.58 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 195.58 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 195.58 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 195.58 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "415c87c7-f3de-515e-b6db-e469c661795b")
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR122")
+					(reference "#PWR182")
 					(unit 1)
 				)
 			)
@@ -4887,15 +4403,15 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 200.66 111.76 0)
+		(at 119.38 120.65 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "210385df-0381-5605-98a1-4787cff7ed78")
-		(property "Reference" "#PWR123"
-			(at 200.66 105.41 0)
+		(uuid "1d897d34-2575-5926-8e0b-c44ff2baca5e")
+		(property "Reference" "#PWR183"
+			(at 119.38 114.3 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4904,7 +4420,7 @@
 			)
 		)
 		(property "Value" "+3V3_RP"
-			(at 200.66 107.95 0)
+			(at 126.6805 120.65 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4912,7 +4428,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 111.76 0)
+			(at 119.38 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4921,7 +4437,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 111.76 0)
+			(at 119.38 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4930,7 +4446,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 200.66 111.76 0)
+			(at 119.38 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4939,28 +4455,28 @@
 			)
 		)
 		(pin "1"
-			(uuid "b3752f1b-aeab-5a9b-b403-6f00c7f2a493")
+			(uuid "bfdd422e-ac53-56da-8e6a-aee5105293f0")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#PWR123")
+					(reference "#PWR183")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 78.74 60.96 0)
+		(lib_id "power:+5V")
+		(at 140.97 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "f1c6844b-dc93-54a4-8137-eb2ed5397ae6")
-		(property "Reference" "#FLG03"
-			(at 78.74 59.055 0)
+		(uuid "158b95a9-a5e6-5135-ba22-752d57a69d0c")
+		(property "Reference" "#PWR184"
+			(at 140.97 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4968,8 +4484,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 78.74 57.15 0)
+		(property "Value" "+5V"
+			(at 140.97 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4977,7 +4493,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 78.74 60.96 0)
+			(at 140.97 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4986,7 +4502,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 60.96 0)
+			(at 140.97 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4995,7 +4511,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 60.96 0)
+			(at 140.97 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5004,28 +4520,28 @@
 			)
 		)
 		(pin "1"
-			(uuid "3e7f04c5-5629-55c4-8b5c-eb7a219f1796")
+			(uuid "9248430a-2a53-52f0-ba70-7641b2a909f5")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#FLG03")
+					(reference "#PWR184")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 58.42 109.22 0)
+		(lib_id "power:GND")
+		(at 140.97 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "a43adc7e-7a36-59cb-9a80-695777cd2367")
-		(property "Reference" "#FLG04"
-			(at 58.42 107.315 0)
+		(uuid "0eb6a07a-34ac-58e0-86a9-aad550775b85")
+		(property "Reference" "#PWR185"
+			(at 140.97 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5033,8 +4549,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 58.42 105.41 0)
+		(property "Value" "GND"
+			(at 140.97 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5042,7 +4558,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 58.42 109.22 0)
+			(at 140.97 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5051,7 +4567,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 58.42 109.22 0)
+			(at 140.97 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5060,7 +4576,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 58.42 109.22 0)
+			(at 140.97 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5069,28 +4585,28 @@
 			)
 		)
 		(pin "1"
-			(uuid "a16e997c-5282-5bd3-9209-640fd9bd4767")
+			(uuid "beb2bf7c-7a09-55d2-bc02-205e150c93d3")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#FLG04")
+					(reference "#PWR185")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 73.66 88.9 0)
+		(lib_id "power:+5V")
+		(at 163.83 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "0cc2fc9b-fc6c-503b-a12c-ed2301181a46")
-		(property "Reference" "#FLG05"
-			(at 73.66 86.995 0)
+		(uuid "de06a2f3-d5c6-5065-85fa-70c84e9ccf4b")
+		(property "Reference" "#PWR186"
+			(at 163.83 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5098,8 +4614,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 73.66 85.09 0)
+		(property "Value" "+5V"
+			(at 163.83 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5107,7 +4623,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 73.66 88.9 0)
+			(at 163.83 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5116,7 +4632,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 73.66 88.9 0)
+			(at 163.83 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5125,7 +4641,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 73.66 88.9 0)
+			(at 163.83 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5134,28 +4650,28 @@
 			)
 		)
 		(pin "1"
-			(uuid "ea473572-f759-55be-998a-99bf8d6bede1")
+			(uuid "05382e12-a335-5d8f-ab11-95415c824221")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#FLG05")
+					(reference "#PWR186")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 167.64 60.96 0)
+		(lib_id "power:GND")
+		(at 163.83 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "c503e54f-f50e-55bf-8fe9-4162f7918bed")
-		(property "Reference" "#FLG06"
-			(at 167.64 59.055 0)
+		(uuid "9a818131-e678-5077-8ee7-5240c637efcc")
+		(property "Reference" "#PWR187"
+			(at 163.83 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5163,8 +4679,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 167.64 57.15 0)
+		(property "Value" "GND"
+			(at 163.83 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5172,7 +4688,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 167.64 60.96 0)
+			(at 163.83 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5181,7 +4697,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 60.96 0)
+			(at 163.83 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5190,7 +4706,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 60.96 0)
+			(at 163.83 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5199,28 +4715,28 @@
 			)
 		)
 		(pin "1"
-			(uuid "fb4cb71e-9ba2-5b79-9b20-ac12dfb9dcc0")
+			(uuid "b5b8323b-b302-526f-a701-0a83ddc498d7")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#FLG06")
+					(reference "#PWR187")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 245.11 60.96 0)
+		(lib_id "power:+5V")
+		(at 175.26 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board no)
 		(dnp no)
-		(uuid "e6fe49b9-f615-5081-a0ed-d638cab9e79e")
-		(property "Reference" "#FLG07"
-			(at 245.11 59.055 0)
+		(uuid "1a508766-a273-515d-8a83-10df2550c1b5")
+		(property "Reference" "#PWR188"
+			(at 175.26 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5228,8 +4744,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 245.11 57.15 0)
+		(property "Value" "+5V"
+			(at 175.26 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5237,7 +4753,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 245.11 60.96 0)
+			(at 175.26 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5246,7 +4762,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 245.11 60.96 0)
+			(at 175.26 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5255,7 +4771,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 245.11 60.96 0)
+			(at 175.26 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5264,12 +4780,1767 @@
 			)
 		)
 		(pin "1"
-			(uuid "57e7c243-7da4-5f22-a9a8-8e02ec80e09d")
+			(uuid "281abbde-affa-51bd-b352-2a99580a3962")
 		)
 		(instances
 			(project "FujiNet-SMS-Rev0"
 				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
-					(reference "#FLG07")
+					(reference "#PWR188")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 175.26 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "cae52f02-0148-5da4-85aa-23b734a73778")
+		(property "Reference" "#PWR189"
+			(at 175.26 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 175.26 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 175.26 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 175.26 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d6a04711-d987-5490-8e1e-46bb7b95bdc6")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR189")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 187.96 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "2d197327-0702-5fbc-bf9e-5377501a9a3b")
+		(property "Reference" "#PWR190"
+			(at 187.96 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 187.96 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 187.96 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 187.96 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 187.96 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8addcadc-0ea5-5823-a0bc-83ce3ad0035b")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR190")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 187.96 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "4a531ff7-1d6b-5b2a-9da7-29a41cf60fff")
+		(property "Reference" "#PWR191"
+			(at 187.96 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 187.96 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 187.96 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 187.96 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 187.96 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "01fea123-8968-5a15-941a-1bed837eb34d")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR191")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 199.39 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "8fb861ce-9d70-5dcc-bbd8-b492c71c3959")
+		(property "Reference" "#PWR192"
+			(at 199.39 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 199.39 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 199.39 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 199.39 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 199.39 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a786f6c4-4505-5d17-a92f-df7d7cd320c7")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR192")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 199.39 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "6714d11f-6a4e-52e5-ad80-ce3584340461")
+		(property "Reference" "#PWR193"
+			(at 199.39 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 199.39 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 199.39 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 199.39 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 199.39 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c7eacd91-e148-5bd3-b665-b6ae392a5909")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR193")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 210.82 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "731f3a33-42ef-5de1-88d0-49bcb94a08c7")
+		(property "Reference" "#PWR194"
+			(at 210.82 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 210.82 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 210.82 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 210.82 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 210.82 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bbae768a-18bd-5bf3-99bd-dd7b49cdd305")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR194")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 210.82 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "aa01427a-cf2f-51a0-8829-5fc89375983f")
+		(property "Reference" "#PWR195"
+			(at 210.82 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 210.82 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 210.82 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 210.82 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 210.82 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d72bf5ac-6995-5b97-9ba2-8da6650ef3f9")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR195")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 222.25 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "42edc457-eff4-59c3-ba58-6f3356113783")
+		(property "Reference" "#PWR196"
+			(at 222.25 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 222.25 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 222.25 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 222.25 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 222.25 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "927e9494-430f-523c-91da-4822a6f75177")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR196")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 222.25 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "47ba781e-6090-5fe6-a575-033a02ee6147")
+		(property "Reference" "#PWR197"
+			(at 222.25 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 222.25 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 222.25 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 222.25 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 222.25 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e02306ee-20c7-5251-b4f2-41eeb5863d49")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR197")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 233.68 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "56a4984f-1663-5861-9572-e8fa3c4f719b")
+		(property "Reference" "#PWR198"
+			(at 233.68 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3_RP"
+			(at 233.68 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 233.68 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 233.68 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 233.68 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "17f1a4bc-f1e6-53ca-b950-a0350bcda791")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR198")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 233.68 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "d75c6baf-1f79-549e-be2d-8061215ce14e")
+		(property "Reference" "#PWR199"
+			(at 233.68 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 233.68 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 233.68 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 233.68 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 233.68 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3456fc48-e594-5412-95a4-9454226276b5")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR199")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 246.38 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "6b1e55b7-1ce9-5314-a0b4-9c73a9946c28")
+		(property "Reference" "#PWR200"
+			(at 246.38 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "CONS_5V"
+			(at 246.38 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 246.38 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 246.38 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 246.38 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "48e42fa5-845b-5a2b-9186-3e14f07d3571")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR200")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 246.38 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "e4c4b730-9eac-578e-a9da-2ff69dc1f6d0")
+		(property "Reference" "#PWR201"
+			(at 246.38 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 246.38 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 246.38 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 246.38 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 246.38 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ce893d7a-a452-5e95-8a52-b5de8817005b")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR201")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 257.81 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "f16ac192-a21b-58bf-ae1e-235e4190af22")
+		(property "Reference" "#PWR202"
+			(at 257.81 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "CONS_5V"
+			(at 257.81 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 257.81 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 257.81 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 257.81 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2b0a8c99-c43b-5ed2-970a-a520a8f11066")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR202")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 257.81 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "c660531d-23af-5d0f-b4a2-d2f12aefbf18")
+		(property "Reference" "#PWR203"
+			(at 257.81 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 257.81 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 257.81 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 257.81 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 257.81 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8c2858cf-f611-5651-9b21-445141d30626")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR203")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 274.32 120.65 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "eef094af-88c1-5ccc-82d0-98c7d4931d5d")
+		(property "Reference" "#PWR204"
+			(at 274.32 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 269.3055 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 274.32 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 274.32 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 274.32 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d5cdf9ce-c893-5dd9-9bcc-d66b9043a2c7")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR204")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 287.02 120.65 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "855d0a44-d1e7-544a-8c99-3f1b4a7c0fd8")
+		(property "Reference" "#PWR205"
+			(at 287.02 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VBUS"
+			(at 292.606 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 287.02 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 287.02 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 287.02 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "353ca2ba-7125-57cd-9bed-2cd9215f6aee")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR205")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 303.53 144.78 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "33339059-ed81-5b06-ab75-9e3f087f0892")
+		(property "Reference" "#PWR206"
+			(at 303.53 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 303.53 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 303.53 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 303.53 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 303.53 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9afe3a9f-3fcd-55cf-a6c2-09b22b08b8f4")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR206")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 320.04 139.7 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "5e522c69-7f7e-5681-9e60-c72e8e93b3ac")
+		(property "Reference" "#PWR207"
+			(at 320.04 133.35 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VBUS"
+			(at 314.454 139.7 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 320.04 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 320.04 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 320.04 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "63db849b-619b-506e-b0d4-c3db9a9593c3")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR207")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 330.2 147.32 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "3ff8ea97-c86b-5598-8672-c953ddfe71eb")
+		(property "Reference" "#PWR208"
+			(at 330.2 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 330.2 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 330.2 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 330.2 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 330.2 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1ed85fb2-2261-5497-8b9c-cb8eb743bc06")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR208")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 330.2 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "c980d65a-e39c-566f-b518-9030412b0926")
+		(property "Reference" "#PWR209"
+			(at 330.2 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "CONS_5V"
+			(at 330.2 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 330.2 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 330.2 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 330.2 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "95cad8b6-1f32-5a06-a6a9-9055479d3664")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR209")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 341.63 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "92add1a4-c88b-5811-8190-0505b46d2cc8")
+		(property "Reference" "#PWR210"
+			(at 341.63 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VBUS"
+			(at 341.63 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 341.63 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 341.63 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 341.63 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6a64bb80-857f-5507-a65a-e740df9aba28")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR210")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 341.63 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "28b9c520-1d48-58b6-b471-6e64576fc0bb")
+		(property "Reference" "#PWR211"
+			(at 341.63 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 341.63 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 341.63 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 341.63 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 341.63 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ace11043-ac12-5a86-85e4-6eabbaaf6e11")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR211")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 350.52 125.73 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "b2bab1b7-22f2-5a9b-b444-17f8f015e97c")
+		(property "Reference" "#PWR212"
+			(at 350.52 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 350.52 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 350.52 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 350.52 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 350.52 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a96c17ec-4b55-5214-959e-ab566398b178")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR212")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 359.41 125.73 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "57e16f8b-a91d-5d22-abaf-b5ad6728eb63")
+		(property "Reference" "#PWR213"
+			(at 359.41 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3_RP"
+			(at 359.41 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 359.41 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 359.41 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 359.41 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "efeb105d-3bdc-5f10-ae9e-b6dd19e9ec19")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR213")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 368.3 125.73 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "02048e22-d091-57ea-8859-740fa6178c41")
+		(property "Reference" "#PWR214"
+			(at 368.3 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 368.3 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 368.3 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 368.3 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 368.3 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "30ae36e6-22c5-5b1c-b987-054b5ade7a07")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR214")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 378.46 125.73 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "5efcb2c0-7cb6-594a-a353-85ebad8e66d3")
+		(property "Reference" "#PWR215"
+			(at 378.46 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "CONS_5V"
+			(at 378.46 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 378.46 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 378.46 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 378.46 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "60c4c628-0d96-59d0-bb6a-7d76ce165bb7")
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7/113877c5-6a44-5bff-9a74-179e8fd72159"
+					(reference "#PWR215")
 					(unit 1)
 				)
 			)
@@ -5277,647 +6548,552 @@
 	)
 	(wire
 		(pts
-			(xy 48.26 60.96)
-			(xy 60.96 60.96)
+			(xy 68.58 127)
+			(xy 71.12 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "800c6fcf-03e2-5b34-8fb5-ec08cbd9b3c2")
+		(uuid "64498dba-b510-598f-8168-94c072f03a04")
 	)
 	(wire
 		(pts
-			(xy 60.96 60.96)
-			(xy 68.58 60.96)
+			(xy 48.26 127)
+			(xy 45.72 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "02cc2b03-4d76-5403-b4ad-ed4c4821bb19")
+		(uuid "f0e27c45-1d2b-530b-abe4-9b9048425790")
 	)
 	(wire
 		(pts
-			(xy 68.58 60.96)
-			(xy 78.74 60.96)
+			(xy 48.26 121.92)
+			(xy 45.72 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "12849c65-88c4-5a2e-a395-f1799c841202")
+		(uuid "0997252b-f833-5b4b-a0a7-ca302a5bbbc3")
 	)
 	(wire
 		(pts
-			(xy 78.74 60.96)
-			(xy 83.82 60.96)
+			(xy 58.42 132.08)
+			(xy 58.42 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e798f92f-bd40-5ab4-854b-573e7eb5e5c2")
+		(uuid "71ba5e77-7cc2-5628-9ed3-6de9e3f9c474")
 	)
 	(wire
 		(pts
-			(xy 48.26 109.22)
-			(xy 58.42 109.22)
+			(xy 68.58 121.92)
+			(xy 71.12 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "fefbaa5b-6688-5e5a-a571-02fcfe1fe06a")
+		(uuid "f318dde5-f52e-5306-bb42-0819c0defccc")
 	)
 	(wire
 		(pts
-			(xy 53.34 88.9)
-			(xy 63.5 88.9)
+			(xy 68.58 124.46)
+			(xy 71.12 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d543ce77-6c24-5955-87c3-eca64f7ab95c")
+		(uuid "32d9e644-80c7-519e-8809-9683c8eca871")
 	)
 	(wire
 		(pts
-			(xy 63.5 88.9)
-			(xy 73.66 88.9)
+			(xy 101.6 120.65)
+			(xy 99.06 120.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "14f81bb5-3160-58c0-8ed1-10eecfd4b73b")
+		(uuid "b95eb922-aaf1-5905-ab45-384a88a3ed7a")
 	)
 	(wire
 		(pts
-			(xy 73.66 88.9)
-			(xy 88.9 88.9)
+			(xy 109.22 130.81)
+			(xy 109.22 133.35)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "12153f35-6fae-5b28-81fb-5b2501cbaead")
+		(uuid "31b0672c-18c8-528f-a6b0-4e70e71ffbc4")
 	)
 	(wire
 		(pts
-			(xy 88.9 88.9)
-			(xy 100.33 88.9)
+			(xy 101.6 123.19)
+			(xy 99.06 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d8a7d296-a4a2-5f6b-bd43-f8a8863a46c4")
+		(uuid "690882f6-57bd-5f22-a1fc-e103e327c8b8")
 	)
 	(wire
 		(pts
-			(xy 88.9 88.9)
-			(xy 88.9 68.58)
+			(xy 116.84 120.65)
+			(xy 119.38 120.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "74eae012-83ed-5cb5-a052-86c4df9c45d3")
+		(uuid "03389809-0f39-5527-8262-41eb2ea840d6")
 	)
 	(wire
 		(pts
-			(xy 107.95 88.9)
-			(xy 114.3 88.9)
+			(xy 140.97 129.54)
+			(xy 140.97 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b067a933-9c57-5ae5-9dbb-1650f883a03d")
+		(uuid "64e6dcad-8cc7-587f-b9a2-7419767d1e3a")
 	)
 	(wire
 		(pts
-			(xy 114.3 88.9)
-			(xy 114.3 60.96)
+			(xy 140.97 137.16)
+			(xy 140.97 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8c694372-92af-5288-8451-6e80a8b96552")
+		(uuid "ac5bce25-cfe3-5d15-8de4-9b298893199b")
 	)
 	(wire
 		(pts
-			(xy 93.98 60.96)
-			(xy 114.3 60.96)
+			(xy 152.4 134.62)
+			(xy 152.4 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "351251b9-1483-545f-a563-a6add1c5c610")
+		(uuid "62fa1c5f-30cd-5856-883e-e5a2f3f2e100")
 	)
 	(wire
 		(pts
-			(xy 114.3 60.96)
-			(xy 124.46 60.96)
+			(xy 152.4 142.24)
+			(xy 152.4 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e9d50946-8482-51ec-adc0-eb4bf1191aee")
+		(uuid "9e7d7882-0942-5654-b666-1ab5a4578998")
 	)
 	(wire
 		(pts
-			(xy 124.46 60.96)
-			(xy 134.62 60.96)
+			(xy 163.83 129.54)
+			(xy 163.83 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8ccb1756-cb99-57ec-926c-c47da7ed2dab")
+		(uuid "fedc7c9c-3e3f-5e56-93b1-d3f5490db794")
 	)
 	(wire
 		(pts
-			(xy 134.62 60.96)
-			(xy 144.78 60.96)
+			(xy 163.83 137.16)
+			(xy 163.83 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f77dbde7-ec22-5a94-bbd3-16704ec63b33")
+		(uuid "313417e9-b8e9-57b6-a4e9-720b0c273000")
 	)
 	(wire
 		(pts
-			(xy 144.78 60.96)
-			(xy 154.94 60.96)
+			(xy 175.26 129.54)
+			(xy 175.26 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7eb9a58c-7090-5d4c-b657-7c7324acb3d4")
+		(uuid "e5ab9ed9-af2b-5ca8-a25d-1d0c608137f2")
 	)
 	(wire
 		(pts
-			(xy 154.94 60.96)
-			(xy 162.56 60.96)
+			(xy 175.26 137.16)
+			(xy 175.26 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ca128a8a-559c-5b94-aeeb-b371e8fa92eb")
+		(uuid "39fd54ec-bb85-59e0-ad39-4fc2da44a6b2")
 	)
 	(wire
 		(pts
-			(xy 162.56 60.96)
-			(xy 167.64 60.96)
+			(xy 187.96 130.81)
+			(xy 187.96 128.27)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "675e539e-9f3b-5b8b-8cbf-98a748c8ac9b")
+		(uuid "574961fc-4189-5da7-8326-9e332d56c96d")
 	)
 	(wire
 		(pts
-			(xy 167.64 60.96)
-			(xy 175.26 60.96)
+			(xy 187.96 138.43)
+			(xy 187.96 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1b7204aa-c11b-58d4-b08b-1cf2c04d6b9b")
+		(uuid "fc80f59f-c90b-5dd7-bce6-78035914ad05")
 	)
 	(wire
 		(pts
-			(xy 175.26 60.96)
-			(xy 177.8 60.96)
+			(xy 199.39 130.81)
+			(xy 199.39 128.27)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "12ce0b1a-a6fb-511e-ba68-f4de42fa78cb")
+		(uuid "94b405bf-2e88-5282-be76-e99f5bbc6c43")
 	)
 	(wire
 		(pts
-			(xy 177.8 66.04)
-			(xy 175.26 66.04)
+			(xy 199.39 138.43)
+			(xy 199.39 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "efc90434-3caa-5145-8e99-8950c8ed16ad")
+		(uuid "107bb4a7-3f18-5d08-a883-c5e9ee118798")
 	)
 	(wire
 		(pts
-			(xy 175.26 66.04)
-			(xy 175.26 60.96)
+			(xy 210.82 129.54)
+			(xy 210.82 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "49d6f239-c253-5d40-90ea-4424962636ad")
+		(uuid "3743a34e-70e6-569c-836b-5ee530e18ef3")
 	)
 	(wire
 		(pts
-			(xy 198.12 60.96)
-			(xy 210.82 60.96)
+			(xy 210.82 137.16)
+			(xy 210.82 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8840e64c-70b2-5be2-ad7d-8abf8330d32d")
+		(uuid "b2c01741-2100-56b6-b912-8f21f2680df4")
 	)
 	(wire
 		(pts
-			(xy 210.82 60.96)
-			(xy 217.17 60.96)
+			(xy 222.25 129.54)
+			(xy 222.25 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bf486c7e-6ae5-5559-b21c-e24449330c7d")
+		(uuid "25932f38-17e2-55e9-b26e-a58ffd667f32")
 	)
 	(wire
 		(pts
-			(xy 198.12 63.5)
-			(xy 203.2 63.5)
+			(xy 222.25 137.16)
+			(xy 222.25 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5358ccaa-e202-554c-ada0-c776dc72048a")
+		(uuid "9559155b-eaea-5c1b-946a-d2a63ca2d0c5")
 	)
 	(wire
 		(pts
-			(xy 203.2 63.5)
-			(xy 203.2 71.12)
+			(xy 233.68 134.62)
+			(xy 233.68 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3e0d4243-1b01-5bdb-a0c5-d3e57b168353")
+		(uuid "a0575f69-b927-57c9-b21a-c5323cfe8240")
 	)
 	(wire
 		(pts
-			(xy 203.2 71.12)
-			(xy 210.82 71.12)
+			(xy 233.68 142.24)
+			(xy 233.68 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c8195c75-b86c-53d8-9bdd-b71a33de562c")
+		(uuid "81530a15-8a7d-5638-8045-a45c3fd4fc8b")
 	)
 	(wire
 		(pts
-			(xy 210.82 71.12)
-			(xy 210.82 68.58)
+			(xy 246.38 134.62)
+			(xy 246.38 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "44bf1d99-7268-505b-b5be-b624f5db18e1")
+		(uuid "8d89a5d9-ae74-597f-9e54-12c93ddcc805")
 	)
 	(wire
 		(pts
-			(xy 205.74 71.12)
-			(xy 205.74 73.66)
+			(xy 246.38 142.24)
+			(xy 246.38 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c0fd9c80-5e39-5a81-8a15-dda6083cbb11")
+		(uuid "1d34fd66-2043-5551-8184-058fbf116b52")
 	)
 	(wire
 		(pts
-			(xy 201.93 60.96)
-			(xy 201.93 58.42)
+			(xy 257.81 134.62)
+			(xy 257.81 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d98ee4cc-6762-5ab3-9db5-02ea49f34146")
+		(uuid "71bec720-69d4-5b0c-ac0d-60d6f6a20f6a")
 	)
 	(wire
 		(pts
-			(xy 224.79 60.96)
-			(xy 229.87 60.96)
+			(xy 257.81 142.24)
+			(xy 257.81 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "93a61b09-a7ca-5059-bbf7-a5204699a7a1")
+		(uuid "e5ae9025-f52e-5590-8803-545fbb1f2953")
 	)
 	(wire
 		(pts
-			(xy 229.87 60.96)
-			(xy 234.95 60.96)
+			(xy 276.86 120.65)
+			(xy 274.32 120.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "48ed396f-aa73-5657-9944-6f88a7384811")
+		(uuid "386ff6f5-c436-533c-a145-72ac4abd0de9")
 	)
 	(wire
 		(pts
-			(xy 234.95 60.96)
-			(xy 245.11 60.96)
+			(xy 284.48 120.65)
+			(xy 287.02 120.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f45836de-c7f2-56c5-986a-e68de6df6dbd")
+		(uuid "8d48177a-8b25-542b-a5c7-06f66b54dbfb")
 	)
 	(wire
 		(pts
-			(xy 198.12 66.04)
-			(xy 200.66 66.04)
+			(xy 303.53 134.62)
+			(xy 303.53 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e153ec0c-dfd9-5420-bfa4-682209394d83")
+		(uuid "260bd8d7-7290-5650-9948-abe7dbc3fddc")
 	)
 	(wire
 		(pts
-			(xy 200.66 66.04)
-			(xy 200.66 78.74)
+			(xy 303.53 142.24)
+			(xy 303.53 144.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e23d80a7-e098-5caf-9e52-bb5167ee7c86")
+		(uuid "9bc7e82d-94b5-5972-a9b6-cd062d3c8439")
 	)
 	(wire
 		(pts
-			(xy 200.66 78.74)
-			(xy 229.87 78.74)
+			(xy 322.58 139.7)
+			(xy 320.04 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1b5ce242-47d3-5fde-be6d-5c4990fcb990")
+		(uuid "fde50fb3-3b6c-5828-a471-e13ce3fd5915")
 	)
 	(wire
 		(pts
-			(xy 229.87 78.74)
-			(xy 229.87 60.96)
+			(xy 330.2 144.78)
+			(xy 330.2 147.32)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ca6671a0-d02c-5d19-89d4-22c5b5f9afbc")
+		(uuid "9296d48c-b1e6-5767-b71e-ce34d5073743")
 	)
 	(wire
 		(pts
-			(xy 162.56 60.96)
-			(xy 162.56 111.76)
+			(xy 330.2 134.62)
+			(xy 330.2 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "94c60542-00ad-5feb-8254-64a09cbb59fe")
+		(uuid "291bcdd5-3681-5613-b79d-d81b245ef586")
 	)
 	(wire
 		(pts
-			(xy 162.56 111.76)
-			(xy 165.1 111.76)
+			(xy 341.63 130.81)
+			(xy 341.63 128.27)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "245e6f91-7f74-5ea6-b5c7-9e313c3b5345")
+		(uuid "67212b6e-467c-517e-8b0c-49f817309ae3")
 	)
 	(wire
 		(pts
-			(xy 165.1 111.76)
-			(xy 170.18 111.76)
+			(xy 341.63 138.43)
+			(xy 341.63 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bc254fd1-9e51-53f7-8d51-490c3aa21963")
+		(uuid "fc1be362-9e5b-563f-afd4-aacfee9a2546")
 	)
 	(wire
 		(pts
-			(xy 170.18 111.76)
-			(xy 172.72 111.76)
+			(xy 350.52 123.19)
+			(xy 350.52 125.73)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "eeb526e4-6188-5843-8f2a-4fc9bc507f81")
+		(uuid "c8cc51f7-3fb6-5b3f-acd2-f63a2238a25a")
 	)
 	(wire
 		(pts
-			(xy 172.72 114.3)
-			(xy 170.18 114.3)
+			(xy 359.41 123.19)
+			(xy 359.41 125.73)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "02d10d21-11c5-51ba-9a45-1a6fabae2924")
+		(uuid "8344f3b5-2fda-56cd-9e8c-b02f50b4bcc6")
 	)
 	(wire
 		(pts
-			(xy 170.18 114.3)
-			(xy 170.18 111.76)
+			(xy 368.3 123.19)
+			(xy 368.3 125.73)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6c63af9e-3de9-531d-a095-c837efeb201a")
+		(uuid "71f981d3-dd4c-5e63-b193-e2892ea7c31d")
 	)
 	(wire
 		(pts
-			(xy 187.96 111.76)
-			(xy 195.58 111.76)
+			(xy 378.46 123.19)
+			(xy 378.46 125.73)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "11a26897-27d9-5bc5-aae8-68f58f0bcd79")
-	)
-	(wire
-		(pts
-			(xy 195.58 111.76)
-			(xy 200.66 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e620dba7-46a8-5a59-8f8a-4a629ed56c5a")
-	)
-	(junction
-		(at 60.96 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "24cff4dc-8910-5c94-a767-a8636bea5d3b")
-	)
-	(junction
-		(at 63.5 88.9)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "472cea90-d9e3-570c-8526-29f715b4d4ed")
-	)
-	(junction
-		(at 68.58 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d05b984b-a92d-5329-bf45-9c3d16654b30")
-	)
-	(junction
-		(at 88.9 88.9)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "552102ef-fe8d-54a6-b84c-69b1e6d6d4eb")
-	)
-	(junction
-		(at 114.3 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1bde54fd-fc0f-5078-804a-afdee05ae49e")
-	)
-	(junction
-		(at 124.46 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c776e084-8b15-5555-9434-053e20d40d8f")
-	)
-	(junction
-		(at 134.62 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b663875d-79ed-5fa2-b0c6-78db3719f24c")
-	)
-	(junction
-		(at 144.78 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "95e6a175-f946-5d77-a055-5dc6d4cf8909")
-	)
-	(junction
-		(at 154.94 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "dc7b5dfb-af5d-51d5-967a-33c0f998bf05")
-	)
-	(junction
-		(at 162.56 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "948b1c91-f953-5bf5-93a7-6df4338bc832")
-	)
-	(junction
-		(at 165.1 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7f571fad-6652-5642-aa1b-35c066b6edd5")
-	)
-	(junction
-		(at 170.18 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a39e4d43-3989-5bcf-abb7-03240f4deed3")
-	)
-	(junction
-		(at 175.26 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0a117cc8-fc29-5d26-bb45-3996b5569154")
-	)
-	(junction
-		(at 195.58 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5da54552-e841-57a1-abfc-02989b1b50da")
-	)
-	(junction
-		(at 201.93 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "03e00d09-4b38-5882-953d-786f969c1310")
-	)
-	(junction
-		(at 205.74 71.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f7fcabf9-6e95-538b-862d-456f405c9774")
-	)
-	(junction
-		(at 210.82 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6934a43a-9cdf-5143-8277-5523cd3a22e5")
-	)
-	(junction
-		(at 229.87 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9b887f60-1354-5a21-9e48-c9613621ebaa")
-	)
-	(junction
-		(at 234.95 60.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "12d72460-a524-5b3b-83cb-3e0ca6f4a426")
+		(uuid "53dbddb5-91b4-590a-8d1a-e62f61eb374f")
 	)
 	(no_connect
-		(at 185.42 114.3)
-		(uuid "4f3efed5-54fc-5850-a844-4169c1992b69")
-	)
-	(label "BUCK_BST"
-		(at 205.74 73.66 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9a2f1b7a-c2e8-5bb6-91e4-75f456ac5e46")
+		(at 114.3 123.19)
+		(uuid "459b9e25-4131-592c-8eb1-3f6d991b285a")
 	)
 	(label "BUCK_SW"
-		(at 201.93 58.42 0)
+		(at 71.12 121.92 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "15d927a5-5229-5dbd-a18f-795fbffa1956")
+		(uuid "d80be310-05fa-5fa4-ae69-e0a458acaced")
+	)
+	(label "BUCK_BST"
+		(at 71.12 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "65d4f52b-ce6d-59b3-9e48-e38211ad7ea9")
+	)
+	(label "BUCK_SW"
+		(at 152.4 132.08 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "15d7d7df-7509-5ab9-9590-f03b1808a6ff")
+	)
+	(label "BUCK_BST"
+		(at 152.4 144.78 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7048644e-ea93-5e5b-9843-ca32e2c8874e")
+	)
+	(label "BUCK_SW"
+		(at 303.53 132.08 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "16bee5ae-66c3-548c-9554-569465a92270")
 	)
 	(embedded_fonts no)
 )

@@ -5,12 +5,14 @@ pcb_x0 = 50; pcb_x1 = 150; pcb_y0 = 32; pcb_tab_y = 110; pcb_y1 = 125; pcb_t = 1
 pcb_tab_x0 = 67.1; pcb_tab_x1 = 132.9;
 pcb_outline = [[52, 32], [148, 32], [150, 34], [150, 109], [149, 110], [132.9, 110], [132.9, 124], [131.9, 125], [68.1, 125], [67.1, 124], [67.1, 110], [51, 110], [50, 109], [50, 34]];
 pcb_holes = [[54, 64, 3.2], [146, 64, 3.2], [54, 104.5, 3.2], [146, 104.5, 3.2]];   // [x, y, diameter]: the shell screws
-sw_reset   = [55.5, 87];   // RESET
-sw_bootsel = [55.5, 95];   // RP BOOTSEL (pinhole)
-sw_s3_en   = [55.5, 71];   // ESP32-S3 EN (pinhole)
-sw_s3_boot = [55.5, 79];   // ESP32-S3 BOOT (pinhole)
-led_ws     = [111.5, 62.5];   // WS2812 status LED
-led_rp     = [106, 66.5];   // RP activity LED
-usb_c      = [126, 32];   // USB-C exits the top edge
+sw_reset   = [66.5, 70.5];   // RESET
+sw_bootsel = [66.5, 78.5];   // RP BOOTSEL (pinhole)
+sw_s3_en   = [58, 70.5];   // ESP32-S3 EN (pinhole)
+sw_s3_boot = [58, 78.5];   // ESP32-S3 BOOT (pinhole)
+led_ws     = [58, 88];   // WS2812 status LED
+led_rp     = [66, 88];   // RP activity LED
+usb_c      = [128, 32];   // USB-C exits the top edge
 microsd    = [100, 32];   // microSD exits the top edge
 esp32_ant  = [66, 32];   // ESP32-S3 antenna centre (at the top edge)
+label_xy   = [118, 90];   // label recess centre: a face area clear of buttons and LEDs
+label_wh   = [50, 30];   // label recess size

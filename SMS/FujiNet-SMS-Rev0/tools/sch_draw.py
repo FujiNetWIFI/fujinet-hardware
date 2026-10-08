@@ -147,6 +147,9 @@ class Sheet:
         self.blocks = []           # root sheet symbols: dict(stem, x, y, w, h, pins={name: Pt}, shapes={name: shape})
         self.errors = []
         self.lint = True           # geometry lint (overlaps); connectivity is always checked
+        self.wired = False         # a hand-drawn sheet: every net one wired piece (see check)
+        self.crossing_budget = None
+        self.crossings = 0
 
     # -- symbols ------------------------------------------------------------
     def place(self, ref, x, y, unit=1, rot=0, mirror=None, fields='auto', ref_at=None, val_at=None):
@@ -571,6 +574,8 @@ class Sheet:
         for ref, p in self.parts.items():
             sym = self.syms[p.lib_id]
             for u in units_of(sym):
+                if p.unit_sheets and p.unit_sheets.get(u, p.sheet) != self.stem:
+                    continue                 # this unit is drawn on another sheet
                 if (ref, u) not in self.placed:
                     err.append('%s unit %d not placed' % (ref, u))
         # wires / buses through bodies and blocks
@@ -598,6 +603,44 @@ class Sheet:
                     if b[0].startswith('body') and a[0].startswith('field ' + b[0][5:] + ' '):
                         continue
                     err.append('overlap: %s / %s' % (a[0], b[0]))
+        if self.wired:
+            # every net with pins on this sheet is ONE wired piece: labels may name a wire or
+            # leave the sheet, never join two pieces (rails are power symbols: exempt)
+            pieces = defaultdict(set)
+            for g, lst in members.items():
+                for ref, num, net in lst:
+                    if net and net not in self.RAILS:
+                        pieces[net].add(g)
+            for net, gs in sorted(pieces.items()):
+                if len(gs) > 1:
+                    err.append('net %s drawn in %d pieces joined only by labels: %s' % (
+                        net, len(gs), [sorted(members[g])[:3] for g in gs][:3]))
+            # no 4-way junctions (two wires meeting a third and fourth at one point read as a crossing)
+            for p, n in ends.items():
+                if n >= 4:
+                    err.append('4-way junction at %s' % (p,))
+            # crossings: a horizontal and a vertical wire of different groups crossing mid-run
+            hs = [(a, b) for a, b in self.wires if a[1] == b[1]]
+            vs = [(a, b) for a, b in self.wires if a[0] == b[0]]
+            nx = 0
+            for a, b in hs:
+                y, xa, xb = a[1], min(a[0], b[0]), max(a[0], b[0])
+                for c, d in vs:
+                    x, yc, yd = c[0], min(c[1], d[1]), max(c[1], d[1])
+                    if xa < x < xb and yc < y < yd and F(a) != F(c):
+                        nx += 1
+            self.crossings = nx
+            if self.crossing_budget is not None and nx > self.crossing_budget:
+                err.append('%d wire crossings, budget %d' % (nx, self.crossing_budget))
+            # no wire through a field or a text block
+            txt = [(w, b) for w, b in boxes if w.startswith(('field', 'text', 'rail text', 'flag text'))]
+            for a, b in self.wires:
+                x0, x1 = min(a[0], b[0]), max(a[0], b[0])
+                y0, y1 = min(a[1], b[1]), max(a[1], b[1])
+                for w, bx in txt:
+                    if x0 < bx[2] - 0.1 and bx[0] + 0.1 < x1 if y0 == y1 else y0 < bx[3] - 0.1 and bx[1] + 0.1 < y1:
+                        if (bx[1] + 0.15 < a[1] < bx[3] - 0.15) if y0 == y1 else (bx[0] + 0.15 < a[0] < bx[2] - 0.15):
+                            err.append('wire %s-%s through %s' % (a, b, w))
         W, H = self.size
         for name, b in boxes:
             if b[0] < 10 or b[1] < 10 or b[2] > W - 10 or b[3] > H - 40 and b[2] > W - 180:

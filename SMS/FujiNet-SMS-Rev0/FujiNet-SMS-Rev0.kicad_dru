@@ -1,12 +1,12 @@
 (version 1)
 (rule "rp2350_core_corner"
-	(condition "A.NetName == 'DVDD' || A.NetName == '/rp2354b/RP_LX' || A.NetName == '/rp2354b/VREG_AVDD'")
+	(condition "A.NetName == 'DVDD' || A.NetName == '/rp-core/RP_LX' || A.NetName == '/rp-core/VREG_AVDD'")
 	(constraint clearance (min 0.12mm)))
 (rule "default_clearance"
-	(condition "A.NetName != 'DVDD' && B.NetName != 'DVDD' && A.NetName != '/rp2354b/RP_LX' && B.NetName != '/rp2354b/RP_LX' && A.NetName != '/rp2354b/VREG_AVDD' && B.NetName != '/rp2354b/VREG_AVDD'")
+	(condition "A.NetName != 'DVDD' && B.NetName != 'DVDD' && A.NetName != '/rp-core/RP_LX' && B.NetName != '/rp-core/RP_LX' && A.NetName != '/rp-core/VREG_AVDD' && B.NetName != '/rp-core/VREG_AVDD'")
 	(constraint clearance (min 0.12mm)))
 (rule "gnd_solid_under_ics"
-	(condition "A.NetName == 'GND' && (A.memberOfFootprint('U1') || A.memberOfFootprint('U2') || A.memberOfFootprint('U3') || A.memberOfFootprint('U10') || A.memberOfFootprint('U12') || A.memberOfFootprint('U13'))")
+	(condition "A.NetName == 'GND' && (A.memberOfFootprint('U4') || A.memberOfFootprint('U10') || A.memberOfFootprint('U7') || A.memberOfFootprint('U2') || A.memberOfFootprint('U5') || A.memberOfFootprint('U6'))")
 	(constraint zone_connection solid))
 (rule "finger_edge"
 	(condition "A.memberOfFootprint('J1')")

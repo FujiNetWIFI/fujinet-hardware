@@ -194,11 +194,25 @@ def main():
         chk('SRAM %s driven by a glue output' % f,
             any(r in glue and N.ptype.get((r, pin)) == 'output' for (r, pin, _) in nets.get(n, [])))
 
-    # ---- GPIO40-47 are not 5 V tolerant: inputs of 5 V parts only ----
+    # ---- RP2350-E9 (stepping A2): the glue enables and the SRAM chip select each pulled to GND by
+    # 8.2k or less, so a pad left in the undefined region after an RP reset cannot latch at ~2.2 V
+    # (RP2350 datasheet p.1366-1367) and assert /OE, /WE or both chip selects ----
+    val = lambda s_: float(s_.replace('k', 'e3').replace('R', ''))
+    for k in ('GAME', 'LOAD', 'RAMWE', 'MBOX'):
+        pd = through_r(rp(P[k]), 'GND')
+        chk('GP%d (%s): E9 pull-down to GND <= 8.2k' % (P[k], k), pd is not None and val(pd) <= 8.2e3)
+    pd = through_r(rp(P['BANK'] + 6), 'GND')
+    chk('GP%d (SA19, SRAM chip select): E9 pull-down to GND <= 8.2k' % (P['BANK'] + 6),
+        pd is not None and val(pd) <= 8.2e3)
+
+    # ---- GPIO40-47 are not 5 V tolerant: inputs of 5 V parts only (a pull-down to GND is no source) ----
+    def pulldown(r, pin):
+        return r.startswith('R') and not r.startswith('RN') and \
+            node_net.get((r, '2' if pin == '1' else '1')) == 'GND'
     for g in range(40, 48):
         n = rp(g)
         bad = [(r, pin, N.ptype.get((r, pin))) for (r, pin, f) in nets.get(n, [])
-               if r != U1 and N.ptype.get((r, pin)) != 'input']
+               if r != U1 and N.ptype.get((r, pin)) != 'input' and not pulldown(r, pin)]
         chk('GP%d (%s): nothing but inputs on the net (not 5 V tolerant)' % (g, n), not bad)
         chk('GP%d (%s): never an edge signal' % (g, n), n not in edge.values())
 

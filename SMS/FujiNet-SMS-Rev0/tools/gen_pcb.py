@@ -359,6 +359,116 @@ def finger_stubs(board):
     return out
 
 
+def sram0_fanin(board):
+    """SRAM0 in the classic ROM spot (placement.ROM_X / ROM_Y, rotation 270, pins 17-32 toward the
+    fingers): the edge is the JEDEC 32-pin memory pinout unrolled, so its console lines reach the
+    SRAM on F.Cu without one crossing.  Drawn here, locked, before any router runs:
+      * the funnel: A3..A0, D0..D7, A10 (+ VSS) from the finger stubs straight into the pin 17-32
+        row -- each line vertical, one 45-degree run (all parallel), vertical into its pad; a
+        B.Cu finger first jogs half a pitch east on B.Cu to a via (east: the SRAM wants every B
+        finger after its F.Cu partner);
+      * the west wrap: A4 A5 A6 A7 A12 round the SRAM's south-west corner, up its west side and
+        into pins 16..12 from the north (innermost = nearest the corner);
+      * the east wrap: A11 A9 A8 the same way round the east side into pins 1..3;
+      * the two pins trapped inside the fan, CE# (pin 30, SA19) and OE# (pin 32), on a short
+        diagonal to a via each (their nets come from the RP / the glue on the inner layers).
+    Pins 4-11 (SA13-SA18, WE#, VCC) stay open to the north for the routers / fan-out."""
+    import placement as PL
+    W, PITCH_W, VD, VDR = 0.2, 0.5, 0.6, 0.3
+    out = []
+    j1 = footprint_of(board, K['J_EDGE'])
+    fx = float(find(j1, 'at')[1])
+    finger = {}                                   # net -> (x, face)
+    for pd in findall(j1, 'pad'):
+        n = find(pd, 'net')
+        if n:
+            finger.setdefault(str(n[1]), (round(fx + float(find(pd, 'at')[1]), 4), str(find(pd, 'layers')[1])[0]))
+    u = footprint_of(board, K['U_SRAM0'])
+    at = find(u, 'at')
+    ux, uy, rot = float(at[1]), float(at[2]), float(at[3]) if len(at) > 3 else 0.0
+    assert rot == 270, 'sram0_fanin is drawn for the SRAM at rotation 270'
+    pin = {}                                      # pad -> (x, y, net, end_y) ; end_y = the pad's outer end
+    for pd in findall(u, 'pad'):
+        a = find(pd, 'at')
+        dx, dy = rot_pt(float(a[1]), float(a[2]), rot)
+        n = find(pd, 'net')
+        sz = find(pd, 'size')
+        half = max(float(sz[1]), float(sz[2])) / 2
+        x, y = round(ux + dx, 4), round(uy + dy, 4)
+        pin[int(pd[1])] = (x, y, str(n[1]) if n else None, y + half if y > uy else y - half)
+    ystub = TAB_Y - 1.0                           # where finger_stubs ends every stub
+    y0 = ystub - 0.3                              # every funnel line's 45-degree run starts here
+    seg_ = lambda pts, net, key: [seg(a[0], a[1], b[0], b[1], W, 'F.Cu', net, (key, i))
+                                  for i, (a, b) in enumerate(zip(pts, pts[1:])) if a != b]
+
+    def start(net, key):
+        """The F.Cu start of a finger's line: its stub top, or (B.Cu finger) a via half a pitch east."""
+        x, face = finger[net]
+        if face == 'F':
+            return x
+        xv = round(x + EG.PITCH / 2, 4)
+        out.append(seg(x, ystub, xv, ystub, 0.3, 'B.Cu', net, (key, 'jog')))
+        out.append(via(xv, ystub, net, (key, 'via'), VD, VDR))
+        return xv
+    xs_of = {}
+    # the east wrap's innermost line (A11, pin 1) starts here: the OE# via sits west of its run
+    xs_of['A11'] = finger[pin[1][2]][0] if finger[pin[1][2]][1] == 'F' else finger[pin[1][2]][0] + EG.PITCH / 2
+    # ---- the funnel: pins 17..32 (south row) ----
+    for k in range(17, 33):
+        x_p, _, net, y_end = pin[k]
+        if net is None or net not in finger or net == 'GND':
+            continue
+        x_s = start(net, 'sf%d' % k)
+        xs_of[k] = xs_of[net] = x_s
+        d = abs(x_p - x_s)
+        assert y0 - d > y_end + 0.1, 'SRAM0 too low for the fan-in of pin %d (%.2f mm short)' % (k, y_end + 0.1 - (y0 - d))
+        out += seg_([(x_s, ystub), (x_s, y0), (x_p, y0 - d), (x_p, y_end)], net, 'sf%d' % k)
+    # VSS (pin 24) straight down onto the via finger_stubs puts at the all-GND finger column
+    x_p, _, net, y_end = pin[24]
+    cols = {}
+    for pd in findall(j1, 'pad'):
+        n = find(pd, 'net')
+        cols.setdefault(round(fx + float(find(pd, 'at')[1]), 4), set()).add(str(n[1]) if n else None)
+    gx = min((x for x, ns in cols.items() if ns == {'GND'}), key=lambda x: abs(x - x_p))
+    out += seg_([(x_p, y_end), (x_p, round(ystub - abs(gx - x_p), 4)), (gx, ystub)], 'GND', 'sfvss')
+    # ---- the two trapped pins, each to a via between its neighbours' 45-degree runs ----
+    # a funnel line east of its pin runs x - y = c (c = its start x - y0) once diagonal
+    c_of = lambda k: (xs_of[k] - y0)
+    cw = xs_of['A11'] - ystub                       # the east wrap's innermost run (x - y = cw)
+    # CE# (pin 30, SA19): down its own column to the midline between D7 (29) and A10 (31), along it
+    x_p, _, net, y_end = pin[30]
+    if net:
+        c = (c_of(29) + c_of(31)) / 2
+        yv = round(y0 - abs(pin[29][0] - xs_of[29]) + 1.5, 4)      # below D7's bend: both runs diagonal
+        pts = [(x_p, y_end), (x_p, round(x_p - c, 4)), (round(yv + c, 4), yv)]
+        out += seg_(pts, net, 'sfx30')
+        out.append(via(pts[-1][0], yv, net, ('sfxv', 30), VD, VDR))
+    # OE# (pin 32): east along its pad end to the midline between A10 (31) and the east wrap, down it
+    x_p, _, net, y_end = pin[32]
+    if net:
+        c = max((c_of(31) + cw) / 2, x_p - y_end)   # the midline, or straight off the pad end if that is east of it
+        yv = round(y_end + 2.0, 4)
+        pts = [(x_p, y_end), (round(c + y_end, 4), y_end), (round(yv + c, 4), yv)]
+        out += seg_(pts, net, 'sfx32')
+        out.append(via(pts[-1][0], yv, net, ('sfxv', 32), VD, VDR))
+    # ---- the wraps: round the corners into the north row ----
+    body_w = 8.0
+    for side, pins_in in (('W', (16, 15, 14, 13, 12)), ('E', (1, 2, 3))):
+        for i, k in enumerate(pins_in):             # innermost first
+            x_p, _, net, y_end = pin[k]
+            x_s = start(net, 'sw%d' % k)
+            if side == 'W':
+                xc = ux - body_w / 2 - 0.22 - PITCH_W * i          # side column, west of the body
+                ydiag = (x_s + ystub) - xc                          # x + y = const up-right
+            else:
+                xc = ux + body_w / 2 + 0.98 + PITCH_W * i          # east of the body (OE#'s via south of it)
+                ydiag = xc - (x_s - ystub)                          # x - y = const up-left
+            yt = round(y_end - 0.6 - PITCH_W * i, 4)                # turn-in height, north of the row
+            out += seg_([(x_s, ystub), (round(xc, 4), round(ydiag, 4)), (round(xc, 4), yt), (x_p, yt),
+                         (x_p, y_end)], net, 'sw%d' % k)
+    return out
+
+
 def rp_support(board, ux, uy):
     """Locked copper the RP2354B needs regardless of routing (the NES Rev0
     arrangement, same package, same rotation):
@@ -416,18 +526,23 @@ def dvdd_island():
     """The DVDD island on In4, relative to the RP2354B centre (y down): the core under the
     package out to DVDD_R, which covers the DVDD pins' inward vias (rp_support: centre
     4.0, 0.5 mm barrel), the strip under the north pin row, and a lobe west under L1 /
-    the DVDD capacitors (placement.py keeps them there).  The notch west of the core
-    (x -5.0..-3.6, y > -4.0) stays +3V3_RP for the VREG_VIN via at (-4.0, -2.8)."""
-    return [(-16.0, -5.6), (DVDD_R, -5.6), (DVDD_R, DVDD_R), (-RP_CORE, DVDD_R),
+    the DVDD capacitors (placement.RP_MACRO keeps them there).  The notch west of the core
+    (x -5.0..-3.6, y > -4.0) stays +3V3_RP for the VREG_VIN via at (-4.0, -2.8).  Drawn for
+    the RP at rotation 90; turned with the RP macro for any other rotation."""
+    poly = [(-16.0, -5.6), (DVDD_R, -5.6), (DVDD_R, DVDD_R), (-RP_CORE, DVDD_R),
             (-RP_CORE, -4.0), (-5.0, -4.0), (-5.0, -1.6), (-16.0, -1.6)]
+    rr = (PLACE[K['U_RP']][2] if K['U_RP'] in PLACE else PL.RP_ROT) - 90
+    return [tuple(round(v, 4) for v in rot_pt(x, y, rr)) for x, y in poly] if rr % 360 else poly
 
 
 FIVE_V_NOTCH_X = PL.FIVE_V_NOTCH_X    # the +5V island may run up the east edge under the buck input / VBUS diode
 
 
 def five_v_island():
-    """In4 south of PLANE_SPLIT_Y is +5V, plus the strip up the east edge (x > FIVE_V_NOTCH_X)
-    under the buck's input; the +3V3_RP and DVDD islands win over it."""
+    """In4 +5V: the floorplan's polygon (placement.FIVE_V_POLY: the cart side plus a strip up the
+    east edge under the buck input); the +3V3_RP and DVDD islands win over it."""
+    if getattr(PL, 'FIVE_V_POLY', None):
+        return PL.FIVE_V_POLY
     return [(X0, PLANE_SPLIT_Y), (FIVE_V_NOTCH_X, PLANE_SPLIT_Y), (FIVE_V_NOTCH_X, Y0 + 2.0),
             (X1, Y0 + 2.0), (X1, TAB_Y), (X0, TAB_Y)]
 
@@ -636,7 +751,9 @@ def write_case_anchors():
              'led_rp     = [%g, %g];   // RP activity LED' % at('D_LED'),
              'usb_c      = [%g, %g];   // USB-C exits the top edge' % (at('J_USB')[0], Y0),
              'microsd    = [%g, %g];   // microSD exits the top edge' % (at('J_SD')[0], Y0),
-             'esp32_ant  = [%g, %g];   // ESP32-S3 antenna centre (at the top edge)' % (at('U_S3')[0], Y0), '']
+             'esp32_ant  = [%g, %g];   // ESP32-S3 antenna centre (at the top edge)' % (at('U_S3')[0], Y0),
+             'label_xy   = [%g, %g];   // label recess centre: a face area clear of buttons and LEDs' % PL.LABEL[0],
+             'label_wh   = [%g, %g];   // label recess size' % PL.LABEL[1], '']
     os.makedirs(os.path.join(PRJ, 'case'), exist_ok=True)
     open(os.path.join(PRJ, 'case', 'board-anchors.scad'), 'w').write('\n'.join(lines))
 
@@ -656,6 +773,21 @@ def check_parts_inside(board):
             cx, cy = min(max(hx, x0), x1), min(max(hy, y0), y1)
             if math.hypot(cx - hx, cy - hy) < HOLE_KEEP:
                 bad.append('%s (%s) within %.1f mm of the hole at %g,%g' % (p.ref, p.key, HOLE_KEEP, hx, hy))
+    # footprint keep-outs (the S3 antenna: no footprints, tracks, vias or pour) hold no other part
+    for fp in board:
+        if not (isinstance(fp, list) and fp and fp[0] == 'footprint'):
+            continue
+        owner = [str(e[2]) for e in findall(fp, 'property') if e[1] == 'Reference'][0]
+        for z in findall(fp, 'zone'):
+            ko = find(z, 'keepout')
+            if not ko or ['footprints', 'not_allowed'] not in ko:
+                continue
+            xy = [(float(q[1]), float(q[2])) for q in find(find(z, 'polygon'), 'pts')[1:]]
+            zx0, zy0, zx1, zy1 = min(x for x, _ in xy), min(y for _, y in xy), max(x for x, _ in xy), max(y for _, y in xy)
+            for r, (x0, y0, x1, y1) in crt.items():
+                if r != owner and x0 < zx1 and zx0 < x1 and y0 < zy1 and zy0 < y1:
+                    bad.append('%s (%s) inside %s\'s keep-out %.1f,%.1f..%.1f,%.1f' % (
+                        r, D.BY_REF[r].key if r in D.BY_REF else r, owner, zx0, zy0, zx1, zy1))
     refs = sorted(r for r in crt if (r in D.BY_REF and r != K['J_EDGE']) or r.startswith('FID'))
     for r in refs:     # the fiducials too: clear of the screw holes
         if r.startswith('FID'):
@@ -731,6 +863,8 @@ def main():
     check_parts_inside(board)
     ux, uy, _ = PLACE[K['U_RP']]
     extra = finger_stubs(board) + rp_support(board, ux, uy)
+    if getattr(PL, 'SRAM0_FANIN', False):
+        extra += sram0_fanin(board)
     board += extra
     add_fanout(board, extra)
     board += outline()

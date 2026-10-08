@@ -118,7 +118,7 @@
     {
       "rule_id": "PU-001",
       "components": [
-        "U10"
+        "U2"
       ],
       "reason": "CP2102N CHREN/CHR0/CHR1 are charger-detect outputs, left open as in the ESP32-S3-DevKitC-1."
     },
@@ -133,7 +133,7 @@
       "rule_id": "EP-AUD",
       "components": [
         "J1",
-        "J2",
+        "J4",
         "J3"
       ],
       "reason": "J_EDGE is the console bus (no SMS cart carries ESD parts; RP2350 FT pads have enhanced ESD protection); J_DBG is the DNP bring-up UART header; the microSD sits inside the shell."
@@ -141,15 +141,15 @@
     {
       "rule_id": "DC-002",
       "components": [
-        "U11"
+        "U3"
       ],
       "reason": "UMH3N is a dual pre-biased transistor (auto-program); it has no supply pin to decouple."
     },
     {
       "rule_id": "VD-004",
       "components": [
-        "R20",
-        "R22"
+        "R13",
+        "R3"
       ],
       "reason": "0603 is the board's passive size; these are not power-sized."
     },
@@ -169,8 +169,8 @@
       "components": [
         "J1",
         "J3",
-        "J4",
-        "U9"
+        "J2",
+        "U1"
       ],
       "reason": "At the edge by design: the cart fingers, the microSD and USB-C mouths on the top edge, the ESP32-S3 antenna flush with the top edge over its keep-out."
     },

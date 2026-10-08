@@ -45,35 +45,44 @@ def hidden():
 
 # ---------------------------------------------------------------------------
 # project-library symbols
-def box_symbol(name, ref, value, footprint, desc, left, right=(), bottom=(), top=(), w=15.24, tb_x=0, ds=''):
-    """left/right/bottom/top: lists of (number, name, etype); None in left/right
-    leaves a one-pin gap between groups.  2.54 pitch, every pin end on the 2.54 grid
-    (w a multiple of 5.08)."""
+def _unit(name, u, left, right=(), bottom=(), top=(), w=15.24, tb_x=0, pitch=2.54, tb_pitch=2.54):
+    """One unit's body and pins (lib coordinates, y up): left/right/bottom/top are lists of
+    (number, name, etype[, shape]); None in a list leaves a gap of one pitch.  Every pin end on
+    the 2.54 grid (w a multiple of 5.08, pitches multiples of 2.54).  Returns (body, pins, box)."""
     n = max(len(left), len(right), 1)
-    y0 = ((n - 1) // 2) * 2.54
-    top_y = y0 + 2.54
-    bot_y = y0 - n * 2.54
+    y0 = ((n - 1) // 2) * pitch
+    top_y = y0 + pitch
+    bot_y = y0 - n * pitch
     half = w / 2
-    body = ['symbol', Q(name + '_0_1'),
+    body = ['symbol', Q('%s_%d_1' % (name, u)) if u else Q(name + '_0_1'),
             ['rectangle', ['start', -half, top_y], ['end', half, bot_y],
              ['stroke', ['width', 0.254], ['type', 'default']], ['fill', ['type', 'background']]]]
-    pins = ['symbol', Q(name + '_1_1')]
+    pins = []
 
     def pin(num, nm, et, x, y, ang, shape='line'):
         pins.append(['pin', et, shape, ['at', x, y, ang], ['length', 2.54],
                      ['name', Q(nm), font()], ['number', Q(str(num)), font()]])
     for i, e in enumerate(left):
         if e:
-            pin(*e[:3], -half - 2.54, y0 - i * 2.54, 0, *e[3:])
+            pin(*e[:3], -half - 2.54, y0 - i * pitch, 0, *e[3:])
     for i, e in enumerate(right):
         if e:
-            pin(*e[:3], half + 2.54, y0 - i * 2.54, 180, *e[3:])
-    for i, (num, nm, et, *sh) in enumerate(bottom):
-        x = tb_x - ((len(bottom) - 1) // 2) * 2.54 + i * 2.54
-        pin(num, nm, et, x, bot_y - 2.54, 90)
-    for i, (num, nm, et, *sh) in enumerate(top):
-        x = tb_x - ((len(top) - 1) // 2) * 2.54 + i * 2.54
-        pin(num, nm, et, x, top_y + 2.54, 270)
+            pin(*e[:3], half + 2.54, y0 - i * pitch, 180, *e[3:])
+    for i, e in enumerate(bottom):
+        if e:
+            x = tb_x - ((len(bottom) - 1) // 2) * tb_pitch + i * tb_pitch
+            pin(*e[:3], x, bot_y - 2.54, 90, *e[3:])
+    for i, e in enumerate(top):
+        if e:
+            x = tb_x - ((len(top) - 1) // 2) * tb_pitch + i * tb_pitch
+            pin(*e[:3], x, top_y + 2.54, 270, *e[3:])
+    return body, pins, (top_y, bot_y)
+
+
+def box_symbol(name, ref, value, footprint, desc, left, right=(), bottom=(), top=(), w=15.24, tb_x=0, ds='',
+               pitch=2.54, tb_pitch=2.54):
+    """A single-unit project symbol (see _unit)."""
+    body, pins, (top_y, bot_y) = _unit(name, 0, left, right, bottom, top, w, tb_x, pitch, tb_pitch)
     return ['symbol', Q(name), ['pin_names', ['offset', 1.016]], ['exclude_from_sim', 'no'],
             ['in_bom', 'yes'], ['on_board', 'yes'],
             ['property', Q('Reference'), Q(ref), ['at', 0, top_y + 1.27, 0], font()],
@@ -81,7 +90,72 @@ def box_symbol(name, ref, value, footprint, desc, left, right=(), bottom=(), top
             ['property', Q('Footprint'), Q(footprint), ['at', 0, 0, 0], hidden()],
             ['property', Q('Datasheet'), Q(ds), ['at', 0, 0, 0], hidden()],
             ['property', Q('Description'), Q(desc), ['at', 0, 0, 0], hidden()],
-            body, pins]
+            body, ['symbol', Q(name + '_1_1')] + pins]
+
+
+def multi_symbol(name, ref, value, footprint, desc, units, ds=''):
+    """A project symbol with several units (not interchangeable): units = [dict(left=, right=,
+    bottom=, top=, w=, tb_x=, pitch=, tb_pitch=)], unit 1 first."""
+    out = ['symbol', Q(name), ['pin_names', ['offset', 1.016]], ['exclude_from_sim', 'no'],
+           ['in_bom', 'yes'], ['on_board', 'yes'],
+           ['property', Q('Reference'), Q(ref), ['at', 0, 2.54, 0], font()],
+           ['property', Q('Value'), Q(value), ['at', 0, -2.54, 0], font()],
+           ['property', Q('Footprint'), Q(footprint), ['at', 0, 0, 0], hidden()],
+           ['property', Q('Datasheet'), Q(ds), ['at', 0, 0, 0], hidden()],
+           ['property', Q('Description'), Q(desc), ['at', 0, 0, 0], hidden()],
+           ['property', Q('ki_locked'), Q(''), ['at', 0, 0, 0], hidden()]]
+    for u, spec in enumerate(units, 1):
+        body, pins, _ = _unit(name, u, **spec)
+        body[1] = Q('%s_%d_1' % (name, u))
+        body += pins
+        out.append(body)
+    return out
+
+
+# The RP2354B in two units (KiCad's MCU_RaspberryPi:RP2354B pin names and numbers, checked by
+# verify_pin_tables; the stacked hidden supply pins unstacked so each wires to its own capacitor):
+#   unit A, the cart-bus sheet: the 48 GPIOs -- the console bus on the left (A0-A15, D0-D7, the
+#           strobes), the glue / bank / LED / /WAIT / debug lines on the right
+#   unit B, the rp-core sheet: supplies, the core regulator, crystal, RUN, SWD, USB, QSPI
+RP_A_LEFT = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None, 16, 17, 18, 19, 20, 21, 22, 23, None,
+             24, 25, 26, 27, 28, 29, 30, 31]
+RP_A_RIGHT = [32, None, 35, 38, 39, 40, None, 41, 42, 43, 44, 45, 46, 47, None, 34, 33, None, 36, 37]
+# unit B sides by the board side their parts sit on (the page is the board turned fingers-left):
+# board west (VREG corner, USB, QSPI) -> page top, board north caps -> page right, board east
+# (crystal, SWD, RUN) -> page bottom, board south caps -> page left
+RP_B_TOP = [64, 61, 63, 65, 10, 32, 51, None, 66, 67, 68, 69, 75, 70, 71, 72, 73, 74, 76]
+RP_B_RIGHT = [41, 50, 59, 60]
+RP_B_BOTTOM = [24, 29, 30, 31, 33, 34, 35]
+RP_B_LEFT = [5, 15]
+RP_B_GND = [62, 81]
+
+
+def rp_split_symbol(stock):
+    """FujiNet-SMS:RP2354B_Split from the stock symbol's pins."""
+    pins = {}
+    for sub in findall(stock, 'symbol'):
+        for p in findall(sub, 'pin'):
+            pins[str(find(p, 'number')[1])] = (str(find(p, 'name')[1]), str(p[1]))
+    gpio = {g: str(n) for g, n in D.RP_GPIO_PIN.items()}
+    used = set()
+
+    def P(num, power=False):
+        num = str(num)
+        used.add(num)
+        nm, et = pins[num]
+        if power and et == 'passive':      # the stock symbol stacks these hidden behind a visible one
+            et = 'power_in'
+        return (num, nm, et)
+    unit_a = dict(left=[P(gpio[g]) if g is not None else None for g in RP_A_LEFT],
+                  right=[P(gpio[g]) if g is not None else None for g in RP_A_RIGHT], w=30.48)
+    sup = lambda lst: [P(n, True) if n is not None else None for n in lst]
+    unit_b = dict(top=sup(RP_B_TOP), right=sup(RP_B_RIGHT), bottom=sup(RP_B_BOTTOM + [None] + RP_B_GND),
+                  left=sup(RP_B_LEFT), w=55.88, tb_pitch=2.54)
+    assert used == set(pins), sorted(set(pins) - used)
+    return multi_symbol('RP2354B_Split', 'U', 'RP2354B', D.FP('QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm'),
+                        'RP2354B (RP2350B + 2 MB flash), KiCad MCU_RaspberryPi:RP2354B pins in two units: '
+                        'A = GPIO0-47, B = supplies / regulator / crystal / RUN / SWD / USB / QSPI',
+                        [unit_a, unit_b], ds='https://datasheets.raspberrypi.com/rp2350/rp2350-datasheet.pdf')
 
 
 # The edge drawn by function, not by finger: every console signal on the
@@ -111,7 +185,7 @@ def edge_symbol():
                       left=left, right=right, top=top, bottom=bottom, w=30.48, tb_x=-7.62)
 
 
-def project_symbols():
+def project_symbols(stock=None):
     edge = edge_symbol()
     sp = D.SRAM_PIN
     sram = box_symbol('AS6C4008-55TIN', 'U', 'AS6C4008-55TIN', D.FP('TSOP-I-32_18.4x8mm_P0.5mm'),
@@ -131,11 +205,12 @@ def project_symbols():
                           (9, 'CD', 'passive'), None, (4, 'VDD', 'power_in'), (6, 'VSS', 'power_in')],
                     bottom=[(10, 'SH', 'passive'), (11, 'SH', 'passive'),
                             (12, 'SH', 'passive'), (13, 'SH', 'passive')], w=20.32)
+    rpx = rp_split_symbol(stock['MCU_RaspberryPi:RP2354B'])
     lib = ['kicad_symbol_lib', ['version', 20241209], ['generator', Q('fujinet_gen')],
-           ['generator_version', Q('1.0')], edge, sram, sd]
+           ['generator_version', Q('1.0')], edge, sram, sd, rpx]
     open(os.path.join(PRJ, D.LIB + '.kicad_sym'), 'w').write(dump(lib) + '\n')
     cache = {}
-    for s in (edge, sram, sd):
+    for s in (edge, sram, sd, rpx):
         c = copy.deepcopy(s)
         c[1] = Q(D.LIB + ':' + s[1])
         cache[c[1]] = c
@@ -146,7 +221,7 @@ def project_symbols():
 def load_symbols():
     t = parse(open(os.path.join(HERE, 'symcache.sexpr')).read())
     syms = {s[1]: s for s in t[1:]}
-    syms.update(project_symbols())
+    syms.update(project_symbols(syms))
     return syms
 
 
@@ -165,6 +240,8 @@ units_of = sch_draw.units_of
 def verify_pin_tables(syms):
     """design.py's hand-written pin numbers against the symbols they index."""
     names = pin_names(syms['MCU_RaspberryPi:RP2354B'])
+    if pin_names(syms[D.LIB + ':RP2354B_Split']) != names:
+        raise SystemExit('RP2354B_Split: pin names differ from the stock RP2354B symbol')
     for g, pin in D.RP_GPIO_PIN.items():
         nm = names.get(str(pin), '')
         if not re.match(r'GPIO%d(/|$)' % g, nm):
@@ -431,6 +508,20 @@ def netlist_parity():
     if bad:
         raise SystemExit('netlist parity:\n  ' + '\n  '.join(bad[:40]))
     print('netlist parity: %d nets match design.py' % len(want))
+    # the names KiCad gives the nets are what the board carries (/cart-bus/A0, /USB_DP, GND, ...):
+    # frozen in tools/nets.lock once the hierarchy is final, so a redraw can change geometry only
+    names = sorted(full.values()) + sorted(n for n in got if n.startswith('unconnected-'))
+    lock = os.path.join(HERE, 'nets.lock')
+    if '--lock-nets' in sys.argv:
+        json.dump(names, open(lock, 'w'), indent=0)
+        open(lock, 'a').write('\n')
+        print('nets.lock: %d net names written' % len(names))
+    elif os.path.exists(lock):
+        old = json.load(open(lock))
+        if old != names:
+            raise SystemExit('nets.lock: the net names changed (the board carries the locked ones):\n  -%s\n  +%s'
+                             % (sorted(set(old) - set(names))[:20], sorted(set(names) - set(old))[:20]))
+        print('nets.lock: %d net names unchanged' % len(names))
 
 
 def write_project(root_uuid, sheet_uuids):
@@ -454,15 +545,17 @@ def main():
     sheet_uuids = {s[0]: str(uid('sheet', s[0])) for s in D.SHEETS}
     pwr = {'pwr': 0, 'flg': 0}
     drawn = {}
+    where = D.sheet_nets()
     for stem, title, page in D.SHEETS:
-        parts = [p for p in D.PARTS if p.sheet == stem]
-        sh = sch_layout.draw(stem, syms, parts)
+        parts = [p for p in D.PARTS if stem in p.sheets()]
+        cross = {n for n, ss in where.items() if len(ss) > 1 and n not in D.RAIL_NETS and stem in ss}
+        sh = sch_layout.draw(stem, syms, parts, cross)
         sh.center()
         sh.check()
         drawn[stem] = sh
         sch = serialize(sh, title, root_uuid, sheet_uuids[stem], pwr)
         open(os.path.join(PRJ, stem + '.kicad_sch'), 'w').write(dump(sch) + '\n')
-    root = sch_layout.draw_root(syms)
+    root = sch_layout.draw_root(syms, drawn)
     root.check()
     check_hierarchy(drawn, root)
     open(os.path.join(PRJ, D.PROJECT + '.kicad_sch'), 'w').write(dump(serialize_root(root, root_uuid, sheet_uuids)) + '\n')

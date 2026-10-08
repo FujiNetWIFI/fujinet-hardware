@@ -16,14 +16,12 @@ LIB = 'FujiNet-SMS'
 PROJECT = 'FujiNet-SMS-Rev0'
 NC = None  # explicit no-connect
 
-SHEETS = [  # (file stem, title, page) -- in signal-flow order, console side first
-    ('edge', '50-pin SMS cart edge', 2),
-    ('rp2354b', 'RP2354B bus controller', 3),
-    ('sram', '1 MB SRAM: 2 x AS6C4008', 4),
-    ('glue', '5V glue: SRAM /OE, /WE, chip select, PWR_OK', 5),
-    ('esp32s3-sd', 'ESP32-S3, microSD, status LED', 6),
-    ('usb-uart', 'USB-C, CP2102N bridge', 7),
-    ('power', 'Power: 5V OR, 3.3V buck, RP LDO', 8),
+SHEETS = [  # (file stem, title, page): one sheet per board region, console side first
+    ('cart-bus', 'Cartridge bus: edge, RP2354B GPIO, 1 MB SRAM, 74HCT glue', 2),
+    ('rp-core', 'RP2354B core: supplies, core regulator, crystal, USB, RUN / BOOTSEL', 3),
+    ('fujinet', 'FujiNet: ESP32-S3, microSD, status LED', 4),
+    ('usb', 'USB-C and the CP2102N bridge', 5),
+    ('power', 'Power: console 5V / USB OR, 3.3V buck, RP LDO', 6),
 ]
 SHEET_ORDER = [s[0] for s in SHEETS]
 
@@ -187,7 +185,9 @@ def RN4(value, a, b, desc='', **k):
     mpn, lcsc = RPACK[value]
     pins = {i + 1: n for i, n in enumerate(a)}
     pins.update({8 - i: n for i, n in enumerate(b)})
-    return add('RN', 'Device:R_Pack04', value, FP('R_Array_Convex_4x0603'), pins, mpn=mpn, lcsc=lcsc, desc=desc, **k)
+    # one symbol unit per resistor (R_Pack04_Split: unit k = pins k and 9-k), drawn inline on its line
+    return add('RN', 'Device:R_Pack04_Split', value, FP('R_Array_Convex_4x0603'), pins, mpn=mpn, lcsc=lcsc,
+               desc=desc, **k)
 
 
 def SW(value, net, desc, **k):
@@ -197,9 +197,9 @@ def SW(value, net, desc, **k):
                mpn='TS-1187A-B-A-B', lcsc='C318884', desc=desc, **k)
 
 
-def TP(net, label, **k):
+def TP(net, label, desc='test pad', **k):
     return add('TP', 'Connector:TestPoint', label, FP('TestPoint_Pad_D1.5mm'), {1: net},
-               desc='test pad', bom=False, **k)
+               desc=desc, bom=False, **k)
 
 
 def SRAM(addr, data, ce, oe, we, desc, **k):
@@ -239,21 +239,18 @@ def GATES(value, gates, desc, **k):
 
 
 # =========================================================================
-# Declared sheet by sheet in SHEETS order, so the references read edge ->
-# RP2354B -> SRAM -> glue -> ESP32-S3 -> USB -> power.  The drawing and the
-# layout address parts by key; the references are output.
-sheet('edge')
+# Declared sheet by sheet (SHEETS order).  References come from tools/refs.lock (geographic,
+# from the frozen placement: tools/annotate.py); the drawing and the layout address parts by key.
+sheet('cart-bus')
 add('J', '%s:SMS_Cart_Edge_50' % LIB, 'SMS_Cart_Edge_50', FP('SMS_Cart_Edge_50'),
     {k: v[0] for k, v in EDGE.items()}, desc='SMS 50-pin cartridge edge, 2.54 mm pitch', bom=False, key='J_EDGE')
 # /CONT and /BUSREQ are console inputs no Rev0 function needs: a pad each, nothing fitted
 TP('CONT_N', 'CONT', key='TP_CONT')
 TP('BUSREQ_N', 'BUSREQ', key='TP_BUSREQ')
 
-# =========================================================================
-sheet('rp2354b')
-# -- RP2354B core: the NES Rev0 circuit.  Every RP supply pin on +3V3_RP, the
-# LDO that tracks the 5 V rail, so the pads are powered before the console's
-# bus levels reach them.
+# -- the RP2354B (two units: GPIO here, the core on rp-core).  Every RP supply pin on +3V3_RP,
+# the LDO that tracks the 5 V rail, so the pads are powered before the console's bus levels
+# reach them.
 rp = {30: 'XIN', 31: 'XOUT', 33: 'SWCLK', 34: 'SWDIO', 35: 'RUN',
       59: RP_IO_RAIL,                                                        # ADC_AVDD
       61: 'VREG_AVDD', 62: 'GND', 63: 'RP_LX', 64: RP_CORE_RAIL, 65: 'DVDD',   # VREG: AVDD PGND LX VIN FB
@@ -264,44 +261,13 @@ rp.update({p: RP_IO_RAIL for p in RP_IOVDD_PINS})
 rp.update({p: 'DVDD' for p in RP_DVDD_PINS})
 for g, pin in RP_GPIO_PIN.items():
     rp[pin] = RP_GPIO_NET[g]
-add('U', 'MCU_RaspberryPi:RP2354B', 'RP2354B', FP('QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm'), rp,
-    mpn='RP2354B', lcsc='C39843328', desc='RP2350B + 2MB flash in package; cart bus server + bank lines', key='U_RP')
-for pin in RP_IOVDD_PINS:      # one 100 nF per IOVDD pin; the key names the pin it sits on
-    C('100nF', RP_IO_RAIL, desc='IOVDD decoupling', key='C_IOV%d' % pin)
-C('100nF', RP_IO_RAIL, desc='QSPI_IOVDD decoupling', key='C_QSPI')
-C('100nF', RP_IO_RAIL, desc='USB_OTP_VDD decoupling', key='C_OTP')
-C('100nF', RP_IO_RAIL, desc='ADC_AVDD decoupling', key='C_ADC')
-C('10uF', RP_IO_RAIL, desc='RP IO rail bulk (LDO output)', key='C_IOBULK')
-C('4.7uF', RP_CORE_RAIL, desc='VREG_VIN bulk (LDO rail)', key='C_VREGIN')
-for pin in RP_DVDD_PINS:
-    C('100nF', 'DVDD', desc='DVDD decoupling', key='C_DV%d' % pin)
-C('4.7uF', 'DVDD', desc='core regulator output', key='C_DVBULK')
-R('33R', RP_CORE_RAIL, 'VREG_AVDD', desc='VREG_AVDD filter', key='R_AVDD')
-C('4.7uF', 'VREG_AVDD', desc='VREG_AVDD filter', key='C_AVDD')
-add('L', 'Device:L', '3.3uH', FP('RPI_L_AOTA-B201610S3R3'), {1: 'DVDD', 2: 'RP_LX'},
-    mpn='AOTA-B201610S3R3-101-T', lcsc='C42411119', desc='RP2350 core SMPS inductor', key='L_RP')
-add('Y', 'Device:Crystal_GND24', '12MHz', FP('Crystal_SMD_3225-4Pin_3.2x2.5mm'),
-    {1: 'XIN', 2: 'GND', 3: 'XOUT_Y', 4: 'GND'}, mpn='ABM8-272-T3', lcsc='C20625731', desc='RP2350 12 MHz crystal',
-    key='Y_RP')
-C('15pF', 'XIN', desc='crystal load', key='C_XIN')
-C('15pF', 'XOUT_Y', desc='crystal load', key='C_XOUT')
-R('1k', 'XOUT', 'XOUT_Y', desc='crystal drive limit', key='R_XOUT')
-SW('RESET', 'RST_BTN', 'cart RESET: RP RUN + S3 EN via BAT54C', key='SW_RESET')
-add('D', 'Diode:BAT54C', 'BAT54C', FP('SOT-23'), {1: 'RUN', 2: 'S3_EN', 3: 'RST_BTN'},
-    mpn='BAT54C,215', lcsc='C37704', desc='RESET steering, common cathode', key='D_RST')
-# RUN / BOOTSEL: the S3 drives them low to assert (fnPicoUpdater::forceBootselViaPins)
-R('10k', RP_IO_RAIL, 'RUN', desc='RUN pull-up', key='R_RUN')
-R('10k', RP_IO_RAIL, 'QSPI_SS', desc='QSPI_SS pull-up', key='R_SS')
-R('1k', 'QSPI_SS', 'BOOTSEL_BTN', desc='BOOTSEL button series', key='R_BSEL')
-SW('BOOTSEL', 'BOOTSEL_BTN', 'RP2354 BOOTSEL (hold while pressing RESET)', key='SW_BOOTSEL')
-R('1k', 'RUN_CTL', 'RUN', desc='S3 IO4 -> RP RUN (drive low = reset)', key='R_RUNCTL')
-R('1k', 'BOOTSEL_CTL', 'QSPI_SS', desc='S3 IO5 -> RP QSPI_SS (low through reset = BOOTSEL)', key='R_BSELCTL')
-R('27R', 'USB_DP', 'RP_USB_DP', desc='USB series', key='R_USBP')
-R('27R', 'USB_DM', 'RP_USB_DM', desc='USB series', key='R_USBM')
-TP('SWCLK', 'SWCLK', key='TP_SWCLK')
-TP('SWDIO', 'SWDIO', key='TP_SWDIO')
-TP('GND', 'GND', key='TP_GND')
-TP('RUN', 'RUN', key='TP_RUN')
+U_RP = add('U', '%s:RP2354B_Split' % LIB, 'RP2354B', FP('QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm'), rp,
+           mpn='RP2354B', lcsc='C39843328', desc='RP2350B + 2MB flash in package; cart bus server + bank lines',
+           key='U_RP')
+# drawn in two units: A = the 48 GPIOs on the cart-bus sheet, B = supplies, core regulator,
+# crystal, RUN, SWD, USB and QSPI on this one (gen_sch.rp_split_symbol)
+U_RP.unit_sheets = {1: 'cart-bus', 2: 'rp-core'}
+U_RP.pin_unit = {str(pad): 1 if pad in RP_GPIO_PIN.values() else 2 for pad in rp}
 # -- the SMS cart side of the RP.  D0-D7 through 100R: the RP and the SRAMs /
 # console never fight at full drive if a turnaround overlaps.
 RN4('4x100R', ['RP_D%d' % i for i in range(4)], ['D%d' % i for i in range(4)],
@@ -327,8 +293,6 @@ add('J', 'Connector_Generic:Conn_01x03', 'DBG UART', FP('PinHeader_1x03_P2.54mm_
     {1: 'DBG_TX', 2: 'DBG_RX', 3: 'GND'}, mpn='PZ254V-11-03P', lcsc='C2937625',
     desc='RP debug UART: 1 TX (GPIO36), 2 RX (GPIO37), 3 GND; fit for bring-up', dnp=True, key='J_DBG')
 
-# =========================================================================
-sheet('sram')
 # -- 1 MB on the 5 V rail: console A0-A12 direct, the RP's bank lines SA13-SA18,
 # SA19 picks the chip.  Their outputs drive the 5 V bus directly.
 SRAM(['A%d' % i for i in range(13)] + ['SA%d' % i for i in range(13, 19)],
@@ -341,8 +305,6 @@ C('100nF', '+5V', desc='SRAM0 decoupling', key='C_SRAM0')
 C('100nF', '+5V', desc='SRAM1 decoupling', key='C_SRAM1')
 C('10uF', '+5V', desc='5V logic domain bulk', key='C_SRAMBULK')
 
-# =========================================================================
-sheet('glue')
 # -- console power sense: edge +5V (before the P-FET) -> 0.82 x -> '14 Schmitt
 R('22k', 'CONS_5V', 'VSENSE', desc='console 5V sense divider', key='R_VSH')
 R('100k', 'VSENSE', 'GND', desc='console 5V sense -> 0.82 x CONS_5V', key='R_VSL')
@@ -381,9 +343,70 @@ for k, n in (('INV', '74HCT14'), ('NORWE', '74HCT27 (/WE stage)'), ('NORDEC', '7
              ('NAND3', '74HCT10'), ('NAND2', '74HCT00')):
     C('100nF', '+5V', desc=n + ' VCC decoupling', key='C_' + k)
 
+# -- RP2350-E9 (datasheet p.1366, stepping A2; fixed in A3/A4, but the stepping a buyer gets is
+# not ours to choose): an input-enabled pad left between VIL and VIH latches near 2.2 V and its
+# internal pull-down cannot pull it back.  After an RP reset with the console running, GAME /
+# LOAD / RAM_WE / MBOX would sit above the 74HCT VIH (2.0 V): /OE and /WE asserted, the SRAM
+# overwritten; SA19 at 2.2 V would leave both SRAM chip selects undefined.  8.2k or less
+# overcomes the leakage (p.1367); 4.7k costs 0.7 mA per line while high (FujiNet-7800 Rev0 did
+# the same for its three enables).
+R('4.7k', 'GAME', 'GND', desc='RP2350-E9 pull-down: GAME (SRAM /OE enable) low while the RP resets', key='R_PDGAME')
+R('4.7k', 'LOAD', 'GND', desc='RP2350-E9 pull-down: LOAD (SRAM /WE window) low while the RP resets', key='R_PDLOAD')
+R('4.7k', 'RAM_WE', 'GND', desc='RP2350-E9 pull-down: RAM_WE low while the RP resets', key='R_PDRAMWE')
+R('4.7k', 'MBOX', 'GND', desc='RP2350-E9 pull-down: MBOX low while the RP resets', key='R_PDMBOX')
+R('4.7k', 'SA19', 'GND', desc='RP2350-E9 pull-down: SA19 (SRAM chip select) defined while the RP resets',
+  key='R_PDSA19')
+# -- bring-up pads: the strobes the firmware's PROVISIONAL timings hang on (sms_cart.c) and the
+# review's /MREQ -> /CE -> /OE scope item, with a ground beside them
+TP('CE_N', 'CE', desc='scope pad: console /CE', key='TP_CE')
+TP('SRAM_OE_N', 'OE', desc='scope pad: SRAM /OE', key='TP_OE')
+TP('SRAM_WE_N', 'WE', desc='scope pad: SRAM /WE', key='TP_WE')
+TP('PWR_OK', 'PWR_OK', desc='scope pad: PWR_OK', key='TP_PWROK')
+TP('GND', 'GND', desc='scope ground', key='TP_GNDBUS')
+
+# =========================================================================
+sheet('rp-core')
+for pin in RP_IOVDD_PINS:      # one 100 nF per IOVDD pin; the key names the pin it sits on
+    C('100nF', RP_IO_RAIL, desc='IOVDD decoupling', key='C_IOV%d' % pin)
+C('100nF', RP_IO_RAIL, desc='QSPI_IOVDD decoupling', key='C_QSPI')
+C('100nF', RP_IO_RAIL, desc='USB_OTP_VDD decoupling', key='C_OTP')
+C('100nF', RP_IO_RAIL, desc='ADC_AVDD decoupling', key='C_ADC')
+C('10uF', RP_IO_RAIL, desc='RP IO rail bulk (LDO output)', key='C_IOBULK')
+C('4.7uF', RP_CORE_RAIL, desc='VREG_VIN bulk (LDO rail)', key='C_VREGIN')
+for pin in RP_DVDD_PINS:
+    C('100nF', 'DVDD', desc='DVDD decoupling', key='C_DV%d' % pin)
+C('4.7uF', 'DVDD', desc='core regulator output', key='C_DVBULK')
+R('33R', RP_CORE_RAIL, 'VREG_AVDD', desc='VREG_AVDD filter', key='R_AVDD')
+C('4.7uF', 'VREG_AVDD', desc='VREG_AVDD filter', key='C_AVDD')
+add('L', 'Device:L', '3.3uH', FP('RPI_L_AOTA-B201610S3R3'), {1: 'DVDD', 2: 'RP_LX'},
+    mpn='AOTA-B201610S3R3-101-T', lcsc='C42411119', desc='RP2350 core SMPS inductor', key='L_RP')
+add('Y', 'Device:Crystal_GND24', '12MHz', FP('Crystal_SMD_3225-4Pin_3.2x2.5mm'),
+    {1: 'XIN', 2: 'GND', 3: 'XOUT_Y', 4: 'GND'}, mpn='ABM8-272-T3', lcsc='C20625731', desc='RP2350 12 MHz crystal',
+    key='Y_RP')
+C('15pF', 'XIN', desc='crystal load', key='C_XIN')
+C('15pF', 'XOUT_Y', desc='crystal load', key='C_XOUT')
+R('1k', 'XOUT', 'XOUT_Y', desc='crystal drive limit', key='R_XOUT')
+SW('RESET', 'RST_BTN', 'cart RESET: RP RUN + S3 EN via BAT54C', key='SW_RESET')
+add('D', 'Diode:BAT54C', 'BAT54C', FP('SOT-23'), {1: 'RUN', 2: 'S3_EN', 3: 'RST_BTN'},
+    mpn='BAT54C,215', lcsc='C37704', desc='RESET steering, common cathode', key='D_RST')
+# RUN / BOOTSEL: the S3 drives them low to assert (fnPicoUpdater::forceBootselViaPins)
+R('10k', RP_IO_RAIL, 'RUN', desc='RUN pull-up', key='R_RUN')
+R('10k', RP_IO_RAIL, 'QSPI_SS', desc='QSPI_SS pull-up', key='R_SS')
+R('1k', 'QSPI_SS', 'BOOTSEL_BTN', desc='BOOTSEL button series', key='R_BSEL')
+SW('BOOTSEL', 'BOOTSEL_BTN', 'RP2354 BOOTSEL (hold while pressing RESET)', key='SW_BOOTSEL')
+R('1k', 'RUN_CTL', 'RUN', desc='S3 IO4 -> RP RUN (drive low = reset)', key='R_RUNCTL')
+R('1k', 'BOOTSEL_CTL', 'QSPI_SS', desc='S3 IO5 -> RP QSPI_SS (low through reset = BOOTSEL)', key='R_BSELCTL')
+R('27R', 'USB_DP', 'RP_USB_DP', desc='USB series', key='R_USBP')
+R('27R', 'USB_DM', 'RP_USB_DM', desc='USB series', key='R_USBM')
+TP('SWCLK', 'SWCLK', key='TP_SWCLK')
+TP('SWDIO', 'SWDIO', key='TP_SWDIO')
+TP('GND', 'GND', key='TP_GND')
+TP('RUN', 'RUN', key='TP_RUN')
+TP('DVDD', 'DVDD', desc='bring-up pad: RP core rail', key='TP_DVDD')
+
 # =========================================================================
 # The FujiNet half: the NES Rev0 circuits.
-sheet('esp32s3-sd')
+sheet('fujinet')
 s3 = {}
 for fn, pad in S3_PAD.items():
     for p in (pad if isinstance(pad, list) else [pad]):
@@ -414,7 +437,7 @@ add('D', 'LED:WS2812B-2020', 'WS2812C-2020-V1', FP('LED_WS2812B-2020_PLCC4_2.0x2
 C('100nF', '+5V', desc='WS2812 decoupling', key='C_WS')
 
 # =========================================================================
-sheet('usb-uart')
+sheet('usb')
 add('J', 'Connector:USB_C_Receptacle_USB2.0_16P', 'USB-C', FP('USB_C_Receptacle_HRO_TYPE-C-31-M-12'),
     {'A1': 'GND', 'A4': 'VBUS', 'A5': 'CC1', 'A6': 'UBRG_DP', 'A7': 'UBRG_DM', 'A8': NC,
      'A9': 'VBUS', 'A12': 'GND', 'B1': 'GND', 'B4': 'VBUS', 'B5': 'CC2', 'B6': 'UBRG_DP',
@@ -488,16 +511,35 @@ add('U', 'Regulator_Linear:AP2112K-3.3', 'AP2112K-3.3', FP('SOT-23-5'),
 C('1uF', '+5V', desc='LDO input', key='C_LDOIN')
 C('1uF', RP_IO_RAIL, desc='LDO output', key='C_LDOOUT')
 
+# bring-up pads on the rails
+TP('CONS_5V', 'CONS_5V', desc='bring-up pad: console 5V', key='TP_CONS5V')
+TP('+5V', '+5V', desc='bring-up pad: +5V', key='TP_5V')
+TP('+3V3', '+3V3', desc='bring-up pad: +3V3', key='TP_3V3')
+TP(RP_IO_RAIL, '+3V3_RP', desc='bring-up pad: +3V3_RP', key='TP_3V3RP')
+
 # PWR_FLAGs: nets whose drivers are passive pins
 PWR_FLAG_NETS = ['GND', 'CONS_5V', 'VBUS', '+5V', '+3V3', 'DVDD', 'VREG_AVDD']   # +3V3_RP is the LDO's power_out
 # nets drawn as power symbols (global, never prefixed): the board's planes and islands
 RAIL_NETS = ['GND', 'CONS_5V', 'VBUS', '+5V', '+3V3', '+3V3_RP', 'DVDD']
 
-# ---- reference assignment (stable: declaration order) ---------------------
-_count = {}
+# ---- references: tools/refs.lock (geographic, written by tools/annotate.py from the frozen
+# placement); a part not in it yet gets the next free number of its prefix, in declaration order
+import json as _json, os as _os
+_LOCK = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'refs.lock')
+_locked = _json.load(open(_LOCK)) if _os.path.exists(_LOCK) else {}
+_used = {}
 for p in PARTS:
-    _count[p.prefix] = _count.get(p.prefix, 0) + 1
-    p.ref = '%s%d' % (p.prefix, _count[p.prefix])
+    if p.key in _locked:
+        p.ref = _locked[p.key]
+        _used.setdefault(p.prefix, set()).add(int(p.ref[len(p.prefix):]))
+for p in PARTS:
+    if p.ref is None:
+        n = 1
+        while n in _used.setdefault(p.prefix, set()):
+            n += 1
+        _used[p.prefix].add(n)
+        p.ref = '%s%d' % (p.prefix, n)
+assert len({p.ref for p in PARTS}) == len(PARTS), 'duplicate reference in refs.lock'
 
 BY_REF = {p.ref: p for p in PARTS}
 KEY = {p.key: p.ref for p in PARTS if p.key}
@@ -505,8 +547,6 @@ assert len(KEY) == len(PARTS), 'every part needs a unique key: %s' % sorted(
     p.ref for p in PARTS if not p.key)
 BY_KEY = {p.key: p for p in PARTS}
 assert all(p.mfr for p in PARTS if p.bom), 'manufacturer missing: %s' % [p.mpn for p in PARTS if p.bom and not p.mfr]
-assert [p.sheet for p in PARTS] == sorted((p.sheet for p in PARTS), key=[s[0] for s in SHEETS].index), \
-    'parts must be declared sheet by sheet in SHEETS order'
 
 
 def nets():

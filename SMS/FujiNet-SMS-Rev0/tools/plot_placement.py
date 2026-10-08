@@ -54,6 +54,7 @@ def main():
     ap.add_argument('--no-rats', action='store_true')
     a = ap.parse_args()
     board = parse(open(a.pcb).read())
+    G.do_placement(G.place, [])
     pads, crt = G.board_pads(board)
     S = a.scale
     wx0, wy0, wx1, wy1 = (map(float, a.window.split(',')) if a.window else
@@ -71,7 +72,11 @@ def main():
     for x, y, d in G.HOLES:
         r = d / 2 * S
         dr.ellipse([P(x, y)[0] - r, P(x, y)[1] - r, P(x, y)[0] + r, P(x, y)[1] + r], outline='black', width=2)
-    dr.line([P(G.X0, G.PLANE_SPLIT_Y), P(G.X1, G.PLANE_SPLIT_Y)], fill=(200, 200, 255), width=1)
+    dr.polygon([P(*p) for p in G.five_v_island()], outline=(255, 170, 170), width=1)     # In4 +5V island
+    if G.K['U_RP'] in G.PLACE:
+        ux, uy, _ = G.PLACE[G.K['U_RP']]
+        r = G.RP_ISLAND
+        dr.rectangle([P(ux - r, uy - r), P(ux + r, uy + r)], outline=(170, 170, 255), width=1)
     key = {p.ref: p.key for p in D.PARTS}
     for ref, (x0, y0, x1, y1) in crt.items():
         dr.rectangle([P(x0, y0), P(x1, y1)], outline=(150, 150, 150), width=1)

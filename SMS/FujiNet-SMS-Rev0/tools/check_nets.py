@@ -57,7 +57,7 @@ def main():
     node_net, func_net, nets, parts = N.node_net, N.func_net, N.nets, N.parts
     one = N.one
     U1, J1, S3 = one('RP2354B'), one('SMS_Cart_Edge_50'), one('ESP32-S3-WROOM-1-N16R8')
-    J2, UCP, WS = one('microSD'), one('CP2102N-A02-GQFN28'), one('WS2812B-2020-V6')
+    J2, UCP, WS = one('microSD'), one('CP2102N-A02-GQFN28'), one('WS2812C-2020-V1')
     U14, LDO, QFET, QW = one('74HCT14'), one('AP2112K-3.3'), one('AO3401A'), one('2N7002')
     srams = N.by_value('AS6C4008-55TIN')
     for ref, what in ((U1, 'RP2354B'), (J1, 'edge'), (S3, 'ESP32-S3'), (U14, '74HCT14'), (LDO, 'AP2112K LDO'),

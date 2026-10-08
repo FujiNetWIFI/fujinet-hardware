@@ -36,17 +36,16 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sexpr import dump, Q
 
-PITCH, N = 2.54, 25
-FINGER_W = 1.75                       # original 1.65-1.76, raphnet 1.75, barbeque / reidrac 1.70
-LAND_Y0, LAND_Y1 = 0.75, 9.5          # copper, distance in from the edge
-TAB_W, TAB_D = 65.8, 15.0             # the connector tab: full board width up to TAB_D (shoulders above)
-MASK_Y1 = 10.0                        # one mask opening per face across the finger field
+import edge_geom as EG
+PITCH, N = EG.PITCH, EG.N_POS
+FINGER_W = EG.FINGER_W
+LAND_Y0, LAND_Y1 = EG.LAND_Y0, EG.LAND_Y1
+TAB_W, TAB_D = EG.TAB_W, EG.TAB_D
+MASK_Y1 = EG.MASK_Y1                  # one mask opening per face across the finger field
 F = lambda: ['effects', ['font', ['size', 1, 1], ['thickness', 0.15]]]
 
 
-def pos_x(k):
-    """Position k (1..25: pins 2k-1 / 2k) centre x: pins 1/2 east."""
-    return round((N - 1) * PITCH / 2 - (k - 1) * PITCH, 3)
+pos_x = EG.pos_x
 
 
 def rect(layer, y0, y1, w=0.05, fill='no'):

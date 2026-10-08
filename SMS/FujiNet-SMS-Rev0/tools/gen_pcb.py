@@ -41,27 +41,30 @@ PCB = os.path.join(PRJ, D.PROJECT + '.kicad_pcb')
 K = D.KEY
 
 # ---- geometry (mm, KiCad frame: y down) -----------------------------------
-X0, X1 = 50.0, 150.0            # body width 100
-Y0 = 32.0                       # top (trailing) edge: USB-C, microSD, the S3 antenna
-TAB_Y = 110.0                   # tab base = bottom of the body
+import edge_geom as EG
+import placement as PL          # the floorplan owns the body height, holes and In4 split
+XC = 100.0
+X0, X1 = XC - EG.BODY_W / 2, XC + EG.BODY_W / 2     # body width 100
 Y1 = 125.0                      # insertion edge
-XC = (X0 + X1) / 2              # 100
-TAB_HW = 32.9                   # 65.8 mm tab (make_edge_fp.TAB_W)
+TAB_D = EG.TAB_D                # tab depth 15 (edge_geom)
+TAB_Y = Y1 - TAB_D              # 110: tab base = bottom of the body
+Y0 = TAB_Y - PL.BODY_H          # top (trailing) edge: USB-C, microSD, the S3 antenna
+TAB_HW = EG.TAB_W / 2           # 65.8 mm tab
 TAB_X0, TAB_X1 = XC - TAB_HW, XC + TAB_HW
-PAD_TOP_Y = Y1 - 9.5            # 115.5: finger copper starts here (make_edge_fp.LAND_Y1)
+PAD_TOP_Y = Y1 - EG.LAND_Y1     # 115.5: finger copper starts here
 BLADE_Y = TAB_Y                 # routers: no tracks/vias at y >= BLADE_Y
-THICKNESS = 1.6
-CH_TOP, CH_SH, CH_TAB = 2.0, 1.0, 1.0      # corner chamfers: top corners, shoulders, insertion edge
+THICKNESS = EG.THICKNESS
+CH_TOP, CH_SH, CH_TAB = 2.0, 1.0, EG.CH_TAB      # corner chamfers: top corners, shoulders, insertion edge
 OUTLINE = [(X0 + CH_TOP, Y0), (X1 - CH_TOP, Y0), (X1, Y0 + CH_TOP),
            (X1, TAB_Y - CH_SH), (X1 - CH_SH, TAB_Y), (TAB_X1, TAB_Y),
            (TAB_X1, Y1 - CH_TAB), (TAB_X1 - CH_TAB, Y1), (TAB_X0 + CH_TAB, Y1), (TAB_X0, Y1 - CH_TAB),
            (TAB_X0, TAB_Y), (X0 + CH_SH, TAB_Y), (X0, TAB_Y - CH_SH), (X0, Y0 + CH_TOP)]
 BODY = [(X0, Y0), (X1, Y0), (X1, TAB_Y), (X0, TAB_Y)]   # planes / pours (clipped by the outline)
 # M3 clearance holes for the shell's four screws (case/FujiNet-SMS-Shell.scad reads them from
-# case/board-anchors.scad): (x, y, diameter); placement.py keeps parts 1 mm off their 3 mm rings
-HOLES = [(54.0, 64.0, 3.2), (146.0, 64.0, 3.2), (54.0, 104.5, 3.2), (146.0, 104.5, 3.2)]
+# case/board-anchors.scad): (x, y, diameter); placement.py keeps parts off their 3 mm rings
+HOLES = [(x, Y0 + dy if dy >= 0 else TAB_Y + dy, d) for x, dy, d in PL.HOLES]
 HOLE_KEEP = 3.0                 # radius around a hole with no parts (screw head / boss)
-PLANE_SPLIT_Y = 60.0            # In4: +3V3 north of this, +5V south (islands win over both)
+PLANE_SPLIT_Y = PL.PLANE_SPLIT_Y    # In4: +3V3 north of this, +5V south (islands win over both)
 
 # In4 islands, in priority order (highest wins)
 RP_ISLAND = 14.0    # half-size of the +3V3_RP island under the RP2354B decoupling ring
@@ -99,6 +102,7 @@ def canon(n):
 
 NETLIST = {}    # (ref, pad) -> the schematic's net name
 FULL = {}       # design.py net name -> the schematic's (board's) net name
+COMP_SHEET = {} # ref -> the sheet name kicad-cli files the component under ('/glue/')
 
 
 def schematic_netlist():
@@ -110,6 +114,8 @@ def schematic_netlist():
                     os.path.join(PRJ, D.PROJECT + '.kicad_sch')], check=True, capture_output=True)
     t = parse(open(fn).read())
     out, full = {}, {}
+    for c in findall(find(t, 'components'), 'comp'):
+        COMP_SHEET[str(find(c, 'ref')[1])] = str(find(find(c, 'sheetpath'), 'names')[1])
     for n in findall(find(t, 'nets'), 'net'):
         name = str(find(n, 'name')[1])
         full[canon(name)] = name
@@ -142,7 +148,8 @@ def instance(part, x, y, rot, path, sheetname, sheetfile, datasheet=''):
         if e:
             out.append(e)
     fields = {'Reference': part.ref, 'Value': part.value, 'Footprint': part.footprint,
-              'Datasheet': datasheet, 'Description': part.desc, 'MPN': part.mpn, 'LCSC': part.lcsc}
+              'Datasheet': datasheet, 'Description': part.desc, 'MPN': part.mpn, 'Manufacturer': part.mfr,
+              'LCSC': part.lcsc}
     done = set()
     for pr in findall(fp, 'property'):
         k = pr[1]
@@ -159,7 +166,7 @@ def instance(part, x, y, rot, path, sheetname, sheetfile, datasheet=''):
                 pr.append(['effects', ['font', ['size', 0.8, 0.8], ['thickness', 0.12]]])
             out.append(pr); done.add(k)
     for k, v in fields.items():
-        if k not in done:
+        if k not in done and (v or k not in ('MPN', 'Manufacturer', 'LCSC')):
             out.append(['property', Q(k), Q(v), ['at', 0, 0, rot], ['layer', Q('F.Fab')], ['hide', 'yes'],
                         ['uuid', uid(part.ref, 'prop', k)],
                         ['effects', ['font', ['size', 1.27, 1.27], ['thickness', 0.15]]]])
@@ -415,7 +422,7 @@ def dvdd_island():
             (-RP_CORE, -4.0), (-5.0, -4.0), (-5.0, -1.6), (-16.0, -1.6)]
 
 
-FIVE_V_NOTCH_X = 139.5    # the +5V island also runs up the east edge under the buck input and the VBUS diode
+FIVE_V_NOTCH_X = PL.FIVE_V_NOTCH_X    # the +5V island may run up the east edge under the buck input / VBUS diode
 
 
 def five_v_island():
@@ -483,6 +490,8 @@ def add_fanout(board, extra):
     keep = [crt[K[k]] for k in ('U_S3', 'J_SD', 'J_USB', 'SW_RESET', 'SW_BOOTSEL', 'SW_S3EN', 'SW_S3BOOT')
             if K[k] in crt]
     keep.append((ux - UNDER, uy - UNDER, ux + UNDER, uy + UNDER))   # no fan-out vias under the RP2354B
+    sx, sy, _ = PLACE[K['U_S3']]                                      # nor in the S3 antenna keep-out
+    keep.append((sx - 24.0, Y0 - 1.0, sx + 24.0, sy - 6.75 + 0.3))   # (the module footprint's zone)
     holes = [(x, y, d / 2 + 0.5) for x, y, d in HOLES]
     vias, segs, failed = fanout.plan(pads, keep, (X0, Y0, X1, TAB_Y), BLADE_Y, holes, skip_refs=(K['J_EDGE'],),
                                      extra_segs=extra_segs, extra_vias=extra_vias, skip_pads=skip)
@@ -602,7 +611,8 @@ def configure_project():
         # the fingers are 0.75 mm from the bevelled edge and 1.5 mm from the tab's sides by design
         '(rule "finger_edge"\n'
         '\t(condition "A.memberOfFootprint(\'%s\')")\n'
-        '\t(constraint edge_clearance (min 0.5mm)))\n' % (corner_a, corner_ab, solid, K['J_EDGE']))
+        '\t(constraint edge_clearance (min %gmm)))\n' % (corner_a, corner_ab, solid, K['J_EDGE'],
+                                                         EG.FINGER_EDGE_CLEAR))
 
 
 def write_case_anchors():
@@ -646,18 +656,42 @@ def check_parts_inside(board):
             cx, cy = min(max(hx, x0), x1), min(max(hy, y0), y1)
             if math.hypot(cx - hx, cy - hy) < HOLE_KEEP:
                 bad.append('%s (%s) within %.1f mm of the hole at %g,%g' % (p.ref, p.key, HOLE_KEEP, hx, hy))
-    refs = sorted(r for r in crt if r in D.BY_REF and r != K['J_EDGE'])
+    refs = sorted(r for r in crt if (r in D.BY_REF and r != K['J_EDGE']) or r.startswith('FID'))
+    for r in refs:     # the fiducials too: clear of the screw holes
+        if r.startswith('FID'):
+            x0, y0, x1, y1 = crt[r]
+            for hx, hy, hd in HOLES:
+                cx, cy = min(max(hx, x0), x1), min(max(hy, y0), y1)
+                if math.hypot(cx - hx, cy - hy) < HOLE_KEEP:
+                    bad.append('%s within %.1f mm of the hole at %g,%g' % (r, HOLE_KEEP, hx, hy))
     for i, r1 in enumerate(refs):
         a = crt[r1]
         for r2 in refs[i + 1:]:
             b = crt[r2]
             if a[0] < b[2] - 0.01 and b[0] < a[2] - 0.01 and a[1] < b[3] - 0.01 and b[1] < a[3] - 0.01:
-                bad.append('%s (%s) and %s (%s): courtyards overlap' % (r1, D.BY_REF[r1].key, r2, D.BY_REF[r2].key))
+                kk = lambda r: D.BY_REF[r].key if r in D.BY_REF else r
+                bad.append('%s (%s) and %s (%s): courtyards overlap' % (r1, kk(r1), r2, kk(r2)))
     if bad:
         raise SystemExit('placement:\n  ' + '\n  '.join(bad))
 
 
 FIDUCIALS = []      # placement.py fills: (name, x, y)
+
+
+def fp_sheet_unit(p, syms):
+    """The sheet and symbol unit a footprint links to.  A part drawn on several sheets (its units
+    split between them) is filed by KiCad under the first of those sheets in hierarchy order, with
+    the uuids of the units drawn there (checked in a prototype, 2026-10-08: kicad-cli's netlist and
+    --schematic-parity); the footprint path takes the lowest of those units.  Cross-checked against
+    the netlist kicad-cli wrote."""
+    units = gen_sch.units_of(syms[p.lib_id])
+    on = {u: p.unit_sheets.get(u, p.sheet) for u in units}
+    stem = min(set(on.values()), key=D.SHEET_ORDER.index)
+    u = min(u for u, sh in on.items() if sh == stem)
+    NET('GND')
+    if COMP_SHEET and COMP_SHEET.get(p.ref) != '/%s/' % stem:
+        raise SystemExit('%s: design puts the footprint on /%s/, kicad-cli on %s' % (p.ref, stem, COMP_SHEET.get(p.ref)))
+    return stem, u
 
 
 def main():
@@ -682,14 +716,14 @@ def main():
     syms = gen_sch.load_symbols()
     for p in D.PARTS:
         x, y, r = PLACE[p.ref]
-        u = gen_sch.units_of(syms[p.lib_id])[0]
-        path = '/%s/%s' % (gen_sch.uid('sheet', p.sheet), gen_sch.uid(p.sheet, p.ref, u))
+        stem, u = fp_sheet_unit(p, syms)
+        path = '/%s/%s' % (gen_sch.uid('sheet', stem), gen_sch.uid(stem, p.ref, u))
         path = path.replace('"', '')
         ds = p.ds
         for pr in findall(syms[p.lib_id], 'property'):
             if pr[1] == 'Datasheet' and not ds:
                 ds = str(pr[2])
-        board.append(instance(p, x, y, r, path, '/%s/' % p.sheet, p.sheet + '.kicad_sch', ds))
+        board.append(instance(p, x, y, r, path, '/%s/' % stem, stem + '.kicad_sch', ds))
     for name, x, y in FIDUCIALS:
         board.append(board_only(name, 'Fiducial_1mm_Mask2mm', x, y, 'assembly fiducial'))
     for i, (x, y, d) in enumerate(HOLES):

@@ -229,7 +229,7 @@ def serialize(sh, title, root_uuid, sheet_uuid, pwr):
               field('Value', p.value, d['fields'][1], rot, mirror=d['mirror']),
               field('Footprint', p.footprint, hid, rot, True), field('Datasheet', ds, hid, rot, True),
               field('Description', p.desc, hid, rot, True)]
-        for k, v in (('MPN', p.mpn), ('LCSC', p.lcsc)):
+        for k, v in (('MPN', p.mpn), ('Manufacturer', p.mfr), ('LCSC', p.lcsc)):
             if v:
                 fl.append(field(k, v, hid, rot, True))
         pins = sorted({num for (uu, num, *_r) in sch_draw.lib_pins(sym) if uu in (0, u)})
@@ -439,6 +439,9 @@ def write_project(root_uuid, sheet_uuids):
     pro['meta']['filename'] = D.PROJECT + '.kicad_pro'
     pro['sheets'] = [[root_uuid, 'Root']] + [[sheet_uuids[s[0]], s[0]] for s in D.SHEETS]
     pro['erc']['rule_severities']['same_local_global_label'] = 'warning'   # no global labels left
+    # KiCad 10 opens the schematic by this entry (a template's project file can name another root)
+    pro['schematic']['top_level_sheets'] = [{'filename': D.PROJECT + '.kicad_sch', 'name': D.PROJECT,
+                                             'uuid': '00000000-0000-0000-0000-000000000000'}]
     json.dump(pro, open(fn, 'w'), indent=2)
     open(fn, 'a').write('\n')
 

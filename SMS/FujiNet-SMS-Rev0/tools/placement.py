@@ -27,6 +27,13 @@ Regions:
 The shell screws (gen_pcb.HOLES) keep 3 mm rings clear.
 """
 
+# board frame owned by the floorplan (gen_pcb reads these)
+BODY_H = 78.0            # body height: top edge at y = 110 - BODY_H
+HOLES = [(54.0, 32.0, 3.2), (146.0, 32.0, 3.2), (54.0, -5.5, 3.2), (146.0, -5.5, 3.2)]   # x, dy (>= 0 from the
+#                          top edge, < 0 from the tab base), diameter
+PLANE_SPLIT_Y = 60.0     # In4: +3V3 north of this, +5V south
+FIVE_V_NOTCH_X = 139.5   # the +5V island also runs up the east edge east of this
+
 RX, RY = 98.0, 86.0      # RP2354B centre
 RING = 10.0              # decoupling ring radius (NES Rev0: 10, not 9 -- a second via column fits)
 

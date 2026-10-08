@@ -25,7 +25,8 @@ def inside(x, y):
 
 
 # return-path vias: a GND via beside every via of these nets (kicad-happy RP-001 wants one within
-# 1 mm of each layer change), offered at 0.95 mm in eight directions and DRC-filtered like the grid.
+# 1 mm of each layer change), offered at 0.95 mm in eight directions and DRC-filtered like the grid;
+# a USB via left without one gets closer offers one at a time (second_ring).
 # None goes inside the RP / DVDD-island exclusion below: a GND through-via there would cut the island,
 # so the USB vias beside the RP (F.Cu <-> In3.Cu) return through its decoupling ring instead
 NEAR_NETS = ('USB_DP', 'USB_DM', 'RP_USB_DP', 'RP_USB_DM', 'UBRG_DP', 'UBRG_DM')
@@ -152,6 +153,47 @@ def main():
         mine -= drop
         open(PCB, 'w').write(dump(board) + '\n')
     print('stitch_gnd: %d candidates, %d GND stitching vias on the board (%d dropped by DRC)' % (len(allc), len(mine), len(allc) - len(mine)))
+    second_ring(off_pads)
+
+
+def second_ring(off_pads):
+    """A USB via still without a GND via within 1.0 mm gets closer offers, one direction per round
+    (0.75 / 0.85 mm, 16 directions): offers around the same via would overlap each other, and DRC
+    would then drop both.  The first offer DRC accepts stays."""
+    nets = {G.NET(n) for n in NEAR_NETS}
+    def vias_of(board, pred):
+        return [(float(find(e, 'at')[1]), float(find(e, 'at')[2])) for e in board
+                if isinstance(e, list) and e and e[0] == 'via' and pred(str(find(e, 'net')[1]))]
+    board = parse(open(PCB).read())
+    gnd = vias_of(board, lambda n: n == 'GND')
+    lonely = [v for v in vias_of(board, lambda n: n in nets)
+              if min(math.hypot(v[0] - g[0], v[1] - g[1]) for g in gnd) > 1.0]
+    offers = [[(round(ax + r * math.cos(math.radians(22.5 * k)), 2), round(ay + r * math.sin(math.radians(22.5 * k)), 2))
+               for r in (0.75, 0.85) for k in range(16)] for ax, ay in lonely]
+    allowed = set(candidates([p for o in offers for p in o]))
+    offers = [[p for p in o if p in allowed and off_pads(*p)] for o in offers]
+    added = 0
+    for j in range(32):
+        todo = [o[j] for o in offers if o and len(o) > j]
+        if not todo:
+            break
+        board = parse(open(PCB).read())
+        k = max(k for k, e in enumerate(board) if isinstance(e, list) and e and e[0] in ('segment', 'via', 'footprint'))
+        new = [via(x, y, 0) for x, y in todo]
+        board[k + 1:k + 1] = new
+        open(PCB, 'w').write(dump(board) + '\n')
+        bad, _d = drc_uuids()
+        keep = {str(find(v, 'uuid')[1]) for v in new} - bad
+        board = [e for e in board if not (isinstance(e, list) and e and e[0] == 'via'
+                                          and str(find(e, 'uuid')[1]) in bad
+                                          and any(e is v for v in new))]
+        open(PCB, 'w').write(dump(board) + '\n')
+        done = {(float(find(v, 'at')[1]), float(find(v, 'at')[2])) for v in new if str(find(v, 'uuid')[1]) in keep}
+        added += len(done)
+        offers = [[] if (o and len(o) > j and o[j] in done) else o for o in offers]
+    left = sum(1 for o in offers if o)
+    print('stitch_gnd: second ring: %d USB vias without a GND via within 1 mm, %d given one, %d with no room'
+          % (len(lonely), added, len(lonely) - added))
 
 
 if __name__ == '__main__':

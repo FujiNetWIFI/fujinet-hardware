@@ -25,6 +25,7 @@ SHEETS = [  # (file stem, title, page) -- in signal-flow order, console side fir
     ('usb-uart', 'USB-C, CP2102N bridge', 7),
     ('power', 'Power: 5V OR, 3.3V buck, RP LDO', 8),
 ]
+SHEET_ORDER = [s[0] for s in SHEETS]
 
 # ---- RP2354B (QFN-80) GPIO -> package pin ---------------------------------
 # Read from KiCad's MCU_RaspberryPi:RP2354B symbol; gen_sch.py re-checks every
@@ -107,6 +108,25 @@ CAP = {'15pF': (C0603, 'CL10C150JB8NNNC', 'C1644'),
        '22uF': (C0805, 'CL21A226MAQNNNE', 'C45783')}
 RPACK = {'4x10k': ('4D03WGJ0103T5E', 'C29718'), '4x100R': ('4D03WGJ0101T5E', 'C25506')}
 
+# MPN -> manufacturer (PCBWay sources by MPN + manufacturer; names from LCSC's product pages,
+# 2026-10-07/08, as the FujiNet-7800 Rev0 table)
+MFR = {'RP2354B': 'Raspberry Pi', 'CC0603KRX7R9BB104': 'YAGEO', 'CL10A106KP8NNNC': 'Samsung Electro-Mechanics',
+       'CL10A475KO8NNNC': 'Samsung Electro-Mechanics', 'CL10C150JB8NNNC': 'Samsung Electro-Mechanics',
+       'CL10A105KB8NNNC': 'Samsung Electro-Mechanics', 'CL21A226MAQNNNE': 'Samsung Electro-Mechanics',
+       'AOTA-B201610S3R3-101-T': 'Abracon', 'ABM8-272-T3': 'Abracon',
+       'TS-1187A-B-A-B': 'XKB Connection', 'BAT54C,215': 'Nexperia', '4D03WGJ0101T5E': 'UNI-ROYAL',
+       '4D03WGJ0103T5E': 'UNI-ROYAL', 'KT-0603R': 'Hubei KENTO Elec', '2N7002': 'Jiangsu Changjing (JSCJ)',
+       'PZ254V-11-03P': 'XFCN', 'AS6C4008-55TIN': 'Alliance Memory', 'SN74HCT14DR': 'Texas Instruments',
+       'SN74HCT00DR': 'Texas Instruments', '74HCT27D,653': 'Nexperia', '74HCT10D,653': 'Nexperia',
+       'CD74HCT27M96': 'Texas Instruments', 'CD74HCT10M': 'Texas Instruments',
+       'ESP32-S3-WROOM-1-N16R8': 'Espressif', 'TF-015': 'SOFNG', 'WS2812C-2020-V1': 'Worldsemi',
+       'TYPE-C-31-M-12': 'Korean Hroparts Elec', 'ESD5Z5.0T1G': 'onsemi', 'CP2102N-A02-GQFN28R': 'Silicon Labs',
+       'UMH3N': 'Jiangsu Changjing (JSCJ)', 'AO3401A': 'Alpha & Omega Semiconductor',
+       'SS34': 'MDD (Microdiode Semiconductor)', 'AP63203WU-7': 'Diodes Incorporated',
+       'SWPA4030S6R8MT': 'Sunlord', 'AP2112K-3.3TRG1': 'Diodes Incorporated'}
+for _v in RES.values():
+    MFR[_v[0]] = 'UNI-ROYAL'
+
 
 class Part:
     def __init__(self, prefix, lib_id, value, footprint, pins, sheet,
@@ -114,9 +134,22 @@ class Part:
         self.prefix, self.lib_id, self.value, self.footprint = prefix, lib_id, value, footprint
         self.pins = {str(k): v for k, v in pins.items()}  # pad number -> net (None = NC)
         self.sheet, self.mpn, self.lcsc, self.desc, self.bom, self.dnp = sheet, mpn, lcsc, desc, bom, dnp
+        self.mfr = MFR.get(mpn, '')
+        self.nc_pads = ()                                  # footprint pads the symbol has no pin for (NC on the part)
         self.ds = ds                                       # datasheet URL when the stock symbol's is another part's
-        self.key = key      # stable name the drawing and layout scripts use (references follow declaration order)
+        self.key = key      # stable name the drawing and layout scripts use (references: refs.lock)
+        self.unit_sheets = {}                              # unit -> sheet, for a part drawn on several sheets
+        self.pin_unit = {}                                 # pad -> unit (only with unit_sheets)
         self.ref = None
+
+    def sheets(self):
+        return sorted(set(self.unit_sheets.values()) | {self.sheet}, key=SHEET_ORDER.index)
+
+    def pad_sheet(self, pad):
+        """The sheet a pad's pin is drawn on."""
+        if self.unit_sheets:
+            return self.unit_sheets[self.pin_unit[str(pad)]]
+        return self.sheet
 
 
 PARTS = []
@@ -158,8 +191,10 @@ def RN4(value, a, b, desc='', **k):
 
 
 def SW(value, net, desc, **k):
-    return add('SW', 'Switch:SW_Push', value, FP('SW_SPST_TL3342'), {1: net, 2: 'GND'},
-               mpn='TL3342F160QG', lcsc='C2886898', desc=desc, **k)
+    # XKB TS-1187A-B-A-B (JLCPCB basic C318884), as FujiNet-7800 Rev0: the TL3342 of the first
+    # SMS layout had 5 in stock on 2026-10-07 against four buttons a board
+    return add('SW', 'Switch:SW_Push', value, FP('SW_SPST_TS-1187A'), {1: net, 2: 'GND'},
+               mpn='TS-1187A-B-A-B', lcsc='C318884', desc=desc, **k)
 
 
 def TP(net, label, **k):
@@ -369,9 +404,13 @@ RN('4x10k', ['SD_CS', 'SD_MISO', 'SD_DAT1', 'SD_DAT2'], '+3V3', desc='SD pull-up
 R('10k', '+3V3', 'SD_CD', desc='card-detect pull-up', key='R_SDCD')
 C('10uF', '+3V3', desc='microSD supply', key='C_SD')
 R('330R', 'LED_STRIP', 'WS_DIN', desc='WS2812 data series', key='R_WS')
-add('D', 'LED:WS2812B-2020', 'WS2812B-2020-V6', FP('LED_WS2812B-2020_PLCC4_2.0x2.0mm'),
-    {1: NC, 2: 'GND', 3: 'WS_DIN', 4: '+5V'}, mpn='WS2812B-2020-V6', lcsc='C52917434',
-    desc='status LED on +5V (datasheet VDD 3.7-5.3 V; VIH 2.7 V takes the S3 3.3 V data directly)', key='D_WS')
+# WS2812C-2020-V1 (JLCPCB C2976072), as FujiNet-7800 Rev0: the WS2812B-2020-V6 had 5 in stock on
+# 2026-10-07.  Same 2.0 x 2.0 package and land, same pins (1 DO, 2 GND, 3 DI, 4 VDD), VDD 3.7-5.3 V,
+# VIH 2.7 V (datasheet p.2-3).
+add('D', 'LED:WS2812B-2020', 'WS2812C-2020-V1', FP('LED_WS2812B-2020_PLCC4_2.0x2.0mm'),
+    {1: NC, 2: 'GND', 3: 'WS_DIN', 4: '+5V'}, mpn='WS2812C-2020-V1', lcsc='C2976072',
+    desc='status LED on +5V (datasheet VDD 3.7-5.3 V; VIH 2.7 V takes the S3 3.3 V data directly)', key='D_WS',
+    ds='http://www.world-semi.com/DownLoadFile/1132')
 C('100nF', '+5V', desc='WS2812 decoupling', key='C_WS')
 
 # =========================================================================
@@ -465,6 +504,7 @@ KEY = {p.key: p.ref for p in PARTS if p.key}
 assert len(KEY) == len(PARTS), 'every part needs a unique key: %s' % sorted(
     p.ref for p in PARTS if not p.key)
 BY_KEY = {p.key: p for p in PARTS}
+assert all(p.mfr for p in PARTS if p.bom), 'manufacturer missing: %s' % [p.mpn for p in PARTS if p.bom and not p.mfr]
 assert [p.sheet for p in PARTS] == sorted((p.sheet for p in PARTS), key=[s[0] for s in SHEETS].index), \
     'parts must be declared sheet by sheet in SHEETS order'
 
@@ -479,12 +519,13 @@ def nets():
 
 
 def sheet_nets():
-    """net -> the set of sheets it has pins on."""
+    """net -> the set of sheets it has pins on (a part drawn on several sheets counts each pin
+    on the sheet of its unit)."""
     out = {}
     for p in PARTS:
-        for n in p.pins.values():
+        for pad, n in p.pins.items():
             if n:
-                out.setdefault(n, set()).add(p.sheet)
+                out.setdefault(n, set()).add(p.pad_sheet(pad))
     return out
 
 

@@ -24,6 +24,9 @@ python3 tools/check_glue.py                   # the 74HCT glue vs sms_cart.h, ev
 python3 tools/audit/edge_orientation.py >/dev/null   # the edge footprint vs the cartridge sources
 if [ "${LAYOUT:-0}" = 1 ]; then
     python3 tools/gen_pcb.py                  # placement.py + design.py -> the placed board, planes, fan-out, case anchors
-    bash tools/route_board.sh                 # pre-route, Freerouting, finisher, stitching, DRC gate
+    bash tools/route_board.sh                 # pre-route, Freerouting, finisher, stitching, check_vias, DRC gate
 fi
-python3 tools/export.py                       # BOM, JLCPCB BOM, schematic PDF (+ CPL / gerbers / renders with a .kicad_pcb)
+python3 tools/export.py                       # BOM, schematic PDF (+ JLCPCB / PCBWay packages, layout views, renders with a .kicad_pcb)
+if [ -f exports/jlcpcb/FujiNet-SMS-Rev0-gerbers.zip ]; then
+    python3 tools/audit/check_gerbers.py >/dev/null   # the fab zips: fingers both faces, mask windows, nothing in the tab
+fi

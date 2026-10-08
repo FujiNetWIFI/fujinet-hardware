@@ -3,10 +3,10 @@
 	(generator "fujinet_gen")
 	(generator_version "1.0")
 	(layer "F.Cu")
-	(descr "Sega Master System 50-pin cartridge edge: 2 x 25 fingers, 2.54 mm pitch, odd pins F.Cu (pin 1 east), even pins B.Cu, pin 2k-1 over pin 2k.  PROVISIONAL geometry and face assignment: verify against a real cartridge PCB.  Hard gold, bevel.")
+	(descr "Sega Master System 50-pin cartridge edge: 2 x 25 fingers, 2.54 mm pitch.  Even pins on F.Cu (component / label side, faces the console front), odd pins on B.Cu, pin 2k-1 behind pin 2k, pins 1/2 east seen from F.Cu.  Fingers 1.75 x 8.75 mm, 0.75-9.5 mm from the edge; tab 65.8 mm. Hard gold, 30-45 deg bevel.")
 	(tags "sega master system sms cartridge edge connector")
 	(property "Reference" "REF**"
-		(at 0 -11.5 0)
+		(at 0 -16.5 0)
 		(layer "F.SilkS")
 		(effects
 			(font
@@ -16,7 +16,7 @@
 		)
 	)
 	(property "Value" "SMS_Cart_Edge_50"
-		(at 0 -13.5 0)
+		(at 0 -18.5 0)
 		(layer "F.Fab")
 		(effects
 			(font
@@ -27,8 +27,8 @@
 	)
 	(attr smd exclude_from_pos_files exclude_from_bom allow_soldermask_bridges)
 	(fp_rect
-		(start -32.5 0)
-		(end 32.5 -10)
+		(start -32.9 0)
+		(end 32.9 -15)
 		(stroke
 			(width 0.1)
 			(type solid)
@@ -37,8 +37,8 @@
 		(layer "F.Fab")
 	)
 	(fp_rect
-		(start -32.5 0)
-		(end 32.5 -10)
+		(start -32.9 0)
+		(end 32.9 -15)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -47,8 +47,8 @@
 		(layer "F.CrtYd")
 	)
 	(fp_rect
-		(start -32.5 0)
-		(end 32.5 -10)
+		(start -32.9 0)
+		(end 32.9 -15)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -57,8 +57,8 @@
 		(layer "B.CrtYd")
 	)
 	(fp_rect
-		(start -32.5 0.2)
-		(end 32.5 -9)
+		(start -32.9 0.2)
+		(end 32.9 -10)
 		(stroke
 			(width 0)
 			(type solid)
@@ -67,8 +67,8 @@
 		(layer "F.Mask")
 	)
 	(fp_rect
-		(start -32.5 0.2)
-		(end 32.5 -9)
+		(start -32.9 0.2)
+		(end 32.9 -10)
 		(stroke
 			(width 0)
 			(type solid)
@@ -76,39 +76,28 @@
 		(fill yes)
 		(layer "B.Mask")
 	)
-	(fp_text user "1"
-		(at 30.48 -10.9 0)
-		(layer "F.SilkS")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(fp_text user "49"
-		(at -30.48 -10.9 0)
-		(layer "F.SilkS")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
 	(fp_text user "2"
-		(at 30.48 -10.9 0)
-		(layer "B.SilkS")
+		(at 30.48 -11.2 0)
+		(layer "F.SilkS")
 		(effects
 			(font
 				(size 1 1)
 				(thickness 0.15)
 			)
-			(justify mirror)
 		)
 	)
 	(fp_text user "50"
-		(at -30.48 -10.9 0)
+		(at -30.48 -11.2 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "1"
+		(at 30.48 -11.2 0)
 		(layer "B.SilkS")
 		(effects
 			(font
@@ -118,254 +107,265 @@
 			(justify mirror)
 		)
 	)
-	(pad "1" smd rect
-		(at 30.48 -4.5)
-		(size 1.78 8)
-		(layers "F.Cu")
+	(fp_text user "49"
+		(at -30.48 -11.2 0)
+		(layer "B.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
 	)
 	(pad "2" smd rect
-		(at 30.48 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "3" smd rect
-		(at 27.94 -4.5)
-		(size 1.78 8)
+		(at 30.48 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "1" smd rect
+		(at 30.48 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "4" smd rect
-		(at 27.94 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "5" smd rect
-		(at 25.4 -4.5)
-		(size 1.78 8)
+		(at 27.94 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "3" smd rect
+		(at 27.94 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "6" smd rect
-		(at 25.4 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "7" smd rect
-		(at 22.86 -4.5)
-		(size 1.78 8)
+		(at 25.4 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "5" smd rect
+		(at 25.4 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "8" smd rect
-		(at 22.86 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "9" smd rect
-		(at 20.32 -4.5)
-		(size 1.78 8)
+		(at 22.86 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "7" smd rect
+		(at 22.86 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "10" smd rect
-		(at 20.32 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "11" smd rect
-		(at 17.78 -4.5)
-		(size 1.78 8)
+		(at 20.32 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "9" smd rect
+		(at 20.32 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "12" smd rect
-		(at 17.78 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "13" smd rect
-		(at 15.24 -4.5)
-		(size 1.78 8)
+		(at 17.78 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "11" smd rect
+		(at 17.78 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "14" smd rect
-		(at 15.24 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "15" smd rect
-		(at 12.7 -4.5)
-		(size 1.78 8)
+		(at 15.24 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "13" smd rect
+		(at 15.24 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "16" smd rect
-		(at 12.7 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "17" smd rect
-		(at 10.16 -4.5)
-		(size 1.78 8)
+		(at 12.7 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "15" smd rect
+		(at 12.7 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "18" smd rect
-		(at 10.16 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "19" smd rect
-		(at 7.62 -4.5)
-		(size 1.78 8)
+		(at 10.16 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "17" smd rect
+		(at 10.16 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "20" smd rect
-		(at 7.62 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "21" smd rect
-		(at 5.08 -4.5)
-		(size 1.78 8)
+		(at 7.62 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "19" smd rect
+		(at 7.62 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "22" smd rect
-		(at 5.08 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "23" smd rect
-		(at 2.54 -4.5)
-		(size 1.78 8)
+		(at 5.08 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "21" smd rect
+		(at 5.08 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "24" smd rect
-		(at 2.54 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "25" smd rect
-		(at 0 -4.5)
-		(size 1.78 8)
+		(at 2.54 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "23" smd rect
+		(at 2.54 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "26" smd rect
-		(at 0 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "27" smd rect
-		(at -2.54 -4.5)
-		(size 1.78 8)
+		(at 0 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "25" smd rect
+		(at 0 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "28" smd rect
-		(at -2.54 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "29" smd rect
-		(at -5.08 -4.5)
-		(size 1.78 8)
+		(at -2.54 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "27" smd rect
+		(at -2.54 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "30" smd rect
-		(at -5.08 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "31" smd rect
-		(at -7.62 -4.5)
-		(size 1.78 8)
+		(at -5.08 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "29" smd rect
+		(at -5.08 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "32" smd rect
-		(at -7.62 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "33" smd rect
-		(at -10.16 -4.5)
-		(size 1.78 8)
+		(at -7.62 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "31" smd rect
+		(at -7.62 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "34" smd rect
-		(at -10.16 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "35" smd rect
-		(at -12.7 -4.5)
-		(size 1.78 8)
+		(at -10.16 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "33" smd rect
+		(at -10.16 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "36" smd rect
-		(at -12.7 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "37" smd rect
-		(at -15.24 -4.5)
-		(size 1.78 8)
+		(at -12.7 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "35" smd rect
+		(at -12.7 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "38" smd rect
-		(at -15.24 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "39" smd rect
-		(at -17.78 -4.5)
-		(size 1.78 8)
+		(at -15.24 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "37" smd rect
+		(at -15.24 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "40" smd rect
-		(at -17.78 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "41" smd rect
-		(at -20.32 -4.5)
-		(size 1.78 8)
+		(at -17.78 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "39" smd rect
+		(at -17.78 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "42" smd rect
-		(at -20.32 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "43" smd rect
-		(at -22.86 -4.5)
-		(size 1.78 8)
+		(at -20.32 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "41" smd rect
+		(at -20.32 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "44" smd rect
-		(at -22.86 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "45" smd rect
-		(at -25.4 -4.5)
-		(size 1.78 8)
+		(at -22.86 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "43" smd rect
+		(at -22.86 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "46" smd rect
-		(at -25.4 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "47" smd rect
-		(at -27.94 -4.5)
-		(size 1.78 8)
+		(at -25.4 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
+	)
+	(pad "45" smd rect
+		(at -25.4 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
 	)
 	(pad "48" smd rect
-		(at -27.94 -4.5)
-		(size 1.78 8)
-		(layers "B.Cu")
-	)
-	(pad "49" smd rect
-		(at -30.48 -4.5)
-		(size 1.78 8)
+		(at -27.94 -5.125)
+		(size 1.75 8.75)
 		(layers "F.Cu")
 	)
+	(pad "47" smd rect
+		(at -27.94 -5.125)
+		(size 1.75 8.75)
+		(layers "B.Cu")
+	)
 	(pad "50" smd rect
-		(at -30.48 -4.5)
-		(size 1.78 8)
+		(at -30.48 -5.125)
+		(size 1.75 8.75)
+		(layers "F.Cu")
+	)
+	(pad "49" smd rect
+		(at -30.48 -5.125)
+		(size 1.75 8.75)
 		(layers "B.Cu")
 	)
 	(embedded_fonts no)

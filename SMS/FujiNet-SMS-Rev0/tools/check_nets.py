@@ -57,7 +57,7 @@ def main():
     node_net, func_net, nets, parts = N.node_net, N.func_net, N.nets, N.parts
     one = N.one
     U1, J1, S3 = one('RP2354B'), one('SMS_Cart_Edge_50'), one('ESP32-S3-WROOM-1-N16R8')
-    J2, UCP, WS = one('microSD'), one('CP2102N-A02-GQFN28'), one('WS2812B-2020-V6')
+    J2, UCP, WS = one('microSD'), one('CP2102N-A02-GQFN28'), one('WS2812C-2020-V1')
     U14, LDO, QFET, QW = one('74HCT14'), one('AP2112K-3.3'), one('AO3401A'), one('2N7002')
     srams = N.by_value('AS6C4008-55TIN')
     for ref, what in ((U1, 'RP2354B'), (J1, 'edge'), (S3, 'ESP32-S3'), (U14, '74HCT14'), (LDO, 'AP2112K LDO'),
@@ -160,7 +160,9 @@ def main():
     chk('GP%d (WAIT) -> 2N7002 gate, source GND' % P['WAIT'],
         gate == func_net.get((QW, 'G')) and func_net.get((QW, 'S')) == 'GND')
     v33io = func_net.get((U1, 'IOVDD'))
-    chk('2N7002 gate pulled up to the RP IO rail (/WAIT held from power-on)', through_r(gate, v33io) == '10k')
+    # 4.7k, not 10k: it must beat GPIO34's reset pull-down (36-113k) past the 2N7002's 2.5 V max VGS(th)
+    # (docs/design-review-rev0.md, tools/audit/spice_checks.py)
+    chk('2N7002 gate pulled up to the RP IO rail by 4.7k (/WAIT held from power-on)', through_r(gate, v33io) == '4.7k')
     led = one('red')
     chk('GP%d (LED) -> 1k -> LED anode, cathode GND' % P['LED'],
         led is not None and through_r(rp(P['LED']), node_net.get((led, '2'))) == '1k' and node_net.get((led, '1')) == 'GND')
@@ -192,11 +194,25 @@ def main():
         chk('SRAM %s driven by a glue output' % f,
             any(r in glue and N.ptype.get((r, pin)) == 'output' for (r, pin, _) in nets.get(n, [])))
 
-    # ---- GPIO40-47 are not 5 V tolerant: inputs of 5 V parts only ----
+    # ---- RP2350-E9 (stepping A2): the glue enables and the SRAM chip select each pulled to GND by
+    # 8.2k or less, so a pad left in the undefined region after an RP reset cannot latch at ~2.2 V
+    # (RP2350 datasheet p.1366-1367) and assert /OE, /WE or both chip selects ----
+    val = lambda s_: float(s_.replace('k', 'e3').replace('R', ''))
+    for k in ('GAME', 'LOAD', 'RAMWE', 'MBOX'):
+        pd = through_r(rp(P[k]), 'GND')
+        chk('GP%d (%s): E9 pull-down to GND <= 8.2k' % (P[k], k), pd is not None and val(pd) <= 8.2e3)
+    pd = through_r(rp(P['BANK'] + 6), 'GND')
+    chk('GP%d (SA19, SRAM chip select): E9 pull-down to GND <= 8.2k' % (P['BANK'] + 6),
+        pd is not None and val(pd) <= 8.2e3)
+
+    # ---- GPIO40-47 are not 5 V tolerant: inputs of 5 V parts only (a pull-down to GND is no source) ----
+    def pulldown(r, pin):
+        return r.startswith('R') and not r.startswith('RN') and \
+            node_net.get((r, '2' if pin == '1' else '1')) == 'GND'
     for g in range(40, 48):
         n = rp(g)
         bad = [(r, pin, N.ptype.get((r, pin))) for (r, pin, f) in nets.get(n, [])
-               if r != U1 and N.ptype.get((r, pin)) != 'input']
+               if r != U1 and N.ptype.get((r, pin)) != 'input' and not pulldown(r, pin)]
         chk('GP%d (%s): nothing but inputs on the net (not 5 V tolerant)' % (g, n), not bad)
         chk('GP%d (%s): never an edge signal' % (g, n), n not in edge.values())
 
@@ -291,15 +307,16 @@ def main():
     for io in range(26, 38):
         chk('S3 IO%d (flash/PSRAM on N16R8) unused' % io, unconn(s3(io)))
 
-    # ---- edge footprint: 2.54 mm, odd pins one face, even the other, pin 1 east (PROVISIONAL) ----
+    # ---- edge footprint: 2.54 mm, even pins on the component side (F.Cu), pins 1/2 east ----
+    # (sources in make_edge_fp.py and tools/audit/edge_orientation.py)
     fpt = open(os.path.join(PRJ, 'FujiNet-SMS.pretty', 'SMS_Cart_Edge_50.kicad_mod')).read()
     pads = {int(m.group(1)): (float(m.group(2)), m.group(3)) for m in
             re.finditer(r'\(pad "(\d+)" smd rect\s*\(at ([-\d.]+) [-\d.]+\)\s*\(size [^)]*\)\s*\(layers "([FB])\.Cu"\)', fpt)}
     chk('edge footprint has 50 pads', sorted(pads) == list(range(1, 51)))
-    chk('edge: odd pads on F.Cu, even on B.Cu, pin 2k-1 over pin 2k',
-        all(pads[2 * k - 1][1] == 'F' and pads[2 * k][1] == 'B' and pads[2 * k - 1][0] == pads[2 * k][0] for k in range(1, 26)))
-    chk('edge: 2.54 mm pitch, pin 1 east (+x), pin 49 west',
-        all(abs((pads[2 * k - 1][0] - pads[2 * k + 1][0]) - 2.54) < 1e-6 for k in range(1, 25)) and pads[1][0] > 0 > pads[49][0])
+    chk('edge: even pads on F.Cu (component / label side), odd on B.Cu, pin 2k-1 behind pin 2k',
+        all(pads[2 * k][1] == 'F' and pads[2 * k - 1][1] == 'B' and pads[2 * k - 1][0] == pads[2 * k][0] for k in range(1, 26)))
+    chk('edge: 2.54 mm pitch, pins 1/2 east (+x), pins 49/50 west',
+        all(abs((pads[2 * k - 1][0] - pads[2 * k + 1][0]) - 2.54) < 1e-6 for k in range(1, 25)) and pads[2][0] > 0 > pads[50][0])
 
     # ---- general ----
     for n, nodes in nets.items():

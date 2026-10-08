@@ -470,7 +470,7 @@
       "pin_not_driven": "error",
       "pin_to_pin": "warning",
       "power_pin_not_driven": "error",
-      "same_local_global_label": "ignore",
+      "same_local_global_label": "warning",
       "similar_label_and_power": "warning",
       "similar_labels": "warning",
       "similar_power": "warning",
@@ -516,7 +516,7 @@
       },
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.15,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -588,7 +588,7 @@
       },
       {
         "netclass": "PWR",
-        "pattern": "BUCK_SW"
+        "pattern": "/power/BUCK_SW"
       },
       {
         "netclass": "PWR",
@@ -600,27 +600,27 @@
       },
       {
         "netclass": "USB",
-        "pattern": "USB_DP"
+        "pattern": "/USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "USB_DM"
+        "pattern": "/USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "RP_USB_DP"
+        "pattern": "/rp-core/RP_USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "RP_USB_DM"
+        "pattern": "/rp-core/RP_USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "UBRG_DP"
+        "pattern": "/usb/UBRG_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "UBRG_DM"
+        "pattern": "/usb/UBRG_DM"
       }
     ]
   },
@@ -760,8 +760,8 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "FujiNet-NES-Rev0.kicad_sch",
-        "name": "FujiNet-NES-Rev0",
+        "filename": "FujiNet-SMS-Rev0.kicad_sch",
+        "name": "FujiNet-SMS-Rev0",
         "uuid": "00000000-0000-0000-0000-000000000000"
       }
     ],
@@ -774,28 +774,20 @@
       "Root"
     ],
     [
-      "9eeae63a-1566-58ff-b304-5075c4325b29",
-      "edge"
+      "939ffe3b-7677-5731-9e90-9579025f1901",
+      "cart-bus"
     ],
     [
-      "de9ba0fb-e9c8-53f2-8fde-708b261ea26e",
-      "rp2354b"
+      "79894676-f4e2-5f4e-8a47-bacbde8a380d",
+      "rp-core"
     ],
     [
-      "f22eb0f2-edb2-55e4-a3af-193519524be3",
-      "sram"
+      "33557b77-e315-5510-b965-3e3c5287ccdf",
+      "fujinet"
     ],
     [
-      "25444489-b319-5465-993c-6d0280d7b795",
-      "glue"
-    ],
-    [
-      "c7712c0e-cda6-5898-b3a1-77515981b1dc",
-      "esp32s3-sd"
-    ],
-    [
-      "eaa17ed8-2afb-5a2a-aa7a-b6de3fe5d03b",
-      "usb-uart"
+      "19092f5a-1e49-5206-9bc4-25f1617567a8",
+      "usb"
     ],
     [
       "113877c5-6a44-5bff-9a74-179e8fd72159",

@@ -27,6 +27,8 @@ STOCK = {
     '74xx': ['74LS27', '74LS10'],                 # 74HCT27 / 74HCT10 (no HCT symbol in the library)
     'Transistor_FET': ['2N7002'],                 # console /WAIT pull-down
     'Connector_Generic': ['Conn_01x03'],          # RP debug UART header
+    'power': ['+1V1'],                            # DVDD (the RP2350 core rail) drawn as a power symbol
+    'Device': ['R_Pack04_Split'],                 # the 4-resistor arrays, one unit per resistor (drawn inline)
 }
 # symbols the NES cache carries that this board does not use
 DROP = {'74xx:74HCT595', '74xx:74LS20', '74xx:74LS32', 'MCU_Microchip_ATtiny:ATtiny13A-SS'}

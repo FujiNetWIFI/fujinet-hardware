@@ -6,7 +6,8 @@ board (it drives every divider from a 3.3 V test source):
    SN74HCT14 input (+-1 uA leakage, 10 pF); the console voltages at which VSENSE
    crosses the HCT14's VT+ / VT- limits.
 2. P-FET gate (the VBUS net, no USB): the SS34's reverse leakage (sourced from
-   +5V, so the node cannot rise above it) into the pull-down, today (22k+47k) and with the planned 4.7k; plus the gate's decay
+   +5V, so the node cannot rise above it) into the pull-down, without the VBUS-GND resistor (the first draft:
+   22k+47k only) and with it (R_VBPD 4.7k, fitted); plus the gate's decay
    after USB is unplugged with the console running (time until VGS < -2.5 V).
 3. /WAIT hold before the firmware runs: 2N7002 (level-1 model, VTO 1.6 typ /
    2.5 V max, K from ID(on) 500 mA at VGS 10 V) with its gate pull-up against
@@ -83,13 +84,9 @@ meas dc v_55 find v(vs) at=5.5
     l_ref, l = res('VBUS_SNS', 'GND')
     pd_ref, pd = res('VBUS', 'GND')
     print('\n== 2. AO3401A gate = VBUS net, console powering the cart (+5V = 5.0 V), SS34 reverse leakage into VBUS')
-    for label, extra in (('today: %s+%s only' % (h_ref, l_ref), ''),
-                         ('planned: + 4.7k VBUS-GND', 'R3 vbus 0 4.7k\n')):
-        if pd and 'planned' in label:
-            label = 'fitted: + %s %gk VBUS-GND' % (pd_ref, pd / 1e3)
-            extra = ''
-        elif pd:
-            extra = ''
+    assert pd, 'no VBUS-GND pull-down (R_VBPD) in design.py'
+    for label, extra in (('without: %s+%s only' % (h_ref, l_ref), ''),
+                         ('fitted: + %s %gk VBUS-GND' % (pd_ref, pd / 1e3), 'R4 vbus 0 %g\n' % pd)):
         vals = []
         for ua in (10, 50, 100, 500):
             deck = '''* gate node under SS34 leakage %d uA
@@ -105,8 +102,8 @@ op
 print v(vbus)
 .endc
 .end
-''' % (ua, ua, h, l, extra + ('R4 vbus 0 %g\n' % pd if pd else ''))
-            o = run('vbus_gate_%d%s' % (ua, '_pd' if 'planned' in label or 'fitted' in label else ''), deck)
+''' % (ua, ua, h, l, extra)
+            o = run('vbus_gate_%d%s' % (ua, '_pd' if extra else ''), deck)
             m = re.search(r'v\(vbus\)\s*=\s*([-+0-9.eE]+)', o)
             v = min(float(m.group(1)), 5.0) if m else float('nan')
             vals.append('%d uA -> %.2f V (VGS %+.2f V)' % (ua, v, v - 5.0))
@@ -114,7 +111,7 @@ print v(vbus)
     # unplug transient: VBUS cap (VBUS decoupling) from 5 V, console keeps +5V at 5.0 V, 50 uA leakage
     cvb = sum(1e-6 if p.value == '1uF' else 1e-7 if p.value == '100nF' else 0
               for p in D.PARTS if p.prefix == 'C' and 'VBUS' in p.pins.values())
-    for label, extra in (('today', ''), ('with 4.7k', 'R3 vbus 0 4.7k\n')):
+    for label, extra in (('without', ''), ('with %s' % pd_ref, 'R4 vbus 0 %g\n' % pd)):
         deck = '''* VBUS decay after unplug
 C1 vbus 0 %g IC=5
 R1 vbus sns %g
@@ -126,7 +123,7 @@ run
 meas tran t_on when v(vbus)=2.5 fall=1
 .endc
 .end
-''' % (cvb, h, l, extra + ('R4 vbus 0 %g\n' % pd if pd else ''))
+''' % (cvb, h, l, extra)
         o = run('vbus_unplug_' + label.replace(' ', '_').replace('.', ''), deck)
         t = meas(o, 't_on')
         print('  unplug, %s (VBUS %.1f uF, 50 uA leakage): gate below 2.5 V (VGS < -2.5 V, FET on) after %s'

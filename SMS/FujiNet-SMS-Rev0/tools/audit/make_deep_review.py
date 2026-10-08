@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Emit analysis/deep_review.json for the Rev0 schematic audit (kicad-happy Deep
-Review; docs/design-review-rev0.md, Part 1).
+Review; docs/design-review-rev0.md).  The first audit's three fixes (VBUS pull-down,
+/WAIT pull-up, CONS_5V bulk) are fitted and verified here; v2 adds the RP2350-E9
+pull-downs and the WS2812C / TS-1187A stock swaps.
 
 References are resolved from tools/design.py by topology (part value / MPN and
 the nets on its pins), never hard-coded, so the file tracks regeneration and
@@ -80,7 +82,7 @@ U_S3 = ref(lambda p: p.mpn.startswith('ESP32-S3'), 'S3')
 U_UART = ref(lambda p: p.mpn.startswith('CP2102N'), 'CP2102N')
 U_BUCK = ref(lambda p: p.mpn == 'AP63203WU-7', 'buck')
 U_LDO = ref(lambda p: p.mpn == 'AP2112K-3.3TRG1', 'LDO')
-D_WS = ref(lambda p: p.mpn == 'WS2812B-2020-V6', 'WS2812')
+D_WS = ref(lambda p: p.mpn == 'WS2812C-2020-V1', 'WS2812')
 D_LED = ref(lambda p: p.mpn == 'KT-0603R', 'LED')
 R_LED = ref(lambda p: p.prefix == 'R' and 'RP_LED' in p.pins.values(), 'LED R')
 Y1 = ref(lambda p: p.mpn == 'ABM8-272-T3', 'crystal')
@@ -89,6 +91,12 @@ TP_CONT = ref(lambda p: p.prefix == 'TP' and 'CONT_N' in p.pins.values(), 'TP CO
 TP_BREQ = ref(lambda p: p.prefix == 'TP' and 'BUSREQ_N' in p.pins.values(), 'TP BUSREQ')
 C_CONS = cap('CONS_5V')
 GLUE = U14 + U27 + U10 + U00
+R_VBPD = res('VBUS', 'GND')
+E9 = [p.ref for p in D.PARTS if p.prefix == 'R' and 'RP2350-E9' in p.desc]
+E9_NETS = [next(n for n in p.pins.values() if n != 'GND') for p in D.PARTS if p.ref in E9]
+SRAM_CE = {p.pins[str(D.SRAM_PIN['CE#'])]: p.ref for p in D.PARTS if p.mpn == 'AS6C4008-55TIN'}
+TIED = ', '.join('%s pin %s to %s' % (p.ref, k, v) for p in D.PARTS if p.value.startswith('74HCT')
+                 for k, v in sorted(p.pins.items()) if v in ('+5V', 'GND') and k not in ('7', '14'))
 
 
 def f(cat, sev, conf, summary, comps, ns, ds=(), comp=None, desc='', rec=''):
@@ -104,41 +112,54 @@ def f(cat, sev, conf, summary, comps, ns, ds=(), comp=None, desc='', rec=''):
 BUS_IN = ['RD_N', 'WR_N', 'CE_N', 'MREQ_N', 'IORQ_N', 'M1_N', 'RESET_N', 'CLK']
 F = [
  # ======================= warnings: changes planned in tools/design.py =======================
- f('power', 'warning', 'high',
-   'SS34 reverse leakage lifts the AO3401A gate (the VBUS net, pulled down only by the 69k CP2102N divider) when the console powers the cart: add 4.7k VBUS-GND',
-   [Q_CONS, D_VBUS, R_VBH, R_VBL], nets('VBUS', 'CONS_5V', '+5V'),
+ f('power', 'info', 'high',
+   'SS34 reverse leakage into the AO3401A gate (the VBUS net) when the console powers the cart: %s 4.7k VBUS-GND holds VGS at -2.8 V up to 500 uA (the 69k sense divider alone let 100 uA turn the FET off)' % R_VBPD,
+   [Q_CONS, D_VBUS, R_VBH, R_VBL, R_VBPD], nets('VBUS', 'CONS_5V', '+5V'),
    [('SS34', 2, 'Maximum DC reverse current'), ('AO3401A', 2, 'Gate Threshold Voltage')],
    {'description': 'gate = I_R x (22k + 47k) [|| 4.7k]; AO3401A VGS(th) -0.5..-1.3 V with the source at +5V; ngspice decks for leakage 10-500 uA and the unplug decay',
     'script': SP,
-    'result': 'today 50 uA -> VGS -1.55 V (weak), >= 100 uA -> gate at +5V, FET off, the console feeds the cart through the body diode (~0.7 V); '
-              'with 4.7k: 500 uA -> VGS -2.80 V (Rds < 85 mOhm); after USB unplug the gate falls below 2.5 V in 3.6 ms (today: never with 50 uA)'},
+    'result': 'without the 4.7k: 50 uA -> VGS -1.55 V (weak), >= 100 uA -> gate at +5V, FET off; '
+              'with it: 500 uA -> VGS -2.80 V (Rds < 85 mOhm); after USB unplug the gate falls below 2.5 V in 3.6 ms (never without it at 50 uA)'},
    'The SS34 is reverse-biased by +5V whenever the console alone powers the cart, and its leakage flows into VBUS, the P-FET gate. '
-   'Datasheet IR is 0.5 mA max at 25 C and 20 mA at 100 C (at 40 V). The same circuit was found and fixed in Fujiversal-Atari2600 Rev1 (R_VBPD); '
-   'NES Rev0 has the same 69k-only gate.',
-   'Planned in tools/design.py: R 4.7k VBUS-GND, 0603WAF4701T5E, LCSC C23162 (1.06 mA from VBUS with USB in). Backport to NES Rev0.'),
- f('power', 'warning', 'high',
-   '/WAIT is not guaranteed held before the firmware runs: 10k gate pull-up vs the RP2350 reset pull-down (36-113k) gives 2.58-3.03 V against a 2N7002 VGS(th) of up to 2.5 V',
+   'Datasheet IR is 0.5 mA max at 25 C and 20 mA at 100 C (at 40 V). Found by the first audit (as in Fujiversal-Atari2600 Rev1); '
+   'NES Rev0 R22 and FujiNet-7800 R24 carry the same fix.',
+   'Fitted: 4.7k VBUS-GND (0603WAF4701T5E, C23162); 1.06 mA from VBUS with USB in.'),
+ f('power', 'info', 'high',
+   '/WAIT is held before the firmware runs: %s 4.7k gate pull-up vs the RP2350 reset pull-down (36-113k) gives >= 2.92 V against a 2N7002 VGS(th) of up to 2.5 V' % R_WAIT,
    [Q_WAIT, R_WAIT, U_RP, J_EDGE], nets('WAIT_GATE', 'WAIT_N', '+3V3_RP'),
    [('2N7002', 2, 'Gate-Threshold Voltage'), ('RP2354B', 1341, 'IOVDD=3.3V 36 113 kΩ'),
     ('RP2354B', 1337, 'GPIO34 - 43 Digital IO (FT) IOVDD Pull-Down'), ('Z0840004', 1, 'WAIT Setup Time')],
    {'description': 'gate = 3.3 V x RPD / (RPD + R_pu); 2N7002 level-1 model VTO 1.6 / 2.5 V, K = 8.9 mA/V^2 from ID(on) >= 500 mA at 10 V; console /WAIT pull-up 4.7k or 10k; Z80 VIL 0.8 V',
     'script': SP,
-    'result': '10k: VTO 2.5 V + RPD 36k -> /WAIT 4.4-4.7 V (not held); 4.7k: every corner held (<= 0.17 V); static cost 0.70 mA while GPIO34 is low'},
+    'result': '4.7k: every corner held (<= 0.17 V); 10k (the first draft): VTO 2.5 V + RPD 36k -> /WAIT 4.4-4.7 V (not held); static cost 0.70 mA while GPIO34 is low'},
    'The hold exists so the Z80 cannot fetch from the cart before core1 serves it (sms_cart.h WAIT_PIN; main.c releases it after core1 starts). '
    'GPIO34 resets with its pull-down enabled; a 10k pull-up only wins with margin against a typical 2N7002.',
-   'Planned in tools/design.py: the WAIT_GATE pull-up 10k -> 4.7k (0603WAF4701T5E, C23162, the same line as the VBUS pull-down).'),
+   'Fitted: 4.7k (0603WAF4701T5E, C23162).'),
+ f('io', 'info', 'high',
+   'RP2350-E9: the mode bits and the SRAM chip select (%s) each carry a 4.7k pull-down (<= 8.2k), so a pad left as an input between VIL and VIH cannot latch at ~2.2 V and enable /OE, /WE or both SRAMs' % ', '.join(E9_NETS),
+   [U_RP] + E9 + SRAMS + GLUE, nets(*E9_NETS),
+   [('RP2354B', 1367, 'Increased leakage current on Bank 0 GPIO when pad input is enabled'),
+    ('RP2354B', 1368, 'with a low impedance source of 8.2 kΩ or less will overcome the erroneous leakage'),
+    ('RP2354B', 1368, 'This doesn’t affect the pull-down behaviour of the pads immediately following a PoR or RUN reset')],
+   {'description': 'E9: ~120 uA sourced by the pad, holding it near 2.2 V; 120 uA x 4.7k; current while the RP drives the line high', 'script': M,
+    'result': 'worst 0.56 V (< 74HCT VIL 0.8 V) on every line; 0.70 mA per pin driven high, 3.5 mA with all five high'},
+   'Affects the A2 stepping (fixed in A3/A4), and the stepping a buyer receives is not guaranteed. Right after a PoR or RUN reset the input enable is clear and the '
+   "pad pull-downs work; the window is any firmware state that leaves these pads as inputs with the output off (init, a crash, core1 restart). "
+   'At ~2.2 V the HCT glue reads GAME, MBOX, RAM_WE and LOAD as set, and SA19 at 2.2 V can select neither or both SRAMs, which would then fight on D0-D7. '
+   'FujiNet-7800 Rev0 added the same pull-downs.',
+   'Fitted: 4.7k pull-downs on GAME, LOAD, RAM_WE, MBOX and SA19; check_nets.py requires them.'),
  f('power', 'warning', 'medium',
-   'Console 5 V budget: the cart can draw ~480 mA peak / ~180 mA average from the console regulator (S3 TX through the buck, RP LDO, SRAM, glue, WS2812); CONS_5V has only 100 nF at the fingers',
+   'Console 5 V budget: the cart can draw ~460 mA peak / ~185 mA average from the console regulator (S3 TX through the buck, RP LDO, SRAM, glue, WS2812C); no published cart-slot current',
    [J_EDGE, Q_CONS, U_BUCK, U_LDO, U_S3, D_WS] + C_CONS + SRAMS, nets('CONS_5V', '+5V'),
    [('ESP32-S3-WROOM-1-N16R8', 27, 'Current delivered by external power supply'),
     ('ESP32-S3-WROOM-1-N16R8', 28, '802.11b, 1 Mbps, @20.5 dBm'),
-    ('WS2812B-2020-V6', 1, '12mA operating current per channel'),
+    ('WS2812C-2020-V1', 1, '5mA operating current per channel'),
     ('AS6C4008-55TIN', 3, 'Average Operating')],
-   {'description': 'buck input = 3.3 V x (S3 355 mA + SD 100 + CP2102N 12) / (5 V x 0.85); + RP 60, SRAM 12, HCT 6, WS2812 36 mA',
-    'script': M, 'result': '~477 mA peak, ~182 mA average; P-FET 14 mW at peak'},
+   {'description': 'buck input = 3.3 V x (S3 355 mA + SD 100 + CP2102N 12) / (5 V x 0.85); + RP 60, SRAM 12, HCT 6, WS2812C 15 mA, E9 pull-downs 3.5 mA',
+    'script': M, 'result': '~460 mA peak, ~185 mA average; P-FET 13 mW at peak'},
    'SMS2 service manual: LM7805 on a heat sink, AC adaptors DC 9 V 0.5 A (AU/EU/UK) or 1 A; no published cart-slot current. '
    'With USB plugged in the P-FET is off and USB carries the cart. The 2600 Rev1 cart has 10 uF + 100 nF on CONS_5V.',
-   'Planned in tools/design.py: C 10uF CONS_5V-GND at the fingers (CL10A106KP8NNNC, C19702). Bring-up: measure the console rail under WiFi TX; '
+   'Fitted: 10 uF + 100 nF on CONS_5V at the fingers (CL10A106KP8NNNC, C19702). Bring-up: measure the console rail under WiFi TX (TP on CONS_5V); '
    'firmware may cap S3 TX power; README: recommend a >= 1 A adaptor.'),
  f('sourcing', 'warning', 'high',
    'AS6C4008-55TIN, 74HCT27D,653 and 74HCT10D,653 are at 0 stock at JLCPCB and LCSC (2026-10-06); TI CD74HCT27M96 / CD74HCT10M are pin-identical second sources',
@@ -158,10 +179,10 @@ F = [
    [('74HCT27D,653', 2, '1A, 2A, 3A 1, 3, 9'), ('74HCT27D,653', 2, '1Y, 2Y, 3Y 12, 6, 8'),
     ('74HCT10D,653', 2, '1A, 2A, 3A 1, 3, 9'), ('74HCT10D,653', 2, '1Y, 2Y, 3Y 12, 6, 8'),
     ('SN74HCT14DR', 3, '1A 1 2 I Channel 1 input'), ('SN74HCT00DR', 1, 'Quadruple 2-Input Positive-NAND Gates')],
-   {'description': 'every glue pin of the kicad-cli netlist compared with design.py; symbol pin types read from the lib_symbols embedded in glue.kicad_sch',
+   {'description': 'every glue pin of the kicad-cli netlist compared with design.py; symbol pin types read from the lib_symbols embedded in cart-bus.kicad_sch',
     'result': '70 pins, 0 mismatches; symbol outputs are pins 12/6/8 (27, 10), 2/4/6/8/10/12 (14), 3/6/8/11 (00)'},
    'SN74HCT00 pin-out is a figure (p.3, read visually): 1A 1, 1B 2, 1Y 3, 2A 4, 2B 5, 2Y 6, GND 7, 3Y 8, 3A 9, 3B 10, 4Y 11, 4A 12, 4B 13, VCC 14. '
-   'Unused third inputs: U7B tied to +5V (NAND), U5C and U6A to GND (NOR).'),
+   'Unused inputs: %s (NAND inputs high, NOR inputs low).' % TIED),
  f('io', 'info', 'high',
    'PWR_OK sense: 0.82 x CONS_5V = 3.69 V at 4.5 V against SN74HCT14 VT+ max 1.9 V (4.5 V) / 2.1 V (5.5 V): PWR_OK is high from a 2.3-2.6 V console rail and drops at 0.6-1.7 V',
    [R_VSH, R_VSL] + U14, nets('VSENSE', 'CONS_5V', 'PWR_OK', 'PWR_OK_N'),
@@ -244,7 +265,7 @@ F = [
    SRAMS, nets('SRAM_OE_N', 'SRAM_WE_N', 'SA19', 'SA19_N', 'D0', 'A0'),
    [('AS6C4008-55TIN', 2, 'TSOP-I/STSOP'), ('AS6C4008-55TIN', 14, 'AS6C4008-55TIN'), ('AS6C4008-55TIN', 3, 'Supply Voltage')],
    {'description': 'datasheet TSOP-I: 1 A11 2 A9 3 A8 4 A13 5 WE# 6 A17 7 A15 8 Vcc 9 A18 10 A16 11 A14 12 A12 13-20 A7..A0 21-23 DQ0-2 24 Vss 25-29 DQ3-7 30 CE# 31 A10 32 OE#; compared with the netlist',
-    'result': '32/32 (U2 /CE = SA19, U3 /CE = SA19_N)'}),
+    'result': '32/32 (%s /CE = SA19, %s /CE = SA19_N)' % (SRAM_CE['SA19'], SRAM_CE['SA19_N'])}),
  f('connector', 'info', 'high',
    '/CONT (edge 34) and /BUSREQ (edge 44) can stay on test pads: /CONT is a general-purpose input the I/O chip reports on the second controller port, not a boot or cart-detect line',
    [J_EDGE, TP_CONT, TP_BREQ], nets('CONT_N', 'BUSREQ_N'),
@@ -253,7 +274,7 @@ F = [
    {'description': 'web research: SMS Power! CartridgeSlot and Pinouts pages, Charles MacDonald smstech (BIOS detects media by the TMR SEGA header), a parts page reporting fingers 34 and 44 absent on the Sega 171-5507D board (numbering not cross-checked)',
     'result': 'stock carts leave both open; the console must pull /BUSREQ up (it runs with no cart); SMS Power lists /CONT as unnecessary for slot adaptors'},
    'Mark III / SMS1 / SMS2 boot the cart by the BIOS header check after enabling the slot through port $3E; the Power Base Converter has no BIOS. Nothing found ties boot to /CONT.',
-   'No change: keep TP5/TP6, nothing fitted (no 0R to GND).'),
+   'No change: keep %s / %s, nothing fitted (no 0R to GND).' % (TP_CONT, TP_BREQ)),
  f('protection', 'info', 'medium',
    'No ESD parts on the 50-pin edge, as on every SMS cart; the RP2350 FT pads carry enhanced ESD protection; USB-C has ESD5Z on D+, D-, VBUS',
    [J_EDGE, U_RP], nets('RD_N', 'CE_N'),
@@ -271,7 +292,7 @@ F = [
    [U_RP, U_LDO], nets('+3V3_RP', 'VREG_AVDD', 'DVDD'),
    [('AP2112K-3.3TRG1', 4, 'Start-up Time'), ('RP2354B', 1340, 'VPIN_FT'),
     ('RP2354B', 444, 'With the exception of the two voltage regulator supplies'), ('RP2354B', 455, 'must be RC filtered')],
-   {'description': 'design.py vs NES Rev0 design.py, part by part', 'result': 'RP core, LDO and every passive on the rp2354b/power sheets identical to NES Rev0 (NES review Deep Review, Power / rails)'}),
+   {'description': 'design.py vs NES Rev0 design.py, part by part', 'result': 'RP core, LDO and every passive on the rp-core / power sheets identical to NES Rev0 (NES review Deep Review, Power / rails)'}),
  f('power', 'info', 'high', 'RP2354B supply pins: IOVDD 5, 15, 24, 29, 41, 50, 60, 76; DVDD 10, 32, 51; 48 GPIO pin numbers checked against the datasheet table',
    [U_RP], nets('+3V3_RP', 'DVDD'),
    [('RP2354B', 1339, '5, 15, 24, 29, 41, 50, 60, 76'), ('RP2354B', 1337, 'GPIO34 - 43 Digital IO (FT) IOVDD Pull-Down')],
@@ -287,9 +308,10 @@ F = [
    [U_S3] + cap('S3_EN'), nets('S3_EN'),
    [('ESP32-S3-WROOM-1-N16R8', 41, 'RC delay circuit at the EN pin')],
    {'description': 'kicad-happy simulate_subcircuits (ngspice)', 'result': '15.88 Hz'}),
- f('led', 'info', 'high', 'WS2812B-2020 on +5V: VDD 3.7-5.3 V covers 4.3-5.25 V; VIH 2.7 V takes the S3 3.3 V data through 330R; 36 mA at full white',
+ f('led', 'info', 'high', 'WS2812C-2020-V1 on +5V: VDD 3.7-5.3 V covers 4.3-5.25 V; VIH 2.7 V takes the S3 3.3 V data through 330R; 15 mA at full white',
    [D_WS], nets('+5V', 'WS_DIN'),
-   [('WS2812B-2020-V6', 3, '+3.7~+5.3'), ('WS2812B-2020-V6', 3, '2.7V'), ('WS2812B-2020-V6', 1, '12mA operating current per channel')]),
+   [('WS2812C-2020-V1', 3, '+3.7~+5.3'), ('WS2812C-2020-V1', 3, '2.7V'), ('WS2812C-2020-V1', 1, '5mA operating current per channel')],
+   None, 'Replaces the WS2812B-2020-V6 (5 at JLCPCB on 2026-10-07): same 2020 package, land and pin order (1 DO, 2 GND, 3 DI, 4 VDD).'),
  f('led', 'info', 'high', 'Activity LED red KT-0603R from GPIO33 through 1k: 1.3-1.5 mA',
    [D_LED, R_LED, U_RP], nets('RP_LED', 'RP_LED_A'),
    [('KT-0603R', 3, 'Forward Voltage')],

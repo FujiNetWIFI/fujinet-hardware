@@ -15,17 +15,26 @@ Z80: Zilog PS0178 (Z8400 NMOS, 4 MHz column; the SMS1 also uses NEC D780C-1 / Z0
 Console /CE: /MREQ gated by the I/O chip's slot enable (315-5216 / 315-5237); no published delay,
      T_CE below is an assumption (PROVISIONAL).  SMS clock 3.579545 MHz, taken as 50 % duty.
 
+Each gate's tpd follows the MPN tools/design.py fits for its value.
+
 Usage: python3 tools/audit/timing_margins.py [--ti]
-  --ti: the TI second sources for the out-of-stock Nexperia parts, CD74HCT27M96 29 ns and
+  --ti: as if the TI second sources were fitted for the Nexperia parts, CD74HCT27M96 29 ns and
         CD74HCT10M 30 ns (TI SCHS406 / SCHS404, 4.5 V, 50 pF, -40..85 C).
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import design as D
 
-TPD = {'74HCT14': 40.0, '74HCT00': 25.0, '74HCT27': 26.0, '74HCT10': 30.0}
-if '--ti' in sys.argv:
-    TPD.update({'74HCT27': 29.0, '74HCT10': 30.0})
+TPD_MPN = {'SN74HCT14DR': 40.0, 'SN74HCT00DR': 25.0, '74HCT27D,653': 26.0, '74HCT10D,653': 30.0,
+           'CD74HCT27M96': 29.0, 'CD74HCT10M': 30.0}
+TI_ALT = {'74HCT27D,653': 'CD74HCT27M96', '74HCT10D,653': 'CD74HCT10M'}
+TPD = {}
+for _p in D.PARTS:
+    if _p.value.startswith('74HCT'):
+        _m = TI_ALT.get(_p.mpn, _p.mpn) if '--ti' in sys.argv else _p.mpn
+        if _m not in TPD_MPN:
+            raise SystemExit('timing_margins: no tpd for %s (%s); add its datasheet figure' % (_m, _p.ref))
+        TPD[_p.value] = max(TPD.get(_p.value, 0.0), TPD_MPN[_m])
 TPD_MIN = 3.0                                    # ns, no datasheet minimum: assume a fast gate
 tAA, tOE, tWP, tDW, tDH, tWR = 55.0, 30.0, 45.0, 25.0, 0.0, 0.0
 TC = 1e3 / 3.579545                              # 279.4 ns

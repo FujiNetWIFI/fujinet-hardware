@@ -2,8 +2,9 @@
 """Numbers behind the Rev0 schematic audit (docs/design-review-rev0.md, Part 1):
 the console-sense divider against the SN74HCT14 thresholds, the P-FET gate under
 the SS34's reverse leakage, the /WAIT FET gate against the RP2350 reset
-pull-down, logic levels across the 3.3 V / 5 V boundary, the +5V rail with USB
-plugged in, the console 5 V budget, LED current, crystal load and the RP LDO.
+pull-down, the RP2350-E9 pull-downs, logic levels across the 3.3 V / 5 V
+boundary, the +5V rail with USB plugged in, the console 5 V budget, LED current,
+crystal load and the RP LDO.
 
 Parts are found by their nets in tools/design.py (not by reference), so the
 script keeps working when references move.  Datasheet limits are the figures
@@ -49,6 +50,9 @@ N7002_K_MIN = 0.5 / (10 - 2.5) ** 2                 # A/V^2 from ID(on) >= 500 m
 AO3401_VTH = (-0.5, -0.9, -1.3)                     # AO3401A VGS(th) (p.2)
 SS34_IR = (0.5e-3, 20e-3)                           # SS34 max reverse current at 40 V, 25 C / 100 C (p.2)
 Z80_VIL = 0.8                                       # Z80 input low (TTL)
+E9_RMAX = 8.2e3                                     # RP2350-E9: a pull to GND of <= 8.2k overcomes the leakage (RP2354B.pdf p.1368)
+E9_ILEAK = 120e-6                                   # its typical source current, holding the pad near 2.2 V
+WS_MA = 5e-3                                        # WS2812C-2020-V1: 5 mA per channel (p.1)
 
 
 def main():
@@ -71,12 +75,12 @@ def main():
 
     # ---- P-FET gate (= VBUS) with no USB: SS34 reverse leakage into the pull-down ---------
     vh, vl = two_pin('VBUS', 'VBUS_SNS'), two_pin('VBUS_SNS', 'GND')
-    pd_planned = two_pin('VBUS', 'GND')
+    pd = two_pin('VBUS', 'GND')
     div = ohms(vh) + ohms(vl)
     out('\n== P-FET gate (VBUS net) with the console powering the cart, SS34 reverse-biased by +5V')
-    out('  pull-down today: %s + %s = %.0f k%s' % (vh.value, vl.value, div / 1e3,
-                                                     ('; plus %s %s VBUS-GND' % (pd_planned.ref, pd_planned.value)) if pd_planned else ''))
-    cases = [('69k divider only', div), ('with 4.7k VBUS-GND (planned)', par(div, 4.7e3))]
+    out('  pull-down: %s + %s = %.0f k%s' % (vh.value, vl.value, div / 1e3,
+                                           ('; plus %s %s VBUS-GND' % (pd.ref, pd.value)) if pd else ' (no VBUS-GND resistor!)'))
+    cases = [('69k divider only (first draft)', div), ('with %s %s VBUS-GND' % (pd.ref, pd.value) if pd else 'with 4.7k', par(div, 4.7e3))]
     for name, r in cases:
         for ua in (10, 20, 50, 100, 500):
             vg = min(ua * 1e-6 * r, 5.0)
@@ -85,7 +89,7 @@ def main():
             out('  %-30s I_R %3d uA -> gate %.2f V, VGS %+.2f V: %s' % (name, ua, vg, vgs, state))
     out('  SS34 IR max at 40 V: 0.5 mA at 25 C, 20 mA at 100 C; with 4.7k the gate stays under 2.5 V up to %.0f uA'
         % (2.5 / par(div, 4.7e3) * 1e6))
-    out('  4.7k costs %.2f mA from VBUS with USB in; VBUS discharge tau after unplug: %.1f ms (now %.0f ms, 1.1 uF)'
+    out('  4.7k costs %.2f mA from VBUS with USB in; VBUS discharge tau after unplug: %.1f ms (%.0f ms without it, 1.1 uF)'
         % (5.0 / 4.7e3 * 1e3, par(div, 4.7e3) * 1.1e-6 * 1e3, div * 1.1e-6 * 1e3))
 
     # ---- /WAIT: 2N7002 gate = pull-up to +3V3_RP against the RP2350 reset pull-down ---------
@@ -104,11 +108,25 @@ def main():
     for rc in (10e3, 4.7e3, 3.3e3):
         out('  console /WAIT pull-up %.1fk needs %.2f mA to reach Z80 VIL 0.8 V' % (rc / 1e3, (5.0 - Z80_VIL) / rc * 1e3))
 
+    # ---- RP2350-E9: pull-downs that hold the mode bits and the chip select low -----------------
+    e9 = [p for p in D.PARTS if p.prefix == 'R' and 'RP2350-E9' in p.desc]
+    out('\n== RP2350-E9 (A2 stepping): pad input enabled, output off, between VIL and VIH -> ~%.0f uA source, '
+        'pad held near 2.2 V; a pull to GND of <= %.1fk overcomes it' % (E9_ILEAK * 1e6, E9_RMAX / 1e3))
+    e9_ma = 0.0
+    for p in e9:
+        r = ohms(p)
+        net = next(n for n in p.pins.values() if n != 'GND')
+        v = E9_ILEAK * r
+        e9_ma += 3.3 / r * 1e3
+        out('  %-4s %-5s on %-7s %s: worst leakage into it %.2f V (< VIL 0.8 V: %s); %.2f mA from the RP pin while it drives high'
+            % (p.ref, p.value, net, 'OK' if r <= E9_RMAX else 'TOO WEAK', v, 'yes' if v < 0.8 else 'NO', 3.3 / r * 1e3))
+    out('  %d pull-downs, %.1f mA from +3V3_RP with every one driven high' % (len(e9), e9_ma))
+
     # ---- logic levels across the boundary -------------------------------------------------
     out('\n== levels')
     out('  RP out -> 74HCT in: VOH %.2f V (min, rated load; ~3.3 V into CMOS) vs VIH %.1f V: %+.2f V' % (RP_VOH_MIN, HCT_VIH, RP_VOH_MIN - HCT_VIH))
-    out('  RP out (SA13-19, SA19 = U2 /CE) -> AS6C4008: VIH %.1f V at VCC 4.5-5.5 V: %+.2f V (min VOH); %+.2f V at 3.25 V'
-        % (SRAM_VIH_5V, RP_VOH_MIN - SRAM_VIH_5V, 3.25 - SRAM_VIH_5V))
+    out('  RP out (SA13-19, SA19 = %s /CE) -> AS6C4008: VIH %.1f V at VCC 4.5-5.5 V: %+.2f V (min VOH); %+.2f V at 3.25 V'
+        % (D.KEY['U_SRAM0'], SRAM_VIH_5V, RP_VOH_MIN - SRAM_VIH_5V, 3.25 - SRAM_VIH_5V))
     out('  RP out (D0-D7 via 100R, LOAD) -> AS6C4008 DQ: same VIH %.1f V; -> Z80 (TTL VIH 2.0 V): %+.2f V' % (SRAM_VIH_5V, RP_VOH_MIN - 2.0))
     out('  console -> RP FT pads: VIH %.1f V at IOVDD 3.3 V (not 0.65 x IOVDD); NMOS VOH min 2.4 V: %+.2f V' % (RP_VIH_FT, 2.4 - RP_VIH_FT))
 
@@ -128,10 +146,10 @@ def main():
     buck_pk = 3.3 * (s3_peak + sd + cp) / (5.0 * eta)
     buck_avg = 3.3 * (s3_avg + 0.02 + cp) / (5.0 * eta)
     rp = 0.060                             # RP2350 at 200 MHz + IO (LDO: input = output current)
-    sram = 0.010 + 0.002                   # selected AS6C4008 ICC1 10 mA max at 1 us cycle; the other chip standby (U2 /CE at 3.3 V: TTL level)
+    sram = 0.010 + 0.002                   # selected AS6C4008 ICC1 10 mA max at 1 us cycle; the other chip standby (its /CE at 3.3 V: TTL level)
     hct = 5 * 0.00002 + 12 * 0.0005        # ICC 20 uA each + ~0.5 mA per TTL-level input (dICC 2.9 mA max at 2.4 V/5.5 V)
-    ws = 0.036                             # WS2812B-2020 12 mA x 3 at full white
-    misc = 3.3 / 4.7e3 + 5.0 / 122e3
+    ws = 3 * WS_MA                         # WS2812C-2020-V1 5 mA x 3 at full white
+    misc = 3.3 / 4.7e3 + 5.0 / 122e3 + e9_ma / 1e3     # /WAIT pull-up, PWR_OK divider, E9 pull-downs (all high)
     pk = buck_pk + rp + sram + hct + ws + misc
     av = buck_avg + 0.04 + sram + hct + 0.005 + misc
     out('  buck input %.0f mA peak (S3 TX 355 mA + SD 100 + CP2102N 12 at 3.3 V, eta %.2f), %.0f mA average' % (buck_pk * 1e3, eta, buck_avg * 1e3))

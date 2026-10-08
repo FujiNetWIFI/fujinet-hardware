@@ -150,8 +150,44 @@ def place(board, fp, obs, bodies):
     return False
 
 
+PIN1_MPNS = ('AS6C4008-55TIN',)    # parts the assembler places without an EasyEDA footprint: mark pin 1 boldly
+PIN1_R, PIN1_OUT = 0.4, 1.2         # dot radius; its centre beyond pin 1 along the pin row (mm)
+
+
+def pin1_marks(board):
+    """A filled F.Silkscreen dot beyond pin 1 of each consigned TSOP, along its pin row (the TSOP-I
+    convention the assembler's preview is checked against).  Idempotent: an existing dot there is
+    replaced."""
+    sys.path.insert(0, HERE)
+    import design as D
+    refs = [p.ref for p in D.PARTS if p.mpn in PIN1_MPNS]
+    for r in refs:
+        fp = board.FindFootprintByReference(r)
+        pads = {p.GetNumber(): p.GetPosition() for p in items(fp.Pads())}
+        p1, p2 = pads['1'], pads['2']
+        dx, dy = p1.x - p2.x, p1.y - p2.y
+        n = (dx * dx + dy * dy) ** 0.5
+        c = pcbnew.VECTOR2I(int(p1.x + dx / n * MM(PIN1_OUT)), int(p1.y + dy / n * MM(PIN1_OUT)))
+        for d in [x.Cast() for x in items(board.Drawings())]:
+            if isinstance(d, pcbnew.PCB_SHAPE) and d.GetLayer() == pcbnew.F_SilkS and \
+                    d.GetShape() == pcbnew.SHAPE_T_CIRCLE and (d.GetCenter() - c).EuclideanNorm() < MM(0.3):
+                board.Remove(d)
+        dot = pcbnew.PCB_SHAPE(board)
+        dot.SetShape(pcbnew.SHAPE_T_CIRCLE)
+        dot.SetCenter(c)
+        dot.SetEnd(pcbnew.VECTOR2I(c.x + MM(PIN1_R) - MM(0.075), c.y))
+        dot.SetWidth(MM(0.15))
+        dot.SetFilled(True)
+        dot.SetLayer(pcbnew.F_SilkS)
+        board.Add(dot)
+    return refs
+
+
 def main():
     moved, hidden = [], []
+    board = pcbnew.LoadBoard(PCB)
+    marked = pin1_marks(board)
+    board.Save(PCB)
     for _ in range(3):
         v = drc()
         if not v:
@@ -171,8 +207,8 @@ def main():
                 hidden.append(r)
         board.Save(PCB)
     left = drc()
-    print('fix_silk: moved %d refs (%s); hidden %d (%s); %d silk warnings left'
-          % (len(set(moved)), ' '.join(sorted(set(moved))), len(hidden), ' '.join(hidden), len(left)))
+    print('fix_silk: pin-1 dots on %s; moved %d refs (%s); hidden %d (%s); %d silk warnings left'
+          % (' '.join(marked), len(set(moved)), ' '.join(sorted(set(moved))), len(hidden), ' '.join(hidden), len(left)))
 
 
 if __name__ == '__main__':

@@ -397,6 +397,11 @@ FIVE_V_NOTCH_X = 139.5   # the +5V island also runs up the east edge east of thi
 FIVE_V_POLY = [(50.0, 66.0), (92.0, 66.0), (92.0, 50.0), (117.0, 50.0), (117.0, 60.0), (139.5, 60.0),
                (139.5, 34.0), (150.0, 34.0), (150.0, 110.0), (50.0, 110.0)]
 LABEL = ((118.0, 90.0), (50.0, 30.0))     # shell label recess: centre (board x, y), size (w, h)
+# F.Silkscreen texts, in spots clear of pads, courtyards and other silk on the routed P3 board
+# (found by rasterising it, 2026-10-08): the title centred above the edge; JLCPCB's order number
+# (export.py adds it to the JLC zip only; tools/audit/check_fab.py re-checks the spot)
+TITLE_XY = (104.25, 103.75)
+JLC_ORDER = ((134.0, 65.4), 1.0)           # centre, text height (mm)
 RP_ROT = 90
 SRAM0_FANIN = VARIANT in ('P1', 'P2', 'P3')     # gen_pcb.sram0_fanin: the ROM-spot SRAM's locked fan-in
 if VARIANT == 'P0':

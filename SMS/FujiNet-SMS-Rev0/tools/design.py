@@ -17,11 +17,11 @@ PROJECT = 'FujiNet-SMS-Rev0'
 NC = None  # explicit no-connect
 
 SHEETS = [  # (file stem, title, page): one sheet per board region, console side first
-    ('cart-bus', 'Cartridge bus: edge, RP2354B GPIO, 1 MB SRAM, 74HCT glue', 2),
-    ('rp-core', 'RP2354B core: supplies, core regulator, crystal, USB, RUN / BOOTSEL', 3),
-    ('fujinet', 'FujiNet: ESP32-S3, microSD, status LED', 4),
+    ('cart-bus', 'Cartridge bus: edge, SRAM, RP GPIO, glue', 2),
+    ('rp-core', 'RP2354B core: supplies, crystal, USB, RUN', 3),
+    ('fujinet', 'FujiNet: ESP32-S3, microSD, LED', 4),
     ('usb', 'USB-C and the CP2102N bridge', 5),
-    ('power', 'Power: console 5V / USB OR, 3.3V buck, RP LDO', 6),
+    ('power', 'Power: 5V OR, 3.3V buck, RP LDO', 6),
 ]
 SHEET_ORDER = [s[0] for s in SHEETS]
 
@@ -411,7 +411,7 @@ s3 = {}
 for fn, pad in S3_PAD.items():
     for p in (pad if isinstance(pad, list) else [pad]):
         s3[p] = 'GND' if fn == 'GND' else '+3V3' if fn == '3V3' else S3_NET.get(fn, NC)
-add('U', 'RF_Module:ESP32-S3-WROOM-1', 'ESP32-S3-WROOM-1-N16R8', FP('ESP32-S3-WROOM-1'), s3,
+add('U', '%s:ESP32-S3-WROOM-1_Fn' % LIB, 'ESP32-S3-WROOM-1-N16R8', FP('ESP32-S3-WROOM-1'), s3,
     mpn='ESP32-S3-WROOM-1-N16R8', lcsc='C2913202', desc='FujiNet core (fujiversal-sms)', key='U_S3')
 C('22uF', '+3V3', desc='S3 bulk (WiFi TX bursts)', key='C_S3BULK')
 C('100nF', '+3V3', desc='S3 decoupling', key='C_S3')
@@ -438,7 +438,7 @@ C('100nF', '+5V', desc='WS2812 decoupling', key='C_WS')
 
 # =========================================================================
 sheet('usb')
-add('J', 'Connector:USB_C_Receptacle_USB2.0_16P', 'USB-C', FP('USB_C_Receptacle_HRO_TYPE-C-31-M-12'),
+add('J', '%s:USB_C_USB2.0_16P_Fn' % LIB, 'USB-C', FP('USB_C_Receptacle_HRO_TYPE-C-31-M-12'),
     {'A1': 'GND', 'A4': 'VBUS', 'A5': 'CC1', 'A6': 'UBRG_DP', 'A7': 'UBRG_DM', 'A8': NC,
      'A9': 'VBUS', 'A12': 'GND', 'B1': 'GND', 'B4': 'VBUS', 'B5': 'CC2', 'B6': 'UBRG_DP',
      'B7': 'UBRG_DM', 'B8': NC, 'B9': 'VBUS', 'B12': 'GND', 'SH': 'GND'},

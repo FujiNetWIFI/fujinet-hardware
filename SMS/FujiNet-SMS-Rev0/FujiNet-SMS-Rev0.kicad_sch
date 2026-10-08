@@ -6,17 +6,17 @@
 	(paper "A3")
 	(title_block
 		(title "FujiNet SMS Rev0")
-		(date "2026-10-06")
+		(date "2026-10-08")
 		(rev "0")
 		(company "FujiNet")
 		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
 		(comment 2 "CERN-OHL-W-2.0 (derived from FujiNet-NES-Rev0 and its sources)")
-		(comment 3 "Rev0 audit 2026-10-06: kicad-happy + datasheets, see docs/design-review-rev0.md")
+		(comment 3 "Rev0 v2 2026-10-08: board co-designed with this schematic, see docs/floorplan-study.md")
 	)
 	(lib_symbols)
 	(sheet
-		(at 30.48 50.8)
-		(size 50.8 25.4)
+		(at 63.5 71.12)
+		(size 53.34 119.38)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -31,7 +31,7 @@
 		)
 		(uuid "939ffe3b-7677-5731-9e90-9579025f1901")
 		(property "Sheetname" "cart-bus"
-			(at 30.48 50.1 0)
+			(at 63.5 70.42 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -41,7 +41,7 @@
 			)
 		)
 		(property "Sheetfile" "cart-bus.kicad_sch"
-			(at 30.48 76.8 0)
+			(at 63.5 191.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58,8 +58,51 @@
 		)
 	)
 	(sheet
-		(at 106.68 50.8)
-		(size 50.8 25.4)
+		(at 124.46 180.34)
+		(size 35.56 33.02)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "113877c5-6a44-5bff-9a74-179e8fd72159")
+		(property "Sheetname" "power"
+			(at 124.46 179.64 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 124.46 213.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-SMS-Rev0"
+				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 124.46 50.8)
+		(size 35.56 116.84)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -74,7 +117,7 @@
 		)
 		(uuid "79894676-f4e2-5f4e-8a47-bacbde8a380d")
 		(property "Sheetname" "rp-core"
-			(at 106.68 50.1 0)
+			(at 124.46 50.1 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -84,7 +127,7 @@
 			)
 		)
 		(property "Sheetfile" "rp-core.kicad_sch"
-			(at 106.68 76.8 0)
+			(at 124.46 168.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -92,8 +135,8 @@
 				(justify left top)
 			)
 		)
-		(pin "BOOTSEL_CTL" bidirectional
-			(at 157.48 55.88 0)
+		(pin "BOOTSEL_CTL" input
+			(at 160.02 60.96 0)
 			(uuid "e6643523-1bcf-5142-8687-5c56727af337")
 			(effects
 				(font
@@ -102,8 +145,28 @@
 				(justify right)
 			)
 		)
-		(pin "RUN_CTL" bidirectional
-			(at 157.48 58.42 0)
+		(pin "USB_DP" bidirectional
+			(at 160.02 63.5 0)
+			(uuid "1589456b-3205-5f75-a5c3-3fe543e1341a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 160.02 66.04 0)
+			(uuid "e3a428dd-537b-5072-a920-62f11cff7d06")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RUN_CTL" input
+			(at 160.02 68.58 0)
 			(uuid "1128a04f-7d9e-54ac-8131-fbae67d4851a")
 			(effects
 				(font
@@ -113,28 +176,8 @@
 			)
 		)
 		(pin "S3_EN" bidirectional
-			(at 157.48 60.96 0)
+			(at 160.02 101.6 0)
 			(uuid "6896d3ee-475c-5451-85ac-7d32b5cc0ab6")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "USB_DM" bidirectional
-			(at 157.48 63.5 0)
-			(uuid "e3a428dd-537b-5072-a920-62f11cff7d06")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "USB_DP" bidirectional
-			(at 157.48 66.04 0)
-			(uuid "1589456b-3205-5f75-a5c3-3fe543e1341a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -151,8 +194,8 @@
 		)
 	)
 	(sheet
-		(at 182.88 50.8)
-		(size 50.8 30.48)
+		(at 177.8 30.48)
+		(size 27.94 88.9)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -167,7 +210,7 @@
 		)
 		(uuid "33557b77-e315-5510-b965-3e3c5287ccdf")
 		(property "Sheetname" "fujinet"
-			(at 182.88 50.1 0)
+			(at 177.8 29.78 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -177,7 +220,7 @@
 			)
 		)
 		(property "Sheetfile" "fujinet.kicad_sch"
-			(at 182.88 81.88 0)
+			(at 177.8 119.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -185,84 +228,84 @@
 				(justify left top)
 			)
 		)
-		(pin "BOOTSEL_CTL" bidirectional
-			(at 233.68 55.88 0)
+		(pin "BOOTSEL_CTL" output
+			(at 177.8 60.96 180)
 			(uuid "d6ba66b1-4746-5295-a70a-e761cfb37abf")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
-			)
-		)
-		(pin "RUN_CTL" bidirectional
-			(at 233.68 58.42 0)
-			(uuid "c9674213-112b-525c-814a-c38bf6c46e3a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "S3_EN" bidirectional
-			(at 233.68 60.96 0)
-			(uuid "7b84a94d-24bf-56de-88e6-56285fd02457")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "S3_IO0" bidirectional
-			(at 233.68 63.5 0)
-			(uuid "a48d3a98-8145-50f1-81c0-fb40a2c7ca89")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "S3_RXD" bidirectional
-			(at 233.68 66.04 0)
-			(uuid "22491f5b-7c68-5778-be66-871c98d23eea")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "S3_TXD" bidirectional
-			(at 233.68 68.58 0)
-			(uuid "fb52c01a-28e6-50cd-aa7c-433c31f18bfa")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "USB_DM" bidirectional
-			(at 233.68 71.12 0)
-			(uuid "8320d358-ac4a-5878-983e-7b805ca1e359")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "USB_DP" bidirectional
-			(at 233.68 73.66 0)
+			(at 177.8 63.5 180)
 			(uuid "7c382ba3-06a6-5b2e-9a93-7a763506127f")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 177.8 66.04 180)
+			(uuid "8320d358-ac4a-5878-983e-7b805ca1e359")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RUN_CTL" output
+			(at 177.8 68.58 180)
+			(uuid "c9674213-112b-525c-814a-c38bf6c46e3a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 177.8 81.28 180)
+			(uuid "7b84a94d-24bf-56de-88e6-56285fd02457")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 177.8 83.82 180)
+			(uuid "a48d3a98-8145-50f1-81c0-fb40a2c7ca89")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" output
+			(at 177.8 86.36 180)
+			(uuid "fb52c01a-28e6-50cd-aa7c-433c31f18bfa")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_RXD" input
+			(at 177.8 88.9 180)
+			(uuid "22491f5b-7c68-5778-be66-871c98d23eea")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -274,8 +317,8 @@
 		)
 	)
 	(sheet
-		(at 259.08 50.8)
-		(size 50.8 25.4)
+		(at 177.8 160.02)
+		(size 27.94 53.34)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -290,7 +333,7 @@
 		)
 		(uuid "19092f5a-1e49-5206-9bc4-25f1617567a8")
 		(property "Sheetname" "usb"
-			(at 259.08 50.1 0)
+			(at 177.8 159.32 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -300,7 +343,7 @@
 			)
 		)
 		(property "Sheetfile" "usb.kicad_sch"
-			(at 259.08 76.8 0)
+			(at 177.8 213.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -308,44 +351,44 @@
 				(justify left top)
 			)
 		)
-		(pin "S3_EN" bidirectional
-			(at 309.88 55.88 0)
-			(uuid "78f2d5e8-4ca2-529c-ac3b-96b22e93050e")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "S3_IO0" bidirectional
-			(at 309.88 58.42 0)
-			(uuid "420fad08-76de-584b-90fd-8a33514d6db5")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "S3_RXD" bidirectional
-			(at 309.88 60.96 0)
+		(pin "S3_RXD" output
+			(at 177.8 165.1 180)
 			(uuid "ae7d9af7-d6bc-5b17-90bd-55a2d57a61dd")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
-		(pin "S3_TXD" bidirectional
-			(at 309.88 63.5 0)
+		(pin "S3_TXD" input
+			(at 177.8 167.64 180)
 			(uuid "735775e9-7225-5fbc-8707-8d1410dd8963")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 177.8 170.18 180)
+			(uuid "420fad08-76de-584b-90fd-8a33514d6db5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 177.8 172.72 180)
+			(uuid "78f2d5e8-4ca2-529c-ac3b-96b22e93050e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -356,596 +399,327 @@
 			)
 		)
 	)
-	(sheet
-		(at 335.28 50.8)
-		(size 50.8 25.4)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 255 255 225 1)
-		)
-		(uuid "113877c5-6a44-5bff-9a74-179e8fd72159")
-		(property "Sheetname" "power"
-			(at 335.28 50.1 0)
-			(effects
-				(font
-					(size 1.524 1.524)
-					bold
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "power.kicad_sch"
-			(at 335.28 76.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "FujiNet-SMS-Rev0"
-				(path "/ff394b2b-0001-5468-a47f-d8dd41a97fc7"
-					(page "6")
-				)
-			)
-		)
-	)
 	(wire
 		(pts
-			(xy 157.48 55.88)
-			(xy 170.18 55.88)
+			(xy 160.02 60.96)
+			(xy 177.8 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ea66b58f-1f3b-5ad5-b41a-00c7fd75be2d")
+		(uuid "71952da3-f1d3-5c97-96e5-4fc7a414f1db")
 	)
 	(wire
 		(pts
-			(xy 170.18 55.88)
-			(xy 170.18 96.52)
+			(xy 160.02 63.5)
+			(xy 177.8 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "717784b4-6089-50fe-942c-bd3dde4c85b7")
+		(uuid "b78e40f3-bf61-57e7-ada0-f4d9c43caa9e")
 	)
 	(wire
 		(pts
-			(xy 233.68 55.88)
-			(xy 254 55.88)
+			(xy 160.02 66.04)
+			(xy 177.8 66.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "62406a0c-11da-57e0-a771-a215d3cbe10d")
+		(uuid "bc1d2ee3-bd56-5551-b394-bae1e8699a02")
 	)
 	(wire
 		(pts
-			(xy 254 55.88)
-			(xy 254 96.52)
+			(xy 160.02 68.58)
+			(xy 177.8 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "99b7d62c-26b3-5c85-b82c-5cf141a04bd1")
+		(uuid "e9bd0b61-2b21-5949-90e5-1a53088733f5")
 	)
 	(wire
 		(pts
-			(xy 170.18 96.52)
-			(xy 254 96.52)
+			(xy 177.8 81.28)
+			(xy 167.64 81.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "63f30957-d0ed-54f9-8625-ec42acd7fe42")
+		(uuid "d2755f2e-750d-521d-b8ff-d412721692cc")
 	)
 	(wire
 		(pts
-			(xy 157.48 58.42)
-			(xy 167.64 58.42)
+			(xy 167.64 81.28)
+			(xy 167.64 172.72)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c0255d03-3b4e-50d5-811d-cf54c5815122")
+		(uuid "a2a2e9f8-3d76-572e-9f86-f4ccf8728266")
 	)
 	(wire
 		(pts
-			(xy 167.64 58.42)
+			(xy 167.64 172.72)
+			(xy 177.8 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7dcd9dc2-4b0d-5e6b-adb0-c265ebaf3dec")
+	)
+	(wire
+		(pts
+			(xy 177.8 83.82)
+			(xy 170.18 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "429a11f0-4197-5713-84ee-0a92e2c3e1dd")
+	)
+	(wire
+		(pts
+			(xy 170.18 83.82)
+			(xy 170.18 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12dbe112-d560-5da3-9c07-30a8b82390a9")
+	)
+	(wire
+		(pts
+			(xy 170.18 170.18)
+			(xy 177.8 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf6833ad-c246-557a-99ab-9e2a090c5716")
+	)
+	(wire
+		(pts
+			(xy 177.8 86.36)
+			(xy 172.72 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c576840b-713e-5574-b96d-eea3df169c7f")
+	)
+	(wire
+		(pts
+			(xy 172.72 86.36)
+			(xy 172.72 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d17f09b3-3871-58bd-88ea-885ae1b0dde1")
+	)
+	(wire
+		(pts
+			(xy 172.72 167.64)
+			(xy 177.8 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2655878-dfb2-590a-9603-cbf5a36c8e81")
+	)
+	(wire
+		(pts
+			(xy 177.8 88.9)
+			(xy 175.26 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e9bbe65-25c1-5fca-a9b1-5da7fcab9799")
+	)
+	(wire
+		(pts
+			(xy 175.26 88.9)
+			(xy 175.26 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "65c670ca-908a-516b-a731-ae24c3ad2f1a")
+	)
+	(wire
+		(pts
+			(xy 175.26 165.1)
+			(xy 177.8 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6b5f8c3-59db-5dfb-822d-5f435e773d04")
+	)
+	(wire
+		(pts
+			(xy 160.02 101.6)
 			(xy 167.64 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "92852213-1157-5112-af1a-28170ae9d15b")
-	)
-	(wire
-		(pts
-			(xy 233.68 58.42)
-			(xy 251.46 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c0d67a00-5da7-5fe4-84dc-7bec3fae5432")
-	)
-	(wire
-		(pts
-			(xy 251.46 58.42)
-			(xy 251.46 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4c74b394-6200-5ece-8cf5-1c5bff5e0305")
-	)
-	(wire
-		(pts
-			(xy 167.64 101.6)
-			(xy 251.46 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "17960770-fb2e-5d93-a403-e616d93c2279")
-	)
-	(wire
-		(pts
-			(xy 157.48 60.96)
-			(xy 165.1 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c9ead03c-809d-5e55-bcb5-26c24010e591")
-	)
-	(wire
-		(pts
-			(xy 165.1 60.96)
-			(xy 165.1 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "96f40d4e-a2cc-506c-aeca-2f75caa1897e")
-	)
-	(wire
-		(pts
-			(xy 233.68 60.96)
-			(xy 248.92 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fa23a9de-68ab-5e4a-a869-42e4dd420a59")
-	)
-	(wire
-		(pts
-			(xy 248.92 60.96)
-			(xy 248.92 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "02481401-fbf7-568d-b678-a8e36939a2c9")
-	)
-	(wire
-		(pts
-			(xy 309.88 55.88)
-			(xy 320.04 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "59356573-5c20-5e90-a8d6-cf22dbc5f25b")
-	)
-	(wire
-		(pts
-			(xy 320.04 55.88)
-			(xy 320.04 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "da94101b-6d58-53a6-85b4-8d70691117c3")
-	)
-	(wire
-		(pts
-			(xy 165.1 106.68)
-			(xy 320.04 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cf4bbe98-04a0-5e7d-8f0b-00907b8225a0")
-	)
-	(wire
-		(pts
-			(xy 157.48 63.5)
-			(xy 162.56 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5b48ea71-6453-59f1-896f-bba384be4391")
-	)
-	(wire
-		(pts
-			(xy 162.56 63.5)
-			(xy 162.56 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0398a981-5edb-57c2-8832-c008b365ee15")
-	)
-	(wire
-		(pts
-			(xy 233.68 71.12)
-			(xy 238.76 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e0ce1977-1aa8-5597-9d59-b482ed54d344")
-	)
-	(wire
-		(pts
-			(xy 238.76 71.12)
-			(xy 238.76 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "462f6406-aebb-55d0-a257-ef4d2e81fee1")
-	)
-	(wire
-		(pts
-			(xy 162.56 111.76)
-			(xy 238.76 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "02721da6-c8bf-50d2-9c9c-65a7c542dd4f")
-	)
-	(wire
-		(pts
-			(xy 157.48 66.04)
-			(xy 160.02 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "54de2681-261e-5e7f-a6b3-b1878ae1ba82")
-	)
-	(wire
-		(pts
-			(xy 160.02 66.04)
-			(xy 160.02 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d9865748-a609-5d17-851a-23a3a174722f")
-	)
-	(wire
-		(pts
-			(xy 233.68 73.66)
-			(xy 236.22 73.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e28ca07f-26c2-53a2-8f88-0b3e98d559ce")
-	)
-	(wire
-		(pts
-			(xy 236.22 73.66)
-			(xy 236.22 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "70a4bfb9-3f5e-5e6e-a7df-6f12faa966bb")
-	)
-	(wire
-		(pts
-			(xy 160.02 116.84)
-			(xy 236.22 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4f7a505a-ee37-51c3-8c94-5fb567340301")
-	)
-	(wire
-		(pts
-			(xy 233.68 63.5)
-			(xy 246.38 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bcf4300e-7187-51f1-ae0b-4496b249b362")
-	)
-	(wire
-		(pts
-			(xy 246.38 63.5)
-			(xy 246.38 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a8669c4-387f-558e-9121-06652e1c9beb")
-	)
-	(wire
-		(pts
-			(xy 309.88 58.42)
-			(xy 317.5 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "892a651c-7642-5863-a8b4-05a656830729")
-	)
-	(wire
-		(pts
-			(xy 317.5 58.42)
-			(xy 317.5 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b3c96ee3-e592-5c55-93f4-fc72317e3db3")
-	)
-	(wire
-		(pts
-			(xy 246.38 121.92)
-			(xy 317.5 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea29a6ef-8e20-59cb-98f5-2cd07c48cbd9")
-	)
-	(wire
-		(pts
-			(xy 233.68 66.04)
-			(xy 243.84 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f13b29de-5b1a-5e94-a71b-f8e2702c7f01")
-	)
-	(wire
-		(pts
-			(xy 243.84 66.04)
-			(xy 243.84 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "230c657a-a56b-5e31-be4d-3ec83e8fdff1")
-	)
-	(wire
-		(pts
-			(xy 309.88 60.96)
-			(xy 314.96 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0b48c3cb-f80c-5c13-9660-46b5e7e4ad76")
-	)
-	(wire
-		(pts
-			(xy 314.96 60.96)
-			(xy 314.96 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85c0bb61-a109-5e7e-9014-2eb20f54c4c0")
-	)
-	(wire
-		(pts
-			(xy 243.84 127)
-			(xy 314.96 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e2ba7492-1136-5c52-85a4-638f1b9b4645")
-	)
-	(wire
-		(pts
-			(xy 233.68 68.58)
-			(xy 241.3 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "62d23763-071b-52e0-9d15-cd0a90a9c506")
-	)
-	(wire
-		(pts
-			(xy 241.3 68.58)
-			(xy 241.3 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e45059b8-4ead-5943-b037-221c317b69eb")
-	)
-	(wire
-		(pts
-			(xy 309.88 63.5)
-			(xy 312.42 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c90846b5-edc5-550b-a3b7-8eecd26172c6")
-	)
-	(wire
-		(pts
-			(xy 312.42 63.5)
-			(xy 312.42 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d418a300-8338-5bba-8e11-9d275fa63563")
-	)
-	(wire
-		(pts
-			(xy 241.3 132.08)
-			(xy 312.42 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d90cce61-d877-5c79-91c5-a56a8f5fa43a")
+		(uuid "cc4ce79b-f4b9-5cae-9ff7-28438e5dd721")
 	)
 	(junction
-		(at 248.92 106.68)
+		(at 167.64 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e50bbc69-8ab2-559f-8051-fdd5b0e75f87")
+		(uuid "e4c5227f-dc4c-587e-a975-86b7358bccc5")
 	)
 	(label "BOOTSEL_CTL"
-		(at 171.45 96.52 0)
+		(at 161.29 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "49b4109e-9204-559b-9f5b-f809a74444ab")
-	)
-	(label "RUN_CTL"
-		(at 168.91 101.6 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "21f5feab-5b65-56c5-a3e9-31a016c9a267")
-	)
-	(label "S3_EN"
-		(at 166.37 106.68 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a8763f4e-dc45-5480-8ef2-ff777743f72c")
-	)
-	(label "USB_DM"
-		(at 163.83 111.76 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "380c8e01-6e67-5333-9b78-448141b4c732")
+		(uuid "edacf2dd-5a01-5499-b510-142a35555a2b")
 	)
 	(label "USB_DP"
-		(at 161.29 116.84 0)
+		(at 161.29 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "85110087-f7ba-5414-af74-310750c210bc")
+		(uuid "2d1dfed9-9c5e-55c1-9437-ad3da785d067")
+	)
+	(label "USB_DM"
+		(at 161.29 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "624252cf-43ee-5e69-8d1d-e99048c34bb4")
+	)
+	(label "RUN_CTL"
+		(at 161.29 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a8843e30-a4b3-5888-afb8-dbfd6c67cb61")
+	)
+	(label "S3_EN"
+		(at 167.64 171.45 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "efc8eed4-3f7e-5f31-8600-f70c035e087e")
 	)
 	(label "S3_IO0"
-		(at 247.65 121.92 0)
+		(at 170.18 168.91 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "fe1a83f2-a430-5a52-a437-14bce7839262")
-	)
-	(label "S3_RXD"
-		(at 245.11 127 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "8d06badc-3736-5014-b13d-8f8bca5022bb")
+		(uuid "219410e0-6cd3-5274-9b74-5765aabdc4fa")
 	)
 	(label "S3_TXD"
-		(at 242.57 132.08 0)
+		(at 172.72 166.37 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "eb41a8fb-22d4-529d-8e5b-2de1a7a72818")
+		(uuid "02a476ee-31cc-5378-b112-d77883eb30c4")
+	)
+	(label "S3_RXD"
+		(at 175.26 163.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d6add3f6-6595-5313-9e54-8a4381ad004c")
+	)
+	(text "edge\nfingers:\nthe\nconsole\nslot"
+		(exclude_from_sim no)
+		(at 27.94 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "830c67be-e284-5116-ac5f-b24b9d30899e")
+	)
+	(text "FujiNet for the Sega Master System / SMS2, Rev0 v2: RP2354B on the cart bus + ESP32-S3.\n\nThis page is the board seen from its component side, turned so that the edge fingers face left\n(board south -> page left, north -> right, west -> top, east -> bottom), 2:1, each sheet's block\nwhere its circuit sits.  Every sheet is drawn the same way: its parts where they are on the board,\nevery connection on it a wire, signals flowing left to right from the console to the USB-C.\n\n  cart-bus   the 50-pin edge, the 1 MB SRAM (512K in the ROM spot, 512K beside it), the 74HCT\n             glue, the RP2354B's 48 GPIOs, /WAIT, the bring-up pads\n  rp-core    the RP2354B's supplies and decoupling ring, core regulator, crystal, SWD, RUN /\n             BOOTSEL, USB to the S3\n  fujinet    the ESP32-S3 (FujiNet), microSD, WS2812 status LED, S3 EN / BOOT\n  usb        USB-C, the CP2102N bridge and esptool's auto-program pair\n  power      CONS_5V / VBUS OR onto +5V, the 3.3 V buck (+3V3), the RP's LDO (+3V3_RP)\n\nBetween sheets: the nine signals wired here; the rails (GND, CONS_5V, VBUS, +5V, +3V3,\n+3V3_RP, DVDD) by their power symbols.\n\nThe co-design (docs/floorplan-study.md): the SMS edge is the JEDEC 32-pin memory pinout unrolled,\nso SRAM0 stands upright in the classic ROM spot and takes A0-A12, D0-D7 and GND from the fingers\nwithout a crossing (its fan-in is drawn by tools/gen_pcb.py and locked before routing).\n\nStack-up: 1.6 mm, 6 layers.  F.Cu every part, even fingers, signals + GND pour | In1 GND plane |\nIn2, In3 signals | In4 power: +3V3 north, a +5V island south and east, +3V3_RP under the RP2354B\nring, DVDD under its core | B.Cu odd fingers, signals + GND pour.\n\nFirmware contract (tools/check_nets.py, tools/check_glue.py check this netlist against it):\nRP2354B pin map fujinet-firmware pico/sms sms_cart.h (A0-A15 GPIO0-15, D0-D7 GPIO16-23, strobes\nGPIO24-31); glue equations sms_glue_oe() / sms_glue_we(); ESP32-S3 pin map fujiversal-sms.h."
+		(exclude_from_sim no)
+		(at 233.68 25.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "0eb22505-dc8b-560c-a826-af5a4e534ef9")
+	)
+	(polyline
+		(pts
+			(xy 211.4 29.4)
+			(xy 211.4 221.4)
+			(xy 207.4 225.4)
+			(xy 57.4 225.4)
+			(xy 55.4 223.4)
+			(xy 55.4 191.2)
+			(xy 27.4 191.2)
+			(xy 25.4 189.2)
+			(xy 25.4 61.6)
+			(xy 27.4 59.6)
+			(xy 55.4 59.6)
+			(xy 55.4 27.4)
+			(xy 57.4 25.4)
+			(xy 207.4 25.4)
+			(xy 211.4 29.4)
+		)
+		(stroke
+			(width 0.254)
+			(type dash)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "4b3c5ac1-27a6-59bd-841a-c93d2b56ef42")
 	)
 	(sheet_instances
 		(path "/"

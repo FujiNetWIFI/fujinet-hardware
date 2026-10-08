@@ -145,6 +145,7 @@ class Sheet:
         self.flags = []            # (net, x, y)
         self.ncs, self.texts = [], []
         self.blocks = []           # root sheet symbols: dict(stem, x, y, w, h, pins={name: Pt}, shapes={name: shape})
+        self.graphics = []         # root drawing only: (points, dashed) polylines, no connectivity
         self.errors = []
         self.lint = True           # geometry lint (overlaps); connectivity is always checked
         self.wired = False         # a hand-drawn sheet: every net one wired piece (see check)
@@ -299,6 +300,10 @@ class Sheet:
     def nc(self, pin):
         self.ncs.append((snap(pin[0]), snap(pin[1])))
 
+    def poly(self, pts, dash=True):
+        """A graphic line (no connectivity): the root's board outline."""
+        self.graphics.append(([(round(x, 4), round(y, 4)) for x, y in pts], dash))
+
     def text(self, pt, s, size=1.27, justify='left'):
         self.texts.append((s, snap(pt[0]), snap(pt[1]), size, justify))
 
@@ -355,8 +360,10 @@ class Sheet:
         boxes = []
         for d in self.placed.values():
             boxes.append(('body ' + d['ref'], d['body']))
-            for (fx, fy, j), s in zip(d['fields'], (d['ref'], d['part'].value)):
-                boxes.append(('field %s %s' % (d['ref'], s), text_box(fx, fy, s, 1.27, j)))
+            hid = d.get('hide_fields', ())
+            for (fx, fy, j), s, nm in zip(d['fields'], (d['ref'], d['part'].value), ('Reference', 'Value')):
+                if nm not in hid:
+                    boxes.append(('field %s %s' % (d['ref'], s), text_box(fx, fy, s, 1.27, j)))
         for kind, net, x, y, ang, shape in self.labels:
             w = 0.9 * 1.27 * len(net) + (0.6 if kind == 'label' else 2.5)
             h = 1.6
@@ -410,6 +417,7 @@ class Sheet:
         for b in self.blocks:
             b['x'], b['y'] = snap(b['x'] + dx), snap(b['y'] + dy)
             b['pins'] = {n: Pt(p[0] + dx, p[1] + dy, p.dx, p.dy, p.owner) for n, p in b['pins'].items()}
+        self.graphics = [([(round(x + dx, 4), round(y + dy, 4)) for x, y in pts], dash) for pts, dash in self.graphics]
 
     def center(self):
         """Centre the drawing in the frame, clear of the title block."""
@@ -606,11 +614,20 @@ class Sheet:
         if self.wired:
             # every net with pins on this sheet is ONE wired piece: labels may name a wire or
             # leave the sheet, never join two pieces (rails are power symbols: exempt)
+            # a piece that reaches a drawn bus through an entry is joined to the bus's other pieces
+            # carrying the same member (KiCad's bus semantics): key it by (bus group, net)
+            via_bus = {}
+            for (ex, ey), (ddx, ddy) in self.entries:
+                bp = (snap(ex + ddx), snap(ey + ddy))
+                for a, b in self.buses:
+                    if bp in (a, b) or on_run(bp, a, b):
+                        via_bus[F((ex, ey))] = F(('b',) + a)
+                        break
             pieces = defaultdict(set)
             for g, lst in members.items():
                 for ref, num, net in lst:
                     if net and net not in self.RAILS:
-                        pieces[net].add(g)
+                        pieces[net].add(('bus', via_bus[g]) if g in via_bus else g)
             for net, gs in sorted(pieces.items()):
                 if len(gs) > 1:
                     err.append('net %s drawn in %d pieces joined only by labels: %s' % (

@@ -48,7 +48,7 @@ Print each half outside down, with no supports, 0.2 mm layers, in PETG or PLA. T
 | Screw holes | 3.2 mm at (54, 64), (146, 64), (54, 104.5), (146, 104.5); no parts within 3 mm | `gen_pcb.HOLES` |
 | USB-C, microSD | at the top edge, x 126 and x 100 | `placement.py` |
 | ESP32-S3 antenna | top-left, flush with the top edge; plastic only over it | `placement.py` |
-| Tallest parts | USB-C 3.2, ESP32-S3 3.1, microSD 1.85, TL3342 buttons 1.5 | datasheets |
+| Tallest parts | USB-C 3.2, ESP32-S3 3.1, microSD 1.85, TS-1187A buttons 1.5 | datasheets |
 
 ## The original cartridge (sources)
 

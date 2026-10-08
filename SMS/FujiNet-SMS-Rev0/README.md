@@ -367,6 +367,12 @@ dimensions and sources in `case/case-spec.md`):
 - **Rear half:** a flat back plate.
 - **Fasteners:** 4x M3x12 from the back.
 
+The SCAD asserts the base width, the cavity, the part clearance (6.3 mm over the tallest part),
+the mouth width and the RESET plunger: its cap stands proud by more than the TS-1187A's travel,
+and its flange clears the switch body. `-D 'part="interference"'` renders both halves
+intersected with the placed plunger and must come out empty (it does: "Current top level
+object is empty").
+
 The base dimensions marked VERIFY in `case-spec.md` come from a replica shell,
 not a measured cartridge. Check them on SMS1, SMS2 and a Genesis + Power Base
 Converter before printing more than one.
@@ -431,7 +437,9 @@ Firmware heads checked: `~/Workspace/fn-sms` (`add-sms`, 10f055b87) and
   `fujiversal-intv.h` (IO4/IO5) and says so.
 
 Edit `tools/design.py` (circuit), `tools/sch_layout.py` (drawing) and
-`tools/placement.py` (board), never the KiCad files.
+`tools/placement.py` (board), never the KiCad files. Freerouting is not deterministic, so
+`LAYOUT=1` reproduces the method (12 passes, greedy, then the finisher), not the same copper;
+the committed board is the reviewed one.
 
 - **Parts are addressed by key.** Every part has a design.py key (`U_RP`,
   `C_IOV5`, ...). The drawing, the placement and the audits use keys;

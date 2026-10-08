@@ -39,25 +39,31 @@ uses 90.
 
 ## Candidates
 
-| | Floorplan | Ratsnest | Crossings | Trial: unrouted after pass 1 / 2 / 3 / 4 |
-|---|---|---|---|---|
-| P0 | The first SMS layout: RP2354B centre-south over the fingers, both SRAMs side by side east, glue north of them | 4383 mm | 1054 | 88 / 63 / 57 / 50 |
-| P1 | SRAM0 in the ROM spot, SRAM1 stacked north of it, RP west over the control fingers, glue east | 4801 mm | 1415 | 84 / 55 / 49 / … |
-| P2 | As P1, with the glue between the RP and the SRAMs | 4901 mm | 1613 | not trial-routed |
-| **P3** | **SRAM0 in the ROM spot, the RP2354B straight north of it (its A/D side facing SRAM0), SRAM1 west, glue east over the strobes** | 4637 mm | 1251 | 84 / 55 / 49 / **45** |
+| | Floorplan | Ratsnest | Crossings | Trial: Freerouting unrouted after pass 1 / 2 / 3 / 4 / 8 | KiCad unconnected after pass 8 |
+|---|---|---|---|---|---|
+| P0 | The first SMS layout: RP2354B centre-south over the fingers, both SRAMs side by side east, glue north of them | 4383 mm | 1054 | 88 / 63 / 57 / 50 / 47 | 10 |
+| P1 | SRAM0 in the ROM spot, SRAM1 stacked north of it, RP west over the control fingers, glue east | 4801 mm | 1415 | 84 / 55 / 49 / 48 / 45 | 20 |
+| P2 | As P1, with the glue between the RP and the SRAMs | 4901 mm | 1613 | not trial-routed | |
+| **P3** | **SRAM0 in the ROM spot, the RP2354B straight north of it (its A/D side facing SRAM0), SRAM1 west, glue east over the strobes** | 4637 mm | 1251 | 84 / 55 / 49 / **45** / **44** | 20 |
 
 Plots: `floorplan/P0.png`, `P1.png`, `P2.png`, `P3-study.png`. The board as built is
 `floorplan/P3-board.png`, with every part placed (4919 mm and 1445 crossings, the bring-up pads
 and E9 pull-downs included).
 
 The trial runs were made before the fan-in was locked, so Freerouting had to find the SRAM0
-funnel itself.
+funnel itself. Freerouting's "unrouted" counts plane connections that KiCad's zone fills make;
+KiCad's own unconnected count after the import is what the finisher has to close. By that count
+the first layout (P0) did better in the trial: 10 against P3's 20. P3 was chosen on the grounds
+below; the full run with the fan-in locked (Part 2 of the review) left KiCad 2 links, which the
+finisher closed.
 
 ## Why P3
 
-- **Routability.** The ROM-spot floorplans beat the first layout from the second pass on, and P3
-  led P1 by the fourth. The airwire numbers point the other way: crossing counts ignore layers,
-  and the ROM spot's whole gain is on F.Cu.
+- **Routability.** By Freerouting's count the ROM-spot floorplans beat the first layout from the
+  second pass on, and P3 led P1 from the fourth to the eighth. By KiCad's count after the trial,
+  P0 was ahead (10 against 20); locking the fan-in, which the trials lacked, brought P3 to 2. The
+  airwire numbers point against P3 too: crossing counts ignore layers, and the ROM spot's whole
+  gain is on F.Cu.
 - **The schematic.** On the page (the board turned so the fingers face left) P3 reads straight
   across: the edge, then SRAM0 in its ROM spot, then the RP2354B. SRAM1 sits above, the glue
   below. P1 put the RP up in a corner of the page.
@@ -71,4 +77,4 @@ funnel itself.
   - The buttons, LEDs and debug header run down the west side, under the shell's pinholes and
     windows; the label goes east of them.
 
-The full-run result (six variants) is in docs/design-review-rev0.md, Part 2.
+The full-run result (six variants, V3 chosen: DRC 0/0/0) is in `docs/design-review-rev0.md`, Part 2.

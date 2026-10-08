@@ -15,4 +15,10 @@ if [ -d exports/jlcpcb/gerbers ] || [ -f exports/jlcpcb/FujiNet-SMS-Rev0-gerbers
     rm -rf analysis/gerbers_tmp && mkdir -p analysis/gerbers_tmp && unzip -q -o exports/jlcpcb/FujiNet-SMS-Rev0-gerbers.zip -d analysis/gerbers_tmp
     python3 $K/kicad/scripts/analyze_gerbers.py analysis/gerbers_tmp/ --analysis-dir analysis/ || true
 fi
+python3 $K/kicad/scripts/cross_verify.py -s analysis/$RUN/schematic.json -p analysis/$RUN/pcb.json \
+    $( [ -f analysis/$RUN/thermal.json ] && echo -t analysis/$RUN/thermal.json ) -o analysis/$RUN/cross_verify.json
 python3 $K/kicad/scripts/summarize_findings.py analysis/ --top 40
+# the release gate, warnings as failures (its waivers are triaged in docs/design-review-rev0.md)
+opt() { [ -f "analysis/$RUN/$2" ] && echo "$1 analysis/$RUN/$2"; }
+python3 $K/kicad/scripts/fab_release_gate.py -s analysis/$RUN/schematic.json -p analysis/$RUN/pcb.json \
+    $(opt -g gerber.json) $(opt -t thermal.json) $(opt -e emc.json) --strict --text | tee analysis/$RUN/fab_release_gate.txt

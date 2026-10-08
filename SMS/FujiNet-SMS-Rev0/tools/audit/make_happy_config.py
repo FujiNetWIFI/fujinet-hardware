@@ -64,6 +64,12 @@ cfg = {
         {'rule_id': 'PM-002', 'components': K('J_EDGE', 'J_SD', 'J_USB', 'U_S3'),
          'reason': 'At the edge by design: the cart fingers, the microSD and USB-C mouths on the top edge, the '
                    'ESP32-S3 antenna flush with the top edge over its keep-out.'},
+        {'rule_id': 'TS-003', 'components': K('U_LDO'),
+         'reason': "Heuristic: it books the whole board's dissipation on the AP2112K. The LDO carries only the RP2354B "
+                   '(30-60 mA from 5 V: 51-102 mW, tools/audit/margins.py), about +25 C in SOT-23-5; the RP core '
+                   'regulator is a switcher, so the LDO never carries the core current.'},
+        {'rule_id': 'TP-001', 'components': K('U_LDO'),
+         'reason': 'Follows from TS-003 (the same heuristic Tj): the LDO runs about 50 C at 25 C ambient.'},
         {'rule_id': 'CC-002',
          'reason': "Signal nets necked down to 0.15 mm only for their last link at the RP2354B's 0.4 mm-pitch pins "
                    '(finish_route --neck); logic currents of a few mA.'},

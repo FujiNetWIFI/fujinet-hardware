@@ -1,0 +1,377 @@
+{
+ "schematic": "FujiNet-ChannelF-Rev0.kicad_sch",
+ "last_sync": "2026-10-09",
+ "note": "every file checked to be a PDF; F3850.pdf (console CPU) and hardware-design-with-rp2040.pdf are references, not BOM parts",
+ "references": {
+  "F3850.pdf": "Fairchild F3850 CPU datasheet (wiki.console5.com): DB0-7 VIH 2.9 V, Table 7",
+  "hardware-design-with-rp2040.pdf": "Raspberry Pi, Hardware design with RP2040 (minimal design)"
+ },
+ "parts": {
+  "0603WAF1001T5E": {
+   "lcsc": "C21190",
+   "refs": [
+    "R5",
+    "R7",
+    "R8",
+    "R10"
+   ],
+   "file": "0603WAF1001T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF1002T5E": {
+   "lcsc": "C25804",
+   "refs": [
+    "R2",
+    "R6",
+    "R9",
+    "R13",
+    "R14",
+    "R20"
+   ],
+   "file": "0603WAF1002T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF1003T5E": {
+   "lcsc": "C25803",
+   "refs": [
+    "R3"
+   ],
+   "file": "0603WAF1003T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF2202T5E": {
+   "lcsc": "C31850",
+   "refs": [
+    "R18"
+   ],
+   "file": "0603WAF2202T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF270JT5E": {
+   "lcsc": "C25190",
+   "refs": [
+    "R11",
+    "R12"
+   ],
+   "file": "0603WAF270JT5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF3300T5E": {
+   "lcsc": "C23138",
+   "refs": [
+    "R4",
+    "R15"
+   ],
+   "file": "0603WAF3300T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF4701T5E": {
+   "lcsc": "C23162",
+   "refs": [
+    "R1"
+   ],
+   "file": "0603WAF4701T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF4702T5E": {
+   "lcsc": "C25819",
+   "refs": [
+    "R19"
+   ],
+   "file": "0603WAF4702T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "0603WAF5101T5E": {
+   "lcsc": "C23186",
+   "refs": [
+    "R16",
+    "R17"
+   ],
+   "file": "0603WAF5101T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "2N7002": {
+   "lcsc": "C8545",
+   "refs": [
+    "Q1"
+   ],
+   "file": "2N7002.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "4D03WGJ0103T5E": {
+   "lcsc": "C29718",
+   "refs": [
+    "RN1"
+   ],
+   "file": "4D03WGJ0103T5E.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "ABM8-272-T3": {
+   "lcsc": "C20625731",
+   "refs": [
+    "Y1"
+   ],
+   "file": "ABM8-272-T3.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "AP2112K-3.3TRG1": {
+   "lcsc": "C51118",
+   "refs": [
+    "U9"
+   ],
+   "file": "AP2112K-3.3TRG1.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "AP63203WU-7": {
+   "lcsc": "C780769",
+   "refs": [
+    "U8"
+   ],
+   "file": "AP63203WU-7.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "BAT54C,215": {
+   "lcsc": "C37704",
+   "refs": [
+    "D2"
+   ],
+   "file": "BAT54C_215.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CC0603KRX7R9BB104": {
+   "lcsc": "C14663",
+   "refs": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "C10",
+    "C11",
+    "C12",
+    "C16",
+    "C17",
+    "C18",
+    "C22",
+    "C25",
+    "C27",
+    "C28",
+    "C30",
+    "C34",
+    "C35"
+   ],
+   "file": "CC0603KRX7R9BB104.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CL10A105KB8NNNC": {
+   "lcsc": "C15849",
+   "refs": [
+    "C13",
+    "C15",
+    "C23",
+    "C26",
+    "C38",
+    "C39"
+   ],
+   "file": "CL10A105KB8NNNC.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CL10A106KP8NNNC": {
+   "lcsc": "C19702",
+   "refs": [
+    "C14",
+    "C24"
+   ],
+   "file": "CL10A106KP8NNNC.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CL10A475KO8NNNC": {
+   "lcsc": "C19666",
+   "refs": [
+    "C29"
+   ],
+   "file": "CL10A475KO8NNNC.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CL10C150JB8NNNC": {
+   "lcsc": "C1644",
+   "refs": [
+    "C19",
+    "C20"
+   ],
+   "file": "CL10C150JB8NNNC.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CL21A226MAQNNNE": {
+   "lcsc": "C45783",
+   "refs": [
+    "C21",
+    "C31",
+    "C32",
+    "C33",
+    "C36",
+    "C37"
+   ],
+   "file": "CL21A226MAQNNNE.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "CP2102N-A02-GQFN28R": {
+   "lcsc": "C964632",
+   "refs": [
+    "U6"
+   ],
+   "file": "CP2102N-A02-GQFN28R.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "ESD5Z5.0T1G": {
+   "lcsc": "C82044",
+   "refs": [
+    "D4",
+    "D5",
+    "D6"
+   ],
+   "file": "ESD5Z5.0T1G.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "ESP32-S3-WROOM-1-N16R8": {
+   "lcsc": "C2913202",
+   "refs": [
+    "U5"
+   ],
+   "file": "ESP32-S3-WROOM-1-N16R8.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "KT-0603G": {
+   "lcsc": "C12624",
+   "refs": [
+    "D1"
+   ],
+   "file": "KT-0603G.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "RP2040": {
+   "lcsc": "C2040",
+   "refs": [
+    "U1"
+   ],
+   "file": "RP2040.pdf",
+   "present": true,
+   "source": "datasheets.raspberrypi.com"
+  },
+  "SN74LVC4245APWR": {
+   "lcsc": "C7859",
+   "refs": [
+    "U2",
+    "U3"
+   ],
+   "file": "SN74LVC4245APWR.pdf",
+   "present": true,
+   "source": "ti.com SCAS375K (rev K, May 2026)"
+  },
+  "SS34": {
+   "lcsc": "C8678",
+   "refs": [
+    "D7",
+    "D8"
+   ],
+   "file": "SS34.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "SWPA4030S6R8MT": {
+   "lcsc": "C62684",
+   "refs": [
+    "L1"
+   ],
+   "file": "SWPA4030S6R8MT.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "TF-015": {
+   "lcsc": "C113206",
+   "refs": [
+    "J2"
+   ],
+   "file": "TF-015.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "TL3342F160QG": {
+   "lcsc": "C2886898",
+   "refs": [
+    "SW1",
+    "SW2",
+    "SW3",
+    "SW4"
+   ],
+   "file": "TL3342F160QG.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "TYPE-C-31-M-12": {
+   "lcsc": "C165948",
+   "refs": [
+    "J3"
+   ],
+   "file": "TYPE-C-31-M-12.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "UMH3N": {
+   "lcsc": "C62892",
+   "refs": [
+    "U7"
+   ],
+   "file": "UMH3N.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  },
+  "W25Q16JVSSIQ": {
+   "lcsc": "C82317",
+   "refs": [
+    "U4"
+   ],
+   "file": "W25Q16JVSSIQ.pdf",
+   "present": true,
+   "source": "datasheet.lcsc.com (C131025)"
+  },
+  "WS2812B-2020-V6": {
+   "lcsc": "C52917434",
+   "refs": [
+    "D3"
+   ],
+   "file": "WS2812B-2020-V6.pdf",
+   "present": true,
+   "source": "copied from Astrocade/rev0 or ATARI-5200 datasheets"
+  }
+ }
+}

@@ -1,0 +1,660 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "94e41297-bf02-5fe3-9e3f-23dd2de0dc13")
+	(paper "A3")
+	(title_block
+		(title "FujiNet Channel F Rev0")
+		(date "2026-10-09")
+		(rev "0")
+		(company "FujiNet")
+		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
+		(comment 2 "CERN-OHL-W-2.0 (S3/USB/power from FujiNet-Astrocade-Rev0 and its sources)")
+		(comment 3 "Firmware: fujinet-firmware pico/channelf (as-is) + fujiversal-channelf")
+	)
+	(lib_symbols)
+	(sheet
+		(at 30.48 33.02)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "e8e18599-2241-5d49-8df6-2a9903eca6b5")
+		(property "Sheetname" "power"
+			(at 30.48 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 30.48 53.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-ChannelF-Rev0"
+				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 76.2)
+		(size 63.5 81.28)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "c37bbd7f-12ea-55b4-a49d-923b7d200ba7")
+		(property "Sheetname" "cart-rp"
+			(at 30.48 75.5 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cart-rp.kicad_sch"
+			(at 30.48 158.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 93.98 81.28 0)
+			(uuid "625bd18a-8d33-5544-94bb-e6bb67bb6422")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 93.98 83.82 0)
+			(uuid "c257c67f-8cce-55df-9de0-5dc86d846d67")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RUN_CTL" input
+			(at 93.98 86.36 0)
+			(uuid "edf0dcc6-10ce-5e39-b76c-b5a5ff8b0196")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "BOOTSEL_CTL" input
+			(at 93.98 88.9 0)
+			(uuid "917d06a4-6779-5b58-8511-ee0322447730")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 93.98 127 0)
+			(uuid "f3db1b0c-34d9-5f46-949d-9b017f4ef5d5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "FujiNet-ChannelF-Rev0"
+				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 33.02)
+		(size 30.48 99.06)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "cdbe3c56-ac67-5d32-b622-767fbe1f06b4")
+		(property "Sheetname" "fujinet"
+			(at 132.08 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "fujinet.kicad_sch"
+			(at 132.08 132.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 132.08 81.28 180)
+			(uuid "cf4c0b8d-da62-51c1-8c91-e7eea99dab92")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 132.08 83.82 180)
+			(uuid "90827ea0-ac21-580f-92c7-2653bf8af392")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RUN_CTL" output
+			(at 132.08 86.36 180)
+			(uuid "70735939-613b-5145-8844-3b58fae034c8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "BOOTSEL_CTL" output
+			(at 132.08 88.9 180)
+			(uuid "b4cc3fa5-3df7-57cb-993c-69700248a72a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 116.84 180)
+			(uuid "8d78b3ff-d587-5617-a51f-017c1f50c2c5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 119.38 180)
+			(uuid "1c04d37d-cf7f-5d40-835e-177838d1ea48")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" output
+			(at 132.08 121.92 180)
+			(uuid "dface011-3c47-565e-bd1f-6f4904b4339d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_RXD" input
+			(at 132.08 124.46 180)
+			(uuid "7c349ddc-97aa-5213-bd56-9c35bb19968a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-ChannelF-Rev0"
+				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 152.4)
+		(size 30.48 35.56)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "ed7d2797-f6fd-5e59-a65f-20b06df2bfd6")
+		(property "Sheetname" "usb"
+			(at 132.08 151.7 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 132.08 188.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "S3_RXD" output
+			(at 132.08 157.48 180)
+			(uuid "94b53b4f-aab1-598a-b2b6-a59a1d4c8512")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" input
+			(at 132.08 160.02 180)
+			(uuid "602eae8a-037b-54d2-9910-328dc0e2bd69")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 162.56 180)
+			(uuid "ebc5966c-1a39-5cee-b1ba-6ba338ad0ab1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 165.1 180)
+			(uuid "8586adfa-2a20-58ce-a4cf-4617d609fb7f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-ChannelF-Rev0"
+				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13"
+					(page "4")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 93.98 81.28)
+			(xy 132.08 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8816a704-1ea5-558a-b3e0-818d65fea9a2")
+	)
+	(wire
+		(pts
+			(xy 93.98 83.82)
+			(xy 132.08 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "596fd7a2-c951-59f5-92f7-7a6c36ea8858")
+	)
+	(wire
+		(pts
+			(xy 93.98 86.36)
+			(xy 132.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d347f3cf-2e86-5572-96d2-4c99d0488992")
+	)
+	(wire
+		(pts
+			(xy 93.98 88.9)
+			(xy 132.08 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a412245f-71d2-59a5-80df-338bbe72b47d")
+	)
+	(wire
+		(pts
+			(xy 132.08 116.84)
+			(xy 121.92 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d2f94fc-6a1f-5b75-a85b-0981a4e07791")
+	)
+	(wire
+		(pts
+			(xy 121.92 116.84)
+			(xy 121.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7acba384-35cf-55d5-97b5-de8762601e00")
+	)
+	(wire
+		(pts
+			(xy 121.92 165.1)
+			(xy 132.08 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c713bcd9-7305-5146-8919-7c79d35058e6")
+	)
+	(wire
+		(pts
+			(xy 132.08 119.38)
+			(xy 124.46 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf322b50-f8ca-5d04-9037-ac07e2820501")
+	)
+	(wire
+		(pts
+			(xy 124.46 119.38)
+			(xy 124.46 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "69aad62d-1221-5360-8cdf-7748500a1460")
+	)
+	(wire
+		(pts
+			(xy 124.46 162.56)
+			(xy 132.08 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "278299eb-9537-5ecb-81b2-cf6c446078c6")
+	)
+	(wire
+		(pts
+			(xy 132.08 121.92)
+			(xy 127 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a3c12b30-e888-505b-bb0e-844646e8110c")
+	)
+	(wire
+		(pts
+			(xy 127 121.92)
+			(xy 127 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2066a80-5e1e-5ea7-945e-41ccaf2c9fa0")
+	)
+	(wire
+		(pts
+			(xy 127 160.02)
+			(xy 132.08 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bea3356b-a553-5318-9d65-9741b19e74aa")
+	)
+	(wire
+		(pts
+			(xy 132.08 124.46)
+			(xy 129.54 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29dd3ebc-b6b0-5761-87da-abf544552fd1")
+	)
+	(wire
+		(pts
+			(xy 129.54 124.46)
+			(xy 129.54 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a614335c-088e-552f-840e-601b50dfe5ed")
+	)
+	(wire
+		(pts
+			(xy 129.54 157.48)
+			(xy 132.08 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d8bc2b8-8da7-5d8c-b29d-6d7edbbdbf1f")
+	)
+	(wire
+		(pts
+			(xy 93.98 127)
+			(xy 121.92 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4be19ca4-3dee-5609-b50c-61f2b50d70be")
+	)
+	(junction
+		(at 121.92 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ae1b2e06-5862-527f-afba-10929dd309f2")
+	)
+	(label "USB_DP"
+		(at 95.25 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5ed17c76-7276-5c6c-8840-895039d29a36")
+	)
+	(label "USB_DM"
+		(at 95.25 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9d4822ce-c588-559a-bb72-3c5022853de5")
+	)
+	(label "RUN_CTL"
+		(at 95.25 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8b33ed02-b22c-5615-ad73-a9ddd3f53823")
+	)
+	(label "BOOTSEL_CTL"
+		(at 95.25 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "507fae80-a30f-545b-a8df-d40191c542ec")
+	)
+	(label "S3_EN"
+		(at 121.92 163.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "504f6cce-b019-59e9-bee7-5fcfb8d0f366")
+	)
+	(label "S3_IO0"
+		(at 124.46 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "283d217e-bde6-5521-9048-c3a17b105e24")
+	)
+	(label "S3_TXD"
+		(at 127 158.75 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "90d4a009-c74d-5e96-9440-602539a73705")
+	)
+	(label "S3_RXD"
+		(at 129.54 156.21 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "27b8257b-51de-50ac-ac25-e8681b80ca9f")
+	)
+	(text "the console cartridge slot\n(the edge) is on cart-rp"
+		(exclude_from_sim no)
+		(at 30.48 162.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "3262f4ac-3960-57bf-ba23-b5dcaa2300d7")
+	)
+	(text "FujiNet for the Fairchild Channel F, Rev0: an RP2040 Videocart on the F8 bus + ESP32-S3.\n\nSignals flow left to right, from the console's cartridge slot to the network, and\nevery connection between the sheets is a wire on this page:\n\n  cart-rp    the 22-contact edge -> two SN74LVC4245A (5 V console / 3.3 V RP) -> the\n             RP2040 (one symbol): D0-D7, ROMC0-4, WRITE, PHI, DIR; /INTREQ's open-drain\n             FET; the activity LED; scope pads on DIR, WRITE, PHI, GP17; and the RP2040's\n             own circuit: supplies and decoupling, 1.1 V core regulator, 2 MB QSPI flash,\n             12 MHz crystal, SWD, RUN / BOOTSEL / RESET, USB out to the S3\n  fujinet    the ESP32-S3 (FujiNet, the RP's USB host), microSD, WS2812 status LED\n  usb        USB-C, the CP2102N bridge and esptool's auto-program pair\n  power      +5V = console 5V OR USB VBUS (SS34s), the 3.3 V buck (+3V3), the RP's\n             LDO (+3V3_RP)\n\nRails (GND, CONS_5V, VBUS, +5V, +3V3, +3V3_RP, DVDD) join by their power symbols.\n\nFirmware contract (tools/check_nets.py checks this netlist against it):\nfujinet-firmware pico/channelf channelf_cart.h (D0-D7 GPIO0-7, ROMC0-4 GPIO8-12,\nWRITE GPIO13, PHI GPIO14, DIR GPIO15, /INTREQ GPIO16), boards/pico.h (LED GPIO25),\nand the ESP32-S3 pin map fujiversal-channelf.h -- the RP2040 firmware runs unchanged.\n\nNot verifiable in CAD (bring-up checklist, README): the WRITE edge and write-data\ntiming (PROVISIONAL in channelf_cart.c: scope pads), console 5 V headroom under\nWiFi bursts, the Videocart edge's geometry (to be measured from a real cart)."
+		(exclude_from_sim no)
+		(at 187.96 25.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "123150a4-d65f-5934-a3c7-1d378c30dd1a")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

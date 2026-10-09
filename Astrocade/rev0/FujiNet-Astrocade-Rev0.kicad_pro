@@ -540,11 +540,11 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "USB",
+        "name": "VBUS",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
+        "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.25,
+        "track_width": 0.3,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -559,11 +559,11 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "VBUS",
+        "name": "USB",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
+        "priority": 2,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.3,
+        "track_width": 0.25,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
@@ -594,19 +594,19 @@
       },
       {
         "netclass": "USB",
-        "pattern": "/cart/USB_DP"
+        "pattern": "/USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "/cart/USB_DM"
+        "pattern": "/USB_DM"
       },
       {
         "netclass": "USB",
-        "pattern": "/cart/RP_USB_DP"
+        "pattern": "/rp-core/RP_USB_DP"
       },
       {
         "netclass": "USB",
-        "pattern": "/cart/RP_USB_DM"
+        "pattern": "/rp-core/RP_USB_DM"
       },
       {
         "netclass": "USB",
@@ -768,16 +768,20 @@
       "Root"
     ],
     [
-      "fa4b0715-3d27-5667-a85f-58417848a235",
-      "cart-rp2354a"
+      "aa14256c-ee19-5269-b6e0-758569b58ec2",
+      "cart-bus"
     ],
     [
-      "13deff85-dcc9-5714-b648-7938a957f8f2",
-      "esp32s3-sd"
+      "9efc14d3-3d8a-5814-bda2-8d7eee164ebe",
+      "rp-core"
     ],
     [
-      "dcbc3199-7cb5-58f1-9360-9070440a8521",
-      "usb-uart"
+      "2207b269-8324-51c2-a1a7-e8a9e05bcdff",
+      "fujinet"
+    ],
+    [
+      "b8ef4323-d442-5390-989d-d78dfe73ee91",
+      "usb"
     ],
     [
       "113cb323-1aa8-5524-9e7e-76bfe6ec88df",

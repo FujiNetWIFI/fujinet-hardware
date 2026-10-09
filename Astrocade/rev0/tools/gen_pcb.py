@@ -76,6 +76,8 @@ def schematic_netlist():
                     os.path.join(PRJ, D.PROJECT + '.kicad_sch')], check=True, capture_output=True)
     t = parse(open(fn).read())
     out = {}
+    for c in findall(find(t, 'components'), 'comp'):
+        COMP_SHEET[str(find(c, 'ref')[1])] = str(find(find(c, 'sheetpath'), 'names')[1])
     for n in findall(find(t, 'nets'), 'net'):
         name = str(find(n, 'name')[1])
         for nd in findall(n, 'node'):
@@ -84,6 +86,7 @@ def schematic_netlist():
 
 
 NETLIST = {}
+COMP_SHEET = {}  # ref -> the sheet kicad-cli files the component under ('/rp-core/')
 import re as _re
 
 
@@ -95,7 +98,7 @@ def load_netlist():
 
 def NET(short):
     """Full KiCad net name for a design.py net: nets local to a sheet carry its path
-    (/cart/CA0); rails and other global nets do not."""
+    (/cart-bus/CA0), nets wired between sheets on the root /NET; rails none."""
     names = set(load_netlist().values())
     if short in names:
         return short
@@ -103,6 +106,21 @@ def NET(short):
     if len(hits) != 1:
         raise SystemExit('net %s: %s' % (short, hits or 'not in the schematic netlist'))
     return hits[0]
+
+
+def fp_sheet_unit(p, syms):
+    """The sheet and symbol unit a footprint links to.  A part drawn on several sheets (its units
+    split between them: the RP2354A, unit A on cart-bus, B on rp-core) is filed by KiCad under the
+    first of those sheets in hierarchy order, with the uuids of the units drawn there; the footprint
+    path takes the lowest of those units.  Cross-checked against the netlist kicad-cli wrote."""
+    units = gen_sch.units_of(syms[p.lib_id])
+    on = {u: p.unit_sheets.get(u, p.sheet) for u in units}
+    stem = min(set(on.values()), key=D.SHEET_ORDER.index)
+    u = min(u for u, sh in on.items() if sh == stem)
+    load_netlist()
+    if COMP_SHEET and COMP_SHEET.get(p.ref) != '/%s/' % stem:
+        raise SystemExit('%s: design puts the footprint on /%s/, kicad-cli on %s' % (p.ref, stem, COMP_SHEET.get(p.ref)))
+    return stem, u
 
 
 def SHORT(full):
@@ -646,14 +664,13 @@ def main():
     syms = gen_sch.load_symbols()
     for p in D.PARTS:
         x, y, r = PLACE[p.ref]
-        u = gen_sch.units_of(syms[p.lib_id])[0]
-        path = '/%s/%s' % (gen_sch.uid('sheet', p.sheet), gen_sch.uid(p.sheet, p.ref, u))
-        sheetname = '/%s/' % gen_sch.LAY.ROOT['names'][p.sheet]
+        stem, u = fp_sheet_unit(p, syms)
+        path = '/%s/%s' % (gen_sch.uid('sheet', stem), gen_sch.uid(stem, p.ref, u))
         ds = ''
         for pr in findall(syms[p.lib_id], 'property'):
             if pr[1] == 'Datasheet':
                 ds = str(pr[2])
-        board.append(instance(p, x, y, r, path, sheetname, p.sheet + '.kicad_sch', ds))
+        board.append(instance(p, x, y, r, path, '/%s/' % stem, stem + '.kicad_sch', ds))
     for i, (x, y, _d) in enumerate(HOLES, 1):
         h = D.Part('H', D.LIB + ':MountingHole_3.2mm_NPTH', 'M3', D.FP('MountingHole_3.2mm_NPTH'), {},
                    None, desc='M3 shell screw', bom=False)

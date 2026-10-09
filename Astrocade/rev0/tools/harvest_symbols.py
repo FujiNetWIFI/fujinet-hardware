@@ -23,11 +23,14 @@ KICAD_SYMS = os.environ.get('KICAD_SYMBOL_DIR', '/usr/share/kicad/symbols')
 # lib -> symbols to (re)flatten from the stock libraries
 STOCK = {
     'Regulator_Linear': ['AP2112K-3.3'],              # RP2354A LDO (+3V3_RP)
+    'Device': ['R_Pack04_Split'],                      # the SD pull-up pack, one unit per resistor
     'power': ['GND', '+3V3', '+5V', 'VBUS', 'PWR_FLAG'],
 }
 # symbols the old cache carries that this board does not use
 DROP = {'FujiNet-INTV:INTV_Cart_Edge_44', 'MCU_RaspberryPi:RP2040', 'Memory_Flash:W25Q32JVSS',
-        '74xx:74LS245', 'Transistor_BJT:BC847', 'Connector:Micro_SD_Card', 'Device:C_Polarized'}
+        '74xx:74LS245', 'Transistor_BJT:BC847', 'Connector:Micro_SD_Card', 'Device:C_Polarized',
+        'Device:R_Pack04',                              # now R_Pack04_Split
+        'FujiNet-Astrocade:Astrocade_Cart_Edge_26'}     # now drawn by gen_sch.edge_symbol()
 
 
 def flatten(lib, name, syms):

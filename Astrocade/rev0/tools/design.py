@@ -1,8 +1,14 @@
 """FujiNet-Astrocade Rev0 (RP2354A) -- the single source of truth.
 
 Every part, value, footprint, MPN, LCSC code and pin->net assignment lives
-here.  gen_sch.py, gen_pcb.py, check_nets.py and export_jlc.py all import it;
-the KiCad files are generated output.
+here.  gen_sch.py, gen_pcb.py, check_nets.py and export.py all import it;
+the KiCad files are generated output.  Parts are addressed by `key` (the
+drawing, the audits); references are labels, frozen in tools/refs.lock (the
+routed board, its silkscreen, BOM and CPL carry them).
+
+One sheet per board region, console side first (the FujiNet-5200 Rev0
+arrangement): every sheet is the board turned so the edge faces left, so the
+schematic reads from the cartridge slot outward (tools/sch_layout.py).
 
 Circuit provenance: the INTV Rev0 cart (fujinet-hardware INTV/FujiNet-INTV-Rev0,
 itself adapted from PiNTY CARD, CERN-OHL-W-2.0).  Firmware contracts:
@@ -22,12 +28,14 @@ LIB = 'FujiNet-Astrocade'
 PROJECT = 'FujiNet-Astrocade-Rev0'
 NC = None  # explicit no-connect
 
-SHEETS = [  # (file stem, title, page)
-    ('cart-rp2354a', 'Cartridge port + RP2354A bus server', 2),
-    ('esp32s3-sd', 'ESP32-S3 FujiNet core, microSD, status LED, RESET', 3),
-    ('usb-uart', 'USB-C, CP2102N programming bridge', 4),
-    ('power', 'Power: console 5V / USB VBUS OR, 3.3V buck, RP 3.3V LDO', 5),
+SHEETS = [  # (file stem, title, page): one sheet per board region, console side first
+    ('cart-bus', 'Cart bus: edge -> RP2354A GPIO', 2),
+    ('rp-core', 'RP2354A core, crystal, RUN, USB', 3),
+    ('fujinet', 'FujiNet: ESP32-S3, microSD, LED', 4),
+    ('usb', 'USB-C and the CP2102N bridge', 5),
+    ('power', 'Power: 5V OR, 3.3V buck, RP LDO', 6),
 ]
+SHEET_ORDER = [s[0] for s in SHEETS]
 
 # ---- RP2354A (QFN-60) GPIO -> package pin ---------------------------------
 RP_GPIO_PIN = {0: 2, 1: 3, 2: 4, 3: 5, 4: 7, 5: 8, 6: 9, 7: 10, 8: 12, 9: 13,
@@ -75,7 +83,8 @@ RES = {'27R': ('0603WAF270JT5E', 'C25190'), '33R': ('0603WAF330JT5E', 'C23140'),
        '330R': ('0603WAF3300T5E', 'C23138'), '1k': ('0603WAF1001T5E', 'C21190'),
        '5.1k': ('0603WAF5101T5E', 'C23186'), '10k': ('0603WAF1002T5E', 'C25804'),
        '22k': ('0603WAF2202T5E', 'C31850'), '47k': ('0603WAF4702T5E', 'C25819'),
-       '100k': ('0603WAF1003T5E', 'C25803'), '150k': ('0603WAF1503T5E', 'C22807')}
+       '100k': ('0603WAF1003T5E', 'C25803'), '150k': ('0603WAF1503T5E', 'C22807'),
+       '15k': ('0603WAF1502T5E', 'C22809')}
 CAP = {'15pF': (C0603, 'CL10C150JB8NNNC', 'C1644'),
        '100nF': (C0603, 'CC0603KRX7R9BB104', 'C14663'),
        '1uF': (C0603, 'CL10A105KB8NNNC', 'C15849'),
@@ -90,11 +99,25 @@ CAP0402 = {'100nF': (None, 'CL05B104KO5NNNC', 'C1525'), '4.7uF': (None, 'CL05A47
 
 class Part:
     def __init__(self, prefix, lib_id, value, footprint, pins, sheet,
-                 mpn='', lcsc='', desc='', unit_pins=None, bom=True, dnp=False):
+                 mpn='', lcsc='', desc='', bom=True, dnp=False, ds='', key=None):
         self.prefix, self.lib_id, self.value, self.footprint = prefix, lib_id, value, footprint
         self.pins = {str(k): v for k, v in pins.items()}  # pad number -> net (None = NC)
         self.sheet, self.mpn, self.lcsc, self.desc, self.bom, self.dnp = sheet, mpn, lcsc, desc, bom, dnp
+        self.mfr = ''
+        self.ds = ds                                       # datasheet URL when the stock symbol's is another part's
+        self.key = key      # stable name the drawing scripts use (references: refs.lock)
+        self.unit_sheets = {}                              # unit -> sheet, for a part drawn on several sheets
+        self.pin_unit = {}                                 # pad -> unit (only with unit_sheets)
         self.ref = None
+
+    def sheets(self):
+        return sorted(set(self.unit_sheets.values()) | {self.sheet}, key=SHEET_ORDER.index)
+
+    def pad_sheet(self, pad):
+        """The sheet a pad's pin is drawn on."""
+        if self.unit_sheets:
+            return self.unit_sheets[self.pin_unit[str(pad)]]
+        return self.sheet
 
 
 PARTS = []
@@ -112,31 +135,32 @@ def add(*a, **k):
     return p
 
 
-def R(value, a, b, desc='', size='0603'):
+def R(value, a, b, desc='', size='0603', key=None):
     mpn, lcsc = RES[value] if size == '0603' else RES0402[value]
     fp = R0603 if size == '0603' else FP('RPI_R0402')
-    return add('R', 'Device:R', value, fp, {1: a, 2: b}, mpn=mpn, lcsc=lcsc, desc=desc)
+    return add('R', 'Device:R', value, fp, {1: a, 2: b}, mpn=mpn, lcsc=lcsc, desc=desc, key=key)
 
 
-def C(value, a, b='GND', desc='', size=None):
+def C(value, a, b='GND', desc='', size=None, key=None):
     fp, mpn, lcsc = CAP[value] if size is None else CAP0402[value]
     if size is not None:
         fp = FP(size)
-    return add('C', 'Device:C', value, fp, {1: a, 2: b}, mpn=mpn, lcsc=lcsc, desc=desc)
+    return add('C', 'Device:C', value, fp, {1: a, 2: b}, mpn=mpn, lcsc=lcsc, desc=desc, key=key)
 
 
-def SW(value, net, desc):
+def SW(value, net, desc, key=None):
     return add('SW', 'Switch:SW_Push', value, FP('SW_SPST_TL3342'), {1: net, 2: 'GND'},
-               mpn='TL3342F160QG', lcsc='C2886898', desc=desc)
+               mpn='TL3342F160QG', lcsc='C2886898', desc=desc, key=key)
 
 
-def TP(net, label):
+def TP(net, label, key=None):
     return add('TP', 'Connector:TestPoint', label, FP('TestPoint_Pad_D1.5mm'), {1: net},
-               desc='test pad', bom=False)
+               desc='test pad', bom=False, key=key)
 
 
 # =========================================================================
-sheet('cart-rp2354a')
+# cart-bus: the edge, the RP2354A's 30 GPIOs (its unit A), what hangs off them
+sheet('cart-bus')
 rp = {p: RP_RAIL for p in RP_IOVDD_PINS}                                     # IOVDD
 rp.update({p: 'DVDD' for p in RP_DVDD_PINS})
 rp.update({50: 'DVDD',                                                       # VREG_FB
@@ -148,154 +172,171 @@ rp.update({50: 'DVDD',                                                       # V
       60: 'QSPI_SS', 61: 'GND'})
 for g, pin in RP_GPIO_PIN.items():
     rp[pin] = RP_GPIO_NET.get(g, NC)
-add('U', 'MCU_RaspberryPi:RP2354A', 'RP2354A', FP('RPI_RP2350A_QFN60'), rp,
-    mpn='RP2354A', lcsc='C41378174', desc='RP2350A + 2MB flash in package; cart bus server')
+U_RP = add('U', '%s:RP2354A_Split' % LIB, 'RP2354A', FP('RPI_RP2350A_QFN60'), rp,
+           mpn='RP2354A', lcsc='C41378174', desc='RP2350A + 2MB flash in package; cart bus server', key='U_RP')
+# drawn in two units: A = the 30 GPIOs on the cart-bus sheet, B = supplies, core regulator,
+# crystal, RUN, SWD, USB and QSPI on rp-core (gen_sch.rp_split_symbol)
+U_RP.unit_sheets = {1: 'cart-bus', 2: 'rp-core'}
+U_RP.pin_unit = {str(pad): 1 if pad in RP_GPIO_PIN.values() else 2 for pad in rp}
 add('J', '%s:Astrocade_Cart_Edge_26' % LIB, 'Astrocade_Cart_Edge_26', FP('Astrocade_Cart_Edge_26'),
-    EDGE, desc='26 contact lands on B.Cu, blade contacts from below', bom=False)
+    EDGE, desc='26 contact lands on B.Cu, blade contacts from below', bom=False, key='J_EDGE')
+R('10k', RP_RAIL, 'CCS_N', desc='/CCS idle-high when no console', key='R_CCS')
+# GP26 is a plain (not fault-tolerant) ADC pad: 0.6 x CONS_5V = 3.0 V at 5.0 V,
+# 3.15 V at 5.25 V; VIH 0.65 x IOVDD = 2.15 V is met down to 3.6 V.  10k / 15k (6 kOhm Thevenin, was
+# 100k / 150k): VSENSE is a digital input in the firmware's serve gate, and on RP2350 A2 silicon erratum
+# E9 holds an input-enabled pad near 2.2 V unless it is pulled down through 8.2 kOhm or less -- with
+# 60 kOhm a USB-powered cart could read a switched-off console as powered (docs/design-review-rev0.md,
+# Part 3, finding 1; tools/audit/e9_vsense.py).  0.2 mA from the console rail.
+R('10k', 'CONS_5V', 'VSENSE', desc='console 5V sense (GP26/ADC0 is not 5V tolerant)', key='R_VSH')
+R('15k', 'VSENSE', 'GND', desc='console 5V sense -> 3.0V (6 kOhm: beats RP2350-E9)', key='R_VSL')
+# activity LED
+R('330R', 'RP_LED', 'RP_LED_A', desc='LED series (KT-0603G VF ~2.6-2.85 V: 1.5-2 mA from 3.3 V)', key='R_LED')
+add('D', 'Device:LED', 'green', FP('LED_0603_1608Metric'), {1: 'GND', 2: 'RP_LED_A'},
+    mpn='KT-0603G', lcsc='C12624', desc='RP activity LED', key='D_LED')
+TP('SELFTEST', 'SELFTEST', key='TP_SELFTEST')
+TP('RP_DBG_TX', 'DBG_TX', key='TP_DBGTX')
+# /CCS is probed at R_CCS: a pad of its own would hang a long stub on the bus
+
+# =========================================================================
+# rp-core: the RP2354A's unit B -- supplies and decoupling, core regulator, crystal,
+# RUN / BOOTSEL / RESET, SWD, the USB link to the S3
+sheet('rp-core')
 # decoupling: one 100nF per IOVDD/DVDD/QSPI/USB/ADC supply pin, bulk on 3V3
-for _ in range(6):
-    C('100nF', RP_RAIL, desc='IOVDD decoupling')
-C('100nF', RP_RAIL, desc='QSPI_IOVDD decoupling (extra)')
-C('100nF', RP_RAIL, desc='USB_OTP_VDD + QSPI_IOVDD decoupling', size='RPI_C0402')
-C('100nF', RP_RAIL, desc='ADC_AVDD decoupling')
-C('4.7uF', RP_RAIL, desc='VREG_VIN bulk', size='RPI_C0402_wide')
-C('10uF', RP_RAIL, desc='RP 3V3 bulk')
-for _ in range(3):
-    C('100nF', 'DVDD', desc='DVDD decoupling')
-C('4.7uF', 'DVDD', desc='core regulator output', size='RPI_C0402_wide')
-R('33R', RP_RAIL, 'VREG_AVDD', desc='VREG_AVDD filter', size='0402')
-C('4.7uF', 'VREG_AVDD', desc='VREG_AVDD filter', size='RPI_C0402')
+for pin in RP_IOVDD_PINS:
+    C('100nF', RP_RAIL, desc='IOVDD decoupling', key='C_IOV%d' % pin)
+C('100nF', RP_RAIL, desc='QSPI_IOVDD decoupling (extra)', key='C_QSPI')
+C('100nF', RP_RAIL, desc='USB_OTP_VDD + QSPI_IOVDD decoupling', size='RPI_C0402', key='C_OTP')
+C('100nF', RP_RAIL, desc='ADC_AVDD decoupling', key='C_ADC')
+C('4.7uF', RP_RAIL, desc='VREG_VIN bulk', size='RPI_C0402_wide', key='C_VREGIN')
+C('10uF', RP_RAIL, desc='RP 3V3 bulk', key='C_IOBULK')
+for pin in RP_DVDD_PINS:
+    C('100nF', 'DVDD', desc='DVDD decoupling', key='C_DV%d' % pin)
+C('4.7uF', 'DVDD', desc='core regulator output', size='RPI_C0402_wide', key='C_DVBULK')
+R('33R', RP_RAIL, 'VREG_AVDD', desc='VREG_AVDD filter', size='0402', key='R_AVDD')
+C('4.7uF', 'VREG_AVDD', desc='VREG_AVDD filter', size='RPI_C0402', key='C_AVDD')
 add('L', 'Device:L', '3.3uH', FP('RPI_L_AOTA-B201610S3R3'), {1: 'DVDD', 2: 'RP_LX'},
-    mpn='AOTA-B201610S3R3-101-T', lcsc='C42411119', desc='RP2350 core SMPS inductor')
+    mpn='AOTA-B201610S3R3-101-T', lcsc='C42411119', desc='RP2350 core SMPS inductor', key='L_RP')
 # 12 MHz crystal
 add('Y', 'Device:Crystal_GND24', '12MHz', FP('Crystal_SMD_3225-4Pin_3.2x2.5mm'),
-    {1: 'XIN', 2: 'GND', 3: 'XOUT_Y', 4: 'GND'}, mpn='ABM8-272-T3', lcsc='C20625731')
-C('15pF', 'XIN', desc='crystal load')
-C('15pF', 'XOUT_Y', desc='crystal load')
-R('1k', 'XOUT', 'XOUT_Y', desc='crystal drive limit')
+    {1: 'XIN', 2: 'GND', 3: 'XOUT_Y', 4: 'GND'}, mpn='ABM8-272-T3', lcsc='C20625731', key='Y_RP')
+C('15pF', 'XIN', desc='crystal load', key='C_XIN')
+C('15pF', 'XOUT_Y', desc='crystal load', key='C_XOUT')
+R('1k', 'XOUT', 'XOUT_Y', desc='crystal drive limit', key='R_XOUT')
 # RUN / BOOTSEL.  The S3 forces them exactly as fnPicoUpdater::
 # forceBootselViaPins() expects: its pins idle as inputs and are driven LOW
 # to assert.  Same 3.3V rail on both chips, so a 1k series resistor is the
 # whole interface (an NPN driver here would invert the firmware's polarity).
-R('10k', RP_RAIL, 'RUN', desc='RUN pull-up')
-R('10k', RP_RAIL, 'QSPI_SS', desc='QSPI_SS pull-up')
-R('1k', 'QSPI_SS', 'BOOTSEL_BTN', desc='BOOTSEL button series')
-SW('BOOTSEL', 'BOOTSEL_BTN', 'RP2354 BOOTSEL (hold while pressing RESET)')
-R('1k', 'RUN_CTL', 'RUN', desc='S3 IO4 -> RP RUN (drive low = reset)')
-R('1k', 'BOOTSEL_CTL', 'QSPI_SS', desc='S3 IO5 -> RP QSPI_SS (low through reset = BOOTSEL)')
-# console bus support
-R('10k', RP_RAIL, 'CCS_N', desc='/CCS idle-high when no console')
-# GP26 is a plain (not fault-tolerant) ADC pad: 0.6 x CONS_5V = 3.0 V at 5.0 V,
-# 3.15 V at 5.25 V; VIH 0.65 x IOVDD = 2.15 V is met down to 3.6 V
-R('100k', 'CONS_5V', 'VSENSE', desc='console 5V sense (GP26/ADC0 is not 5V tolerant)')
-R('150k', 'VSENSE', 'GND', desc='console 5V sense -> 3.0V')
+R('10k', RP_RAIL, 'RUN', desc='RUN pull-up', key='R_RUN')
+R('10k', RP_RAIL, 'QSPI_SS', desc='QSPI_SS pull-up', key='R_SS')
+R('1k', 'QSPI_SS', 'BOOTSEL_BTN', desc='BOOTSEL button series', key='R_BSEL')
+SW('BOOTSEL', 'BOOTSEL_BTN', 'RP2354 BOOTSEL (hold while pressing RESET)', key='SW_BOOTSEL')
+R('1k', 'RUN_CTL', 'RUN', desc='S3 IO4 -> RP RUN (drive low = reset)', key='R_RUNCTL')
+R('1k', 'BOOTSEL_CTL', 'QSPI_SS', desc='S3 IO5 -> RP QSPI_SS (low through reset = BOOTSEL)', key='R_BSELCTL')
 # RP <-> S3 native USB (RP = CDC device, S3 = host)
-R('27R', 'USB_DP', 'RP_USB_DP', desc='USB series', size='0402')
-R('27R', 'USB_DM', 'RP_USB_DM', desc='USB series', size='0402')
-# activity LED
-R('330R', 'RP_LED', 'RP_LED_A', desc='LED series (KT-0603G VF ~2.6-2.85 V: 1.5-2 mA from 3.3 V)')
-add('D', 'Device:LED', 'green', FP('LED_0603_1608Metric'), {1: 'GND', 2: 'RP_LED_A'},
-    mpn='KT-0603G', lcsc='C12624', desc='RP activity LED')
-TP('SWCLK', 'SWCLK')
-TP('SWDIO', 'SWDIO')
-TP('GND', 'GND')
-TP('SELFTEST', 'SELFTEST')
-TP('RP_DBG_TX', 'DBG_TX')
-TP('RUN', 'RUN')
-TP('QSPI_SS', 'BOOTSEL')
-# /CCS and DVDD are probed at R8 and C15: a pad of their own would hang a long stub
-# on the bus / the core rail
+R('27R', 'USB_DP', 'RP_USB_DP', desc='USB series', size='0402', key='R_USBP')
+R('27R', 'USB_DM', 'RP_USB_DM', desc='USB series', size='0402', key='R_USBM')
+TP('SWCLK', 'SWCLK', key='TP_SWCLK')
+TP('SWDIO', 'SWDIO', key='TP_SWDIO')
+TP('GND', 'GND', key='TP_GND')
+TP('RUN', 'RUN', key='TP_RUN')
+TP('QSPI_SS', 'BOOTSEL', key='TP_BOOTSEL')
+# DVDD is probed at C_DVBULK: a pad of its own would hang a stub on the core rail
+# top-face RESET resets both MCUs: the button pulls RP RUN and S3 EN low through
+# a common-cathode pair, so neither chip's reset drives the other's
+SW('RESET', 'RST_BTN', 'cart RESET: RP RUN + S3 EN via BAT54C', key='SW_RESET')
+add('D', 'Diode:BAT54C', 'BAT54C', FP('SOT-23'), {1: 'RUN', 2: 'S3_EN', 3: 'RST_BTN'},
+    mpn='BAT54C,215', lcsc='C37704', desc='RESET steering, common cathode', key='D_RST')
 
 # =========================================================================
-sheet('esp32s3-sd')
+# fujinet: the ESP32-S3, microSD, the WS2812 status LED
+sheet('fujinet')
 s3 = {}
 for fn, pad in S3_PAD.items():
     for p in (pad if isinstance(pad, list) else [pad]):
         s3[p] = 'GND' if fn == 'GND' else '+3V3' if fn == '3V3' else S3_NET.get(fn, NC)
-add('U', 'RF_Module:ESP32-S3-WROOM-1', 'ESP32-S3-WROOM-1-N16R8', FP('ESP32-S3-WROOM-1'), s3,
-    mpn='ESP32-S3-WROOM-1-N16R8', lcsc='C2913202', desc='FujiNet core (fujiversal-astrocade)')
-C('22uF', '+3V3', desc='S3 bulk (WiFi TX bursts)')
-C('100nF', '+3V3', desc='S3 decoupling')
-R('10k', '+3V3', 'S3_EN', desc='EN pull-up')
-C('1uF', 'S3_EN', desc='EN power-on delay')
-SW('S3_RST', 'S3_EN', 'ESP32-S3 EN')
-SW('S3_BOOT', 'S3_IO0', 'ESP32-S3 BOOT (IO0)')
-# top-face RESET resets both MCUs: the button pulls RP RUN and S3 EN low through
-# a common-cathode pair, so neither chip's reset drives the other's
-SW('RESET', 'RST_BTN', 'cart RESET: RP RUN + S3 EN via BAT54C')
-add('D', 'Diode:BAT54C', 'BAT54C', FP('SOT-23'), {1: 'RUN', 2: 'S3_EN', 3: 'RST_BTN'},
-    mpn='BAT54C,215', lcsc='C37704', desc='RESET steering, common cathode')
+add('U', '%s:ESP32-S3-WROOM-1_Fn' % LIB, 'ESP32-S3-WROOM-1-N16R8', FP('ESP32-S3-WROOM-1'), s3,
+    mpn='ESP32-S3-WROOM-1-N16R8', lcsc='C2913202', desc='FujiNet core (fujiversal-astrocade)', key='U_S3')
+C('22uF', '+3V3', desc='S3 bulk (WiFi TX bursts)', key='C_S3BULK')
+C('100nF', '+3V3', desc='S3 decoupling', key='C_S3')
+R('10k', '+3V3', 'S3_EN', desc='EN pull-up', key='R_EN')
+C('1uF', 'S3_EN', desc='EN power-on delay', key='C_EN')
+SW('S3_RST', 'S3_EN', 'ESP32-S3 EN', key='SW_S3EN')
+SW('S3_BOOT', 'S3_IO0', 'ESP32-S3 BOOT (IO0)', key='SW_S3BOOT')
 add('J', '%s:MicroSD_TF015' % LIB, 'microSD', FP('TF-SMD_TF-015'),
     {1: 'SD_DAT2', 2: 'SD_CS', 3: 'SD_MOSI', 4: '+3V3', 5: 'SD_SCK', 6: 'GND',
      7: 'SD_MISO', 8: 'SD_DAT1', 9: 'SD_CD', 10: 'GND', 11: 'GND', 12: 'GND', 13: 'GND'},
-    mpn='TF-015', lcsc='C113206', desc='microSD push-push, SPI mode')
-add('RN', 'Device:R_Pack04', '4x10k', FP('R_Array_Convex_4x0603'),
+    mpn='TF-015', lcsc='C113206', desc='microSD push-push, SPI mode', key='J_SD')
+# one symbol unit per resistor (R_Pack04_Split: unit k = pins k and 9-k), drawn on its line
+add('RN', 'Device:R_Pack04_Split', '4x10k', FP('R_Array_Convex_4x0603'),
     {1: 'SD_CS', 2: 'SD_MISO', 3: 'SD_DAT1', 4: 'SD_DAT2', 5: '+3V3', 6: '+3V3', 7: '+3V3', 8: '+3V3'},
-    mpn='4D03WGJ0103T5E', lcsc='C29718', desc='SD pull-ups')
+    mpn='4D03WGJ0103T5E', lcsc='C29718', desc='SD pull-ups', key='RN_SD')
 # TF-015 card-detect: open with no card, closed to the shell (GND) with a card in:
 # SD_CD reads LOW when a card is present
-R('10k', '+3V3', 'SD_CD', desc='card-detect pull-up (low = card present)')
-C('10uF', '+3V3', desc='microSD supply')
+R('10k', '+3V3', 'SD_CD', desc='card-detect pull-up (low = card present)', key='R_SDCD')
+C('10uF', '+3V3', desc='microSD supply', key='C_SD')
 # WS2812B-2020-V6 datasheet: VDD +3.7..+5.3 V (NOT a 3.3 V part), VIH min 2.7 V:
 # it runs on +5V (4.6-5.0 V after the OR diode) and takes the S3's 3.3 V data directly
-R('330R', 'LED_STRIP', 'WS_DIN', desc='WS2812 data series')
+R('330R', 'LED_STRIP', 'WS_DIN', desc='WS2812 data series', key='R_WS')
 add('D', 'LED:WS2812B-2020', 'WS2812B-2020-V6', FP('LED_WS2812B-2020_PLCC4_2.0x2.0mm'),
     {1: NC, 2: 'GND', 3: 'WS_DIN', 4: '+5V'}, mpn='WS2812B-2020-V6', lcsc='C52917434',
-    desc='status LED on +5V (datasheet VDD 3.7-5.3 V; VIH 2.7 V takes 3.3 V data)')
-C('100nF', '+5V', desc='WS2812 decoupling')
+    desc='status LED on +5V (datasheet VDD 3.7-5.3 V; VIH 2.7 V takes 3.3 V data)', key='D_WS')
+C('100nF', '+5V', desc='WS2812 decoupling', key='C_WS')
 
 # =========================================================================
-sheet('usb-uart')
-add('J', 'Connector:USB_C_Receptacle_USB2.0_16P', 'USB-C', FP('USB_C_Receptacle_HRO_TYPE-C-31-M-12'),
+# usb: USB-C, ESD, the CP2102N bridge and esptool's auto-program pair
+sheet('usb')
+add('J', '%s:USB_C_USB2.0_16P_Fn' % LIB, 'USB-C', FP('USB_C_Receptacle_HRO_TYPE-C-31-M-12'),
     {'A1': 'GND', 'A4': 'VBUS', 'A5': 'CC1', 'A6': 'UBRG_DP', 'A7': 'UBRG_DM', 'A8': NC,
      'A9': 'VBUS', 'A12': 'GND', 'B1': 'GND', 'B4': 'VBUS', 'B5': 'CC2', 'B6': 'UBRG_DP',
      'B7': 'UBRG_DM', 'B8': NC, 'B9': 'VBUS', 'B12': 'GND', 'SH': 'GND'},
-    mpn='TYPE-C-31-M-12', lcsc='C165948', desc='power + S3 programming')
-R('5.1k', 'CC1', 'GND', desc='UFP Rd')
-R('5.1k', 'CC2', 'GND', desc='UFP Rd')
-for n in ('UBRG_DP', 'UBRG_DM', 'VBUS'):
+    mpn='TYPE-C-31-M-12', lcsc='C165948', desc='power + S3 programming', key='J_USB')
+R('5.1k', 'CC1', 'GND', desc='UFP Rd', key='R_CC1')
+R('5.1k', 'CC2', 'GND', desc='UFP Rd', key='R_CC2')
+for n, k in (('UBRG_DP', 'D_ESDP'), ('UBRG_DM', 'D_ESDM'), ('VBUS', 'D_ESDV')):
     add('D', 'Diode:ESD5Zxx', 'ESD5Z5.0T1G', FP('D_SOD-523'), {1: n, 2: 'GND'},
-        mpn='ESD5Z5.0T1G', lcsc='C82044', desc='ESD')
-C('1uF', 'VBUS', desc='VBUS decoupling at the connector')
-C('100nF', 'VBUS', desc='VBUS HF decoupling at the connector')
+        mpn='ESD5Z5.0T1G', lcsc='C82044', desc='ESD', key=k)
+C('1uF', 'VBUS', desc='VBUS decoupling at the connector', key='C_VBUS')
+C('100nF', 'VBUS', desc='VBUS HF decoupling at the connector', key='C_VBUSHF')
 cp = {i: NC for i in range(1, 30)}
 cp.update({3: 'GND', 4: 'UBRG_DP', 5: 'UBRG_DM', 6: '+3V3', 7: '+3V3', 8: 'VBUS_SNS',
            9: 'CP_RST', 23: 'GND', 24: 'UART_RTS', 25: 'S3_TXD', 26: 'S3_RXD',
            28: 'UART_DTR', 29: 'GND'})
 add('U', 'Interface_USB:CP2102N-Axx-xQFN28', 'CP2102N-A02-GQFN28', FP('QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm'),
-    cp, mpn='CP2102N-A02-GQFN28R', lcsc='C964632', desc='USB-UART for S3 flashing/console (self-powered)')
-C('100nF', '+3V3', desc='CP2102N VDD')
-C('4.7uF', '+3V3', desc='CP2102N VDD bulk')
-R('22k', 'VBUS', 'VBUS_SNS', desc='VBUS sense divider')
-R('47k', 'VBUS_SNS', 'GND', desc='VBUS sense divider')
-R('10k', '+3V3', 'CP_RST', desc='/RST pull-up')
+    cp, mpn='CP2102N-A02-GQFN28R', lcsc='C964632', desc='USB-UART for S3 flashing/console (self-powered)',
+    key='U_UART')
+C('100nF', '+3V3', desc='CP2102N VDD', key='C_UART')
+C('4.7uF', '+3V3', desc='CP2102N VDD bulk', key='C_UARTBULK')
+R('22k', 'VBUS', 'VBUS_SNS', desc='VBUS sense divider', key='R_VBSH')
+R('47k', 'VBUS_SNS', 'GND', desc='VBUS sense divider', key='R_VBSL')
+R('10k', '+3V3', 'CP_RST', desc='/RST pull-up', key='R_CPRST')
 add('U', 'Transistor_BJT:UMH3N', 'UMH3N', FP('SOT-363_SC-70-6'),
     {1: 'UART_RTS', 2: 'UART_DTR', 6: 'S3_EN', 3: 'S3_IO0', 4: 'UART_DTR', 5: 'UART_RTS'},
-    mpn='UMH3N', lcsc='C62892', desc='esptool auto-program (DevKitC-1 style)')
+    mpn='UMH3N', lcsc='C62892', desc='esptool auto-program (DevKitC-1 style)', key='U_AUTOPROG')
 
 # =========================================================================
+# power: the console 5V / USB VBUS OR, the 3.3 V buck, the RP's LDO
 sheet('power')
 # Diode OR: no back-feed from USB into an unpowered console, nor from the
 # console into the USB host.  SS34 VF ~0.35 V at the cart's ~0.4 A: +5V is
 # 4.4-4.9 V on a 4.75-5.25 V console rail -- above the AP63203's 3.8 V and
 # the AP2112K's 3.3 V + 0.25 V dropout; there is no 5 V logic on this board.
 add('D', 'Diode:SS34', 'SS34', FP('D_SMA'), {1: '+5V', 2: 'CONS_5V'}, mpn='SS34', lcsc='C8678',
-    desc='console 5V OR-ing')
+    desc='console 5V OR-ing', key='D_CONS')
 add('D', 'Diode:SS34', 'SS34', FP('D_SMA'), {1: '+5V', 2: 'VBUS'}, mpn='SS34', lcsc='C8678',
-    desc='USB VBUS OR-ing (no back-feed into the console)')
-C('100nF', 'CONS_5V', desc='edge 5V HF bypass')
-C('22uF', '+5V', desc='buck input')
-C('22uF', '+5V', desc='buck input')
-C('22uF', '+5V', desc='+5V bulk')
-C('100nF', '+5V', desc='buck input HF')
+    desc='USB VBUS OR-ing (no back-feed into the console)', key='D_VBUS')
+C('100nF', 'CONS_5V', desc='edge 5V HF bypass', key='C_CONSHF')
+C('22uF', '+5V', desc='buck input', key='C_BIN1')
+C('22uF', '+5V', desc='buck input', key='C_BIN2')
+C('22uF', '+5V', desc='+5V bulk', key='C_5VBULK')
+C('100nF', '+5V', desc='buck input HF', key='C_BINHF')
 add('U', 'Regulator_Switching:AP63203WU', 'AP63203WU', FP('TSOT-23-6'),
     {1: '+3V3', 2: '+5V', 3: '+5V', 4: 'GND', 5: 'BUCK_SW', 6: 'BUCK_BST'},
-    mpn='AP63203WU-7', lcsc='C780769', desc='3.3V 2A buck')
-C('100nF', 'BUCK_SW', 'BUCK_BST', desc='bootstrap')
+    mpn='AP63203WU-7', lcsc='C780769', desc='3.3V 2A buck', key='U_BUCK')
+C('100nF', 'BUCK_SW', 'BUCK_BST', desc='bootstrap', key='C_BST')
 add('L', 'Device:L', '6.8uH', FP('L_Sunlord_SWPA4030S'), {1: 'BUCK_SW', 2: '+3V3'},
-    mpn='SWPA4030S6R8MT', lcsc='C62684', desc='buck inductor')
-C('22uF', '+3V3', desc='buck output')
-C('22uF', '+3V3', desc='buck output')
+    mpn='SWPA4030S6R8MT', lcsc='C62684', desc='buck inductor', key='L_BUCK')
+C('22uF', '+3V3', desc='buck output', key='C_BOUT1')
+C('22uF', '+3V3', desc='buck output', key='C_BOUT2')
 # RP rail: AP2112K-3.3 straight off +5V.  In dropout it follows the console rail
 # as it rises (1 V/ms into the rail's ~21 uF needs 21 mA, under its 50 mA
 # fold-back limit), instead of waiting out the buck's UVLO + 4 ms soft-start
@@ -303,23 +344,45 @@ C('22uF', '+3V3', desc='buck output')
 # VREG_AVDD ride on it too: they must rise together (RP2350 p.402).
 add('U', 'Regulator_Linear:AP2112K-3.3', 'AP2112K-3.3', FP('SOT-23-5'),
     {1: '+5V', 2: 'GND', 3: '+5V', 4: NC, 5: RP_RAIL},
-    mpn='AP2112K-3.3TRG1', lcsc='C51118', desc='RP2354A 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD), fast start')
-C('1uF', '+5V', desc='LDO input')
-C('1uF', RP_RAIL, desc='LDO output')
-TP('+5V', '+5V')
-TP('+3V3', '+3V3')
-TP(RP_RAIL, '+3V3_RP')
+    mpn='AP2112K-3.3TRG1', lcsc='C51118', desc='RP2354A 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD), fast start',
+    key='U_LDO')
+C('1uF', '+5V', desc='LDO input', key='C_LDOIN')
+C('1uF', RP_RAIL, desc='LDO output', key='C_LDOOUT')
+TP('+5V', '+5V', key='TP_5V')
+TP('+3V3', '+3V3', key='TP_3V3')
+TP(RP_RAIL, '+3V3_RP', key='TP_3V3RP')
 
 # PWR_FLAGs: nets whose drivers are passive pins
 PWR_FLAG_NETS = ['GND', 'CONS_5V', 'VBUS', '+5V', '+3V3', 'DVDD', 'VREG_AVDD']   # +3V3_RP: LDO power_out
+# nets drawn as power symbols (global, never prefixed): the board's planes and islands
+RAIL_NETS = ['GND', 'CONS_5V', 'VBUS', '+5V', '+3V3', '+3V3_RP', 'DVDD']
 
-# ---- reference assignment (stable: declaration order) ---------------------
-_count = {}
+# ---- references: tools/refs.lock (key -> reference), frozen from the routed Rev0 board (its
+# silkscreen, BOM and CPL carry them); a part not in it gets the next free number of its prefix
+import json as _json, os as _os
+_LOCK = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'refs.lock')
+_locked = _json.load(open(_LOCK)) if _os.path.exists(_LOCK) else {}
+_used = {}
 for p in PARTS:
-    _count[p.prefix] = _count.get(p.prefix, 0) + 1
-    p.ref = '%s%d' % (p.prefix, _count[p.prefix])
+    if p.key in _locked:
+        p.ref = _locked[p.key]
+        _used.setdefault(p.prefix, set()).add(int(p.ref[len(p.prefix):]))
+for p in PARTS:
+    if p.ref is None:
+        n = 1
+        while n in _used.setdefault(p.prefix, set()):
+            n += 1
+        _used[p.prefix].add(n)
+        p.ref = '%s%d' % (p.prefix, n)
+assert len({p.ref for p in PARTS}) == len(PARTS), 'duplicate reference in refs.lock'
 
 BY_REF = {p.ref: p for p in PARTS}
+KEY = {p.key: p.ref for p in PARTS if p.key}
+assert len(KEY) == len(PARTS), 'every part needs a unique key: %s' % sorted(
+    p.ref for p in PARTS if not p.key)
+BY_KEY = {p.key: p for p in PARTS}
+assert [p.sheet for p in PARTS] == sorted((p.sheet for p in PARTS), key=SHEET_ORDER.index), \
+    'parts must be declared sheet by sheet in SHEETS order'
 
 
 def nets():
@@ -331,9 +394,20 @@ def nets():
     return out
 
 
+def sheet_nets():
+    """net -> the set of sheets it has pins on (a part drawn on several sheets counts each pin
+    on the sheet of its unit)."""
+    out = {}
+    for p in PARTS:
+        for pad, n in p.pins.items():
+            if n:
+                out.setdefault(n, set()).add(p.pad_sheet(pad))
+    return out
+
+
 if __name__ == '__main__':
     for p in PARTS:
-        print(p.sheet, p.ref, p.value, p.footprint.split(':')[1], p.lcsc, 'DNP' if p.dnp else '')
+        print(p.sheet, p.ref, p.key, p.value, p.footprint.split(':')[1], p.lcsc, 'DNP' if p.dnp else '')
     ns = nets()
     print(len(PARTS), 'parts', len(ns), 'nets')
     for n, pp in sorted(ns.items()):

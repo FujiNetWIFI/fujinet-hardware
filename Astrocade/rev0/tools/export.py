@@ -63,7 +63,8 @@ def boms():
         w.writerow(['Refs', 'Value', 'Footprint', 'MPN', 'LCSC', 'Description', 'DNP'])
         for (val, fp, mpn, lcsc, dnp), ps in rows:
             refs = ','.join(sorted((p.ref for p in ps), key=ref_key))
-            w.writerow([refs, val, fp.split(':')[1], mpn, lcsc, ps[0].desc, 'DNP' if dnp else ''])
+            first = min(ps, key=lambda p: ref_key(p.ref))        # not declaration order: design.py is grouped by sheet
+            w.writerow([refs, val, fp.split(':')[1], mpn, lcsc, first.desc, 'DNP' if dnp else ''])
     with open(os.path.join(OUT, 'BOM-JLCPCB.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['Comment', 'Designator', 'Footprint', 'LCSC Part #'])

@@ -31,24 +31,26 @@ from `tools/` (see *Regenerating*). The audit is
 
 ## Schematic
 
-The schematic is a root block diagram plus four sheets. Signals flow left to
-right: USB-C, then the ESP32-S3, then the RP2354A, then the console bus.
+The schematic is drawn the way the later carts' (2600 Rev1, 7800, SMS, 5200) are:
+- **every sheet is the board turned edge-left**: board south -> page left, north -> right, west -> top, east -> bottom;
+- each part sits where it is on the board, and `tools/sch_place.py` checks the order;
+- **every connection on a sheet is a wire**, flowing left to right from the console to the USB-C.
 
 | Page | Sheet | Contents |
 |---|---|---|
-| 1 | root | Block diagram, wired through the hierarchical pins; rails; bring-up items |
-| 2 | `cart` | The 26-contact edge, the RP2354A, its decoupling and regulator corner, crystal, RUN/BOOTSEL, USB link, SWD |
-| 3 | `esp32` | ESP32-S3, EN/BOOT/RESET, microSD, status LED |
-| 4 | `usb` | USB-C, ESD, CP2102N, auto-program |
-| 5 | `power` | Console 5 V / USB VBUS diode-OR, 3.3 V buck, RP LDO |
+| 1 | root | The board outline at 2:1 with each sheet's block over its region; the nine signals between sheets wired; notes |
+| 2 | `cart-bus` | The 26-land edge **straight into the RP2354A's GPIO unit**: 22 parallel wires (/CCS, A0-A12, D0-D7), no buffers; /CCS pull-up, the VSENSE divider, activity LED, SELFTEST / DBG_TX pads |
+| 3 | `rp-core` | The RP2354A's core unit: every supply pin with its capacitor, the core regulator corner, crystal, SWD, RUN / BOOTSEL / RESET, the USB pair to the S3 |
+| 4 | `fujinet` | ESP32-S3, EN / BOOT, microSD, WS2812 status LED |
+| 5 | `usb` | USB-C, ESD, CP2102N, esptool's auto-program pair |
+| 6 | `power` | Console 5 V / USB VBUS diode-OR, 3.3 V buck, RP LDO |
 
-The drawing uses:
+Rails are power symbols (`CONS_5V`, `VBUS`, `+5V`, `+3V3`, `+3V3_RP`, `DVDD`, `GND`). Sheets join only through hierarchical labels, wired on the root. KiCad names the nets:
+- `/cart-bus/CA0` for a net local to its sheet;
+- `/S3_EN` for a net joined on the root;
+- `GND` for a rail.
 
-- power symbols for every rail: `CONS_5V`, `VBUS`, `+5V`, `+3V3`, `+3V3_RP`, `DVDD`, `GND`;
-- real wires inside each functional cluster;
-- net labels only between clusters.
-
-Nets local to one sheet carry its path in KiCad (`/cart/CA0`).
+The names are frozen in `tools/nets.lock` because the routed board carries them. References are frozen in `tools/refs.lock`.
 
 ## Edge port
 
@@ -62,7 +64,7 @@ the console only ever *reads* the cart. The RP pin map is exactly
 | GP0-GP12 | CA0-CA12 | A0 9, A1 8, A2 7, A3 6, A4 5, A5 4, A6 3, A7 2, A8 24, A9 23, A10 20, A11 19, A12 22 |
 | GP13 | CCS_N (10k pull-up to +3V3_RP) | 21 |
 | GP14-GP21 | CD0-CD7 | D0 10, D1 11, D2 12, D3 14, D4 15, D5 16, D6 17, D7 18 |
-| GP26 | VSENSE: edge +5V (CONS_5V) through 100k/150k (3.0 V) | 25 |
+| GP26 | VSENSE: edge +5V (CONS_5V) through 10k/15k (3.0 V; 6 kOhm, below RP2350-E9's 8.2 kOhm) | 25 |
 | GP22 / GP27 | SELFTEST / DBG_TX test pads | - |
 | GP25 | green activity LED (330R) | - |
 
@@ -164,25 +166,27 @@ The sourced dossier is `case/case-spec.md`, and the parametric shell is
 
 ## Regenerating
 
-KiCad 10.0.6, Python 3 with numpy, Java 21+, and Freerouting 2.4.1 at
+KiCad 10, Python 3 with numpy; for `LAYOUT=1` also Java 21+ and Freerouting 2.4.1 at
 `~/.local/share/freerouting/freerouting-2.4.1.jar`. `check_nets.py` reads the
 firmware from `$FUJINET_FIRMWARE`. Its default is the worktree
 `~/Workspace/fn-astrocade` on fujinet-firmware branch `astrocade-rp2354-board`.
 
-`tools/build_all.sh` runs the whole chain:
+`tools/build_all.sh` runs the whole chain. By default it keeps the routed board and only re-links it to the regenerated schematic. `LAYOUT=1` re-places and re-routes the board from scratch: Freerouting is deterministic, but any change to its inputs gives a different board.
 
 | Step | Script | What it does |
 |---|---|---|
-| Schematic | `gen_sch.py` | `design.py` (parts, nets) + `sch_layout.py` (drawing) -> root + 4 sheets |
-| | `check_sch_layout.py` | The drawn netlist equals `design.py`, pin for pin, and no symbols overlap |
+| Schematic | `gen_sch.py` | `design.py` (parts, nets) + `sch_layout.py` (the drawing, through `sch_draw.py`) -> root + 5 sheets. Every sheet is connectivity-checked as drawn (one wired piece per net, no 4-way junctions, no overlaps), mirror-checked against the placement (`sch_place.py`), and the written schematic is checked against `design.py` pin for pin through kicad-cli's netlist and `tools/nets.lock` |
+| | KiCad ERC | `--severity-all`, must report 0 |
 | | `check_nets.py` | The netlist against the firmware headers (independent of `design.py`) |
-| Board | `gen_pcb.py` | Placement, the RPi regulator-corner graft, plane fan-out, zones, fiducials |
-| | `finish_route.py --nets=<bus>` | Pre-routes the cart bus on the empty board |
+| Board, default | `sync_pcb_nets.py`, `sync_pcb_sheets.py`, `gen_pcb.configure_project()` | The routed board gets the schematic's net names and sheet links; the copper is untouched (self-checked) |
+| | `check_vias.py`, `audit/edge_orientation.py`, KiCad DRC `--schematic-parity` | Must report 0 errors |
+| Board, `LAYOUT=1` | `gen_pcb.py` | Placement, the RPi regulator-corner graft, plane fan-out, zones, fiducials |
+| | `finish_route.py --nets=XIN,XOUT,XOUT_Y,VBUS --lock` | Pre-routes the crystal and VBUS (the bus is left to Freerouting) |
 | | `route.py` | Freerouting |
 | | `drc_fix.py`, `finish_route.py` | Clean up router errors, then close whatever is still open (A* with rip-up) |
 | | `tidy_tracks.py`, `stitch_gnd.py` | Tidy the tracks, add GND stitching (never in a pad) |
 | | `stitch_transitions.py`, `check_vias.py` | GND return vias at USB / crystal / SWCLK layer changes; a gate that no via touches another net's pad (KiCad's DRC re-nets such vias) |
-| Gates | KiCad DRC | Must report 0 errors |
+| | KiCad DRC `--schematic-parity` | Must report 0 errors |
 | Outputs | `export.py` | BOM, JLC BOM/CPL, gerbers, PDF, renders |
 
 **Audit** (`tools/audit/`):
@@ -193,9 +197,11 @@ firmware from `$FUJINET_FIRMWARE`. Its default is the worktree
 | `timing_margins.py` | Z80 read budget |
 | `edge_orientation.py` | Land 1 east on B.Cu |
 | `make_deep_review.py` | Datasheet-cited findings, for kicad-happy's evidence gate |
-| `run_pcb_audit.sh` | All kicad-happy analyzers (writes `analysis/`, gitignored) |
+| `e9_vsense.py`, `dvdd_far_pin.py`, `vbus_leakage.py` | The numbers behind design-review Part 3 findings 1-3 |
+| `stock_check.py` | JLC / LCSC stock for every assembled line (network) |
+| `run_pcb_audit.sh` | All kicad-happy analyzers, the deep-review gate and the fab release gate (writes `analysis/`, gitignored) |
 
-`datasheets/` (gitignored) is filled by kicad-happy's LCSC sync.
+`datasheets/manifest.json` lists the datasheet for every MPN. The PDFs are gitignored; they were copied from the sibling carts' `datasheets/`.
 
 **The RP2350 regulator corner is Raspberry Pi's.** Pins 46-50 (VREG_AVDD,
 PGND, LX, VREG_VIN, FB) sit side by side at 0.4 mm pitch next to USB_DM/DP.
@@ -215,16 +221,16 @@ for DSN/SES and zone fills.
 
 ## Status
 
-Rev0 redo, generated 2026-10-02 from a clean `tools/build_all.sh` run. The schematic and the 6-layer layout are **100 % routed** and the fabrication outputs are exported. The board has **not been built or tested** on hardware.
+Rev0 redo, generated 2026-10-02 from a clean `tools/build_all.sh` run. The schematic was redrawn wired on 2026-10-09, with the same netlist and the same routed board (design review Part 3). The 6-layer layout is **100 % routed** and the fabrication outputs are exported. The board has **not been built or tested** on hardware.
 
 | Check | Result |
 |---|---|
 | ERC (`--severity-all`) | 0 violations |
-| `check_sch_layout.py` | 373 / 373 pins on the `design.py` net; no overlapping symbols |
+| `gen_sch.py` | Every sheet wired and mirroring the board (tau 1.00); netlist parity 74 / 74 nets with `design.py`; `nets.lock` unchanged |
 | `check_nets.py` | 182 / 182 against the firmware headers (branch `astrocade-rp2354-board`), the Tilton edge map and the power tree |
-| DRC (`--refill-zones --schematic-parity`) | **0 errors, 0 unconnected, 0 parity.** 76 warnings: silkscreen cosmetics (silk over pads is clipped by the mask in the gerbers; the ESP32 / microSD / USB-C silk runs off the trailing edge where those parts overhang) and 1 copper sliver |
+| DRC (`--refill-zones --schematic-parity`) | **0 errors, 0 unconnected, 0 parity.** 77 warnings: silkscreen cosmetics (silk over pads is clipped by the mask in the gerbers; the ESP32 / microSD / USB-C silk runs off the trailing edge where those parts overhang) and 1 copper sliver |
 | `check_vias.py` | 382 vias, none touching a pad of another net |
-| kicad-happy | Schematic + SPICE 16/16 pass; Deep Review 19/19 evidence-verified; PCB / EMC / thermal (score 97) / gerbers dispositioned in `docs/design-review-rev0.md` |
+| kicad-happy | Schematic + SPICE 16/16 pass; Deep Review 25/25 evidence-verified (Part 3 adds two datasheet deviations to decide: VSENSE vs RP2350-E9, DVDD decoupling); PCB / EMC / thermal (score 97) / gerbers dispositioned in `docs/design-review-rev0.md` |
 | Firmware | `fujicade_rp2354` (fujinet-firmware `astrocade-rp2354-board`) is unchanged by the redo: same pin map, same RUN/BOOTSEL contract |
 | Shell | Both halves render in OpenSCAD with the generated anchors (the existing non-manifold warning remains) |
 
@@ -253,7 +259,9 @@ The 6-layer stack closes completely.
 2. **Power-up:** scope +3V3_RP, CONS_5V and CA0 at a console cold start.
    +3V3_RP must follow the console rail as it rises (AP2112K in dropout).
 3. **VSENSE gate:** the cart must stay silent on USB power with the console
-   off, and serve with it on.
+   off, including while the console is being switched off, and serve with it
+   on. Log the RP2354A stepping (`rp2350_chip_version()`): erratum E9 is why
+   the divider is 10k/15k (design review Part 3, finding 1).
 4. **Read timing:** /CCS to D0-D7 valid against the Z80 read cycle, about
    590 ns available for an M1 fetch (`timing_margins.py`). The console's
    decode delay is assumed, not published.
@@ -267,6 +275,18 @@ The 6-layer stack closes completely.
    the microSD shell is about 2 mm from it.
 9. **TL3342 RESET actuator** height against the roof (printed plunger, see
    `case/case-spec.md`).
+10. **DVDD under load:** scope DVDD (at C15) with WiFi and the bus busy. None
+    of the DVDD pins has a capacitor close to it; the datasheet wants 4.7 uF at
+    pin 23 (design review Part 3, finding 2, a Rev1 change).
+
+**Rev1 / ordering notes** (design review Part 3):
+- 4.7 uF beside RP2354A DVDD pin 23 and 100 nF beside pins 6 and 39 (finding 2);
+- a 4.7k VBUS pull-down against SS34 reverse leakage faking a CP2102N USB
+  attach (finding 3);
+- a red KT-0603R + 680R activity LED: the green KT-0603G can be dim at 330R
+  (finding 4);
+- the AOTA-B201610S3R3 core inductor: 291 left at JLC on 2026-10-09; order soon
+  or name a pin-compatible 2016 3.3 uH alternate (finding 5).
 
 ## Provenance and license
 
@@ -291,7 +311,7 @@ The 6-layer stack closes completely.
 
 | Path | Contents |
 |---|---|
-| `FujiNet-Astrocade-Rev0.kicad_pro/.kicad_sch/.kicad_pcb` | KiCad 10 project: root plus `cart-rp2354a`, `esp32s3-sd`, `usb-uart`, `power` sheets. It uses only the project libraries `FujiNet-Astrocade.kicad_sym`, `FujiNet-Astrocade.pretty/` and `3d/` |
+| `FujiNet-Astrocade-Rev0.kicad_pro/.kicad_sch/.kicad_pcb` | KiCad 10 project: root plus `cart-bus`, `rp-core`, `fujinet`, `usb`, `power` sheets. It uses only the project libraries `FujiNet-Astrocade.kicad_sym`, `FujiNet-Astrocade.pretty/` and `3d/` |
 | `FujiNet-Astrocade-Rev0-BOM.csv` | Grouped BOM, with an MPN and LCSC code on every line |
 | `exports/jlcpcb/` | `BOM-JLCPCB.csv`, `CPL-JLCPCB.csv`, `FujiNet-Astrocade-Rev0-gerbers.zip` |
 | `docs/` | Schematic PDF, design review, layout SVGs, 3D renders |

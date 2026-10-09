@@ -20,7 +20,7 @@ import gen_pcb as G
 _args = [a for a in sys.argv[1:] if not a.startswith('--')]
 PCB = os.path.abspath(_args[0]) if _args else G.PCB
 ONLY = next((a.split('=', 1)[1].split(',') for a in sys.argv[1:] if a.startswith('--nets=')), None)
-ONLY = [G.NET(n) for n in ONLY] if ONLY else ONLY      # design.py names -> KiCad's (/cart/CA0)
+ONLY = [G.NET(n) for n in ONLY] if ONLY else ONLY      # design.py names -> KiCad's (/cart-bus/CA0)
 LOCK = '--lock' in sys.argv
 # --force=NETS: route these first, ignoring (and ripping up) other nets' unlocked
 # router copper; the ripped nets are left for the next Freerouting round

@@ -1,7 +1,7 @@
 # FujiNet-Astrocade Rev0 Design Review
 
-**Project:** FujiNet-Astrocade-Rev0 (KiCad 10.0.6, root + 4 hierarchical sheets, generated from `tools/design.py` + `tools/sch_layout.py`)
-**Date:** 2026-10-02
+**Project:** FujiNet-Astrocade-Rev0 (KiCad 10, generated from `tools/design.py` + `tools/sch_layout.py`; since Part 3 a root board map + 5 wired sheets)
+**Date:** 2026-10-02 (Parts 1, 2); 2026-10-09 (Part 3: the wired redraw and a re-audit, at the end)
 **Baseline:** commit `12ffcc1` (the first Rev0: RP2354A + ESP32-S3, 6-layer, autorouted, never audited against datasheets)
 **Analyzers:** kicad-happy 2.2.1:
 - `analyze_schematic.py`
@@ -11,7 +11,7 @@
 
 Project checks:
 - `tools/check_nets.py`: 182 netlist-vs-firmware checks
-- `tools/check_sch_layout.py`: 373 pins, drawn netlist == design.py
+- `tools/check_sch_layout.py`: 373 pins, drawn netlist == design.py (replaced in Part 3 by `gen_sch.py`'s netlist parity + `tools/nets.lock`)
 - KiCad ERC (`--severity-all`)
 
 ## Overview
@@ -147,7 +147,7 @@ LDO start-up: +3V3_RP carries 21.3 uF, and the AP2112K's short-current limit is 
 | VM-001 5 V / 3.3 V crossing | Intentional. The RP2350 FT pads take 5.5 V with IOVDD powered, and IOVDD is the tracking LDO rail. The console only reads the cart; the RP's 3.3 V outputs meet the Z80's TTL VIH. |
 | RS-001 VBUS_SNS "no source" | A divider node into the CP2102N VBUS sense pin |
 | PU-001 U3 CHREN | Charger-detect output, left open as in the DevKitC-1 |
-| LB-001 x9 "multiple labels" | A hierarchical label and its sheet pin: how the root block diagram wires the sheets |
+| LB-001 x9 "multiple labels" | A hierarchical label and its sheet pin: how the root block diagram wires the sheets (x8 since Part 3; the analyzer names those nets by sheet uuid, `/2207b269-.../S3_EN`, where KiCad's netlist says `/S3_EN`) |
 | CG-AUD J1, EP-AUD J1/J2 | Console-defined pinout (3 GND); no ESD on a console bus; microSD inside the shell |
 
 ## Not Performed / Review Limits
@@ -268,3 +268,107 @@ What CAD cannot settle is the README bring-up checklist:
 - 5 V headroom under WiFi bursts
 - the JLC CPL rotation preview
 
+
+## Part 3 (2026-10-09): the schematic redrawn wired, and a re-audit
+
+**Scope.** The Part 1 schematic was readable but disconnected:
+- every edge land and every RP2354A GPIO ended in a local label (65 on the cart sheet, each bus net labelled twice);
+- the 15 RP decoupling capacitors stood in a row 84 mm above U1, each on its own power symbol;
+- the root was a plain block diagram.
+
+The later carts (2600 Rev1, 7800, SMS, 5200) are drawn by the SMS-lineage tools, and the schematic is now drawn the same way:
+- `tools/sch_draw.py`, `sch_draft.py`, `sch_place.py` and `netlist.py` are ported from FujiNet-5200 Rev0;
+- `tools/sch_layout.py` hand-draws each sheet.
+
+**Unchanged:** the routed board, its copper and every part.
+**Baseline:** master `1de56c1`.
+
+### What changed
+
+| | Part 1 / 2 | Part 3 |
+|---|---|---|
+| Sheets | `cart` (edge + the whole RP), `esp32`, `usb`, `power` | `cart-bus`, `rp-core`, `fujinet`, `usb`, `power`, one per board region, console side first; the RESET button and its BAT54C moved from `esp32` to `rp-core`, beside the RP's BOOTSEL as on the board |
+| RP2354A | the stock symbol | `RP2354A_Split`: unit A = the 30 GPIOs (cart-bus), unit B = supplies / regulator / crystal / SWD / RUN / USB / QSPI (rp-core); pin names checked against the stock symbol on every build |
+| The cart bus | labels on both ends | 22 straight wires, edge land -> GPIO, in the edge symbol's order (/CCS, A0-A12, D0-D7); not one crossing |
+| Decoupling | a row of caps on power symbols | every supply pin wired out to its rail with its own cap beside it (the cap's role as `design.py` and `placement.py` record it) |
+| Root | block diagram | the board outline turned edge-left at 2:1, each sheet's block over its region, the nine inter-sheet signals wired without a crossing |
+| Every sheet | | the board turned edge-left (south -> left, north -> right, west -> top, east -> bottom); signals left to right from the console to the USB-C |
+| References | declaration order | `tools/refs.lock` (key -> reference), seeded from the routed board: silk, BOM and CPL are unchanged |
+
+Sheet-local nets now carry the new sheet names, and nets joined on the root are `/NET`:
+- `/cart/CA0` became `/cart-bus/CA0`;
+- `/cart/XIN` became `/rp-core/XIN`;
+- `/esp32/S3_EN` became `/S3_EN`.
+
+On the routed board, the renames were made by these tools:
+- `tools/sync_pcb_nets.py` (new) renames the nets on the board itself. It maps every name by its last path element and refuses unless the map is one-to-one. Its self-check: with names cut to that element, the board text is unchanged.
+- `tools/sync_pcb_sheets.py` re-points the footprint sheet links.
+- `gen_pcb.configure_project()` rewrites the net-class patterns and the `.kicad_dru` rules.
+
+`build_all.sh` now leaves the routed board in place by default (`LAYOUT=0`, as on the 5200). Before, a plain run re-placed and re-routed the board.
+
+### Gates (all pass)
+
+| Gate | Result |
+|---|---|
+| `gen_sch.py`: `Sheet.check` on every sheet | every connection a wire, each net one wired piece, no 4-way junctions, nothing overlapping; crossings: 0 on cart-bus, rp-core, fujinet and power; 1 on usb (the esptool auto-program pair: RTS and DTR leave the bridge side by side, as on the 5200) |
+| board-mirror (`sch_place.py`) | Kendall tau 1.00 across and down on all five sheets |
+| netlist parity | 74 / 74 nets, pin for pin, against `design.py` (kicad-cli netlist); the names frozen in `tools/nets.lock` (178) |
+| `design.py` vs the Part 2 file | every reference: the same value, footprint, MPN, LCSC code, description and pin -> net map |
+| KiCad ERC `--severity-all` | 0 |
+| `check_nets.py` (firmware branch `astrocade-rp2354-board`, worktree `~/Workspace/fn-astrocade`) | 182 / 182 |
+| the board after the re-link vs before | identical, apart from net names and the footprints' sheet links (`sync_pcb_nets` self-check, and a separate normalised diff) |
+| KiCad DRC `--schematic-parity --severity-all --refill-zones` | 0 errors, 0 unconnected, 0 parity; 77 warnings, the same list at the same coordinates as the unchanged board gives under KiCad 10.0.7 (Part 2 counted 76 under 10.0.6): silkscreen, 1 copper sliver, 1 dangling via |
+| `check_vias.py`, `edge_orientation.py` | 0 failures; land 1 east on B.Cu |
+| fab package | `BOM-JLCPCB.csv`, `CPL-JLCPCB.csv` and the project BOM byte-identical; the 18 gerber / drill files identical but for KiCad 10.0.7's header, the date and the net-name attributes |
+
+### Re-audit (kicad-happy 2.2.1, runs `analysis/2026-10-09_0752`, and `2026-10-09_0805-2` after the R9 / R10 change)
+
+| Analyzer | Result |
+|---|---|
+| `analyze_schematic.py` | 53 findings, 0 error / 2 warning (PU-001 U3 CHREN, RS-001 VBUS_SNS: as Part 1) |
+| `analyze_pcb.py --full --proximity` | 47 findings: the Part 2 set, same dispositions |
+| `cross_analysis.py`, `cross_verify.py` | PS-002 x2 (info); cross_verify's 7 "orphans" are FID1-3 and H1-4 (board-only), its diff-pair / decoupling misses are naming artifacts (it looks for the short name on the board) |
+| `analyze_emc.py` | 37 findings, risk score 35.5: identical to Part 2 (the copper did not change) |
+| `analyze_thermal.py` | 97 / 100, 0.28 W; TS-003 U6 as Part 2 |
+| `simulate_subcircuits.py` (ngspice) | 16 / 16 pass (VSENSE and VBUS_SNS dividers, EN RC, crystal, decoupling, inrush) |
+| `analyze_gerbers.py` | GR-002, GR-004 as Part 2 |
+| `fab_release_gate.py --strict` | 5 fails, all known: advanced DFM tier (0.1 mm via ring, JLC multilayer accepts it), no revision on the silkscreen (the board text reads "FujiNet Astrocade Rev0"; the gate wants a title-block rev), 93 vs 100 parts (FID1-3, H1-4), gerber layer extents (GR-002), the TS-003 thermal warning |
+| lifecycle (`lifecycle_audit.py --only lcsc`) | no lifecycle status from LCSC (by construction); stock checked instead (`tools/audit/stock_check.py`) |
+| Deep review (`tools/audit/make_deep_review.py` + `deep_review_gate.py`) | **25 / 25 verified**, 0 quarantined: the 19 Part 1 findings (citation pages updated to the current RP2350 datasheet revision) and 6 new ones |
+
+**Datasheets.** `datasheets/` now holds all 36 MPNs (manifest.json), copied from the sibling carts. The PDFs are gitignored. The RP2354A's file is the 1380-page RP2350 datasheet. Two gaps remain:
+- the Samsung MLCC files (CL05/CL10/CL21) are RoHS declarations, not datasheets, so capacitor DC-bias derating is not datasheet-backed;
+- the Sunlord SWPA4030 PDF is a scan.
+
+### New findings (Part 3)
+
+The later carts' audits were compared with this board, item by item. Five new findings follow; the sixth new deep-review entry records the redraw's gates (above). None of the five is a short or a wrong pin. The first two deviate from the RP2350 datasheet.
+
+| # | Severity | Finding | Evidence | Fix | Board impact |
+|---|---|---|---|---|---|
+| 1 | **warning** (if the RP2354A is A2 silicon); **fixed 2026-10-09** | **RP2350-E9 can hold VSENSE high in a switched-off console.** The serve gate is /CCS low AND VSENSE (GPIO26) high. The firmware configures VSENSE as a plain input, input enabled and no pulls (`main.c`). On an A2 die, a pad between VIL and VIH sources ~120 uA and holds near 2.2 V; only a pull of 8.2 k or less overcomes it. The 100k / 150k divider is a 60 k pull, so a USB-powered cart in a console being switched off can leave the gate open and drive D0-D7 into the dead bus whenever /CCS reads low. | RP2350 DS p.1367-1369 (E9; "Fixed by RP2350 A3"); `tools/audit/e9_vsense.py`: 60 k holds ~2.2 V > VIH 2.15 V; 10k / 15k = 6 k holds ~0.7 V | **Done (user decision):** R9 / R10 are 10k / 15k, the same 0.6 ratio, drawing 0.2 mA from CONS_5V. Before the LDO starts, GP26 can take up to ~0.1 mA through its clamp (`e9_vsense.py`), and +3V3_RP tracks the ramp. | value change only (R9, R10: same 0603 lands): the BOM changes, the CPL and copper do not |
+| 2 | **warning** | **DVDD has no capacitor close to any pin.** The datasheet wants 100 nF at the two DVDD pins nearest the core regulator and 4.7 uF at the furthest. Here all three DVDD 100 nF sit by the regulator and reach the pins through the In4 DVDD island; the furthest pin (23) is 9.1 mm from the nearest DVDD cap. The 2600 Rev1 (same QFN-60) has 4.7 uF at pin 23. | RP2350 DS p.441 ("The DVDD pin furthest from the regulator should be decoupled with a 4.7uF capacitor close to the pin"); `tools/audit/dvdd_far_pin.py` | 4.7 uF (C13 -> CL10A475KO8NNNC) beside pin 23, 100 nF beside pins 6 and 39 | re-placement on the QFN's crowded south side + re-route |
+| 3 | info | **USB OR diode leakage can fake a USB attach.** With the console powering the cart and no cable, the SS34's reverse leakage lifts VBUS, which is held only by the CP2102N's 22k / 47k divider. 57 uA reaches the CP2102N's VBUS threshold (VIO - 0.6 V), plausible only on a hot board. No gate rides on VBUS here, so the symptom is the CP2102N's D+ pull-up switching on with no host. | SS34 DS p.2 (0.5 mA at 25 C / 20 mA at 100 C, at 40 V); CP2102N DS p.8; `tools/audit/vbus_leakage.py` | 4.7k VBUS pull-down, as on the 2600 Rev1 / SMS / 7800 / 5200 | new 0603 + re-route (Rev1) |
+| 4 | info | **The activity LED can be dim.** KT-0603G VF is 2.6-3.1 V at 5 mA, so 330R from 3.3 V gives 0.6-2.1 mA. The later carts use a red KT-0603R at 680R-1k. | KT-0603G DS p.3; `por_window.py` | red KT-0603R + 680R | value / part change only |
+| 5 | info | **Stock.** The AOTA 3.3 uH core-regulator inductor (the Raspberry Pi minimal design's part) is down to 291 at JLC and 5 at LCSC, from 3,308 on 2026-10-02. Every other line is in stock: TL3342 1,650 (4 per board), RP2354A 15,866, WS2812B-2020-V6 1,011,237. | `tools/audit/stock_check.py`, `analysis/sourcing/2026-10-09.json` | order soon, or name a pin-compatible 2016 3.3 uH alternate | none now |
+
+Compared with the later carts, items checked and **not** applicable:
+- **The P-FET on the console 5V** (siblings): there is no 5 V logic here, and the SS34 drop leaves 4.37 V at a 4.75 V console rail.
+- **The siblings' 4.7k E9 pull-downs:** they guard glue and SRAM enables this board does not have; the bus pads' pulls are off in firmware.
+- **WS2812C:** the 5200 went back to the WS2812B-2020-V6 on 2026-10-08, and the V6 is the stocked part.
+- **TS-1187A switches:** the TL3342 is still in stock.
+
+One sibling item stays a bring-up check rather than a change: **the console 5V has only 100 nF at the edge**; every sibling has 10 uF + 100 nF. The +5V side already carries 66 uF behind the OR diode; README bring-up item 5 (console 5 V headroom under WiFi bursts) measures what the console rail sees.
+
+### Verdict (Part 3)
+
+**The redraw is complete and electrically neutral.** It is the same netlist pin for pin, the same copper and the same fab package. The board is as orderable as Part 2 said.
+
+The user's decisions on the new findings (2026-10-09):
+
+| # | Decision | Applied |
+|---|---|---|
+| 1 VSENSE vs E9 | change R9 / R10 to 10k / 15k | yes. `design.py` value change. `sync_pcb_sheets.py` gave R9 / R10 the new Value / MPN / LCSC fields, and the copper is unchanged. Checks: DRC parity 0, `check_nets` 182 / 182, SPICE divider pass. JLC BOM: R9 joins the 10k line (C25804); R10 is a new 15k line (0603WAF1502T5E, C22809, JLC basic) |
+| 2 DVDD decoupling | Rev1, plus a bring-up check (README item 10) | no board change |
+| 3 VBUS pull-down, 4 LED, 5 inductor stock | Rev1 / ordering notes (README) | no board change |

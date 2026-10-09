@@ -1,9 +1,9 @@
 (version 1)
 (rule "rp2350_core_corner"
-	(condition "A.NetName == 'DVDD' || A.NetName == '/cart/RP_LX' || A.NetName == '/cart/VREG_AVDD'")
+	(condition "A.NetName == 'DVDD' || A.NetName == '/rp-core/RP_LX' || A.NetName == '/rp-core/VREG_AVDD'")
 	(constraint clearance (min 0.12mm)))
 (rule "default_clearance"
-	(condition "A.NetName != 'DVDD' && A.NetName != '/cart/RP_LX' && A.NetName != '/cart/VREG_AVDD' && B.NetName != 'DVDD' && B.NetName != '/cart/RP_LX' && B.NetName != '/cart/VREG_AVDD'")
+	(condition "A.NetName != 'DVDD' && A.NetName != '/rp-core/RP_LX' && A.NetName != '/rp-core/VREG_AVDD' && B.NetName != 'DVDD' && B.NetName != '/rp-core/RP_LX' && B.NetName != '/rp-core/VREG_AVDD'")
 	(constraint clearance (min 0.15mm)))
 (rule "j1_gnd_spokes"
 	(condition "A.memberOfFootprint('J1')")

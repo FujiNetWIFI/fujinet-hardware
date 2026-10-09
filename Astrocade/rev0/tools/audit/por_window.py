@@ -14,7 +14,7 @@ for ramp in (0.5, 1.0, 2.0):     # console rail slew, V/ms (a 7805 behind big ca
     print('console rail ramping %.1f V/ms: tracking it needs %.0f mA (< 50 mA limit: IOVDD follows CONS_5V - VF while in dropout)'
           % (ramp, c_rp * ramp))
 for cons in (4.75, 5.0, 5.25, 5.5):
-    vs = cons * 150 / (100 + 150)
+    vs = cons * 15 / (10 + 15)                    # 10k / 15k (was 100k / 150k: the ratio is the same)
     print('CONS_5V %.2f V -> VSENSE %.2f V (GP26 ADC pad, IOVDD 3.3 V: abs max IOVDD + 0.5; VIH 2.15 V)' % (cons, vs))
 print('VSENSE reads high down to %.2f V of console rail' % (2.145 / 0.6))
 for cons in (4.75, 5.0):

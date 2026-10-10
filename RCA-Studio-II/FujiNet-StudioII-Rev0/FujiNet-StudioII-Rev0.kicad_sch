@@ -1,0 +1,256 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "519a007e-2e50-5f05-ad00-268acf04d4da")
+	(paper "A3")
+	(title_block
+		(title "FujiNet Studio II Rev0")
+		(date "2026-10-10")
+		(rev "0")
+		(company "FujiNet")
+		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
+		(comment 2 "CERN-OHL-W-2.0 (core and generators from FujiNet-5200-Rev0)")
+		(comment 3 "Rev0 2026-10-10: schematic only; firmware pico/studio2 s2_cart.h")
+	)
+	(lib_symbols)
+	(sheet
+		(at 45.72 50.8)
+		(size 50.8 60.96)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "38427a2e-6a12-55ed-80fe-6efdd4dcd657")
+		(property "Sheetname" "cart-bus"
+			(at 45.72 50.1 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cart-bus.kicad_sch"
+			(at 45.72 112.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-StudioII-Rev0"
+				(path "/519a007e-2e50-5f05-ad00-268acf04d4da"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 127 50.8)
+		(size 40.64 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "c4bd8d24-298e-5810-9582-c7c2e670f0d9")
+		(property "Sheetname" "rp-core"
+			(at 127 50.1 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "rp-core.kicad_sch"
+			(at 127 81.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 167.64 55.88 0)
+			(uuid "c1c57165-73a3-5e1d-8606-a3b36eb28384")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 167.64 58.42 0)
+			(uuid "695128ec-140f-53c0-9e2e-8f13462c72c2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "FujiNet-StudioII-Rev0"
+				(path "/519a007e-2e50-5f05-ad00-268acf04d4da"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 203.2 50.8)
+		(size 40.64 30.48)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "073f09d0-cbee-5e6b-a0d9-7132a10288d7")
+		(property "Sheetname" "power"
+			(at 203.2 50.1 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 203.2 81.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 203.2 55.88 180)
+			(uuid "9777605e-7b57-5132-abcf-8cabd7d122e5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 203.2 58.42 180)
+			(uuid "26a2e5fe-c77e-5a21-9e43-a6958811030b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-StudioII-Rev0"
+				(path "/519a007e-2e50-5f05-ad00-268acf04d4da"
+					(page "4")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 167.64 55.88)
+			(xy 203.2 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f5b9073-72f8-5001-87c3-fb9715c40335")
+	)
+	(wire
+		(pts
+			(xy 167.64 58.42)
+			(xy 203.2 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aebdd3e0-9d95-5f25-9ba7-15c34ec64b1b")
+	)
+	(label "USB_DP"
+		(at 170.18 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "76f95a3b-0fb4-59e2-a773-de54ac9f7ed3")
+	)
+	(label "USB_DM"
+		(at 170.18 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "21d1a185-5cba-5fed-9f92-42841930c81a")
+	)
+	(text "the console cartridge slot (the edge) is on cart-bus;\nthe ESP32-S3 board plugs into the USB-C on power"
+		(exclude_from_sim no)
+		(at 45.72 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "4fb437cd-7279-5c1a-a876-ff5ade6531d3")
+	)
+	(text "FujiNet for the RCA Studio II, Rev0: an RP2354B cartridge on the CDP1802 bus.\n\nThe cart serves the console's reads in software (fujinet-firmware pico/studio2): every read is one\nTPA pulse, the high address byte on MA0-7 as TPA falls, the low byte a few hundred ns later.  The\nedge has no write strobe, clock or reset: the console reaches the cart only through the address of\na read.  CART CS turns the console RAM off for the pages the cart claims, the 1861's raster too.\n\n  cart-bus   the 22-pin edge, 330R into the RP2354B's GPIOs, the 74HCT541 data buffer, the CART CS\n             NOR, the two ORs that gate /OE2 and CART CS with the console's power, the /DRIVE and\n             /CLAIM pull-ups, PWR_OK and the ADC sense of the console 5 V, the debug UART, the LED,\n             the bring-up pads\n  rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL\n  power      +5V = console 5 V (P-FET) OR USB VBUS (SS34), the RP's LDO (+3V3), the USB-C receptacle\n\nThe ESP32-S3 (the FujiNet, fujiversal-studio2) is a separate board with its own supply, joined to\nthis one by USB alone.\n\nBetween sheets: USB_DP / USB_DM, wired here; the rails (GND, CONS_5V, VBUS, +5V, +3V3, DVDD) by\ntheir power symbols.\n\nFirmware contract (tools/check_nets.py, tools/check_glue.py check this netlist against it):\nfujinet-firmware pico/studio2 s2_cart.h (MA0-7 GPIO0-7, TPA 8, /MRD 9, D0-D7 GPIO16-23, /DRIVE 24,\n/CLAIM 25, PWR_OK 26, LED 27, VSENSE ADC GPIO40, debug UART GPIO44 / 45); glue s2_glue_drive(),\ns2_glue_cartcs(), both gated by PWR_OK: nothing is driven into a console that is off.\n\nStatus: schematic only.  The edge geometry is PROVISIONAL (tools/edge_geom.py)."
+		(exclude_from_sim no)
+		(at 45.72 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "0169fe80-c3fa-50c6-ad5f-7e857a4f0063")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

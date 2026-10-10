@@ -1,0 +1,225 @@
+(footprint "StudioII_Cart_Edge_22"
+	(version 20241229)
+	(generator "fujinet_gen")
+	(generator_version "2.0")
+	(layer "F.Cu")
+	(descr "RCA Studio II 22-pin cartridge edge: 22 contacts at 3.96 mm (0.156\") on F.Cu, pin 1 at the left.  PROVISIONAL: fingers 2.50 mm wide, copper 0.6-8.5 mm from the edge, tab 88.9 mm; measure a real cartridge first.  Hard gold, 30-45 deg bevel.")
+	(tags "rca studio ii cartridge edge connector 0.156")
+	(property "Reference" "REF**"
+		(at 0 -13.5 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "StudioII_Cart_Edge_22"
+		(at 0 -15.5 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd exclude_from_pos_files exclude_from_bom allow_soldermask_bridges)
+	(fp_line
+		(start -44.45 -12)
+		(end -44.45 -0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -44.45 -0.8)
+		(end -43.65 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start -43.65 0)
+		(end 43.65 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 43.65 0)
+		(end 44.45 -0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_line
+		(start 44.45 -0.8)
+		(end 44.45 -12)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_rect
+		(start -44.45 0)
+		(end 44.45 -12)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(fp_rect
+		(start -43.33 0.2)
+		(end 43.33 -9)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Mask")
+	)
+	(fp_text user "1"
+		(at -41.58 -10 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "22"
+		(at 41.58 -10 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -41.58 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "2" smd rect
+		(at -37.62 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "3" smd rect
+		(at -33.66 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "4" smd rect
+		(at -29.7 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "5" smd rect
+		(at -25.74 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "6" smd rect
+		(at -21.78 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "7" smd rect
+		(at -17.82 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "8" smd rect
+		(at -13.86 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "9" smd rect
+		(at -9.9 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "10" smd rect
+		(at -5.94 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "11" smd rect
+		(at -1.98 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "12" smd rect
+		(at 1.98 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "13" smd rect
+		(at 5.94 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "14" smd rect
+		(at 9.9 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "15" smd rect
+		(at 13.86 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "16" smd rect
+		(at 17.82 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "17" smd rect
+		(at 21.78 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "18" smd rect
+		(at 25.74 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "19" smd rect
+		(at 29.7 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "20" smd rect
+		(at 33.66 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "21" smd rect
+		(at 37.62 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(pad "22" smd rect
+		(at 41.58 -4.55)
+		(size 2.5 7.9)
+		(layers "F.Cu")
+	)
+	(embedded_fonts no)
+)

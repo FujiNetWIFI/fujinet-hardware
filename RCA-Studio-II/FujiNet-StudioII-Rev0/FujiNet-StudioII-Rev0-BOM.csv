@@ -1,0 +1,47 @@
+Qty,References,Value,Footprint,MPN,Manufacturer,LCSC,Description,Notes
+21,C1 C2 C3 C4 C6 C7 C8 C9 C10 C11 C12 C13 C14 C15 C16 C17 C20 C21 C22 C28 C30,100nF,C_0603_1608Metric,CC0603KRX7R9BB104,YAGEO,C14663,capacitor (several uses: see schematic),
+4,C5 C18 C29 C31,10uF,C_0603_1608Metric,CL10A106KP8NNNC,Samsung Electro-Mechanics,C19702,capacitor (several uses: see schematic),
+3,C19 C23 C24,4.7uF,C_0603_1608Metric,CL10A475KO8NNNC,Samsung Electro-Mechanics,C19666,capacitor (several uses: see schematic),
+2,C25 C26,15pF,C_0603_1608Metric,CL10C150JB8NNNC,Samsung Electro-Mechanics,C1644,crystal load,
+3,C27 C32 C33,1uF,C_0603_1608Metric,CL10A105KB8NNNC,Samsung Electro-Mechanics,C15849,capacitor (several uses: see schematic),
+1,D1,red,LED_0603_1608Metric,KT-0603R,Hubei KENTO Elec,C2286,activity LED (GPIO27),
+3,D2 D3 D4,ESD5Z5.0T1G,D_SOD-523,ESD5Z5.0T1G,onsemi,C82044,ESD,
+1,D5,SS34,D_SMA,SS34,MDD (Microdiode Semiconductor),C8678,USB VBUS OR-ing (no back-feed into the console or the host),
+1,J1,StudioII_Cart_Edge_22,StudioII_Cart_Edge_22,,,,"RCA Studio II 22-pin cartridge edge, 3.96 mm (0.156"") pitch, contacts on one face (PROVISIONAL geometry)",not in BOM
+1,J2,DBG UART,PinHeader_1x03_P2.54mm_Vertical,PZ254V-11-03P,XFCN,C2937625,"RP debug UART, 3.3 V: 1 TX (GPIO44), 2 RX (GPIO45), 3 GND; fit for bring-up",DNP
+1,J3,USB-C,USB_C_Receptacle_HRO_TYPE-C-31-M-12,TYPE-C-31-M-12,Korean Hroparts Elec,C165948,USB to the ESP32-S3 board (RP native USB) + power,
+1,L1,3.3uH,RPI_L_AOTA-B201610S3R3,AOTA-B201610S3R3-101-T,Abracon,C42411119,RP2350 core SMPS inductor,
+1,Q1,AO3401A,SOT-23,AO3401A,Alpha & Omega Semiconductor,C15127,"console 5V switch: G = VBUS, S = +5V, D = CONS_5V; body diode CONS_5V -> +5V",
+10,R1 R2 R3 R4 R5 R6 R7 R8 R9 R10,330R,R_0603_1608Metric,0603WAF3300T5E,UNI-ROYAL,C23138,resistor (several uses: see schematic),
+4,R11 R12 R20 R21,10k,R_0603_1608Metric,0603WAF1002T5E,UNI-ROYAL,C25804,resistor (several uses: see schematic),
+1,R13,22k,R_0603_1608Metric,0603WAF2202T5E,UNI-ROYAL,C31850,console 5V sense divider,
+3,R14 R15 R16,100k,R_0603_1608Metric,0603WAF1003T5E,UNI-ROYAL,C25803,resistor (several uses: see schematic),
+3,R17 R19 R22,1k,R_0603_1608Metric,0603WAF1001T5E,UNI-ROYAL,C21190,resistor (several uses: see schematic),
+1,R18,33R,R_0603_1608Metric,0603WAF330JT5E,UNI-ROYAL,C23140,VREG_AVDD filter,
+2,R23 R24,27R,R_0603_1608Metric,0603WAF270JT5E,UNI-ROYAL,C25190,USB series,
+2,R25 R26,5.1k,R_0603_1608Metric,0603WAF5101T5E,UNI-ROYAL,C23186,UFP Rd,
+1,R27,4.7k,R_0603_1608Metric,0603WAF4701T5E,UNI-ROYAL,C23162,"VBUS pull-down: P-FET gate low with no cable, against the SS34 leakage",
+1,SW1,RESET,SW_SPST_TS-1187A,TS-1187A-B-A-B,XKB Connection,C318884,cart RESET: RP2354B RUN,
+1,SW2,BOOTSEL,SW_SPST_TS-1187A,TS-1187A-B-A-B,XKB Connection,C318884,RP2354 BOOTSEL (hold while pressing RESET),
+1,TP1,/MRD,TestPoint_Pad_D1.5mm,,,,scope pad: console /MRD (edge 21),not in BOM
+1,TP2,TPA,TestPoint_Pad_D1.5mm,,,,"scope pad: console TPA, gated by /MRD (edge 19)",not in BOM
+1,TP3,CART_CS,TestPoint_Pad_D1.5mm,,,,scope pad: CART CS (edge 22),not in BOM
+1,TP4,/DRIVE,TestPoint_Pad_D1.5mm,,,,scope pad: /DRIVE (GPIO24),not in BOM
+1,TP5,/CLAIM,TestPoint_Pad_D1.5mm,,,,scope pad: NOR input (GPIO25),not in BOM
+1,TP6,PWR_OK,TestPoint_Pad_D1.5mm,,,,scope pad: console power sense,not in BOM
+2,TP7 TP10,GND,TestPoint_Pad_D1.5mm,,,,test pad (several uses: see schematic),not in BOM
+1,TP8,SWCLK,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP9,SWDIO,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP11,RUN,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP12,DVDD,TestPoint_Pad_D1.5mm,,,,bring-up pad: RP core rail,not in BOM
+1,TP13,CONS_5V,TestPoint_Pad_D1.5mm,,,,bring-up pad: console 5V (edge 15),not in BOM
+1,TP14,VBUS,TestPoint_Pad_D1.5mm,,,,bring-up pad: USB VBUS,not in BOM
+1,TP15,+5V,TestPoint_Pad_D1.5mm,,,,bring-up pad: +5V,not in BOM
+1,TP16,+3V3,TestPoint_Pad_D1.5mm,,,,bring-up pad: +3V3 (RP),not in BOM
+1,U1,RP2354B,QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm,RP2354B,Raspberry Pi,C39843328,RP2350B + 2MB flash in package; cart bus server,
+1,U2,74HCT541,TSSOP-20_4.4x6.5mm_P0.65mm,SN74HCT541PWR,Texas Instruments,C436096,D0-D7 driver: drives only while /OE1 (/MRD) and /OE2 (/DRIVE) are low,
+1,U3,74HCT1G02,SOT-23-5,"74HCT1G02GV,125",Nexperia,C12504,"CART CS = NOR(/MRD, CS_REQ_N), 5 V CMOS out",
+1,U4,74HCT32,SOIC-14_3.9x8.7mm_P1.27mm,SN74HCT32DR,Texas Instruments,C6781,/OE2 = /DRIVE | /PWROK; CS_REQ_N = /CLAIM | /PWROK,
+1,U5,74HCT14,SOIC-14_3.9x8.7mm_P1.27mm,SN74HCT14DR,Texas Instruments,C6769,PWR_OK from the console 5V sense,
+1,U6,AP2112K-3.3,SOT-23-5,AP2112K-3.3TRG1,Diodes Incorporated,C51118,"RP2354B 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD), 600mA, fast start",
+1,Y1,12MHz,Crystal_SMD_3225-4Pin_3.2x2.5mm,ABM8-272-T3,Abracon,C20625731,RP2350 12 MHz crystal,

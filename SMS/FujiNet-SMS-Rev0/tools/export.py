@@ -318,7 +318,7 @@ def gerbers():
     shutil.rmtree(g, ignore_errors=True)
     os.makedirs(g)
     layers = 'F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts'
-    run('kicad-cli', 'pcb', 'export', 'gerbers', '--layers', layers, '--subtract-soldermask',
+    run('kicad-cli', 'pcb', 'export', 'gerbers', '--check-zones', '--layers', layers, '--subtract-soldermask',
         '--no-protel-ext', '-o', g + '/', PCB)
     run('kicad-cli', 'pcb', 'export', 'drill', '--format', 'excellon', '--excellon-separate-th',
         '--generate-map', '--map-format', 'gerberx2', '-o', g + '/', PCB)
@@ -327,7 +327,7 @@ def gerbers():
     shutil.rmtree(gj, ignore_errors=True)
     os.makedirs(gj)
     jb = jlc_board()
-    run('kicad-cli', 'pcb', 'export', 'gerbers', '--layers', 'F.SilkS', '--subtract-soldermask',
+    run('kicad-cli', 'pcb', 'export', 'gerbers', '--check-zones', '--layers', 'F.SilkS', '--subtract-soldermask',
         '--no-protel-ext', '-o', gj + '/', jb)
     silk = [fn for fn in os.listdir(gj) if fn.endswith('F_Silkscreen.gbr')]
     assert len(silk) == 1 and silk[0] in os.listdir(g), (os.listdir(gj), sorted(os.listdir(g)))

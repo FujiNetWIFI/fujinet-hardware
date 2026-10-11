@@ -25,6 +25,9 @@ if [ "${LAYOUT:-0}" = 1 ]; then
     bash tools/route_board.sh                 # pre-route, Freerouting, finisher, stitching, check_vias, DRC gate
 fi
 python3 tools/export.py                       # BOM, schematic PDF (+ JLCPCB / PCBWay packages, layout views, renders with a .kicad_pcb)
+if compgen -G 'exports/*/*-gerbers.zip' >/dev/null; then
+    python3 tools/audit/check_plane_shorts.py   # the zips: no plated hole inside an inner pour of another net
+fi
 if [ -f exports/jlcpcb/FujiNet-7800-Rev0-gerbers.zip ]; then
     python3 tools/audit/check_gerbers.py >/dev/null   # the fab zips: slots, fingers both faces, mask windows, nothing in the tab
 fi

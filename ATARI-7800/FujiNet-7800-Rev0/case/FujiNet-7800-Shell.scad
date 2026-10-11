@@ -42,6 +42,13 @@ label    = [54, 38];                // label recess (w, h) on the label face, cl
 label_c  = [104, 104];              // its centre (board x, y)
 label_t  = 0.4;
 part_h   = 3.3;     // tallest part above F.Cu (USB-C 3.2, ESP32-S3 module 3.1)
+// RESET plunger and its guide.  The four buttons stand in one column at 6.2 mm, so the guide must stay
+// under ~9.4 mm across to clear the pin-holes either side: a small cap and flange.
+sw_h      = 1.5;    // TS-1187A above F.Cu (XKB drawing; tools/make_fp_extra.py)
+proud     = 0.6;    // the cap above the label face at rest
+press_gap = 0.15;   // the stem above the switch at rest
+cap_d = 5.0;  cap_hole = 5.4;  fl_d = 6.6;  stem_d = 3.0;   // cap, its hole, flange, stem
+guide_od = 8.6;  guide_id = 7.0;  guide_h = 3.4;          // guide below the label plate
 
 $fn = 48;
 eps = 0.01;
@@ -65,6 +72,10 @@ assert(z_fin - z_f >= part_h + 0.8, "parts too tall for the label-side gap");
 assert(z_b >= wall + 1.0, "no room behind the board");
 assert(mouth_w >= pcb_tab_x1 - pcb_tab_x0 + 4, "mouth narrower than the tab");
 assert(mouth_w <= shell_w - 2 * wall - 2, "mouth wider than the cavity");
+assert(len([for (p = [sw_bootsel, sw_s3_en, sw_s3_boot])
+            if (norm([p[0] - sw_reset[0], p[1] - sw_reset[1]]) < guide_od / 2 + 2.2 / 2 + 0.4) 1]) == 0,
+       "the RESET guide meets a pin-hole");
+assert(z_fin - guide_h >= z_f + part_h + 0.3, "the RESET guide would sit on parts");
 echo(str("shell: ", shell_w, " x ", shell_h, " x ", shell_d, " mm; label-side gap ", z_fin - z_f,
          " mm, back gap ", z_b - wall, " mm; edge ", edge_in, " mm inside the mouth"));
 
@@ -95,7 +106,7 @@ module mouth() {
 }
 // label face: RESET (with a plunger), the other three buttons as pin-holes, LED windows
 module face_holes() {
-    for (p = [[sw_reset, 6.2], [sw_bootsel, 2.2], [sw_s3_en, 2.2], [sw_s3_boot, 2.2],
+    for (p = [[sw_reset, cap_hole], [sw_bootsel, 2.2], [sw_s3_en, 2.2], [sw_s3_boot, 2.2],
               [led_ws, 3.0], [led_rp, 2.0]])
         translate([p[0][0], Y(p[0][1]), z_fin - eps]) cylinder(d = p[1], h = wall + 2 * eps);
 }
@@ -108,10 +119,10 @@ module label_half() {
             translate([0, 0, z_b]) linear_extrude(shell_d - z_b) difference() { outer2d(); inner2d(); }
             screws() translate([0, 0, z_f]) cylinder(d = boss_l_d, h = z_fin - z_f + eps);   // board stops
             // RESET plunger guide
-            translate([sw_reset[0], Y(sw_reset[1]), z_f + 2.6]) cylinder(d = 9, h = z_fin - z_f - 2.6 + eps);
+            translate([sw_reset[0], Y(sw_reset[1]), z_fin - guide_h]) cylinder(d = guide_od, h = guide_h + eps);
         }
         screws() translate([0, 0, z_f - eps]) cylinder(d = pilot_d, h = z_fin - z_f - 0.4);
-        translate([sw_reset[0], Y(sw_reset[1]), z_f + 2.6 - eps]) cylinder(d = 6.4, h = z_fin - z_f);
+        translate([sw_reset[0], Y(sw_reset[1]), z_fin - guide_h - eps]) cylinder(d = guide_id, h = guide_h + eps);
         face_holes();
         top_openings();
         mouth();
@@ -137,12 +148,20 @@ module back_half() {
     }
 }
 
-// RESET plunger: a cap through the label plate, a flange under it, a stem onto the TS-1187A
-// (actuator 1.5 mm above F.Cu)
+// RESET plunger, modelled cap-down (its print orientation): the cap through the label plate, a
+// 45-degree cone (no support) into a flange held in the guide, a stem onto the TS-1187A.  At rest the
+// cone sits on the hole's edge, the cap `proud` above the face and the stem `press_gap` above the switch.
+cap_l    = wall + proud - (cap_hole - cap_d) / 2;
+cone_h   = (fl_d - cap_d) / 2;
+stem_end = wall + proud + (z_fin - z_f) - sw_h - press_gap;   // from the cap's top
 module plunger() {
-    cylinder(d = 6.0, h = 1.2 + wall);                    // cap: through the 6.2 hole, 1.2 proud
-    translate([0, 0, -1.0]) cylinder(d = 8.4, h = 1.0);   // flange inside the 9 mm guide
-    translate([0, 0, -(z_fin - z_f - 1.5 - 1.0)]) cylinder(d = 3.0, h = z_fin - z_f - 1.5 - 1.0 + eps);
+    cylinder(d = cap_d, h = cap_l + eps);
+    translate([0, 0, cap_l]) cylinder(d1 = cap_d, d2 = fl_d, h = cone_h);
+    translate([0, 0, cap_l + cone_h - eps]) cylinder(d = fl_d, h = 0.7 + eps);
+    translate([0, 0, cap_l + cone_h + 0.7 - eps]) cylinder(d = stem_d, h = stem_end - (cap_l + cone_h + 0.7) + eps);
+}
+module plunger_fitted(drop = 0) {
+    translate([sw_reset[0], Y(sw_reset[1]), shell_d + proud - drop]) rotate([180, 0, 0]) plunger();
 }
 
 // the board, for the "assembled" / "check" views
@@ -157,10 +176,10 @@ module label_print() { translate([0, Y(y_top) + Y(y_bot), shell_d]) rotate([180,
 if (part == "label") label_print();
 else if (part == "back") back_half();
 else if (part == "plunger") plunger();
-else if (part == "assembled") { label_half(); back_half(); color("green") board();
-                                translate([sw_reset[0], Y(sw_reset[1]), z_fin - 0.4]) plunger(); }
-else if (part == "check") { intersection() { board(0.05); label_half(); }   // must be empty (the board
-                            intersection() { board(0.05); back_half(); } }  // only touches the bosses)
+else if (part == "assembled") { label_half(); back_half(); color("green") board(); color("red") plunger_fitted(); }
+else if (part == "check") { intersection() { board(0.05); label_half(); }   // must be empty: the board
+                            intersection() { board(0.05); back_half(); }    // only touches the bosses,
+                            intersection() { plunger_fitted(0.05); label_half(); } }   // the plunger the hole's edge
 else {
     label_print();
     translate([shell_w + 10, 0, 0]) back_half();

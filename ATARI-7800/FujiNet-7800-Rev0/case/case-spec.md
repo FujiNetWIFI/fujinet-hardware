@@ -17,7 +17,7 @@ cartridge or console; check each one before printing more than one shell.
 | | |
 |---|---|
 | Outside | 80.0 x 125.0 x 20.0 mm (W x H x D). |
-| Label half | Over the component side (F.Cu). It carries every part and pins 1-16, and faces the **console's rear**, the way a 7800 cartridge's label faces ("hold the cartridge so the name on the label faces away from you", 7800 manual). It has:<br>• a 54 x 38 mm label recess, 0.4 mm deep;<br>• RESET through a 6.2 mm hole with a printed plunger;<br>• BOOTSEL, S3 EN and S3 BOOT as 2.2 mm pin-holes;<br>• WS2812 and RP-LED windows (3.0 / 2.0 mm) near the top edge;<br>• the microSD finger notch. |
+| Label half | Over the component side (F.Cu). It carries every part and pins 1-16, and faces the **console's rear**, the way a 7800 cartridge's label faces ("hold the cartridge so the name on the label faces away from you", 7800 manual). It has:<br>• a 54 x 38 mm label recess, 0.4 mm deep;<br>• RESET through a 5.4 mm hole with a printed plunger (Ø5.0 cap, Ø6.6 flange in a Ø7.0 guide: the guide stays clear of the pin-holes 6.2 mm either side);<br>• BOOTSEL, S3 EN and S3 BOOT as 2.2 mm pin-holes;<br>• WS2812 and RP-LED windows (3.0 / 2.0 mm) near the top edge;<br>• the microSD finger notch. |
 | Back half | A flat plate over B.Cu (no parts), toward the player. It has screw counterbores and a 1 mm alignment lip into the label half. |
 | Top wall | USB-C opening 13 x 7.2 mm, sized for a plug overmold. microSD slot 14 x 2.4 mm. |
 | Bottom | The connector mouth, 57 mm wide through the full inner depth (VERIFY). The contact edge sits 6.5 mm up inside it (VERIFY). The console's two plastic keys enter the board's key slots inside the mouth. |
@@ -37,10 +37,14 @@ The SCAD asserts:
 - the width is no more than a 2600 cartridge's;
 - the board clears the walls and the lip;
 - the tallest part (3.3 mm) clears the label plate, with a 7.2 mm gap;
-- the mouth is wider than the tab and narrower than the cavity.
+- the mouth is wider than the tab and narrower than the cavity;
+- the RESET guide clears the pin-holes either side of it and the parts below it.
 
-`part="check"` intersects the board with both halves. It must be empty: the board only touches
-the bosses.
+`part="check"` intersects the board with both halves, and the RESET plunger with the label half.
+It must be empty: the board only touches the bosses, and the plunger rests on its hole's edge.
+
+The plunger prints cap-down. At rest the cap stands 0.6 mm proud of the label face and the stem
+0.15 mm above the switch, so a press flush with the face moves the switch 0.45 mm.
 
 ## The board (from `board-anchors.scad`)
 

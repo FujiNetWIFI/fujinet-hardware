@@ -346,7 +346,9 @@ module board_keepout() {
 
 // ---------------------------------------------------------------- output --
 part = "both";   // "front", "rear", "holder", "both" (print layout), "assembled", "check"
-module rear_print()   { translate([0, 0, T]) mirror([0, 0, 1]) rear_half(); }
+// print orientation: turned over by a rotation, onto its own footprint (a mirror would export the
+// half's mirror image)
+module rear_print()   { translate([0, 2 * Yo + ch, T]) rotate([180, 0, 0]) rear_half(); }
 module holder_print() { translate([0, 0, Yo + hold_v + hold_t / 2]) rotate([-90, 0, 0]) holder(); }
 if (part == "front") front_half();
 else if (part == "rear") rear_print();

@@ -92,5 +92,6 @@ module front_half() { intersection() { shell(); translate([-1, -1, -1]) cube([ca
 module back_half()  { intersection() { shell(); translate([-1, -1, split_t]) cube([cart_w + 2, cart_h + 2, cart_t]); } }
 
 if (part == "front") front_half();
-else if (part == "back") translate([0, 0, cart_t]) mirror([0, 0, 1]) back_half();   // print face down
+// print the back half face down: turned over by a rotation (a mirror would export its mirror image)
+else if (part == "back") translate([0, cart_h, cart_t]) rotate([180, 0, 0]) back_half();
 else { front_half(); back_half(); }

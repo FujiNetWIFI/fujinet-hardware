@@ -164,13 +164,15 @@ module plunger() {
 // ---------------------------------------------------------------- output --
 part = "both";   // "front", "rear", "plunger", "both" (print layout), "assembled", "interference"
 module plunger_placed() { translate([sw_reset[0], Y(sw_reset[1]), 0]) plunger(); }
-if (part == "front") translate([0, 0, shell_d]) mirror([0, 0, 1]) front_half();
+// print orientation: turned over by a rotation (a mirror would export the half's mirror image)
+module front_print() { translate([0, Y(y_top) + Y(y_bot), shell_d]) rotate([180, 0, 0]) front_half(); }
+if (part == "front") front_print();
 else if (part == "rear") rear_half();
-else if (part == "plunger") translate([0, 0, shell_d + proud]) mirror([0, 0, 1]) plunger();
+else if (part == "plunger") translate([0, 0, shell_d + proud]) rotate([180, 0, 0]) plunger();
 else if (part == "assembled") { front_half(); rear_half(); plunger_placed(); }
 // must render EMPTY (OpenSCAD then writes no STL): the plunger at rest touches neither half
 else if (part == "interference") intersection() { union() { front_half(); rear_half(); } plunger_placed(); }
 else {
-    translate([0, 0, shell_d]) mirror([0, 0, 1]) front_half();
+    front_print();
     translate([shell_w + 10, 0, 0]) rear_half();
 }

@@ -152,7 +152,9 @@ module board(shrink = 0) {
 
 // ---------------------------------------------------------------- output --
 part = "both";   // "label", "back", "plunger", "both" (print layout), "assembled", "check"
-if (part == "label") translate([0, 0, shell_d]) mirror([0, 0, 1]) label_half();
+// print orientation: turned over by a rotation (a mirror would export the half's mirror image)
+module label_print() { translate([0, Y(y_top) + Y(y_bot), shell_d]) rotate([180, 0, 0]) label_half(); }
+if (part == "label") label_print();
 else if (part == "back") back_half();
 else if (part == "plunger") plunger();
 else if (part == "assembled") { label_half(); back_half(); color("green") board();
@@ -160,6 +162,6 @@ else if (part == "assembled") { label_half(); back_half(); color("green") board(
 else if (part == "check") { intersection() { board(0.05); label_half(); }   // must be empty (the board
                             intersection() { board(0.05); back_half(); } }  // only touches the bosses)
 else {
-    translate([0, 0, shell_d]) mirror([0, 0, 1]) label_half();
+    label_print();
     translate([shell_w + 10, 0, 0]) back_half();
 }

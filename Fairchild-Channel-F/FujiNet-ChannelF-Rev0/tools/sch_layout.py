@@ -181,15 +181,16 @@ def cart_rp(sh):
     ports (5 V, the console) facing the edge and their B ports (3.3 V) facing the RP2040, whose left
     side takes the bus row for row -- each of the 15 bus lines, both halves of it, is a straight
     wire and not one line crosses another: D0-D7 through the data translator (its DIR from GPIO15
-    on the top row, with its pull-up and scope pad), WRITE / ROMC0-4 / PHI through the control
-    translator (DIR tied high: console -> RP only), /INTREQ under them through its open-drain FET
+    on the top row, with its pull-up and scope pad), ROMC0-4 / WRITE / PHI through the control
+    translator (DIR tied high: console -> RP only; its channels in the board's order, WRITE's scope
+    pad dropping past PHI's line -- the page's one crossing), /INTREQ under them through its open-drain FET
     from GPIO16, the activity LED on GPIO25.  Under the bus, the 2 MB QSPI flash wired pin for pin
     into the RP's left side with the BOOTSEL group standing on its /CS line, and the 12 MHz crystal.
     The six IOVDD along the RP's top and its core supplies along the bottom, each with its capacitor
     beside the pin; on its right GPIO17's scope pad, the unused GPIOs, SWD, the USB pair through 27R
     and RUN with its RESET steering -- out to the FujiNet half."""
     sh.wired = True
-    sh.crossing_budget = 0                         # planar
+    sh.crossing_budget = 1                         # WRITE's scope pad past PHI (the board's channel order)
     J, U, UD, UC = 'J_EDGE', 'U_RP', 'U_DBUF', 'U_CBUF'
     row = lambda r: snap(50.8 + 2.54 * r)
     xU = 254.0                                     # the RP's left pin column
@@ -206,7 +207,7 @@ def cart_rp(sh):
     for key, chans in ((UD, D.DATA_CH), (UC, D.CTRL_CH)):
         for k, (cn, rn) in enumerate(chans, 1):
             a, bb = sh.P(key, D.A_PIN[k]), sh.P(key, D.B_PIN[k])
-            if cn == 'CBUF_A8':                    # the control translator's spare A8: pulled low
+            if rn is None:                         # the control translator's spare A8: pulled low
                 fit(sh, 'R_A8', 1, (snap(a[0] - 12.7), a[1]), {1: R_}, fields='below')
                 sh.wire(a, sh.P('R_A8', 1))
                 sh.label((snap(a[0] - 1.27), a[1]), cn, 'L')
@@ -217,10 +218,15 @@ def cart_rp(sh):
             assert e[1] == a[1] == bb[1] == r[1], (cn, e, a, bb, r)
             sh.wire(e, a)
             sh.label((snap(e[0] + 2.54), e[1]), cn)
-            if rn in ('RP_WRITE', 'RP_PHI'):       # the scope pad: up off WRITE, down off PHI
+            if rn == 'RP_PHI':                     # PHI's scope pad hangs into the spare's row (B8 open)
                 xt = snap(xB + 30.48)
                 rail_line(sh, bb, [xt, r[0]])
-                tee_tp(sh, 'TP_' + rn[3:], (xt, bb[1]), up=rn == 'RP_WRITE')
+                tee_tp(sh, 'TP_PHI', (xt, bb[1]), up=False)
+            elif rn == 'RP_WRITE':                 # WRITE's drops past PHI's line (the page's one crossing:
+                xt = snap(xB + 40.64)              # the board's channel order puts WRITE between ROMC4 and PHI)
+                rail_line(sh, bb, [xt, r[0]])
+                fit(sh, 'TP_WRITE', 1, (xt, snap(bb[1] + 3 * 2.54)), {1: U_}, fields='right')
+                sh.wire((xt, bb[1]), sh.P('TP_WRITE', 1))
             else:
                 sh.wire(bb, r)
             sh.label((snap(bb[0] + 2.54), bb[1]), rn)

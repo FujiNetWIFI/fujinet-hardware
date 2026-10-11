@@ -25,7 +25,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "FujiNet-ChannelF:ChannelF_Videocart_Edge_22"
 			(at 0 0 0)
 			(effects
 				(font
@@ -249,24 +249,6 @@
 			(pin passive line
 				(at 15.24 -17.78 180)
 				(length 2.54)
-				(name "WRITE"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "15"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin passive line
-				(at 15.24 -20.32 180)
-				(length 2.54)
 				(name "ROMC0"
 					(effects
 						(font
@@ -283,7 +265,7 @@
 				)
 			)
 			(pin passive line
-				(at 15.24 -22.86 180)
+				(at 15.24 -20.32 180)
 				(length 2.54)
 				(name "ROMC1"
 					(effects
@@ -301,7 +283,7 @@
 				)
 			)
 			(pin passive line
-				(at 15.24 -25.4 180)
+				(at 15.24 -22.86 180)
 				(length 2.54)
 				(name "ROMC2"
 					(effects
@@ -319,7 +301,7 @@
 				)
 			)
 			(pin passive line
-				(at 15.24 -27.94 180)
+				(at 15.24 -25.4 180)
 				(length 2.54)
 				(name "ROMC3"
 					(effects
@@ -337,7 +319,7 @@
 				)
 			)
 			(pin passive line
-				(at 15.24 -30.48 180)
+				(at 15.24 -27.94 180)
 				(length 2.54)
 				(name "ROMC4"
 					(effects
@@ -347,6 +329,24 @@
 					)
 				)
 				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 15.24 -30.48 180)
+				(length 2.54)
+				(name "WRITE"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "15"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -993,24 +993,6 @@
 			(pin bidirectional line
 				(at -58.42 35.56 0)
 				(length 2.54)
-				(name "GPIO13"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "16"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(pin bidirectional line
-				(at -58.42 33.02 0)
-				(length 2.54)
 				(name "GPIO8"
 					(effects
 						(font
@@ -1027,7 +1009,7 @@
 				)
 			)
 			(pin bidirectional line
-				(at -58.42 30.48 0)
+				(at -58.42 33.02 0)
 				(length 2.54)
 				(name "GPIO9"
 					(effects
@@ -1045,7 +1027,7 @@
 				)
 			)
 			(pin bidirectional line
-				(at -58.42 27.94 0)
+				(at -58.42 30.48 0)
 				(length 2.54)
 				(name "GPIO10"
 					(effects
@@ -1063,7 +1045,7 @@
 				)
 			)
 			(pin bidirectional line
-				(at -58.42 25.4 0)
+				(at -58.42 27.94 0)
 				(length 2.54)
 				(name "GPIO11"
 					(effects
@@ -1081,7 +1063,7 @@
 				)
 			)
 			(pin bidirectional line
-				(at -58.42 22.86 0)
+				(at -58.42 25.4 0)
 				(length 2.54)
 				(name "GPIO12"
 					(effects
@@ -1091,6 +1073,24 @@
 					)
 				)
 				(number "15"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -58.42 22.86 0)
+				(length 2.54)
+				(name "GPIO13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "16"
 					(effects
 						(font
 							(size 1.27 1.27)

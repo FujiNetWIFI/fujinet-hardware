@@ -130,8 +130,10 @@ def multi_symbol(name, ref, value, footprint, desc, units, ds=''):
 CTRL_ROW = 26                      # row of the control translator's DIR row (its rows 0-11)
 LED_ROW = 57
 QSPI_ROW = LED_ROW + 14            # QSPI_SS: room above it for the BOOTSEL group
+_RP_GPIO = {n: g for g, n in D.RP_GPIO_NET.items()}
+CTRL_GPIO = [_RP_GPIO[b] if b else None for a, b in D.CTRL_CH]     # the control rows, the spare's empty
 RP_LEFT = [15, None, None, None] + list(range(0, 8)) + [None] * (CTRL_ROW + 4 - 12) + \
-    [13, 8, 9, 10, 11, 12, 14] + [None] * 9 + [16] + [None] * (LED_ROW - 47) + [25]
+    CTRL_GPIO + [None] * 8 + [16] + [None] * (LED_ROW - 47) + [25]
 RP_LEFT += [None] * (QSPI_ROW - len(RP_LEFT)) + [('p', 56), ('p', 52), ('p', 53), ('p', 55), ('p', 54), ('p', 51),
                                                 None, None, ('p', 20), None, None, ('p', 21), None, None, ('p', 19),
                                                 None, None, None, None]   # clear of the bottom pins' names
@@ -331,7 +333,7 @@ def usbc_symbol(stock):
 
 
 # The edge drawn by function: the bus on the right, toward the translators, row for row with their A
-# ports (the data translator's D0-D7, then the control translator's WRITE, ROMC0-4, PHI), /INTREQ
+# ports (the data translator's D0-D7, then the control translator's ROMC0-4, WRITE, PHI), /INTREQ
 # level with its FET's drain; the console's +5V (pins 19, 20) on top, the grounds (1, 2) below, the
 # open contacts (21 NC, 22 +12V) on the left.  Pin numbers are the Videocart's 1-22 (veswiki).
 EDGE_NAMES = {'INTREQ_N': '~{INTREQ}', 'CONS_5V': '+5V', 'GND': 'GND'}
@@ -342,7 +344,7 @@ _BY_NET = {n: p for p, n in D.EDGE.items() if n not in ('GND', 'CONS_5V', None)}
 INT_ROW = CTRL_ROW + 17            # row of the /INTREQ wire (three rows above the FET's gate)
 EDGE_FIRST = 4                     # row of the edge's first right-hand pin (D0)
 EDGE_RIGHT = [_BY_NET['D%d' % i] for i in range(8)] + [None] * (CTRL_ROW + 4 - 12) + \
-    [_BY_NET[a] for a, b in D.CTRL_CH[:7]] + [None] * (INT_ROW - CTRL_ROW - 11) + [_BY_NET['INTREQ_N']]
+    [_BY_NET[a] if b else None for a, b in D.CTRL_CH] + [None] * (INT_ROW - CTRL_ROW - 12) + [_BY_NET['INTREQ_N']]
 
 
 def edge_symbol():
@@ -353,7 +355,7 @@ def edge_symbol():
     right = [pin(p) if p else None for p in EDGE_RIGHT]
     # the rows must meet the translators' A ports, row for row (RP rows EDGE_FIRST ...)
     want = {EDGE_FIRST + i: D.DATA_CH[i][0] for i in range(8)}
-    want.update({CTRL_ROW + 4 + i: D.CTRL_CH[i][0] for i in range(7)})
+    want.update({CTRL_ROW + 4 + i: a for i, (a, b) in enumerate(D.CTRL_CH) if b})
     want[INT_ROW] = 'INTREQ_N'
     got = {EDGE_FIRST + i: D.EDGE[p] for i, p in enumerate(EDGE_RIGHT) if p}
     assert got == want, (got, want)
@@ -362,7 +364,7 @@ def edge_symbol():
     left = [pin(21), pin(22)]
     used = [e[0] for e in right + top + bottom + left if e]
     assert sorted(used) == list(range(1, 23)), 'edge symbol must carry every contact once'
-    return box_symbol('ChannelF_Cart_Edge_22', 'J', 'ChannelF_Cart_Edge_22', '',
+    return box_symbol('ChannelF_Cart_Edge_22', 'J', 'ChannelF_Cart_Edge_22', D.BY_KEY['J_EDGE'].footprint,
                       'Fairchild Channel F Videocart edge, 22 contacts (channelf.se veswiki Pinouts): 1-2 GND, '
                       '3-18 bus, 19-20 +5V, 21 NC, 22 +12V',
                       left=left, right=right, top=top, bottom=bottom, w=25.4, tb_x=0, tb_pitch=2.54,

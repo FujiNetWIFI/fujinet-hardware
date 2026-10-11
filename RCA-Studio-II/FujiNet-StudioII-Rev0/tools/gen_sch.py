@@ -26,10 +26,10 @@ import sch_draw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRJ = os.path.dirname(HERE)
-DATE = '2026-10-10'
+DATE = '2026-10-11'
 TITLE = 'FujiNet Studio II Rev0'
-COMMENT2 = 'CERN-OHL-W-2.0 (core and generators from FujiNet-5200-Rev0)'
-COMMENT3 = 'Rev0 2026-10-10: schematic only; firmware pico/studio2 s2_cart.h'
+COMMENT2 = 'CERN-OHL-W-2.0 (RP core from FujiNet-5200-Rev0, S3 half from FujiNet-ChannelF-Rev0)'
+COMMENT3 = 'Rev0 2026-10-11: RP2354B + ESP32-S3; firmware pico/studio2 s2_cart.h, fujiversal-studio2.h'
 NS = uuid.UUID('5d1f0a2c-3e4b-4c6d-8e7f-5702d10c0de2')   # the Studio II Rev0 namespace
 
 
@@ -117,8 +117,8 @@ def multi_symbol(name, ref, value, footprint, desc, units, ds=''):
 # The RP2354B in two units (KiCad's MCU_RaspberryPi:RP2354B pin names and numbers, checked by
 # verify_pin_tables; the stacked hidden supply pins unstacked so each wires to its own capacitor):
 #   unit A, the cart-bus sheet: the 48 GPIOs.  Its left side faces the edge, row for row with the
-#           rows the cart-bus sheet draws straight across (the edge symbol's EDGE_RIGHT): RP_D0-7
-#           (GPIO16-23) level with the '541's A1-A8, /DRIVE (GPIO24) level with the upper input of
+#           rows the cart-bus sheet draws straight across (the edge symbol's EDGE_RIGHT): RP_D7-0
+#           (GPIO23-16) level with the '541's A1-A8 (its channels reversed: A8 = bit 0), /DRIVE (GPIO24) level with the upper input of
 #           the OR in front of /OE2, PWR_OK (GPIO26) level with the second '14 stage, /MRD (GPIO9)
 #           on the /MRD row, /CLAIM (GPIO25) level with the lower input of the OR in front of the
 #           NOR, then MA0-MA7 and TPA (GPIO0-8) every other row, through their 330R; the debug
@@ -128,7 +128,7 @@ from sch_layout import ROW                                            # cart-bus
 N_ROWS = ROW['MA'] + 2 * 8 + 1                                       # MA0-MA7, then TPA
 RP_A_LEFT = [None] * N_ROWS
 for _i in range(8):
-    RP_A_LEFT[ROW['D'] + _i] = 16 + _i                 # RP_D0-7
+    RP_A_LEFT[ROW['D'] + _i] = 23 - _i                 # RP_D7-0 (the '541 takes its channels reversed)
     RP_A_LEFT[ROW['MA'] + 2 * _i] = _i                 # MA0-7
 RP_A_LEFT[ROW['OE2'] - 1] = 24                         # /DRIVE
 RP_A_LEFT[ROW['PWROK']] = 26                           # PWR_OK
@@ -236,7 +236,7 @@ def usbc_symbol(stock):
 # CART CS, then MA0-MA7 and TPA every other row (room for their 330R's names); +5V on top, the
 # two grounded pins (GND, ROM DISABLE) below.
 EDGE_RIGHT = [None] * N_ROWS
-for _i, _p in enumerate((10, 9, 8, 5, 4, 3, 2, 1)):            # D0..D7
+for _i, _p in enumerate((1, 2, 3, 4, 5, 8, 9, 10)):            # D7..D0 (the '541's Y1..Y8)
     EDGE_RIGHT[ROW['D'] + _i] = _p
 for _i, _p in enumerate((11, 12, 13, 14, 16, 17, 18, 20)):     # MA0..MA7
     EDGE_RIGHT[ROW['MA'] + 2 * _i] = _p
@@ -251,27 +251,90 @@ def edge_symbol():
     nets = {p: n for p, (n, nm) in D.EDGE.items()}
     pin = lambda p: (p, D.EDGE[p][1], 'passive')
     right = [pin(p) if p else None for p in EDGE_RIGHT]
-    assert [nets[p] for p in EDGE_RIGHT[:8]] == ['D%d' % i for i in range(8)]
+    assert [nets[p] for p in EDGE_RIGHT[:8]] == ['D%d' % i for i in range(7, -1, -1)]
     assert [nets[EDGE_RIGHT[ROW['MA'] + 2 * i]] for i in range(8)] == ['MA%d' % i for i in range(8)]
     top = [pin(p) for p in EDGE_TOP]
     bottom = [pin(p) for p in EDGE_BOTTOM]
     used = [e[0] for e in right + top + bottom if e]
     assert sorted(used) == list(range(1, 23)), 'edge symbol must carry every contact once'
     return box_symbol('StudioII_Cart_Edge_22', 'J', 'StudioII_Cart_Edge_22', D.FP('StudioII_Cart_Edge_22'),
-                      'RCA Studio II 22-pin cartridge edge, 3.96 mm (0.156") pitch, contacts on one face '
-                      '(PROVISIONAL geometry, tools/edge_geom.py)',
+                      'RCA Studio II 22-pin cartridge edge, 0.156" (3.9624 mm) pitch, contacts on one face '
+                      '(B.Cu; FliP multicart geometry, tools/edge_geom.py)',
                       left=(), right=right, top=top, bottom=bottom, w=15.24, tb_x=0, tb_pitch=5.08)
+
+
+# The ESP32-S3 module by function (KiCad's RF_Module:ESP32-S3-WROOM-1 pin names, numbers and
+# types; GND 40 / 41 stacked hidden behind GND 1 as there), each group facing the parts it serves
+# on the page: BOOT and the RP2354B's RUN / BOOTSEL / USB on the left, toward the rp-core
+# sheet; EN beside 3V3 on top, to its power-on RC and button; the UART to the USB bridge top
+# right; the WS2812 and the microSD's SPI lines along the bottom, spaced for the pull-ups between
+# them; the 23 spare GPIOs, in GPIO order, down the right.
+S3_LEFT = [None, None, None, None, None, None, 'IO0', None, None, None, None, None, None,
+           'IO4', 'IO5', None, 'IO20', 'IO19']
+S3_RIGHT = ['TXD0', 'RXD0', None] + ['IO%d' % g for g in (1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                                                         17, 18, 21, 35, 36, 37, 45, 46, 47)] + [None] * 2
+S3_TOP = ['EN', None, None, None, None, None, '3V3']
+S3_BOTTOM = ['IO48', None, 'GND', None, 'IO42', None, None, None, None, 'IO41', None, None, None,
+             'IO40', None, None, None, 'IO39', None, 'IO38']
+
+
+def s3_symbol(stock):
+    pins = {}
+    for sub in findall(stock, 'symbol'):
+        for p in findall(sub, 'pin'):
+            pins[str(find(p, 'number')[1])] = (str(find(p, 'name')[1]), str(p[1]))
+    by_fn = {}
+    for fn, pad in D.S3_PAD.items():
+        for p in (pad if isinstance(pad, list) else [pad]):
+            by_fn.setdefault(fn, []).append(str(p))
+    used = set()
+
+    def P(fn):
+        if fn is None:
+            return None
+        num = by_fn[fn][0]
+        used.add(num)
+        return (num,) + pins[num]
+    body, pl, (top_y, bot_y) = _unit('ESP32-S3-WROOM-1_Fn', 0, [P(f) for f in S3_LEFT], [P(f) for f in S3_RIGHT],
+                                      [P(f) for f in S3_BOTTOM], [P(f) for f in S3_TOP], w=55.88, tb_x=-2.54)
+    g1 = next(p for p in pl if find(p, 'number')[1] == Q('1'))
+    for num in by_fn['GND'][1:]:              # 40 and 41: stacked on GND 1, hidden, as in the stock symbol
+        used.add(num)
+        pl.append(['pin', pins[num][1], 'line', list(find(g1, 'at')), ['length', 2.54], ['hide', 'yes'],
+                   ['name', Q(pins[num][0]), font()], ['number', Q(num), font()]])
+    assert used == set(pins), sorted(set(pins) - used)
+    return ['symbol', Q('ESP32-S3-WROOM-1_Fn'), ['pin_names', ['offset', 1.016]], ['exclude_from_sim', 'no'],
+            ['in_bom', 'yes'], ['on_board', 'yes'],
+            ['property', Q('Reference'), Q('U'), ['at', 0, top_y + 1.27, 0], font()],
+            ['property', Q('Value'), Q('ESP32-S3-WROOM-1'), ['at', 0, bot_y - 5.08, 0], font()],
+            ['property', Q('Footprint'), Q(D.FP('ESP32-S3-WROOM-1')), ['at', 0, 0, 0], hidden()],
+            ['property', Q('Datasheet'), Q('https://www.espressif.com/sites/default/files/documentation/'
+                                           'esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf'), ['at', 0, 0, 0], hidden()],
+            ['property', Q('Description'), Q('ESP32-S3-WROOM-1 module, KiCad RF_Module:ESP32-S3-WROOM-1 pins '
+                                             'grouped by function'), ['at', 0, 0, 0], hidden()],
+            body, ['symbol', Q('ESP32-S3-WROOM-1_Fn_1_1')] + pl]
 
 
 def project_symbols(stock=None):
     edge = edge_symbol()
+    # microSD drawn in the S3's SPI pin order, signals 5.08 apart (room for their names)
+    sd = box_symbol('MicroSD_TF015', 'J', 'microSD', D.FP('TF-SMD_TF-015'),
+                    'microSD push-push socket, SOFNG TF-015 (LCSC C113206); CD closes to the shell with a card in',
+                    left=[(8, 'DAT1', 'bidirectional'), None, (1, 'DAT2', 'bidirectional'), None,
+                          (3, 'CMD/DI', 'input'), None, (5, 'CLK', 'input'), None,
+                          (7, 'DAT0/DO', 'bidirectional'), None, (2, 'DAT3/CS', 'bidirectional'), None,
+                          (9, 'CD', 'passive'), None, (4, 'VDD', 'power_in'), (6, 'VSS', 'power_in')],
+                    bottom=[(10, 'SH', 'passive'), (11, 'SH', 'passive'),
+                            (12, 'SH', 'passive'), (13, 'SH', 'passive')], w=20.32)
     rpx = rp_split_symbol(stock['MCU_RaspberryPi:RP2354B'])
+    s3 = s3_symbol(stock['RF_Module:ESP32-S3-WROOM-1'])
     usbc = usbc_symbol(stock['Connector:USB_C_Receptacle_USB2.0_16P'])
+    mine = [edge, sd, rpx, s3, usbc]
     lib = ['kicad_symbol_lib', ['version', 20241209], ['generator', Q('fujinet_gen')],
-           ['generator_version', Q('1.0')], edge, rpx, usbc]
+           ['generator_version', Q('1.0')]] + mine
     open(os.path.join(PRJ, D.LIB + '.kicad_sym'), 'w').write(dump(lib) + '\n')
     cache = {}
-    for s in (edge, rpx, usbc):
+    for s in mine:
         c = copy.deepcopy(s)
         c[1] = Q(D.LIB + ':' + s[1])
         cache[c[1]] = c
@@ -315,6 +378,18 @@ def verify_pin_tables(syms):
             raise SystemExit('RP_DVDD_PINS: pin %d is %r' % (pin, names.get(str(pin))))
     if pin_names(syms[D.LIB + ':USB_C_USB2.0_16P_Fn']) != pin_names(syms['Connector:USB_C_Receptacle_USB2.0_16P']):
         raise SystemExit('USB_C_USB2.0_16P_Fn: pin names differ from the stock USB-C symbol')
+    names = pin_names(syms['RF_Module:ESP32-S3-WROOM-1'])
+    if pin_names(syms[D.LIB + ':ESP32-S3-WROOM-1_Fn']) != names:
+        raise SystemExit('ESP32-S3-WROOM-1_Fn: pin names differ from the stock ESP32-S3-WROOM-1 symbol')
+    for fn, pad in D.S3_PAD.items():
+        for p in (pad if isinstance(pad, list) else [pad]):
+            nm = names[str(p)]
+            if nm != fn and not (fn == 'IO19' and nm == 'USB_D-') and not (fn == 'IO20' and nm == 'USB_D+'):
+                raise SystemExit('S3_PAD: %s -> pad %d, but the symbol calls it %r' % (fn, p, nm))
+    mux = pin_names(syms['Power_Management:TPS2116DRL'])
+    for pin, nm in ((1, 'GND'), (2, 'VOUT'), (3, 'VIN1'), (4, 'PR1'), (5, 'MODE'), (6, 'VIN2'), (7, 'VOUT'), (8, 'ST')):
+        if mux[str(pin)] != nm:                  # TPS2116 datasheet 5 (pin functions)
+            raise SystemExit('TPS2116DRL pin %d is %r, want %s' % (pin, mux[str(pin)], nm))
 
 
 # ---------------------------------------------------------------------------

@@ -6,12 +6,12 @@
 	(paper "A3")
 	(title_block
 		(title "FujiNet Studio II Rev0 - Cart bus: edge, glue, RP GPIO")
-		(date "2026-10-10")
+		(date "2026-10-11")
 		(rev "0")
 		(company "FujiNet")
 		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
-		(comment 2 "CERN-OHL-W-2.0 (core and generators from FujiNet-5200-Rev0)")
-		(comment 3 "Rev0 2026-10-10: schematic only; firmware pico/studio2 s2_cart.h")
+		(comment 2 "CERN-OHL-W-2.0 (RP core from FujiNet-5200-Rev0, S3 half from FujiNet-ChannelF-Rev0)")
+		(comment 3 "Rev0 2026-10-11: RP2354B + ESP32-S3; firmware pico/studio2 s2_cart.h, fujiversal-studio2.h")
 	)
 	(lib_symbols
 		(symbol "74xGxx:74LVC1G02"
@@ -3384,14 +3384,14 @@
 				(pin bidirectional line
 					(at -33.02 73.66 0)
 					(length 2.54)
-					(name "GPIO16"
+					(name "GPIO23"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "16"
+					(number "23"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3401,96 +3401,6 @@
 				)
 				(pin bidirectional line
 					(at -33.02 71.12 0)
-					(length 2.54)
-					(name "GPIO17"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "17"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -33.02 68.58 0)
-					(length 2.54)
-					(name "GPIO18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -33.02 66.04 0)
-					(length 2.54)
-					(name "GPIO19"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "19"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -33.02 63.5 0)
-					(length 2.54)
-					(name "GPIO20"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "20"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -33.02 60.96 0)
-					(length 2.54)
-					(name "GPIO21"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "21"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -33.02 58.42 0)
 					(length 2.54)
 					(name "GPIO22"
 						(effects
@@ -3508,16 +3418,106 @@
 					)
 				)
 				(pin bidirectional line
-					(at -33.02 55.88 0)
+					(at -33.02 68.58 0)
 					(length 2.54)
-					(name "GPIO23"
+					(name "GPIO21"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "23"
+					(number "21"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -33.02 66.04 0)
+					(length 2.54)
+					(name "GPIO20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -33.02 63.5 0)
+					(length 2.54)
+					(name "GPIO19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -33.02 60.96 0)
+					(length 2.54)
+					(name "GPIO18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -33.02 58.42 0)
+					(length 2.54)
+					(name "GPIO17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -33.02 55.88 0)
+					(length 2.54)
+					(name "GPIO16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4895,7 +4895,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "RCA Studio II 22-pin cartridge edge, 3.96 mm (0.156\") pitch, contacts on one face (PROVISIONAL geometry, tools/edge_geom.py)"
+			(property "Description" "RCA Studio II 22-pin cartridge edge, 0.156\" (3.9624 mm) pitch, contacts on one face (B.Cu; FliP multicart geometry, tools/edge_geom.py)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4921,14 +4921,14 @@
 				(pin passive line
 					(at 10.16 73.66 180)
 					(length 2.54)
-					(name "D0"
+					(name "D7"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "10"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4938,96 +4938,6 @@
 				)
 				(pin passive line
 					(at 10.16 71.12 180)
-					(length 2.54)
-					(name "D1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 68.58 180)
-					(length 2.54)
-					(name "D2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 66.04 180)
-					(length 2.54)
-					(name "D3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 63.5 180)
-					(length 2.54)
-					(name "D4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 60.96 180)
-					(length 2.54)
-					(name "D5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 58.42 180)
 					(length 2.54)
 					(name "D6"
 						(effects
@@ -5045,16 +4955,106 @@
 					)
 				)
 				(pin passive line
-					(at 10.16 55.88 180)
+					(at 10.16 68.58 180)
 					(length 2.54)
-					(name "D7"
+					(name "D5"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "1"
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 66.04 180)
+					(length 2.54)
+					(name "D4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 63.5 180)
+					(length 2.54)
+					(name "D3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 60.96 180)
+					(length 2.54)
+					(name "D2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 58.42 180)
+					(length 2.54)
+					(name "D1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 55.88 180)
+					(length 2.54)
+					(name "D0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5624,7 +5624,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "RCA Studio II 22-pin cartridge edge, 3.96 mm (0.156\") pitch, contacts on one face (PROVISIONAL geometry)"
+		(property "Description" "RCA Studio II 22-pin cartridge edge, 0.156\" (3.9624 mm) pitch, contacts on one face (B.Cu), FliP multicart geometry"
 			(at 48.26 129.54 0)
 			(effects
 				(font
@@ -12546,135 +12546,25 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 55.88)
-			(xy 109.22 55.88)
+			(xy 58.42 73.66)
+			(xy 109.22 73.66)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "012448f4-6450-5101-abbc-21b277770785")
+		(uuid "4fce88e3-a50c-517c-a0d6-bc7fb0644064")
 	)
 	(wire
 		(pts
-			(xy 134.62 55.88)
-			(xy 241.3 55.88)
+			(xy 134.62 73.66)
+			(xy 241.3 73.66)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "48c05897-8e89-51db-b7f3-07fe342a67f0")
-	)
-	(wire
-		(pts
-			(xy 58.42 58.42)
-			(xy 109.22 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ce68c7af-d5db-5f42-b626-125be2ffac3e")
-	)
-	(wire
-		(pts
-			(xy 134.62 58.42)
-			(xy 241.3 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0569a559-18d0-57d0-b483-5befe492befe")
-	)
-	(wire
-		(pts
-			(xy 58.42 60.96)
-			(xy 109.22 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d8a0723-3b04-5953-8d39-527ee13c4fe1")
-	)
-	(wire
-		(pts
-			(xy 134.62 60.96)
-			(xy 241.3 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3db850a3-3ef0-56ba-9046-2f29af6e6b49")
-	)
-	(wire
-		(pts
-			(xy 58.42 63.5)
-			(xy 109.22 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "26721cff-2f41-50db-a16f-06c387f8ca8f")
-	)
-	(wire
-		(pts
-			(xy 134.62 63.5)
-			(xy 241.3 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "34a13169-6c9b-5b0c-958f-2d62bc24af61")
-	)
-	(wire
-		(pts
-			(xy 58.42 66.04)
-			(xy 109.22 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "45155fa2-1582-59da-a20e-521ff8ebd691")
-	)
-	(wire
-		(pts
-			(xy 134.62 66.04)
-			(xy 241.3 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9b4075fe-da50-548d-a5d5-290d98b7d172")
-	)
-	(wire
-		(pts
-			(xy 58.42 68.58)
-			(xy 109.22 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f6c1a55c-8b7c-559c-bfab-089a13f4911d")
-	)
-	(wire
-		(pts
-			(xy 134.62 68.58)
-			(xy 241.3 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0cebb99b-7148-5834-bac6-5df0ba633ac5")
+		(uuid "004c108d-2988-5a5e-8258-7216b0079149")
 	)
 	(wire
 		(pts
@@ -12700,25 +12590,135 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 73.66)
-			(xy 109.22 73.66)
+			(xy 58.42 68.58)
+			(xy 109.22 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4fce88e3-a50c-517c-a0d6-bc7fb0644064")
+		(uuid "f6c1a55c-8b7c-559c-bfab-089a13f4911d")
 	)
 	(wire
 		(pts
-			(xy 134.62 73.66)
-			(xy 241.3 73.66)
+			(xy 134.62 68.58)
+			(xy 241.3 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "004c108d-2988-5a5e-8258-7216b0079149")
+		(uuid "0cebb99b-7148-5834-bac6-5df0ba633ac5")
+	)
+	(wire
+		(pts
+			(xy 58.42 66.04)
+			(xy 109.22 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45155fa2-1582-59da-a20e-521ff8ebd691")
+	)
+	(wire
+		(pts
+			(xy 134.62 66.04)
+			(xy 241.3 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b4075fe-da50-548d-a5d5-290d98b7d172")
+	)
+	(wire
+		(pts
+			(xy 58.42 63.5)
+			(xy 109.22 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "26721cff-2f41-50db-a16f-06c387f8ca8f")
+	)
+	(wire
+		(pts
+			(xy 134.62 63.5)
+			(xy 241.3 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34a13169-6c9b-5b0c-958f-2d62bc24af61")
+	)
+	(wire
+		(pts
+			(xy 58.42 60.96)
+			(xy 109.22 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d8a0723-3b04-5953-8d39-527ee13c4fe1")
+	)
+	(wire
+		(pts
+			(xy 134.62 60.96)
+			(xy 241.3 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3db850a3-3ef0-56ba-9046-2f29af6e6b49")
+	)
+	(wire
+		(pts
+			(xy 58.42 58.42)
+			(xy 109.22 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce68c7af-d5db-5f42-b626-125be2ffac3e")
+	)
+	(wire
+		(pts
+			(xy 134.62 58.42)
+			(xy 241.3 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0569a559-18d0-57d0-b483-5befe492befe")
+	)
+	(wire
+		(pts
+			(xy 58.42 55.88)
+			(xy 109.22 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "012448f4-6450-5101-abbc-21b277770785")
+	)
+	(wire
+		(pts
+			(xy 134.62 55.88)
+			(xy 241.3 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48c05897-8e89-51db-b7f3-07fe342a67f0")
 	)
 	(wire
 		(pts
@@ -13891,146 +13891,6 @@
 		(uuid "521b1ba4-dbae-56f9-93cc-43eb65ccef3b")
 	)
 	(label "D0"
-		(at 59.69 55.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "e31c997e-5260-5fee-9edc-b74ba2a590e3")
-	)
-	(label "RP_D0"
-		(at 135.89 55.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4042e104-7707-5ee6-846b-cd9dd1328a9e")
-	)
-	(label "D1"
-		(at 59.69 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "8dbdf002-9b74-5239-89f4-fc26446847b8")
-	)
-	(label "RP_D1"
-		(at 135.89 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "240c4b8a-89cc-53e5-b9af-77443d5e8195")
-	)
-	(label "D2"
-		(at 59.69 60.96 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "85d141a9-042f-5783-a1c0-070fa5b8d8d5")
-	)
-	(label "RP_D2"
-		(at 135.89 60.96 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "db1771a2-3cdd-54d2-a7bd-b0f6f9fe9a99")
-	)
-	(label "D3"
-		(at 59.69 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "029b8c94-415c-5c86-9b2a-bc04232805aa")
-	)
-	(label "RP_D3"
-		(at 135.89 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "024fa241-0353-5d4d-8633-db8526666c49")
-	)
-	(label "D4"
-		(at 59.69 66.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "284057ed-492c-5bae-b85c-72922906b9a9")
-	)
-	(label "RP_D4"
-		(at 135.89 66.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "359a0160-8f67-52cf-8c50-9a3349e588dd")
-	)
-	(label "D5"
-		(at 59.69 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "6c88a986-654b-517c-ae66-75ec37bccf4e")
-	)
-	(label "RP_D5"
-		(at 135.89 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "3dd02f80-96ab-5346-ae5c-1e7778570c50")
-	)
-	(label "D6"
-		(at 59.69 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a20bbaeb-6ddb-5c0f-a67c-9ec298d58c1a")
-	)
-	(label "RP_D6"
-		(at 135.89 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a06fdd92-6277-58ac-bff3-4f4160fc8581")
-	)
-	(label "D7"
 		(at 59.69 73.66 0)
 		(effects
 			(font
@@ -14038,9 +13898,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "9dec9fc1-02c6-54c9-871a-37bd2f1cccf3")
+		(uuid "3507cc0a-9548-5ffb-a427-6de6962a3b78")
 	)
-	(label "RP_D7"
+	(label "RP_D0"
 		(at 135.89 73.66 0)
 		(effects
 			(font
@@ -14048,7 +13908,147 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "08b7b870-34b8-576c-8b1c-678dfc48dcc9")
+		(uuid "ac84fa68-2bd9-530a-914b-e7e1b08f707c")
+	)
+	(label "D1"
+		(at 59.69 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5f980a6f-da4a-5d68-879e-26f3ac8c25b2")
+	)
+	(label "RP_D1"
+		(at 135.89 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "12f28aa4-1bd3-500d-b01f-1eb24d6e8b5c")
+	)
+	(label "D2"
+		(at 59.69 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "115d2953-79cb-5cfc-8b93-482878c5a9e2")
+	)
+	(label "RP_D2"
+		(at 135.89 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7a2f4bab-a6ca-5eae-b745-98512d38a3ea")
+	)
+	(label "D3"
+		(at 59.69 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "73e4858e-7d61-5e63-8e21-df1aad2dbdc9")
+	)
+	(label "RP_D3"
+		(at 135.89 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "02d18989-3343-5a0a-a8b7-3597fd40bac5")
+	)
+	(label "D4"
+		(at 59.69 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2029fe69-863a-546f-a0e4-325da4c7ee7b")
+	)
+	(label "RP_D4"
+		(at 135.89 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ef291b05-d6a0-5090-a62c-8d11025a6bcc")
+	)
+	(label "D5"
+		(at 59.69 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e1a7c98c-e163-599e-99e2-def029775ed3")
+	)
+	(label "RP_D5"
+		(at 135.89 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "609c51c9-0b10-5e20-82e7-47b67d87dd28")
+	)
+	(label "D6"
+		(at 59.69 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a5dc7add-e57a-55e3-a670-88be43f7b8e2")
+	)
+	(label "RP_D6"
+		(at 135.89 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5e276458-1f8d-5f39-a4ff-53711900693a")
+	)
+	(label "D7"
+		(at 59.69 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5e84ef26-1da3-5594-9965-59ec8b5ad6cd")
+	)
+	(label "RP_D7"
+		(at 135.89 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d25b0b6d-8ce6-55a6-9daa-47a7c3de0cff")
 	)
 	(label "OE2_N"
 		(at 148.59 81.28 180)
@@ -14390,7 +14390,7 @@
 		)
 		(uuid "d2c1cb68-53e2-5230-8b77-9501cfce88cf")
 	)
-	(text "The glue (s2_cart.h): the '541 (U2) drives D0-D7 while /OE1 = /MRD and\n/OE2 = /DRIVE | /PWROK are both low (s2_glue_drive); CART CS = NOR(/MRD,\n/CLAIM | /PWROK) (U4, U3; s2_glue_cartcs) turns the console RAM off for a\nread the RP claims.  /MRD alone ends both.  With the console off (PWR_OK_N\nhigh) nothing is driven into it, whatever the RP, on USB, left on /DRIVE\nand /CLAIM.  5 V CMOS levels: the 1802 VIH is 3.5 V at 5 V.\nR11 / R12 10k to +5V hold /DRIVE and /CLAIM high, the cart silent, while\nthe RP is unpowered or booting (they beat its reset pull-down; RP2350-E9).\nPWR_OK: edge 15 (the console's 5 V, before the P-FET) through R13 / R14 into\ntwo '14 Schmitt stages; the first, PWR_OK_N, gates the two ORs.  Every\nconsole line reaches the RP through 330R; GPIO0-31 are 5 V tolerant\nwhenever IOVDD is up.  ADC0 (GPIO40) reads edge 15 through R15 / R16.\nEdge pin 6 (ROM DISABLE) is grounded, as on a stock cartridge."
+	(text "The glue (s2_cart.h): the '541 (U2) drives D0-D7 while /OE1 = /MRD and\n/OE2 = /DRIVE | /PWROK are both low (s2_glue_drive); CART CS = NOR(/MRD,\n/CLAIM | /PWROK) (U4, U3; s2_glue_cartcs) turns the console RAM off for a\nread the RP claims.  /MRD alone ends both.  With the console off (PWR_OK_N\nhigh) nothing is driven into it, whatever the RP, on USB, left on /DRIVE\nand /CLAIM.  5 V CMOS levels: the 1802 VIH is 3.5 V at 5 V.\nR11 / R12 10k to +5V hold /DRIVE and /CLAIM high, the cart silent, while\nthe RP is unpowered or booting (they beat its reset pull-down; RP2350-E9).\nPWR_OK: edge 15 (the console's 5 V, before the mux) through R13 / R14 into\ntwo '14 Schmitt stages; the first, PWR_OK_N, gates the two ORs.  Every\nconsole line reaches the RP through 330R; GPIO0-31 are 5 V tolerant\nwhenever IOVDD is up.  ADC0 (GPIO40) reads edge 15 through R15 / R16.\nEdge pin 6 (ROM DISABLE) is grounded, as on a stock cartridge."
 		(exclude_from_sim no)
 		(at 304.8 198.12 0)
 		(effects

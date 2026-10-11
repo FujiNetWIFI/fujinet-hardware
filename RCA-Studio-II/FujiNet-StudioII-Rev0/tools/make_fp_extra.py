@@ -7,14 +7,20 @@
     TS-1187A-X-X-X rev A0 (datasheets/TS-1187A-B-A-B.pdf): body 5.1 x 5.1 x 1.5 mm,
     PCB layout four 1.0 x 0.75 mm pads at x +-3.0, y +-1.875 (7.0 / 5.0 and 4.5 / 3.0
     outer / inner spans); A-B and C-D are each one contact, so the pads are 1 1 / 2 2.
-Both as on FujiNet-5200 Rev0.  Every other footprint in FujiNet-StudioII.pretty is a
-copy of that project's, except the edge (make_edge_fp.py).
+Both as on FujiNet-5200 Rev0.
+  * MountingHole_8.128mm_NPTH: the original shell's posts pass through FliP's milled 8.128 mm
+    holes (tools/edge_geom.py), with a courtyard ring placement.HOLE_KEEP in radius -- the post's
+    base and the parts ring the floorplan keeps.
+Every other footprint in FujiNet-StudioII.pretty is a copy of FujiNet-5200 Rev0's (the fiducial,
+Fiducial_1mm_Mask2mm, of its library's KiCad geometry), except the edge (make_edge_fp.py).
 
 Usage: python3 tools/make_fp_extra.py
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sexpr import dump, Q
+import edge_geom as EG
+import placement as PL
 
 PRJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F = lambda s=1.0: ['effects', ['font', ['size', s, s], ['thickness', 0.15 if s >= 1 else 0.1]]]
@@ -85,8 +91,26 @@ def ts1187a():
     return fp
 
 
+def mounting_hole():
+    name = 'MountingHole_%gmm_NPTH' % EG.HOLE_D
+    return ['footprint', Q(name), ['version', 20241229], ['generator', Q('fujinet_gen')],
+            ['generator_version', Q('1.0')], ['layer', Q('F.Cu')],
+            ['descr', Q('RCA Studio II shell post clearance hole, NPTH %g mm (FliP multicart v5.1)' % EG.HOLE_D)],
+            ['tags', Q('mounting hole npth studio ii shell post')],
+            ['property', Q('Reference'), Q('REF**'), ['at', 0, -PL.HOLE_KEEP - 1, 0], ['layer', Q('F.Fab')], F()],
+            ['property', Q('Value'), Q(name), ['at', 0, PL.HOLE_KEEP + 1, 0], ['layer', Q('F.Fab')], F()],
+            ['attr', 'exclude_from_pos_files', 'exclude_from_bom', 'board_only'],
+            ['fp_circle', ['center', 0, 0], ['end', PL.HOLE_KEEP, 0], ['stroke', ['width', 0.05], ['type', 'solid']],
+             ['fill', 'no'], ['layer', Q('F.CrtYd')]],
+            ['fp_circle', ['center', 0, 0], ['end', EG.HOLE_D / 2, 0], ['stroke', ['width', 0.1], ['type', 'solid']],
+             ['fill', 'no'], ['layer', Q('F.Fab')]],
+            ['pad', Q(''), 'np_thru_hole', 'circle', ['at', 0, 0], ['size', EG.HOLE_D, EG.HOLE_D],
+             ['drill', EG.HOLE_D], ['layers', Q('*.Cu'), Q('*.Mask')]],
+            ['embedded_fonts', 'no']]
+
+
 if __name__ == '__main__':
     lib = os.path.join(PRJ, 'FujiNet-StudioII.pretty')
-    for fp in (header_1x03(), ts1187a()):
+    for fp in (header_1x03(), ts1187a(), mounting_hole()):
         open(os.path.join(lib, str(fp[1]) + '.kicad_mod'), 'w').write(dump(fp) + '\n')
         print('wrote', fp[1])

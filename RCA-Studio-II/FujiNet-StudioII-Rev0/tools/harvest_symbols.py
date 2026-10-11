@@ -24,12 +24,21 @@ KICAD_SYMS = os.environ.get('KICAD_SYMBOL_DIR', '/usr/share/kicad/symbols')
 STOCK = {
     '74xGxx': ['74LVC1G02'],                      # CART CS NOR (the 74HCT1G02 has the same pinout)
     '74xx': ['74LS32'],                           # the PWR_OK gating ORs (the 74HCT32 has the same pinout)
+    # the ESP32-S3 half (FujiNet-ChannelF Rev0's circuit) and the power mux
+    'Device': ['R_Pack04_Split'],
+    'Diode': ['BAT54C'],
+    'Interface_USB': ['CP2102N-Axx-xQFN28'],
+    'LED': ['WS2812B-2020'],
+    'Power_Management': ['TPS2116DRL'],
+    'Power_Protection': ['USBLC6-2SC6'],
+    'RF_Module': ['ESP32-S3-WROOM-1'],            # the pin table the project's ESP32-S3-WROOM-1_Fn is checked against
+    'Regulator_Switching': ['AP63203WU'],
+    'Transistor_BJT': ['UMH3N'],
 }
 # symbols the carried-over cache (the 5200's) holds that this board does not use
-DROP = {'74xGxx:74LVC1G17', '74xx:74LS08', 'Device:Polyfuse', 'Device:R_Pack04_Split', 'Diode:BAT54C',
-        'Interface_USB:CP2102N-Axx-xQFN28', 'Jumper:SolderJumper_2_Bridged', 'LED:WS2812B-2020',
-        'RF_Module:ESP32-S3-WROOM-1', 'Regulator_Switching:AP63203WU', 'Regulator_Switching:AP63205WU',
-        'Transistor_BJT:UMH3N', 'Transistor_FET:2N7002'}
+DROP = {'74xGxx:74LVC1G17', '74xx:74LS08', 'Device:Polyfuse', 'Jumper:SolderJumper_2_Bridged',
+        'Regulator_Switching:AP63205WU', 'Transistor_FET:2N7002', 'Diode:ESD5Zxx', 'Diode:SS34',
+        'Transistor_FET:AO3401A'}
 
 
 def flatten(lib, name, syms):

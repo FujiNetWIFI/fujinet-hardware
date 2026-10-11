@@ -5,13 +5,14 @@ it -- independently of tools/design.py.
 Exports a fresh netlist with kicad-cli and reads
   $FUJINET_FIRMWARE/pico/studio2/firmware/include/s2_cart.h   every *_PIN GPIO number
       (default ~/Workspace/fujinet-firmware)
-  $FUJINET_S2_BOARD/include/pinmap/fujiversal-studio2.h       if present: the S3 board's contract
-      that the cart is joined by USB alone (default ~/Workspace/fn-studio2-board)
+  $FUJINET_S2_BOARD/include/pinmap/fujiversal-studio2.h       the ESP32-S3's pin map: SD, UART0,
+      WS2812, and RUN / BOOTSEL forcing if it declares them (default ~/Workspace/fn-studio2-board)
 and checks every GPIO of the RP2354B against the pin *functions* the netlist reports (GPIOn on the
 RP2354B, An/Yn on the '541), the Studio II 22-pin edge map (its own copy of the pinout), the series
 resistors on the console's lines, the 5 V-tolerance rule for GPIO40-47, the /DRIVE and /CLAIM
-pull-ups, the supply sense dividers and the PWR_OK_N gating, the power OR, the RP's support circuit
-and the edge footprint.  The glue logic itself is check_glue.py's.
+pull-ups, the supply sense dividers and the PWR_OK_N gating, the power mux, the RP's support circuit,
+the RP <-> S3 USB link and RUN / BOOTSEL forcing, the S3's pins, the USB-C bridge, and the edge
+footprint.  The glue logic itself is check_glue.py's.
 
 Usage: python3 tools/check_nets.py         exit 1 on any failure
 """
@@ -39,6 +40,13 @@ RP_PD_MIN = 30e3                              # RP2350 pad pull-down, taken low 
 
 fails = 0
 count = 0
+warns = 0
+
+
+def warn(desc):
+    global warns
+    warns += 1
+    print('WARN:', desc)
 
 
 def chk(desc, ok):
@@ -56,8 +64,13 @@ def main():
     U1, J1, BUF = one('RP2354B'), one('StudioII_Cart_Edge_22'), one('74HCT541')
     NOR, U14, U32 = one('74HCT1G02'), one('74HCT14'), one('74HCT32')
     LDO, USB = one('AP2112K-3.3'), one('USB-C')
+    S3, SD, CP = one('ESP32-S3-WROOM-1-N16R8'), one('microSD'), one('CP2102N-A02-GQFN28')
+    MUX, BUCK, WS = one('TPS2116'), one('AP63203WU'), one('WS2812B-2020-V6')
+    ESD, RSTD, AUTO = one('USBLC6-2SC6'), one('BAT54C'), one('UMH3N')
     for ref, what in ((U1, 'RP2354B'), (J1, 'edge'), (BUF, '74HCT541'), (NOR, '74HCT1G02'), (U14, '74HCT14'),
-                      (U32, '74HCT32'), (LDO, 'AP2112K LDO'), (USB, 'USB-C')):
+                      (U32, '74HCT32'), (LDO, 'AP2112K LDO'), (USB, 'USB-C'), (S3, 'ESP32-S3'), (SD, 'microSD'),
+                      (CP, 'CP2102N'), (MUX, 'TPS2116 mux'), (BUCK, 'AP63203 buck'), (WS, 'WS2812B'),
+                      (ESD, 'USBLC6 ESD'), (RSTD, 'BAT54C'), (AUTO, 'UMH3N')):
         if ref is None:
             raise SystemExit('no %s in the netlist' % what)
     glue = {BUF, NOR, U14, U32}
@@ -251,20 +264,33 @@ def main():
            and {node_net.get((r, '1')), node_net.get((r, '2'))} == {v5, 'GND'}]
     chk("a 100 nF on the cart 5V rail per glue package (%d for 4)" % len(dec), len(dec) >= 4)
 
-    # ---- power path: +5V = CONS_5V (P-FET, gate = VBUS) | VBUS (SS34) ----
+    # ---- power path: +5V = the TPS2116 mux: VIN1 USB VBUS (priority), VIN2 the console's 5 V ----
     vbus = func_net.get((USB, 'VBUS'))
-    qfet = next((r for r, (v, _) in parts.items() if v == 'AO3401A' and node_net.get((r, '2')) == v5), None)
-    chk('edge 15 -> P-FET drain, source = cart 5V rail', qfet is not None and node_net.get((qfet, '3')) == cons)
-    chk('P-FET gate = USB VBUS (off when the S3 board powers the cart)', qfet is not None and node_net.get((qfet, '1')) == vbus)
-    chk('VBUS -> SS34 -> cart 5V rail', any(val == 'SS34' and node_net.get((r, '2')) == vbus and node_net.get((r, '1')) == v5
-                                            for r, (val, _) in parts.items()))
-    chk('VBUS held low with no cable and against the SS34 leakage: <= 4.7k',
-        any(VAL(parts[r][0]) <= 4.7e3 for r in pulldown(vbus)))
-    chk('nothing but the P-FET, its capacitors, the sense dividers and a test pad on edge 15',
-        not [r for r, _ in others(cons, {J1, qfet} | tps) if not re.match(r'(R|C)\d+$', r)])
+    chk('mux VIN1 = USB VBUS, VIN2 = edge 15, VOUT (both pins) = the cart 5V rail',
+        func_net.get((MUX, 'VIN1')) == vbus and func_net.get((MUX, 'VIN2')) == cons
+        and node_net.get((MUX, '2')) == v5 and node_net.get((MUX, '7')) == v5)
+    chk('mux MODE on VIN1 (priority mode, datasheet 7.6.1)', func_net.get((MUX, 'MODE')) == vbus)
+    pr1 = func_net.get((MUX, 'PR1'))
+    rh, rl = through_r(vbus, pr1), through_r(pr1, 'GND')
+    chk('mux PR1 from a VBUS divider', rh is not None and rl is not None)
+    if rh and rl:
+        k = (VAL(rh) + VAL(rl)) / VAL(rl)
+        lo, hi = 0.92 * k, 1.08 * k                    # VREF 0.92-1.08 V (TPS2116 6.5)
+        chk('mux switches to VBUS above %.2f-%.2f V: inside 3.5 V .. the USB minimum 4.75 V' % (lo, hi),
+            lo >= 3.5 and hi < 4.75)
+    chk('mux GND on GND', func_net.get((MUX, 'GND')) == 'GND')
+    chk('the console 5 V reaches the cart rail only through the mux (nothing else bridges them)',
+        not [r for r, _ in others(cons, {J1, MUX} | tps) if not re.match(r'(R|C)\d+$', r)])
     chk('no glue pull-up goes to the console 5 V (nothing pushed into an unpowered console)',
         not [r for r in parts if re.match(r'R\d+$', r) and cons in (node_net.get((r, '1')), node_net.get((r, '2')))
              and ({node_net.get((r, '1')), node_net.get((r, '2'))} - {cons}) & {drv, clm}])
+    s3r = func_net.get((S3, '3V3'))
+    chk('AP63203 IN and EN on the cart 5V rail, FB on the S3 rail', func_net.get((BUCK, 'IN')) == v5
+        and func_net.get((BUCK, 'EN')) == v5 and func_net.get((BUCK, 'FB')) == s3r and not unconn(s3r))
+    chk('buck: SW -> 6.8uH -> the S3 rail, 100 nF bootstrap SW-BST',
+        two_pin(func_net.get((BUCK, 'SW')), s3r, 'L') == '6.8uH'
+        and through_c(func_net.get((BUCK, 'SW')), func_net.get((BUCK, 'BST'))) == '100nF')
+    chk('WS2812B VDD on the cart 5V rail (datasheet 3.7-5.3 V)', node_net.get((WS, '4')) == v5)
 
     # ---- RP support: everything on the LDO rail ----
     v33io = func_net.get((U1, 'IOVDD'))
@@ -278,9 +304,12 @@ def main():
     chk('RUN pull-up to the IO rail', through_r(run, v33io) == '10k')
     chk('QSPI_SS pull-up to the IO rail', through_r(ss, v33io) == '10k')
     sws = {r: {node_net.get((r, '1')), node_net.get((r, '2'))} for r in parts if re.match(r'SW\d+$', r)}
-    chk('RESET button: RUN to GND', any(n == {run, 'GND'} for n in sws.values()))
+    s3en = func_net.get((S3, 'EN'))
+    rstb = node_net.get((RSTD, '3'))
+    chk('RESET: a button pulls the BAT54C common cathode to GND; its anodes are RP RUN and S3 EN',
+        {node_net.get((RSTD, '1')), node_net.get((RSTD, '2'))} == {run, s3en} and any(n == {rstb, 'GND'} for n in sws.values()))
     bsel = [o for r, o in resistors(ss).items() if parts[r][0] == '1k']
-    chk('BOOTSEL: QSPI_SS -> 1k -> button to GND', len(bsel) == 1 and any(n == {bsel[0], 'GND'} for n in sws.values()))
+    chk('BOOTSEL: QSPI_SS -> 1k -> button to GND', any(n == {o, 'GND'} for o in bsel for n in sws.values()))
     for f in ('QSPI_SCLK', 'QSPI_SD0', 'QSPI_SD1', 'QSPI_SD2', 'QSPI_SD3'):
         chk('RP %s unconnected (flash is in the package)' % f, unconn(func_net.get((U1, f))))
     for n, nodes in nets.items():
@@ -299,31 +328,90 @@ def main():
         xtal is not None and node_net.get((xtal, '1')) == xin and through_r(xout, node_net.get((xtal, '3'))) == '1k'
         and through_c(xin, 'GND') == '15pF' and through_c(node_net.get((xtal, '3')), 'GND') == '15pF')
 
-    # ---- USB: the RP's native USB to the receptacle (the S3 board is the host) ----
-    for f, cf in (('USB_DP', 'D+'), ('USB_DM', 'D-')):
+    # ---- the RP <-> S3 link: the RP's native USB through 27R to the S3's USB host (IO19 / IO20) ----
+    s3 = lambda io: func_net.get((S3, 'IO%d' % io))
+    chk('RP USB_DP -> 27R -> S3 USB_D+ (IO20)', through_r(func_net.get((U1, 'USB_DP')), func_net.get((S3, 'USB_D+'))) == '27R')
+    chk('RP USB_DM -> 27R -> S3 USB_D- (IO19)', through_r(func_net.get((U1, 'USB_DM')), func_net.get((S3, 'USB_D-'))) == '27R')
+    for f, sf in (('USB_DP', 'USB_D+'), ('USB_DM', 'USB_D-')):
+        chk('S3 %s: the S3 and the 27R only (the link stays on the board)' % sf,
+            len(nets.get(func_net.get((S3, sf)), [])) == 2)
+    pm_ok = os.path.exists(PINMAP)
+    if not pm_ok:
+        raise SystemExit('%s not found: the S3 pin map is this board\'s contract' % PINMAP)
+    run_io, bsel_io = define(PINMAP, 'PIN_RP2040_RUN', -2), define(PINMAP, 'PIN_RP2040_BOOTSEL', -2)
+    if run_io == -2 or bsel_io == -2:
+        warn('%s declares no PIN_RP2040_RUN / _BOOTSEL: this board wires S3 IO4 / IO5 (fujiversal-intv.h\'s '
+             'pins) -- add them to the pin map' % os.path.basename(PINMAP))
+        run_io, bsel_io = 4, 5
+    chk('S3 IO%d (RUN forcing) -> 1k -> RP RUN (active low, no inverter)' % run_io, through_r(s3(run_io), run) == '1k')
+    chk('S3 IO%d (BOOTSEL forcing) -> 1k -> RP QSPI_SS' % bsel_io, through_r(s3(bsel_io), ss) == '1k')
+    # ---- the S3's own pins: fujiversal-studio2.h ----
+    sd = {k: define(PINMAP, 'PIN_SD_HOST_' + k) for k in ('CS', 'SCK', 'MISO', 'MOSI')}
+    led_strip = define(PINMAP, 'PIN_LED_STRIP')
+    uart_rx, uart_tx = define(PINMAP, 'PIN_UART0_RX'), define(PINMAP, 'PIN_UART0_TX')
+    chk('SD CS  IO%d -> DAT3/CS' % sd['CS'], s3(sd['CS']) == node_net.get((SD, '2')) and not unconn(s3(sd['CS'])))
+    chk('SD MOSI IO%d -> CMD' % sd['MOSI'], s3(sd['MOSI']) == node_net.get((SD, '3')) and not unconn(s3(sd['MOSI'])))
+    chk('SD SCK IO%d -> CLK' % sd['SCK'], s3(sd['SCK']) == node_net.get((SD, '5')) and not unconn(s3(sd['SCK'])))
+    chk('SD MISO IO%d -> DAT0' % sd['MISO'], s3(sd['MISO']) == node_net.get((SD, '7')) and not unconn(s3(sd['MISO'])))
+    chk('microSD VDD on the S3 rail, VSS on GND', node_net.get((SD, '4')) == s3r and node_net.get((SD, '6')) == 'GND')
+    for pin, what in ((2, 'CS'), (7, 'DAT0'), (8, 'DAT1'), (1, 'DAT2')):
+        chk('microSD %s pulled up to the S3 rail' % what, any(o == s3r for o in resistors(node_net.get((SD, str(pin)))).values())
+            or (parts.get('RN1') and s3r in (node_net.get(('RN1', str(9 - q))) for q in range(1, 5)
+                                             if node_net.get(('RN1', str(q))) == node_net.get((SD, str(pin))))))
+    chk('LED strip IO%d -> R -> WS2812 DIN' % led_strip, through_r(s3(led_strip), node_net.get((WS, '3'))) is not None)
+    chk('UART0 TX IO%d / RX IO%d are the module TXD0 / RXD0 pins' % (uart_tx, uart_rx), (uart_tx, uart_rx) == (43, 44))
+    chk('S3 TXD0 -> CP2102N RXD', func_net.get((S3, 'TXD0')) == func_net.get((CP, 'RXD')) and not unconn(func_net.get((S3, 'TXD0'))))
+    chk('S3 RXD0 <- CP2102N TXD', func_net.get((S3, 'RXD0')) == func_net.get((CP, 'TXD')) and not unconn(func_net.get((S3, 'RXD0'))))
+    for io in (3, 45, 46):
+        chk('S3 strapping IO%d unloaded' % io, unconn(s3(io)))
+    for io in range(26, 38):
+        chk('S3 IO%d (flash / octal PSRAM on N16R8) unused' % io, unconn(s3(io)))
+    chk('S3 EN: 10k pull-up to the S3 rail and 1 uF to GND (power-on delay)',
+        through_r(s3en, s3r) == '10k' and through_c(s3en, 'GND') == '1uF')
+    chk('S3 EN and IO0 each have a button to GND', any(n == {s3en, 'GND'} for n in sws.values())
+        and any(n == {func_net.get((S3, 'IO0')), 'GND'} for n in sws.values()))
+    q = lambda f: func_net.get((AUTO, f))
+    rts, dtr = func_net.get((CP, '~{RTS}')), func_net.get((CP, '~{DTR}'))
+    chk('esptool auto-program pair (UMH3N, DevKitC-1): Q1 base DTR / emitter RTS / collector EN, '
+        'Q2 base RTS / emitter DTR / collector IO0',
+        (q('B1'), q('E1'), q('C1')) == (dtr, rts, s3en) and (q('B2'), q('E2'), q('C2')) == (rts, dtr, func_net.get((S3, 'IO0')))
+        and not unconn(rts) and not unconn(dtr))
+    chk('S3 3V3 on the buck rail (not the RP LDO)', s3r != v33io and func_net.get((LDO, 'VOUT')) != s3r)
+    # ---- USB-C: the CP2102N bridge, the USBLC6 and power ----
+    for cf, ef, ep in (('D+', 'D+', ('3', '4')), ('D-', 'D-', ('1', '6'))):
         conn = func_net.get((USB, cf))
-        chk('RP %s -> 27R -> USB-C %s (both rows)' % (f, cf), through_r(func_net.get((U1, f)), conn) == '27R'
+        chk('USB-C %s (both rows) -> CP2102N %s' % (cf, ef), conn == func_net.get((CP, ef)) and not unconn(conn)
             and len({node_net.get((USB, p)) for p in ((('A6', 'B6') if cf == 'D+' else ('A7', 'B7')))}) == 1)
-        chk('USB-C %s has an ESD diode to GND' % cf, any(v.startswith('ESD') and {node_net.get((r, '1')),
-                                                         node_net.get((r, '2'))} == {conn, 'GND'} for r, (v, _) in parts.items()))
+        chk('USB-C %s through the USBLC6 (both of its pins on the line)' % cf,
+            all(node_net.get((ESD, p)) == conn for p in ep))
+    chk('USBLC6 VBUS on VBUS, GND on GND', node_net.get((ESD, '5')) == vbus and node_net.get((ESD, '2')) == 'GND')
     for cc in ('A5', 'B5'):
         chk('USB-C %s: 5.1k Rd to GND (UFP)' % cc, through_r(node_net.get((USB, cc)), 'GND') == '5.1k')
-    if os.path.exists(PINMAP):
-        chk('%s declares no RP RUN / BOOTSEL lines (the cart is joined by USB alone)' % os.path.basename(PINMAP),
-            define(PINMAP, 'PIN_RP2040_RUN', -2) == -2 and define(PINMAP, 'PIN_RP2040_BOOTSEL', -2) == -2)
-    else:
-        print('note: %s not found; the USB-only link to the S3 board is not cross-checked' % PINMAP)
+    sns = func_net.get((CP, 'VBUS'))
+    rh, rl = through_r(vbus, sns), through_r(sns, 'GND')
+    chk('CP2102N VBUS sense through a divider', rh is not None and rl is not None)
+    if rh and rl:
+        k = VAL(rl) / (VAL(rh) + VAL(rl))
+        # CP2102N datasheet 2.x note: VBUS abs max VIO + 2.5 V, VIH VIO - 0.6 V (VIO = VDD = 3.3 V here)
+        chk('CP2102N VBUS sense: %.2f V at 4.75 V over VIH 2.7 V, %.2f V at 5.25 V under VIO + 2.5 V'
+            % (4.75 * k, 5.25 * k), 4.75 * k >= 2.7 and 5.25 * k <= 5.8)
+    chk('CP2102N VDD / VREGIN on the S3 rail (self-powered)', func_net.get((CP, 'VDD')) == s3r
+        and func_net.get((CP, 'VREGIN')) == s3r)
+    chk('CP2102N RSTb: 1k pull-up to the S3 rail (datasheet: 1k in all cases)', through_r(func_net.get((CP, '~{RST}')), s3r) == '1k')
 
-    # ---- edge footprint: 22 contacts at 3.96 mm on one face, pin 1 at the left (edge_geom.py) ----
+    # ---- edge footprint: 22 contacts at 0.156" on B.Cu (the face away from the parts), pin 1 at the
+    # left seen from that face = at the right (+x) seen from F.Cu (edge_geom.py; the sources are
+    # audit/edge_orientation.py's) ----
     from sexpr import parse as sparse, findall as sfindall, find as sfind
     fpe = sparse(open(os.path.join(PRJ, 'FujiNet-StudioII.pretty', 'StudioII_Cart_Edge_22.kicad_mod')).read())
-    pads = {int(p[1]): (float(sfind(p, 'at')[1]), sfind(p, 'layers')[1]) for p in sfindall(fpe, 'pad')}
+    pads = {int(p[1]): (float(sfind(p, 'at')[1]), str(sfind(p, 'layers')[1])) for p in sfindall(fpe, 'pad')}
     chk('edge footprint has 22 pads', sorted(pads) == list(range(1, 23)))
     if sorted(pads) == list(range(1, 23)):
-        chk('edge: every contact on one copper face', len({pads[k][1] for k in pads}) == 1)
-        steps = [round(pads[k + 1][0] - pads[k][0], 3) for k in range(1, 22)]
-        chk('edge: 3.96 mm (0.156") pitch, pin 1 at the left (-x), centred',
-            steps == [3.96] * 21 and pads[1][0] < 0 < pads[22][0] and abs(pads[1][0] + pads[22][0]) < 1e-6)
+        chk('edge: every contact on B.Cu (one face, away from the parts)', {pads[k][1] for k in pads} == {'B.Cu'})
+        steps = [round(pads[k][0] - pads[k + 1][0], 4) for k in range(1, 22)]
+        chk('edge: 3.9624 mm (0.156") pitch, pin 1 at the right (+x) seen from F.Cu, centred',
+            all(abs(st - 3.9624) < 2e-4 for st in steps) and pads[1][0] > 0 > pads[22][0]
+            and abs(pads[1][0] + pads[22][0]) < 1e-6)
 
     # ---- general ----
     for n, nodes in nets.items():
@@ -347,7 +435,7 @@ def main():
                 more += edge_of.get(o, [])
         print('GP%-4d %-4s %-11s %s' % (g, pin_of[f], n, ', '.join(edge_of.get(n, []) + more)))
     print('(GPIO%s unconnected)' % ', '.join(str(g) for g in range(48) if unconn(rp(g))))
-    print('%d checks, %d failed' % (count, fails))
+    print('%d checks, %d failed, %d warnings' % (count, fails, warns))
     sys.exit(1 if fails else 0)
 
 

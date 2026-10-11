@@ -132,7 +132,7 @@ def overlap(a, b, gap=0.0):
 # ---------------------------------------------------------------------------
 class Sheet:
     RAILS = {'GND': 'power:GND', '+5V': 'power:+5V', '+3V3': 'power:+3V3',
-             'CONS_5V': 'power:+5V', 'VBUS': 'power:VBUS', 'DVDD': 'power:+1V1'}
+             'CONS_5V': 'power:+5V', 'VBUS': 'power:VBUS', 'DVDD': 'power:+1V1', '+3V3_S3': 'power:+3V3'}
 
     def __init__(self, stem, syms, parts, paper='A3'):
         self.stem, self.syms, self.paper = stem, syms, paper
@@ -149,6 +149,8 @@ class Sheet:
         self.errors = []
         self.lint = True           # geometry lint (overlaps); connectivity is always checked
         self.wired = False         # a hand-drawn sheet: every net one wired piece (see check)
+        self.through = set()       # references whose same-net pins are joined inside the part
+                                   # (flow-through ESD arrays): their pins may join two drawn pieces
         self.crossing_budget = None
         self.crossings = 0
 
@@ -631,6 +633,12 @@ class Sheet:
                 for ref, num, net in lst:
                     if net and net not in self.RAILS:
                         pieces[net].add(('bus', via_bus[g]) if g in via_bus else g)
+            # a flow-through part (self.through) joins its own same-net pins inside the package
+            for ref in self.through:
+                for net in list(pieces):
+                    hit = {g for g in pieces[net] if any(r == ref and n == net for r, _, n in members.get(g, ()))}
+                    if len(hit) > 1:
+                        pieces[net] = (pieces[net] - hit) | {('through', ref, net)}
             for net, gs in sorted(pieces.items()):
                 if len(gs) > 1:
                     err.append('net %s drawn in %d pieces joined only by labels: %s' % (

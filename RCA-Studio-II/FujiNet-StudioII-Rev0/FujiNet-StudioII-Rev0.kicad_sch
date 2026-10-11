@@ -6,17 +6,60 @@
 	(paper "A3")
 	(title_block
 		(title "FujiNet Studio II Rev0")
-		(date "2026-10-10")
+		(date "2026-10-11")
 		(rev "0")
 		(company "FujiNet")
 		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
-		(comment 2 "CERN-OHL-W-2.0 (core and generators from FujiNet-5200-Rev0)")
-		(comment 3 "Rev0 2026-10-10: schematic only; firmware pico/studio2 s2_cart.h")
+		(comment 2 "CERN-OHL-W-2.0 (RP core from FujiNet-5200-Rev0, S3 half from FujiNet-ChannelF-Rev0)")
+		(comment 3 "Rev0 2026-10-11: RP2354B + ESP32-S3; firmware pico/studio2 s2_cart.h, fujiversal-studio2.h")
 	)
 	(lib_symbols)
 	(sheet
-		(at 45.72 50.8)
-		(size 50.8 60.96)
+		(at 30.48 33.02)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "073f09d0-cbee-5e6b-a0d9-7132a10288d7")
+		(property "Sheetname" "power"
+			(at 30.48 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 30.48 53.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-StudioII-Rev0"
+				(path "/519a007e-2e50-5f05-ad00-268acf04d4da"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 172.72)
+		(size 63.5 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -31,7 +74,7 @@
 		)
 		(uuid "38427a2e-6a12-55ed-80fe-6efdd4dcd657")
 		(property "Sheetname" "cart-bus"
-			(at 45.72 50.1 0)
+			(at 30.48 172.02 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -41,7 +84,7 @@
 			)
 		)
 		(property "Sheetfile" "cart-bus.kicad_sch"
-			(at 45.72 112.36 0)
+			(at 30.48 193.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58,8 +101,8 @@
 		)
 	)
 	(sheet
-		(at 127 50.8)
-		(size 40.64 30.48)
+		(at 30.48 76.2)
+		(size 63.5 81.28)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -74,7 +117,7 @@
 		)
 		(uuid "c4bd8d24-298e-5810-9582-c7c2e670f0d9")
 		(property "Sheetname" "rp-core"
-			(at 127 50.1 0)
+			(at 30.48 75.5 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -84,7 +127,7 @@
 			)
 		)
 		(property "Sheetfile" "rp-core.kicad_sch"
-			(at 127 81.88 0)
+			(at 30.48 158.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -93,7 +136,7 @@
 			)
 		)
 		(pin "USB_DP" bidirectional
-			(at 167.64 55.88 0)
+			(at 93.98 81.28 0)
 			(uuid "c1c57165-73a3-5e1d-8606-a3b36eb28384")
 			(effects
 				(font
@@ -103,8 +146,38 @@
 			)
 		)
 		(pin "USB_DM" bidirectional
-			(at 167.64 58.42 0)
+			(at 93.98 83.82 0)
 			(uuid "695128ec-140f-53c0-9e2e-8f13462c72c2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RUN_CTL" input
+			(at 93.98 86.36 0)
+			(uuid "61e41858-7df7-5524-a013-613549ac1158")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "BOOTSEL_CTL" input
+			(at 93.98 88.9 0)
+			(uuid "e53377ac-8a93-591f-91b2-04fa9d0f26b5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 93.98 127 0)
+			(uuid "879319c3-dc57-500d-8af4-a5f64778ed5d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -121,8 +194,8 @@
 		)
 	)
 	(sheet
-		(at 203.2 50.8)
-		(size 40.64 30.48)
+		(at 132.08 33.02)
+		(size 30.48 99.06)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -135,9 +208,9 @@
 		(fill
 			(color 255 255 225 1)
 		)
-		(uuid "073f09d0-cbee-5e6b-a0d9-7132a10288d7")
-		(property "Sheetname" "power"
-			(at 203.2 50.1 0)
+		(uuid "04051d5c-9134-56fe-9068-232f9cfa1567")
+		(property "Sheetname" "fujinet"
+			(at 132.08 32.32 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -146,8 +219,8 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "power.kicad_sch"
-			(at 203.2 81.88 0)
+		(property "Sheetfile" "fujinet.kicad_sch"
+			(at 132.08 132.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -156,8 +229,8 @@
 			)
 		)
 		(pin "USB_DP" bidirectional
-			(at 203.2 55.88 180)
-			(uuid "9777605e-7b57-5132-abcf-8cabd7d122e5")
+			(at 132.08 81.28 180)
+			(uuid "79d7e915-e9ef-5c42-9f8f-73f5f12f4fba")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -166,8 +239,68 @@
 			)
 		)
 		(pin "USB_DM" bidirectional
-			(at 203.2 58.42 180)
-			(uuid "26a2e5fe-c77e-5a21-9e43-a6958811030b")
+			(at 132.08 83.82 180)
+			(uuid "4c2bcdbb-7372-5b5c-abc5-cf123adcf81e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RUN_CTL" output
+			(at 132.08 86.36 180)
+			(uuid "f936f279-dba9-59b3-bb4e-f11a874a30c1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "BOOTSEL_CTL" output
+			(at 132.08 88.9 180)
+			(uuid "adf59fff-60eb-546d-a8af-48e8271f1271")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 116.84 180)
+			(uuid "6dd728c4-9ad1-5fbd-b3ca-05f5b9b4f353")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 119.38 180)
+			(uuid "da34668d-10d8-5f1c-851c-93a466abd0c0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" output
+			(at 132.08 121.92 180)
+			(uuid "4b0aba46-5a34-5b41-9e1f-d67dd0bf6500")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_RXD" input
+			(at 132.08 124.46 180)
+			(uuid "17057d2a-550e-5dc5-8d04-70e1358088fe")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -183,69 +316,383 @@
 			)
 		)
 	)
-	(wire
-		(pts
-			(xy 167.64 55.88)
-			(xy 203.2 55.88)
-		)
+	(sheet
+		(at 132.08 152.4)
+		(size 30.48 35.56)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(stroke
-			(width 0)
-			(type default)
+			(width 0.1524)
+			(type solid)
 		)
-		(uuid "7f5b9073-72f8-5001-87c3-fb9715c40335")
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "ff082d2f-af75-5f65-916d-4e58bcd134e1")
+		(property "Sheetname" "usb"
+			(at 132.08 151.7 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 132.08 188.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "S3_RXD" output
+			(at 132.08 157.48 180)
+			(uuid "20b62145-9b72-57ee-ae2b-b3fb7472a2b3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" input
+			(at 132.08 160.02 180)
+			(uuid "41b2a956-c6a4-5b1b-a6c6-38e829ebf641")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 162.56 180)
+			(uuid "dfca7441-2719-5cb6-add8-fbb28b81ed19")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 165.1 180)
+			(uuid "e49347b7-48c0-55b9-adea-e8d2a1c56f3f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-StudioII-Rev0"
+				(path "/519a007e-2e50-5f05-ad00-268acf04d4da"
+					(page "5")
+				)
+			)
+		)
 	)
 	(wire
 		(pts
-			(xy 167.64 58.42)
-			(xy 203.2 58.42)
+			(xy 93.98 81.28)
+			(xy 132.08 81.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "aebdd3e0-9d95-5f25-9ba7-15c34ec64b1b")
+		(uuid "da0daff6-6e55-5efb-ad81-7d641ff8d474")
+	)
+	(wire
+		(pts
+			(xy 93.98 83.82)
+			(xy 132.08 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd45fb13-0183-534c-ac3a-874d819f9444")
+	)
+	(wire
+		(pts
+			(xy 93.98 86.36)
+			(xy 132.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "61a2f982-e8bb-5557-a759-55abeffc0526")
+	)
+	(wire
+		(pts
+			(xy 93.98 88.9)
+			(xy 132.08 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb828d6a-7679-538a-abbc-86132111b738")
+	)
+	(wire
+		(pts
+			(xy 132.08 116.84)
+			(xy 121.92 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48bf76cc-51d2-5783-b5a5-8c27e3e48d59")
+	)
+	(wire
+		(pts
+			(xy 121.92 116.84)
+			(xy 121.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15fd0a32-3d37-52d7-a9e7-09d1054389fe")
+	)
+	(wire
+		(pts
+			(xy 121.92 165.1)
+			(xy 132.08 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "618873c8-cce2-598d-a15c-907ce23ecaf5")
+	)
+	(wire
+		(pts
+			(xy 132.08 119.38)
+			(xy 124.46 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "979a45de-edb8-5cca-b2e8-5cbfd3557b85")
+	)
+	(wire
+		(pts
+			(xy 124.46 119.38)
+			(xy 124.46 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b88c3ae-a77f-5741-ac6a-f8f79c775b65")
+	)
+	(wire
+		(pts
+			(xy 124.46 162.56)
+			(xy 132.08 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8465f72-e29c-5abc-9784-1481d5107b26")
+	)
+	(wire
+		(pts
+			(xy 132.08 121.92)
+			(xy 127 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a56479d-55ff-5434-bbc9-075b1bd5c884")
+	)
+	(wire
+		(pts
+			(xy 127 121.92)
+			(xy 127 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a90e384-9e7d-5b83-84ae-202b79bc5078")
+	)
+	(wire
+		(pts
+			(xy 127 160.02)
+			(xy 132.08 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77054183-001a-5fdd-85c4-d5eac2874a6b")
+	)
+	(wire
+		(pts
+			(xy 132.08 124.46)
+			(xy 129.54 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5629dae5-6426-5fdd-a353-fe00a08c63dc")
+	)
+	(wire
+		(pts
+			(xy 129.54 124.46)
+			(xy 129.54 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08349ef5-598d-54f2-b23f-30beda924b8e")
+	)
+	(wire
+		(pts
+			(xy 129.54 157.48)
+			(xy 132.08 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ef9e849-1c09-5a30-a033-7c97fca43f01")
+	)
+	(wire
+		(pts
+			(xy 93.98 127)
+			(xy 121.92 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e95e7bd-c188-5674-a5d8-0c3509f1e324")
+	)
+	(junction
+		(at 121.92 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0c8eb2da-be37-5b6c-b4d3-c39c35facd95")
 	)
 	(label "USB_DP"
-		(at 170.18 55.88 0)
+		(at 95.25 81.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "76f95a3b-0fb4-59e2-a773-de54ac9f7ed3")
+		(uuid "9249795c-ef04-5808-8087-b6138e9a2898")
 	)
 	(label "USB_DM"
-		(at 170.18 58.42 0)
+		(at 95.25 83.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "21d1a185-5cba-5fed-9f92-42841930c81a")
+		(uuid "f6b7c1a6-6b38-5199-a230-2f17f137d84c")
 	)
-	(text "the console cartridge slot (the edge) is on cart-bus;\nthe ESP32-S3 board plugs into the USB-C on power"
+	(label "RUN_CTL"
+		(at 95.25 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1da7ceda-b9a6-56dd-8697-013ac69861b8")
+	)
+	(label "BOOTSEL_CTL"
+		(at 95.25 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5da1e507-9a68-55dc-af39-f6b15e08e5e2")
+	)
+	(label "S3_EN"
+		(at 121.92 163.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c9368b3b-5c7f-5d14-8ae2-bb774013a494")
+	)
+	(label "S3_IO0"
+		(at 124.46 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "32059939-edf8-545f-977f-5951875711bf")
+	)
+	(label "S3_TXD"
+		(at 127 158.75 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "54f796d6-e497-56c0-ad57-11eb2ec92fe6")
+	)
+	(label "S3_RXD"
+		(at 129.54 156.21 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "698505fa-b041-5e6f-a17f-2a5d707e402a")
+	)
+	(text "the console cartridge slot (the edge) is on cart-bus"
 		(exclude_from_sim no)
-		(at 45.72 127 0)
+		(at 30.48 203.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "4fb437cd-7279-5c1a-a876-ff5ade6531d3")
+		(uuid "86f0d7e1-e671-5601-88f0-d301ced52384")
 	)
-	(text "FujiNet for the RCA Studio II, Rev0: an RP2354B cartridge on the CDP1802 bus.\n\nThe cart serves the console's reads in software (fujinet-firmware pico/studio2): every read is one\nTPA pulse, the high address byte on MA0-7 as TPA falls, the low byte a few hundred ns later.  The\nedge has no write strobe, clock or reset: the console reaches the cart only through the address of\na read.  CART CS turns the console RAM off for the pages the cart claims, the 1861's raster too.\n\n  cart-bus   the 22-pin edge, 330R into the RP2354B's GPIOs, the 74HCT541 data buffer, the CART CS\n             NOR, the two ORs that gate /OE2 and CART CS with the console's power, the /DRIVE and\n             /CLAIM pull-ups, PWR_OK and the ADC sense of the console 5 V, the debug UART, the LED,\n             the bring-up pads\n  rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL\n  power      +5V = console 5 V (P-FET) OR USB VBUS (SS34), the RP's LDO (+3V3), the USB-C receptacle\n\nThe ESP32-S3 (the FujiNet, fujiversal-studio2) is a separate board with its own supply, joined to\nthis one by USB alone.\n\nBetween sheets: USB_DP / USB_DM, wired here; the rails (GND, CONS_5V, VBUS, +5V, +3V3, DVDD) by\ntheir power symbols.\n\nFirmware contract (tools/check_nets.py, tools/check_glue.py check this netlist against it):\nfujinet-firmware pico/studio2 s2_cart.h (MA0-7 GPIO0-7, TPA 8, /MRD 9, D0-D7 GPIO16-23, /DRIVE 24,\n/CLAIM 25, PWR_OK 26, LED 27, VSENSE ADC GPIO40, debug UART GPIO44 / 45); glue s2_glue_drive(),\ns2_glue_cartcs(), both gated by PWR_OK: nothing is driven into a console that is off.\n\nStatus: schematic only.  The edge geometry is PROVISIONAL (tools/edge_geom.py)."
+	(text "FujiNet for the RCA Studio II, Rev0: an RP2354B cartridge on the CDP1802 bus + ESP32-S3.\n\nThe cart serves the console's reads in software (fujinet-firmware pico/studio2): every read is one\nTPA pulse, the high address byte on MA0-7 as TPA falls, the low byte a few hundred ns later.  The\nedge has no write strobe, clock or reset: the console reaches the cart only through the address of\na read.  CART CS turns the console RAM off for the pages the cart claims, the 1861's raster too.\n\n  cart-bus   the 22-pin edge, 330R into the RP2354B's GPIOs, the 74HCT541 data buffer, the CART CS\n             NOR, the two ORs that gate /OE2 and CART CS with the console's power, the /DRIVE and\n             /CLAIM pull-ups, PWR_OK and the ADC sense of the console 5 V, the debug UART, the LED,\n             the bring-up pads\n  rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL /\n             RESET, its USB out to the S3\n  fujinet    the ESP32-S3 (the FujiNet, the RP's USB host), microSD, WS2812 status light\n  usb        USB-C, the USBLC6 ESD array, the CP2102N bridge and esptool's auto-program pair\n  power      +5V = the TPS2116 mux (USB VBUS first, console 5 V second), the RP's LDO (+3V3), the\n             S3's buck (+3V3_S3)\n\nRails (GND, CONS_5V, VBUS, +5V, +3V3, +3V3_S3, DVDD) join by their power symbols.\n\nFirmware contract (tools/check_nets.py, tools/check_glue.py check this netlist against it):\nfujinet-firmware pico/studio2 s2_cart.h (MA0-7 GPIO0-7, TPA 8, /MRD 9, D0-D7 GPIO16-23, /DRIVE 24,\n/CLAIM 25, PWR_OK 26, LED 27, VSENSE ADC GPIO40, debug UART GPIO44 / 45); glue s2_glue_drive(),\ns2_glue_cartcs(), both gated by PWR_OK: nothing is driven into a console that is off.  The S3:\nfujiversal-studio2.h (SD 38-41, UART0 43 / 44, WS2812 48, USB host 19 / 20); RUN / BOOTSEL forcing\non IO4 / IO5 (fujiversal-intv.h's pins)."
 		(exclude_from_sim no)
-		(at 45.72 152.4 0)
+		(at 187.96 25.4 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "0169fe80-c3fa-50c6-ad5f-7e857a4f0063")
+		(uuid "0d7c246a-86f2-5fb3-9e9e-a6985ce13d4f")
 	)
 	(sheet_instances
 		(path "/"

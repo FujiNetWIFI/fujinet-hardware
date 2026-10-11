@@ -5,7 +5,8 @@ EasyEDA footprint of LCSC C113206 (SOFNG TF-015), as fetched by
 
 Changes vs. the EasyEDA export: the two plastic locating posts become NPTH,
 the courtyard is enlarged to cover every pad, silk is kept, the 3D model
-points at ${KIPRJMOD}/3d/TF-015.step.  Card inserts from +Y.
+points at ${KIPRJMOD}/3d/TF-015.step, offset so its pegs sit in the NPTHs
+(easyeda2kicad's own offset is not carried over).  Card inserts from +Y.
 Usage: make_tf015_fp.py <easyeda .pretty dir>
 """
 import os, sys
@@ -46,7 +47,9 @@ for p in findall(m, 'pad'):
     else:
         out.append(['pad', Q(num), 'smd', 'rect', ['at', x, y], ['size', float(size[1]), float(size[2])],
                     ['layers', Q('F.Cu'), Q('F.Paste'), Q('F.Mask')]])
-out.append(['model', Q('${KIPRJMOD}/3d/TF-015.step'), ['offset', ['xyz', 0, 0, 0]],
+# the LCSC model's origin is the card centre on the peg line, not this footprint's origin:
+# its pegs (+/-4, 0) go onto the footprint's (-4.9, 5.5) / (3.1, 5.5) (3D offset: +y is up)
+out.append(['model', Q('${KIPRJMOD}/3d/TF-015.step'), ['offset', ['xyz', -0.9, -5.5, 0]],
             ['scale', ['xyz', 1, 1, 1]], ['rotate', ['xyz', 0, 0, 0]]])
 open(os.path.join(prj, 'FujiNet-NES.pretty', 'TF-SMD_TF-015.kicad_mod'), 'w').write(dump(out) + '\n')
 print('ok')

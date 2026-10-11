@@ -110,7 +110,7 @@ def gerbers():
     import gen_pcb
     inner = 'In1.Cu,In2.Cu' if gen_pcb.STACKUP == 4 else 'In1.Cu,In2.Cu,In3.Cu,In4.Cu'
     layers = 'F.Cu,%s,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts' % inner
-    run('kicad-cli', 'pcb', 'export', 'gerbers', '--layers', layers, '--subtract-soldermask',
+    run('kicad-cli', 'pcb', 'export', 'gerbers', '--check-zones', '--layers', layers, '--subtract-soldermask',
         '--no-protel-ext', '-o', g + '/', PCB)
     run('kicad-cli', 'pcb', 'export', 'drill', '--format', 'excellon', '--excellon-separate-th',
         '--generate-map', '--map-format', 'gerberx2', '-o', g + '/', PCB)

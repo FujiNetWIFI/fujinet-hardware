@@ -169,15 +169,15 @@ LDO start-up: +3V3_RP carries 21.3 uF, and the AP2112K's short-current limit is 
 - DRC-gated tidy, GND stitching, return vias at USB/crystal/SWCLK layer changes where DRC allows
 - `check_vias.py`
 
-It has 833 track segments (2.14 m) and 382 vias:
-- 368 at 0.6/0.3
+It has 833 track segments (2.14 m) and 379 vias:
+- 365 at 0.6/0.3
 - 8 at 0.45/0.25: the USB-C pad ties and some router vias
 - 3 at 0.5/0.25: under the RP
 - 3 at 0.8/0.4: power
 
 **Gates.**
-- KiCad DRC (`--refill-zones --schematic-parity`): **0 errors, 0 unconnected, 0 parity**. 76 warnings remain: silkscreen cosmetics plus 1 copper sliver.
-- `check_vias.py`: 0 vias touching a pad of another net.
+- KiCad DRC (`--schematic-parity`, on the saved zone fills): **0 errors, 0 unconnected, 0 parity**. 76 warnings remain: silkscreen cosmetics plus 1 copper sliver.
+- `check_vias.py`: 0 vias touching a pad or a track of another net.
 - `check_nets.py`: 182/182.
 
 ### Stack-up: 4 layers tried first (user request), 6 layers used
@@ -231,7 +231,7 @@ Two findings along the way changed the tooling. Neither was a placement problem.
 | TS-003 U6 AP2112K "Tj 96 C", TP-001 MLCCs near it | Analyzer's assumed load. With about 60 mA x (4.62 - 3.3) V = 79 mW at ~250 C/W, the rise is about +20 C (`tools/audit/por_window.py`). |
 | SW-001 buck harmonics, CERT-001, WL-001 | Informational (AP63203 at 1.1 MHz; pre-certified ESP32-S3 module). |
 | GR-002 "height varies 18 mm" across copper layers | The inner signal layers simply carry less copper than the outlined layers. Not a registration problem: all layers share one origin. |
-| GR-004 paste 46 % of copper flashes | Copper flashes include 382 vias and the unpasted lands / test pads. |
+| GR-004 paste 46 % of copper flashes | Copper flashes include 379 vias and the unpasted lands / test pads. |
 | PS-002 +3V3_RP / VBUS "2 islands" | Fill fragments around vias, joined through vias; DRC reports 0 unconnected. |
 | TE-001 test points 6 % of nets | By design: SWD, SELFTEST, DBG_TX, RUN, BOOTSEL and the three rails. |
 
@@ -372,3 +372,20 @@ The user's decisions on the new findings (2026-10-09):
 | 1 VSENSE vs E9 | change R9 / R10 to 10k / 15k | yes. `design.py` value change. `sync_pcb_sheets.py` gave R9 / R10 the new Value / MPN / LCSC fields, and the copper is unchanged. Checks: DRC parity 0, `check_nets` 182 / 182, SPICE divider pass. JLC BOM: R9 joins the 10k line (C25804); R10 is a new 15k line (0603WAF1502T5E, C22809, JLC basic) |
 | 2 DVDD decoupling | Rev1, plus a bring-up check (README item 10) | no board change |
 | 3 VBUS pull-down, 4 LED, 5 inductor stock | Rev1 / ordering notes (README) | no board change |
+
+## Post-review change (2026-10-11): the fab zip re-plotted from refilled zones
+
+The gerbers are plotted from the zone fills saved in the board file. `stitch_gnd.py` adds its GND vias to
+the file after the last fill, so the saved inner pours still covered them. The committed zip put
+**161 plated holes inside an inner-layer pour of another net**, mostly GND vias inside the power planes.
+Two were worse: GND stitching vias that sat on a USB_DP and a CD7 track, inside the In1 GND pour. A third sat on a
++3V3 track. KiCad re-nets such a via to the track on load, so DRC never saw them. A board made from it would
+have had GND shorted to the planes, and USB_DP and CD7 shorted to GND. The DRC gate checked fresh fills in memory
+(`--refill-zones`), so it passed. Found on FujiNet-StudioII Rev0.
+
+- `tools/fill_zones.py` refills and saves the board; the DRC gate now runs on the saved fills
+  (identical results to before; the via_dangling warning is gone).
+- `tools/export.py` plots with `--check-zones`.
+- `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
+  at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
+- Re-exported: only the copper layers' pours changed (all six; the drill file loses the three stray vias). Outside the zone fills the board is unchanged but for those three vias, now removed (379 vias); `check_vias.py` also tests tracks now.

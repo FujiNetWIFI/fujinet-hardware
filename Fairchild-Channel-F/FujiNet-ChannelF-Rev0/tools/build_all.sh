@@ -27,9 +27,13 @@ if [ "${LAYOUT:-0}" = 1 ]; then
     bash tools/route_board.sh                 # pre-route, Freerouting, finisher, stitching, check_vias, DRC gate
 elif [ -f $PCB ]; then
     python3 tools/sync_pcb_sheets.py          # re-link the routed board to the schematic (copper untouched)
-    kicad-cli pcb drc --refill-zones --schematic-parity --severity-all --exit-code-violations $PCB -o /dev/null
+    python3 tools/fill_zones.py               # refill + save: the gerbers plot the SAVED fills (stitch_gnd adds vias after the last fill)
+    kicad-cli pcb drc --schematic-parity --severity-all --exit-code-violations $PCB -o /dev/null   # on the saved fills
 fi
 python3 tools/export.py                       # BOMs, schematic PDF (+ the JLCPCB package, layout views, renders)
+if compgen -G 'exports/*/*-gerbers.zip' >/dev/null; then
+    python3 tools/audit/check_plane_shorts.py   # the zips: no plated hole inside an inner pour of another net
+fi
 if [ -f exports/jlcpcb/FujiNet-ChannelF-Rev0-gerbers.zip ]; then
     python3 tools/tab_overlay.py              # docs/tab-overlay-1to1.pdf
     python3 tools/audit/check_fab.py          # the package: BOM / CPL vs design.py, drills, the order-number spot

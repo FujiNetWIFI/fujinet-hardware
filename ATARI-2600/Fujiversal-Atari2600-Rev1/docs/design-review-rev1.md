@@ -174,3 +174,18 @@ Recorded in `.kicad-happy.json` with reasons: PU-001 (CP2102N CHREN), RS-001 (VB
 
 ## Verdict
 **Ready to order as a prototype from JLCPCB** (fab + assembly), with the bring-up checklist in the README. Schematic: complete and verified against the datasheets and the fn-2600 firmware headers. Layout: 100 % routed, DRC clean with schematic parity, DFM clean against JLC's standard tier, fabrication files complete.
+
+## Post-review change (2026-10-11): the fab zip re-plotted from refilled zones
+
+The gerbers are plotted from the zone fills saved in the board file. `stitch_gnd.py` adds its GND vias to
+the file after the last fill, so the saved inner pours still covered them. The committed zip put
+**120 plated holes inside an inner-layer pour of another net**: GND vias inside the power planes.
+A board made from it would have had GND shorted to the planes. The DRC gate checked fresh fills in memory
+(`--refill-zones`), so it passed. Found on FujiNet-StudioII Rev0.
+
+- `tools/fill_zones.py` refills and saves the board; the DRC gate now runs on the saved fills
+  (identical results to before).
+- `tools/export.py` plots with `--check-zones`.
+- `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
+  at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
+- Re-exported: only the copper layers' pours changed (In2 and the outer pours; drills unchanged). Outside the zone fills the board is unchanged.

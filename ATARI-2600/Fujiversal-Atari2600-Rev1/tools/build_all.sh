@@ -17,3 +17,6 @@ if [ "${LAYOUT:-0}" = 1 ]; then
     bash tools/route_board.sh                 # pre-routes, Freerouting, finisher, stitching, DRC
 fi
 python3 tools/export.py                       # BOM, JLCPCB BOM, schematic PDF (+ CPL/gerbers/renders with a .kicad_pcb)
+if compgen -G 'exports/*/*-gerbers.zip' >/dev/null; then
+    python3 tools/audit/check_plane_shorts.py   # the zips: no plated hole inside an inner pour of another net
+fi

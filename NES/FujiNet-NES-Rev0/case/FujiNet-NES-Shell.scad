@@ -45,10 +45,17 @@ module cavity() {
     translate([wall, wall, wall]) linear_extrude(cart_t - 2 * wall) rrect(cart_w - 2 * wall, cart_h - 2 * wall, corner_r - 1);
 }
 
-module board_cutout() {
-    // the board itself (so the halves' rails leave it room) ...
-    translate([0, 0, pcb_z - 0.2]) linear_extrude(pcb_t + 0.4)
+module board2d() {
+    // the board, with its holes (the posts pass through them)
+    difference() {
         polygon([for (p = pcb_outline) [bx(p[0]), byy(p[1])]]);
+        for (h = pcb_holes) translate([bx(h[0]), byy(h[1])]) circle(d = h[2]);
+    }
+}
+
+module board_cutout() {
+    // the board itself (so the halves' rails leave it room; the posts run on through its holes) ...
+    translate([0, 0, pcb_z - 0.2]) linear_extrude(pcb_t + 0.4) board2d();
     // ... and the connector slot through the bottom face
     translate([(cart_w - slot_w) / 2, -1, pcb_z - (slot_t - pcb_t) / 2]) cube([slot_w, bottom_inset + tab_d + 1, slot_t]);
 }

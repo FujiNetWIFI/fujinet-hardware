@@ -13,6 +13,8 @@ and powering it.
   and the S3's `include/pinmap/fujiversal-studio2.h` as they stand.
   - Both firmwares run on it unchanged.
   - One pin-map addition lets the S3 re-flash the RP: see *Firmware follow-ups*.
+- **Shell:** a printed two-piece shell, `case/FujiNet-StudioII-Shell.scad`. Its size is estimated,
+  not measured on an original: see `case/case-spec.md`.
 - **Nothing has been built yet:** see **Before ordering**.
 
 | Check (2026-10-11) | Result |
@@ -287,6 +289,15 @@ contacts are on.
 - the four buttons, the two LEDs and the debug header;
 - a label recess.
 
+`case/FujiNet-StudioII-Shell.scad` is that shell: a two-piece clamshell, 97.9 x 100 x 16 mm.
+- It holds the board by FliP's two post holes and two side notches, as an original shell holds his
+  board, with two M3 screws from the back and two snap hooks along the top.
+- 15 mm of board stays bare below it, to enter the console.
+- The buttons, LEDs and debug header face the player. The label recess on the back face faces the
+  console's back, as an original's does; a second, smaller one sits on the front.
+- `case/case-spec.md` has its numbers, their sources, the export commands, and what to verify on a
+  console.
+
 ## Before ordering
 
 1. **The edge.** Print `docs/tab-overlay-1to1.pdf` at 100 % and check its 50 mm ruler. Then lay a
@@ -301,8 +312,10 @@ contacts are on.
    preview.
    - 4 layers, ENIG, gold fingers with bevel, Standard PCBA top side.
    - Rails, if any, on the long sides only.
-5. **The shell.** The board is 111.5 mm tall, so an original shell does not fit. Print one from
-   `case/board-anchors.scad`.
+5. **The shell.** The board is 111.5 mm tall, so an original shell does not fit.
+   - Print `case/FujiNet-StudioII-Shell.scad`; `case/case-spec.md` has the export commands.
+   - Its size is estimated, not measured on an original. Work through the spec's VERIFY list on a
+     console first: how far the bare board enters, the slot's surroundings, the fits.
 6. **The review's open questions** (`docs/design-review-rev0.md`).
 
 ## Firmware follow-ups (not changed here)
@@ -446,5 +459,6 @@ References are frozen in `tools/refs.lock`, net names in `tools/nets.lock`.
 | `docs/assembly-top.pdf`, `layout-front.svg`, `layout-back.svg`, `board-top.png`, `board-bottom.png` | the board |
 | `docs/tab-overlay-1to1.pdf` | the edge at 1:1, to check against a real cartridge |
 | `docs/floorplan-study.md`, `docs/design-review-rev0.md`, `docs/sourcing.md` | the layout's reasoning, the audit, the stock |
-| `case/board-anchors.scad` | the board's outline, holes and openings for a printed shell |
+| `case/board-anchors.scad` | the board's outline, holes and openings for a printed shell (generated) |
+| `case/FujiNet-StudioII-Shell.scad`, `case/case-spec.md` | the printed shell (two halves and the RESET plunger), its dimension dossier and VERIFY list |
 | `datasheets/manifest.json` | the parts' datasheets (the PDFs are gitignored: re-fetch by the manifest) |

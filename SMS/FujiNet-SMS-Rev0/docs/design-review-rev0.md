@@ -313,3 +313,18 @@ Before ordering:
 1. Lay the 1:1 tab overlay on a real cartridge, and measure an original board's thickness.
 2. Check U7 / U10 against their pin-1 dots in the assembler's preview.
 3. Source the SRAMs and the Nexperia '27 / '10 (consign, Global Sourcing, or PCBWay turnkey).
+
+## Post-review change (2026-10-11): the fab zips re-plotted from refilled zones
+
+The gerbers are plotted from the zone fills saved in the board file. `stitch_gnd.py` adds its GND vias to
+the file after the last fill, so the saved inner pours still covered them. The committed zips put
+**275 plated holes inside an inner-layer pour of another net**: GND vias inside the power planes (the JLCPCB and the PCBWay zip alike; one BOOTSEL_CTL via inside the In1 GND).
+A board made from them would have had GND shorted to the planes. The DRC gate checked fresh fills in memory
+(`--refill-zones`), so it passed. Found on FujiNet-StudioII Rev0.
+
+- `tools/fill_zones.py` refills and saves the board; the DRC gate now runs on the saved fills
+  (identical results to before).
+- `tools/export.py` plots with `--check-zones`.
+- `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
+  at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
+- Re-exported: only the copper layers' pours changed (In1, In4 and the outer pours; drills unchanged). Outside the zone fills the board is unchanged.

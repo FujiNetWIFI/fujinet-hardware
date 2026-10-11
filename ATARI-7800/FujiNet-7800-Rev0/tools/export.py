@@ -176,7 +176,7 @@ def gerbers():
     shutil.rmtree(g, ignore_errors=True)
     os.makedirs(g)
     layers = 'F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts'
-    run('kicad-cli', 'pcb', 'export', 'gerbers', '--layers', layers, '--subtract-soldermask',
+    run('kicad-cli', 'pcb', 'export', 'gerbers', '--check-zones', '--layers', layers, '--subtract-soldermask',
         '--no-protel-ext', '-o', g + '/', PCB)
     run('kicad-cli', 'pcb', 'export', 'drill', '--format', 'excellon', '--excellon-separate-th',
         '--generate-map', '--map-format', 'gerberx2', '-o', g + '/', PCB)

@@ -229,7 +229,7 @@ Rev0 redo, generated 2026-10-02 from a clean `tools/build_all.sh` run. The schem
 | `gen_sch.py` | Every sheet wired and mirroring the board (tau 1.00); netlist parity 74 / 74 nets with `design.py`; `nets.lock` unchanged |
 | `check_nets.py` | 182 / 182 against the firmware headers (branch `astrocade-rp2354-board`), the Tilton edge map and the power tree |
 | DRC (`--refill-zones --schematic-parity`) | **0 errors, 0 unconnected, 0 parity.** 77 warnings: silkscreen cosmetics (silk over pads is clipped by the mask in the gerbers; the ESP32 / microSD / USB-C silk runs off the trailing edge where those parts overhang) and 1 copper sliver |
-| `check_vias.py` | 382 vias, none touching a pad of another net |
+| `check_vias.py` | 379 vias, none touching a pad or a track of another net |
 | kicad-happy | Schematic + SPICE 16/16 pass; Deep Review 25/25 evidence-verified (Part 3 adds two datasheet deviations to decide: VSENSE vs RP2350-E9, DVDD decoupling); PCB / EMC / thermal (score 97) / gerbers dispositioned in `docs/design-review-rev0.md` |
 | Firmware | `fujicade_rp2354` (fujinet-firmware `astrocade-rp2354-board`) is unchanged by the redo: same pin map, same RUN/BOOTSEL contract |
 | Shell | Both halves render in OpenSCAD with the generated anchors (the existing non-manifold warning remains) |

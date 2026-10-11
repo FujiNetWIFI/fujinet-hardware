@@ -210,3 +210,18 @@ Before ordering:
 4. Order options: 6 layers, 1.6 mm, ENIG + hard-gold fingers with a 30-45 degree bevel, epoxy-filled vias (vias sit in the RP, CP2102N and S3 thermal pads). For JLCPCB: Standard PCBA; if rails are needed, on the left and right body edges only, never on the tab or the top edge (USB-C, microSD, antenna).
 
 Re-run: `tools/audit/run_pcb_audit.sh` (after `tools/export.py`).
+
+## Post-review change (2026-10-11): the fab zips re-plotted from refilled zones
+
+The gerbers are plotted from the zone fills saved in the board file. `stitch_gnd.py` adds its GND vias to
+the file after the last fill, so the saved inner pours still covered them. The committed zips put
+**249 plated holes inside an inner-layer pour of another net**: GND vias inside the power planes (the JLCPCB and the PCBWay zip alike).
+A board made from them would have had GND shorted to the planes. The DRC gate checked fresh fills in memory
+(`--refill-zones`), so it passed. Found on FujiNet-StudioII Rev0.
+
+- `tools/fill_zones.py` refills and saves the board; the DRC gate now runs on the saved fills
+  (identical results to before).
+- `tools/export.py` plots with `--check-zones`.
+- `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
+  at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
+- Re-exported: only the copper layers' pours changed (In1, In4 and the outer pours; drills unchanged). Outside the zone fills the board is unchanged.

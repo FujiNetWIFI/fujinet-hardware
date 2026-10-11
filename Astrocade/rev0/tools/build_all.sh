@@ -29,7 +29,8 @@ if [ "${LAYOUT:-0}" != 1 ]; then
     python3 -c 'import sys; sys.path.insert(0, "tools"); import gen_pcb; gen_pcb.configure_project()'
     python3 tools/check_vias.py
     python3 tools/audit/edge_orientation.py
-    kicad-cli pcb drc --refill-zones --schematic-parity --severity-error --exit-code-violations \
+    python3 tools/fill_zones.py               # refill + save: the gerbers plot the SAVED fills (stitch_gnd adds vias after the last fill)
+    kicad-cli pcb drc --schematic-parity --severity-error --exit-code-violations \
         FujiNet-Astrocade-Rev0.kicad_pcb -o /dev/null
 else
     python3 tools/gen_pcb.py                  # placement, RPi regulator-corner graft, plane fan-out, zones
@@ -46,7 +47,11 @@ else
     python3 tools/stitch_transitions.py       # GND return vias beside USB / crystal / SWCLK layer changes
     python3 tools/check_vias.py               # no via inside another net's pad (KiCad's DRC re-nets such vias)
     python3 tools/set_models.py
-    kicad-cli pcb drc --refill-zones --schematic-parity --severity-error --exit-code-violations \
+    python3 tools/fill_zones.py               # refill + save: the gerbers plot the SAVED fills (stitch_gnd adds vias after the last fill)
+    kicad-cli pcb drc --schematic-parity --severity-error --exit-code-violations \
         FujiNet-Astrocade-Rev0.kicad_pcb -o /dev/null
 fi
 python3 tools/export.py                       # BOM, JLCPCB BOM + CPL, gerbers, schematic PDF, SVGs, renders
+if compgen -G 'exports/*/*-gerbers.zip' >/dev/null; then
+    python3 tools/audit/check_plane_shorts.py   # the zips: no plated hole inside an inner pour of another net
+fi

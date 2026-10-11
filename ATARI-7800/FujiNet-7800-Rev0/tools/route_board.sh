@@ -22,4 +22,5 @@ python3 tools/stitch_gnd.py               # GND stitching grid + edge guard row,
 python3 tools/check_vias.py               # before any pcbnew save re-nets a via that sits in a foreign pad
 python3 tools/set_models.py
 python3 tools/fix_silk.py                 # refs off pads/other silk (nearest clear spot, else hidden)
-kicad-cli pcb drc --refill-zones --schematic-parity --severity-error --exit-code-violations $PCB -o /dev/null
+python3 tools/fill_zones.py               # refill + save: the gerbers plot the SAVED fills (stitch_gnd adds vias after the last fill)
+kicad-cli pcb drc --schematic-parity --severity-error --exit-code-violations $PCB -o /dev/null   # on the saved fills

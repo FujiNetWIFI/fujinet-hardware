@@ -250,7 +250,7 @@ def gerbers():
     shutil.rmtree(g, ignore_errors=True)
     os.makedirs(g)
     jb = jlc_board()
-    run('kicad-cli', 'pcb', 'export', 'gerbers', '--layers', GERBER_LAYERS, '--subtract-soldermask',
+    run('kicad-cli', 'pcb', 'export', 'gerbers', '--check-zones', '--layers', GERBER_LAYERS, '--subtract-soldermask',
         '--no-protel-ext', '-o', g + '/', jb)
     run('kicad-cli', 'pcb', 'export', 'drill', '--format', 'excellon', '--excellon-separate-th',
         '--generate-map', '--map-format', 'gerberx2', '-o', g + '/', jb)

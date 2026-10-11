@@ -81,9 +81,13 @@ EDGE = {1: 'GND', 2: 'GND', 3: 'D0', 4: 'D1', 5: 'INTREQ_N', 6: 'ROMC0', 7: 'ROM
 
 # ---- the two translators: channel -> (console net, RP net); A1-A8 = pins 3-10, B1-B8 = 21-14 ----
 DATA_CH = [('D%d' % i, 'RP_D%d' % i) for i in range(8)]
-# control: WRITE first and PHI last, so each has a free side for its scope pad
-CTRL_CH = [('WRITE', 'RP_WRITE')] + [('ROMC%d' % i, 'RP_ROMC%d' % i) for i in range(5)] + \
-          [('PHI', 'RP_PHI'), ('CBUF_A8', NC)]                 # A8 unused: pulled low, B8 open
+# control, co-designed with the board (docs/floorplan-study.md): ROMC0-4, WRITE, PHI, the spare.  The
+# B row then meets the RP2040's GP8-GP14 (rot 90: GP8-11 along its south side, GP12-14 up its east
+# side) in their own order, so B -> RP crosses nothing; the fingers' R4 / PHI / WRITE order costs one
+# swap out on the tab.  Any A_k / B_k pairing is electrically the same channel: the firmware fixes only
+# the GPIO numbers.
+CTRL_CH = [('ROMC%d' % i, 'RP_ROMC%d' % i) for i in range(5)] + \
+          [('WRITE', 'RP_WRITE'), ('PHI', 'RP_PHI'), ('CBUF_A8', NC)]   # A8 unused: pulled low, B8 open
 A_PIN = {k: 2 + k for k in range(1, 9)}                         # A1 -> 3 ... A8 -> 10
 B_PIN = {k: 22 - k for k in range(1, 9)}                        # B1 -> 21 ... B8 -> 14
 
@@ -105,13 +109,28 @@ CAP = {'15pF': (C0603, 'CL10C150JB8NNNC', 'C1644'),
        '22uF': (C0805, 'CL21A226MAQNNNE', 'C45783')}
 
 
+# MPN -> manufacturer (the BOM's Manufacturer column; names from LCSC's / JLCPCB's pages)
+MFR = {'RP2040': 'Raspberry Pi', 'W25Q16JVSSIQ': 'Winbond', 'SN74LVC4245APWR': 'Texas Instruments',
+       'ABM8-272-T3': 'Abracon', 'CC0603KRX7R9BB104': 'YAGEO', 'CL10A106KP8NNNC': 'Samsung Electro-Mechanics',
+       'CL10A475KO8NNNC': 'Samsung Electro-Mechanics', 'CL10C150JB8NNNC': 'Samsung Electro-Mechanics',
+       'CL10A105KB8NNNC': 'Samsung Electro-Mechanics', 'CL21A226MAQNNNE': 'Samsung Electro-Mechanics',
+       'TL3342F160QG': 'E-Switch', 'BAT54C,215': 'Nexperia', '4D03WGJ0103T5E': 'UNI-ROYAL',
+       'KT-0603G': 'Hubei KENTO Elec', '2N7002': 'Jiangsu Changjing (JSCJ)',
+       'ESP32-S3-WROOM-1-N16R8': 'Espressif', 'TF-015': 'SOFNG', 'WS2812B-2020-V6': 'Worldsemi',
+       'TYPE-C-31-M-12': 'Korean Hroparts Elec', 'ESD5Z5.0T1G': 'onsemi', 'CP2102N-A02-GQFN28R': 'Silicon Labs',
+       'UMH3N': 'Jiangsu Changjing (JSCJ)', 'SS34': 'MDD (Microdiode Semiconductor)',
+       'AP63203WU-7': 'Diodes Incorporated', 'SWPA4030S6R8MT': 'Sunlord', 'AP2112K-3.3TRG1': 'Diodes Incorporated'}
+for _v in RES.values():
+    MFR.setdefault(_v[0], 'UNI-ROYAL')
+
+
 class Part:
     def __init__(self, prefix, lib_id, value, footprint, pins, sheet,
                  mpn='', lcsc='', desc='', bom=True, dnp=False, ds='', key=None):
         self.prefix, self.lib_id, self.value, self.footprint = prefix, lib_id, value, footprint
         self.pins = {str(k): v for k, v in pins.items()}  # pad number -> net (None = NC)
         self.sheet, self.mpn, self.lcsc, self.desc, self.bom, self.dnp = sheet, mpn, lcsc, desc, bom, dnp
-        self.mfr = ''
+        self.mfr = MFR.get(mpn, '')
         self.ds = ds                                       # datasheet URL when the stock symbol's is another part's
         self.key = key      # stable name the drawing scripts use
         self.unit_sheets = {}                              # unit -> sheet, for a part drawn on several sheets
@@ -195,10 +214,10 @@ U_RP = add('U', '%s:RP2040_Fn' % LIB, 'RP2040', FP('QFN-56-1EP_7x7mm_P0.4mm_EP3.
            key='U_RP', ds='https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf')
 # one symbol, pins by function (gen_sch.rp_symbol): the bus on the left, row for row with the
 # translators, the flash and crystal under it; supplies top and bottom; USB / SWD / RUN on the right
-# no footprint yet: the Videocart edge's contact geometry (faces, pitch, pin 1) is to be measured from a
-# real cartridge before layout -- not guessed (README, open items)
-add('J', '%s:ChannelF_Cart_Edge_22' % LIB, 'ChannelF_Cart_Edge_22', '',
-    EDGE, desc='Fairchild Channel F Videocart edge, 22 contacts (footprint: measure a real Videocart first)',
+# the edge fingers (tools/edge_geom.py, make_edge_fp.py; sources in tools/audit/edge_orientation.py):
+# 22 contacts on B.Cu, the face down in the console, 2.54 mm with the key slot between 11 and 12
+add('J', '%s:ChannelF_Cart_Edge_22' % LIB, 'ChannelF_Cart_Edge_22', FP('ChannelF_Videocart_Edge_22'),
+    EDGE, desc='Fairchild Channel F Videocart edge: 22 gold fingers on B.Cu (board copper, not a part)',
     bom=False, key='J_EDGE')
 LVC4245('U_DBUF', DATA_CH, 'RP_DIR', 'F8 data bus D0-D7: A = console 5 V, B = RP2040; DIR = GP15')
 C('100nF', 'CONS_5V', desc='data translator VCCA', key='C_DBUFA')

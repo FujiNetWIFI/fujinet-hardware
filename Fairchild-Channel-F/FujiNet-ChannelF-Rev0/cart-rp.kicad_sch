@@ -1322,7 +1322,7 @@
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "FujiNet-ChannelF:ChannelF_Videocart_Edge_22"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1546,24 +1546,6 @@
 				(pin passive line
 					(at 15.24 -17.78 180)
 					(length 2.54)
-					(name "WRITE"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "15"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 -20.32 180)
-					(length 2.54)
 					(name "ROMC0"
 						(effects
 							(font
@@ -1580,7 +1562,7 @@
 					)
 				)
 				(pin passive line
-					(at 15.24 -22.86 180)
+					(at 15.24 -20.32 180)
 					(length 2.54)
 					(name "ROMC1"
 						(effects
@@ -1598,7 +1580,7 @@
 					)
 				)
 				(pin passive line
-					(at 15.24 -25.4 180)
+					(at 15.24 -22.86 180)
 					(length 2.54)
 					(name "ROMC2"
 						(effects
@@ -1616,7 +1598,7 @@
 					)
 				)
 				(pin passive line
-					(at 15.24 -27.94 180)
+					(at 15.24 -25.4 180)
 					(length 2.54)
 					(name "ROMC3"
 						(effects
@@ -1634,7 +1616,7 @@
 					)
 				)
 				(pin passive line
-					(at 15.24 -30.48 180)
+					(at 15.24 -27.94 180)
 					(length 2.54)
 					(name "ROMC4"
 						(effects
@@ -1644,6 +1626,24 @@
 						)
 					)
 					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 15.24 -30.48 180)
+					(length 2.54)
+					(name "WRITE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1990,24 +1990,6 @@
 				(pin bidirectional line
 					(at -58.42 35.56 0)
 					(length 2.54)
-					(name "GPIO13"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "16"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -58.42 33.02 0)
-					(length 2.54)
 					(name "GPIO8"
 						(effects
 							(font
@@ -2024,7 +2006,7 @@
 					)
 				)
 				(pin bidirectional line
-					(at -58.42 30.48 0)
+					(at -58.42 33.02 0)
 					(length 2.54)
 					(name "GPIO9"
 						(effects
@@ -2042,7 +2024,7 @@
 					)
 				)
 				(pin bidirectional line
-					(at -58.42 27.94 0)
+					(at -58.42 30.48 0)
 					(length 2.54)
 					(name "GPIO10"
 						(effects
@@ -2060,7 +2042,7 @@
 					)
 				)
 				(pin bidirectional line
-					(at -58.42 25.4 0)
+					(at -58.42 27.94 0)
 					(length 2.54)
 					(name "GPIO11"
 						(effects
@@ -2078,7 +2060,7 @@
 					)
 				)
 				(pin bidirectional line
-					(at -58.42 22.86 0)
+					(at -58.42 25.4 0)
 					(length 2.54)
 					(name "GPIO12"
 						(effects
@@ -2088,6 +2070,24 @@
 						)
 					)
 					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -58.42 22.86 0)
+					(length 2.54)
+					(name "GPIO13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4650,8 +4650,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6f515eb3-f59d-54c7-8321-26912085a648")
-		(property "Reference" "U1"
+		(uuid "73cc4d90-8cb2-590e-9f82-58a55a07e168")
+		(property "Reference" "U5"
 			(at 383.54 71.882 0)
 			(effects
 				(font
@@ -4705,6 +4705,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Raspberry Pi"
+			(at 340.36 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C2040"
 			(at 340.36 187.96 0)
 			(effects
@@ -4715,180 +4724,180 @@
 			)
 		)
 		(pin "1"
-			(uuid "fa4ffa81-ab88-55af-a105-3a0cb01d92c9")
+			(uuid "1c5b0284-5d2c-5726-b72b-da882c71b97e")
 		)
 		(pin "10"
-			(uuid "e6988ebc-b523-53d2-99ed-6e350dd2d84f")
+			(uuid "3b41572f-1399-5bc2-bd40-8f24fd2cd736")
 		)
 		(pin "11"
-			(uuid "4cb3891c-546b-5300-bc85-72f3b3e64e28")
+			(uuid "307c393d-3471-5e2a-9480-d31b3e383df7")
 		)
 		(pin "12"
-			(uuid "156fc7cc-981d-5c0e-9a4c-56159f970865")
+			(uuid "6e848ea4-a37a-51eb-90bc-4a1ac23d8010")
 		)
 		(pin "13"
-			(uuid "855a96ee-3164-561d-9469-479ab1e3d1e7")
+			(uuid "8634e16a-d3be-50b4-84de-433f871226b0")
 		)
 		(pin "14"
-			(uuid "2d0e3802-9c6b-5c4f-b17c-cb349a8f36e3")
+			(uuid "61d1d0c5-a824-535b-8bf2-7783031c237c")
 		)
 		(pin "15"
-			(uuid "c6a3fdff-fb45-5758-b92c-0a2b708d6d76")
+			(uuid "39f5bce8-cd73-50a4-884f-df6c0b08001f")
 		)
 		(pin "16"
-			(uuid "19fa9536-73ff-52cd-960b-701c1bafdb85")
+			(uuid "b9e8e70f-7ef9-51d7-ae06-02297547c8db")
 		)
 		(pin "17"
-			(uuid "b0951b59-e8e6-5bb8-87ab-b8351e6b5cdb")
+			(uuid "80f72ecd-0779-52b0-826c-d5703de23931")
 		)
 		(pin "18"
-			(uuid "1a90fda2-69d3-5d20-bbdf-4cd3e37bdb45")
+			(uuid "4d3276c6-54b7-5738-b38d-418e3e222219")
 		)
 		(pin "19"
-			(uuid "2748750a-5b43-53f7-bfe1-b83f5ed77720")
+			(uuid "9aaf9d67-43e2-5293-b43d-3b18a8e58cb1")
 		)
 		(pin "2"
-			(uuid "afef79df-368a-54bb-9a86-5ca990639f68")
+			(uuid "bf5096d1-c8ee-5e59-b742-478e703a09d6")
 		)
 		(pin "20"
-			(uuid "0be67b90-5806-5957-99a0-9b2893d22c68")
+			(uuid "8d1f6ea9-79f3-596a-9561-4b0bcbd702f1")
 		)
 		(pin "21"
-			(uuid "22dbb747-6cec-5964-acec-96f117307d5f")
+			(uuid "bdfe2096-74f3-5628-b425-c9ca3440dd31")
 		)
 		(pin "22"
-			(uuid "68fd32ca-78ba-56e1-88ab-a6ef25c8cef7")
+			(uuid "ca5bf8dd-9208-5e7a-afad-cfc701eb21b1")
 		)
 		(pin "23"
-			(uuid "5ab237ec-b6a3-54bf-966f-c67da2d1f03a")
+			(uuid "67eee179-ddb6-509f-b8fd-5aa200a08fb2")
 		)
 		(pin "24"
-			(uuid "850b7bd3-f342-5095-9db8-4d77ece2340a")
+			(uuid "79357798-b55c-5338-a066-cb0fa639a4bd")
 		)
 		(pin "25"
-			(uuid "26fc3a79-76bd-53a6-8b65-416d3bb326ee")
+			(uuid "56b5c888-585f-5da6-9f1e-f8b3511f445b")
 		)
 		(pin "26"
-			(uuid "b45515ed-bb28-5ea5-8fc1-d2acc3b095c8")
+			(uuid "0471638d-4925-5b84-a6d8-08b0e411e1e6")
 		)
 		(pin "27"
-			(uuid "2e1b8848-90e7-5971-9c18-a4e4c644aea8")
+			(uuid "dcf6159d-6bc9-597c-8d46-2d5233b1a5f1")
 		)
 		(pin "28"
-			(uuid "7ec7a772-6378-5e77-9faf-fa76478f09dc")
+			(uuid "59dc2285-4e77-5545-81ab-1d47a98b9868")
 		)
 		(pin "29"
-			(uuid "53d8be6c-d662-583f-9ae1-ed437dbb7ef5")
+			(uuid "8e62f0a7-fae6-55ce-8f32-7cc57dc4fdd1")
 		)
 		(pin "3"
-			(uuid "39f994dd-f541-58df-bbdb-5ad931f0fd20")
+			(uuid "df695c16-b1dc-5f3f-8a6b-f62d7f2e251a")
 		)
 		(pin "30"
-			(uuid "2dca4179-5e86-5dfa-a9cf-a58610070af5")
+			(uuid "4b6d415b-cc64-5cea-9b4f-e34787ffe1ba")
 		)
 		(pin "31"
-			(uuid "e9f8ec1d-2230-5f88-85c9-35c47947473d")
+			(uuid "52c98350-3ff1-55a6-be0f-20f3b50e2a92")
 		)
 		(pin "32"
-			(uuid "7843c94e-3145-5e4e-9d94-687db6ebee3c")
+			(uuid "6da3714f-0a51-52f9-9dab-285d21a8be2e")
 		)
 		(pin "33"
-			(uuid "c6dd9866-3e0b-5c58-89ec-e95665af7f50")
+			(uuid "46b407c0-18a5-5024-8b45-a401c14ae711")
 		)
 		(pin "34"
-			(uuid "131bf23f-f22a-5b40-88db-612180485bd3")
+			(uuid "a89d2850-f979-5dc3-b550-a67929ec0f4d")
 		)
 		(pin "35"
-			(uuid "83ec4d4b-feb8-505f-91b2-ddb59e3066b2")
+			(uuid "8f707e62-0392-58eb-a319-42e261c6f311")
 		)
 		(pin "36"
-			(uuid "815cb662-ffad-5b83-8d40-3fa3625c2f4d")
+			(uuid "01cf38c1-11d6-5919-a913-941fcab5a903")
 		)
 		(pin "37"
-			(uuid "38c65387-0cc1-5287-bc17-30eee1aefa7b")
+			(uuid "05dc252d-aef3-5926-bdb3-596a59fe511d")
 		)
 		(pin "38"
-			(uuid "a4922a09-43be-5e77-a880-b1e91c06bd9a")
+			(uuid "b4fc661a-5741-56bb-ac3a-bc2f7a7404b9")
 		)
 		(pin "39"
-			(uuid "aa805279-7f41-51b0-887a-d0cd7dc2b127")
+			(uuid "a1f0f8dc-4067-5927-9ef0-d68fc9569ffa")
 		)
 		(pin "4"
-			(uuid "bc14055a-a590-5f72-977b-291ee09ec800")
+			(uuid "bfd04911-89f6-5a26-b0ff-a29b3f3c86be")
 		)
 		(pin "40"
-			(uuid "84446fff-5f79-5346-931f-a7501c941eae")
+			(uuid "88d8f17f-2f73-5ad2-ada6-33a944a89916")
 		)
 		(pin "41"
-			(uuid "5334d2b1-b651-5d37-846f-cd612a3f4c7b")
+			(uuid "ced2bcd5-a334-5374-983a-166bf8666f0c")
 		)
 		(pin "42"
-			(uuid "8639aae2-63d1-586f-9511-8cb10a1384a5")
+			(uuid "a10dc5e3-036c-5d73-8cc6-967b41676e77")
 		)
 		(pin "43"
-			(uuid "2ef984a0-cb92-53ef-94cf-7d08a80f2e47")
+			(uuid "f488b9f1-c502-50f6-868f-49cded4abc35")
 		)
 		(pin "44"
-			(uuid "6f37ea1a-2040-50a3-9045-97504cf1c9bf")
+			(uuid "9bcb6f49-a896-596f-9fdc-3dcf08f008ce")
 		)
 		(pin "45"
-			(uuid "f48a0973-2089-51ec-a83b-88ae1c635625")
+			(uuid "916927c3-a870-5579-a47b-bfa292a1d2c8")
 		)
 		(pin "46"
-			(uuid "0594a368-d916-5b35-b864-6d979566f8bc")
+			(uuid "b7c5fe74-4066-592b-b1f6-cc59e1d49d82")
 		)
 		(pin "47"
-			(uuid "fd69e6f5-087e-5cd0-8d37-441a074dc854")
+			(uuid "2aabcfd2-c425-5533-8836-ca915f40b4e6")
 		)
 		(pin "48"
-			(uuid "e81bd13c-b002-52a1-b134-659571a3afc1")
+			(uuid "da9c23d4-dcbd-5547-a21e-448790b1c0cc")
 		)
 		(pin "49"
-			(uuid "d14623cf-cc74-5478-a573-4459291de8b8")
+			(uuid "f95834ff-82f9-588c-9f3c-5d292441f789")
 		)
 		(pin "5"
-			(uuid "a8c8ee65-cc89-572a-91f4-be7dd86d9061")
+			(uuid "c8d26ef9-52a4-57d3-8bf1-f90285b7a09b")
 		)
 		(pin "50"
-			(uuid "323d3c34-4ed5-553b-ad56-5d15cc63190d")
+			(uuid "dc0a8a57-cf5e-58d7-a8a4-70592367c9a7")
 		)
 		(pin "51"
-			(uuid "45b18211-efc2-59c4-96e3-72e887a9034f")
+			(uuid "1aa04508-dd0f-5c05-a8f5-01f8c3ebaca2")
 		)
 		(pin "52"
-			(uuid "fab0d961-33c9-5b13-9809-139f4005b09e")
+			(uuid "65d1817d-64a9-5cf1-8255-f8176afbe3d3")
 		)
 		(pin "53"
-			(uuid "0bc92390-d416-52a1-9086-e37f76155a69")
+			(uuid "c3288b5f-6930-5b2c-89b1-97be68184d03")
 		)
 		(pin "54"
-			(uuid "e29b3597-70db-5488-9f82-3c18b23ebc54")
+			(uuid "97188126-9651-5faa-9ec3-5447f6904906")
 		)
 		(pin "55"
-			(uuid "30ad9881-439f-58f5-9cf0-f2e768e949dd")
+			(uuid "658d8f40-6d6b-5d7b-ba40-cebba4351d4e")
 		)
 		(pin "56"
-			(uuid "fd45d73a-b90b-5bf4-8b44-200cc3823666")
+			(uuid "b4c78b85-f230-57ee-98a6-4ec4c00fb2d8")
 		)
 		(pin "57"
-			(uuid "34f06266-1e4a-571c-810c-ce469bc2119a")
+			(uuid "cbe7573f-d8c1-50a6-a81f-8b23ce4223e9")
 		)
 		(pin "6"
-			(uuid "1ae8d019-e892-532d-a153-fce88060c939")
+			(uuid "4200f800-6478-5545-9fc9-93a4ddc7d39c")
 		)
 		(pin "7"
-			(uuid "e64400c6-b661-50c1-b64f-efa650883cf6")
+			(uuid "a554000b-3fb8-5396-9c77-dfbf42cbc80a")
 		)
 		(pin "8"
-			(uuid "bed7cb6a-f743-52b4-85cc-342e0e60f3a5")
+			(uuid "339c974a-e140-54e1-895b-17d25a70cedd")
 		)
 		(pin "9"
-			(uuid "1955f43d-8499-583e-9258-7fd0e9720482")
+			(uuid "48815882-bf90-578f-a546-273d874c3397")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "U1")
+					(reference "U5")
 					(unit 1)
 				)
 			)
@@ -4902,8 +4911,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d762d248-d51b-5842-9237-5932a11c9344")
-		(property "Reference" "U2"
+		(uuid "fcc06497-5da4-514d-81cc-0dde9dd81e64")
+		(property "Reference" "U8"
 			(at 201.93 74.93 0)
 			(effects
 				(font
@@ -4957,6 +4966,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 215.9 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C7859"
 			(at 215.9 88.9 0)
 			(effects
@@ -4967,81 +4985,81 @@
 			)
 		)
 		(pin "1"
-			(uuid "bc2f7bc3-bbfa-5433-b019-bb020e7884a8")
+			(uuid "02c3545e-7aaa-5b14-a14a-d130f0c5f846")
 		)
 		(pin "10"
-			(uuid "03d45959-78eb-5db6-bbb3-f72454208d01")
+			(uuid "96defb66-d7b1-513e-a147-fba5b9060f30")
 		)
 		(pin "11"
-			(uuid "af17780f-5c43-561b-af01-c5d2172c7c1c")
+			(uuid "c0b80421-05eb-50b1-840d-6f4507c92d79")
 		)
 		(pin "12"
-			(uuid "5599ac58-2ee5-53e8-a95d-592aec009276")
+			(uuid "eb64f2fd-270a-5cac-94eb-95533d5832d0")
 		)
 		(pin "13"
-			(uuid "ede5d2f4-4109-5fb5-ad9f-3a7b482bd8a9")
+			(uuid "e24fe15a-87dc-5299-a0ad-17d456218fde")
 		)
 		(pin "14"
-			(uuid "a88fd3a0-56a6-5395-a8f7-506910506480")
+			(uuid "8faa5454-1591-5037-b1e2-50141e82a8cd")
 		)
 		(pin "15"
-			(uuid "bb581426-1e79-5a37-8355-080262a62ffe")
+			(uuid "9a56c613-9119-5410-b4bc-67ba9314eb03")
 		)
 		(pin "16"
-			(uuid "8e149058-e30d-5daf-9237-b58d9c699109")
+			(uuid "093681cb-03d5-557e-97fd-d6abc1db2487")
 		)
 		(pin "17"
-			(uuid "22abc9d7-2412-5cd3-82fc-67c6bedb0d81")
+			(uuid "238bf824-4125-550d-a5b2-a2919e740055")
 		)
 		(pin "18"
-			(uuid "36e4a7c1-f78b-5769-b50e-a869d303bde9")
+			(uuid "3bc7f3e6-0301-56b4-bc32-bc6198108e75")
 		)
 		(pin "19"
-			(uuid "dd26a09b-d1d9-5ace-8dd5-edfc18a83756")
+			(uuid "c607ca73-3126-529c-a107-27aac5d2f61d")
 		)
 		(pin "2"
-			(uuid "1c866bd1-091c-5eae-817e-9a60c058bef7")
+			(uuid "0fdfb921-3615-50f2-9308-2a0a4c433e7b")
 		)
 		(pin "20"
-			(uuid "4fd6724f-f592-5cf0-86bc-2c757073732f")
+			(uuid "c1d87691-1409-5379-bb7d-7c313c2c2b66")
 		)
 		(pin "21"
-			(uuid "3ae50fec-59e9-5012-9352-33ee3ba6c761")
+			(uuid "91819841-6c1a-5d8e-9a4a-1cf9ad1de406")
 		)
 		(pin "22"
-			(uuid "6bb606f0-694e-5fcf-ab50-3e73e43859fc")
+			(uuid "760e336b-8e9c-5d7a-8316-4979932e2cff")
 		)
 		(pin "23"
-			(uuid "ad9049fa-3aae-536d-b2c9-9bae90dae31b")
+			(uuid "ff2385b9-6c56-51b5-a514-012ed2c7dd21")
 		)
 		(pin "24"
-			(uuid "56d21735-fd94-5d6c-ab7d-1d0f244065b5")
+			(uuid "1eccb321-3b73-59c0-a4e7-fa6ab300e8c2")
 		)
 		(pin "3"
-			(uuid "16fc745d-a63f-50ab-b6f7-19acd699d5e1")
+			(uuid "1beb7f67-12ea-594e-b836-56c23366e86c")
 		)
 		(pin "4"
-			(uuid "9e5b4f2f-0d84-5dde-b6e8-ba3e9a572941")
+			(uuid "098fe93a-2376-5459-b12b-71c4578edc9a")
 		)
 		(pin "5"
-			(uuid "bb527d3a-e936-5e8b-a2ce-a33533eba701")
+			(uuid "ad9cd37a-84e2-50e5-b593-415501afbbcd")
 		)
 		(pin "6"
-			(uuid "82066319-9f99-55d8-ad4e-037c805da16f")
+			(uuid "2f067560-3dc3-59d7-9f07-a3a17462cb66")
 		)
 		(pin "7"
-			(uuid "ffa55ef8-b582-5caa-a1d0-e248a6970f58")
+			(uuid "b9c4bde4-d815-5b43-95a9-e80387396927")
 		)
 		(pin "8"
-			(uuid "e0e7e2fc-16c9-5c30-8144-43e5f4066bd7")
+			(uuid "765feb6d-c9eb-5ae4-bdab-bd81bbdff402")
 		)
 		(pin "9"
-			(uuid "be76977d-b399-5662-8613-c3fd98479c98")
+			(uuid "ceeff854-1392-5fcb-aa08-fe4a9994bf5b")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "U2")
+					(reference "U8")
 					(unit 1)
 				)
 			)
@@ -5055,8 +5073,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "68d9f263-811b-5a85-bc50-99556a2daae6")
-		(property "Reference" "U3"
+		(uuid "bc9f38cc-3d66-56cd-b5ab-013d392ab30d")
+		(property "Reference" "U9"
 			(at 201.93 140.97 0)
 			(effects
 				(font
@@ -5110,6 +5128,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 215.9 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C7859"
 			(at 215.9 154.94 0)
 			(effects
@@ -5120,81 +5147,81 @@
 			)
 		)
 		(pin "1"
-			(uuid "02f31bb1-c8d9-578b-ab1b-bd9f6182da45")
+			(uuid "ce010a0a-89fd-5e68-9eb4-e91e8b3eb4c9")
 		)
 		(pin "10"
-			(uuid "7d915e54-157f-5418-af27-959b3b6f9625")
+			(uuid "276aca03-b6dc-5db6-8696-f5ef627d493f")
 		)
 		(pin "11"
-			(uuid "b11b2ec7-0e24-59dc-a317-e396d649ce78")
+			(uuid "5e9882e8-457e-53e5-a1ba-c628edc9c2c7")
 		)
 		(pin "12"
-			(uuid "99dd6899-0fc8-5f17-8ec0-a1626a338e45")
+			(uuid "9c0dda08-95af-5490-8cd1-e0bf32c906a2")
 		)
 		(pin "13"
-			(uuid "7f435409-eb2e-56ac-8ac6-386f325caacd")
+			(uuid "1344d9e2-21a5-5b8c-ab40-0d2d087fc1dd")
 		)
 		(pin "14"
-			(uuid "14e371c2-1381-5e33-9a26-19cdf48867cd")
+			(uuid "694b312f-b67d-5e2c-b9d5-13eacc46fba4")
 		)
 		(pin "15"
-			(uuid "9e6bf2d4-f9b5-5de3-b0b4-752998a30b62")
+			(uuid "1475f6bf-86a8-5692-945d-cabf3e3364a3")
 		)
 		(pin "16"
-			(uuid "51ea595d-9a83-50b2-84fc-7140efb36d2f")
+			(uuid "ad98a48a-e733-5382-9aa2-2dd2cedf03fa")
 		)
 		(pin "17"
-			(uuid "ebf39b40-5321-5c48-8921-938ab3da7969")
+			(uuid "336e5717-d4c2-5d0e-942a-677a35da7e33")
 		)
 		(pin "18"
-			(uuid "587b41b3-c71b-5477-a6df-c0aba1f01fad")
+			(uuid "199ee2aa-9404-500b-8b2a-7375633aff77")
 		)
 		(pin "19"
-			(uuid "b551caf0-a3e2-56c0-b527-913117648c3c")
+			(uuid "edf38d61-98ed-5b11-85b1-1741982e768b")
 		)
 		(pin "2"
-			(uuid "5bad9cba-c0a7-5ba9-9c70-6284a000f93e")
+			(uuid "98d359f6-883e-561f-ad91-a7b40bcfc5ed")
 		)
 		(pin "20"
-			(uuid "27faa448-58e6-5e64-ae3b-40a166362e15")
+			(uuid "b73e1e1c-7e33-567a-b380-70c233a4ac0d")
 		)
 		(pin "21"
-			(uuid "c7cfb96f-92ee-5b1c-8952-0f241e460093")
+			(uuid "ab1e6047-d24c-5c9d-a3f2-470bfbe367a4")
 		)
 		(pin "22"
-			(uuid "4f5c0574-506c-5ac4-8302-c0b0c7d94268")
+			(uuid "1b9876ad-9d61-5e51-b99c-30be78ae4ec9")
 		)
 		(pin "23"
-			(uuid "5ad4ef20-78e9-53f6-bee4-202ef05b8a94")
+			(uuid "330ff2f3-81da-5892-b1fc-0e702bf8458b")
 		)
 		(pin "24"
-			(uuid "78848d1a-52d6-5d05-9097-da83cf4151f0")
+			(uuid "c2a347ab-bc14-53c9-94a8-32566e197bca")
 		)
 		(pin "3"
-			(uuid "674131bf-ecb1-5d8b-a9dd-1228213cdf35")
+			(uuid "b1059c0c-86af-5216-97b7-06dfb71280c0")
 		)
 		(pin "4"
-			(uuid "c5188ef6-9a9f-5563-b7d4-9b1868176f04")
+			(uuid "481b5e73-a09a-587f-9b81-50b4f5c93e3b")
 		)
 		(pin "5"
-			(uuid "351bfbe4-a3fc-5f78-a88a-21c1e0c9a366")
+			(uuid "30485a24-299a-5f6d-a068-580fb6a21cd0")
 		)
 		(pin "6"
-			(uuid "5a1e4521-fd56-50e6-a7ae-7336cbada92e")
+			(uuid "5dde511b-8391-53cc-bfcd-4c70b5822d79")
 		)
 		(pin "7"
-			(uuid "00afa2a2-6fab-54e9-916d-f98decc690e7")
+			(uuid "88347a36-125f-5705-94d0-859cfa4af393")
 		)
 		(pin "8"
-			(uuid "f19c6942-2ddf-5851-9f45-dfa11c37630b")
+			(uuid "c1df6791-76f9-58ad-a4d6-38ff8d55b558")
 		)
 		(pin "9"
-			(uuid "5103fb58-316d-5183-a8e8-8bedaec51196")
+			(uuid "0fff2407-98d8-576f-b0f4-9c2c6ee88a0b")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "U3")
+					(reference "U9")
 					(unit 1)
 				)
 			)
@@ -5227,7 +5254,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "FujiNet-ChannelF:ChannelF_Videocart_Edge_22"
 			(at 147.32 134.62 0)
 			(effects
 				(font
@@ -5245,7 +5272,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Fairchild Channel F Videocart edge, 22 contacts (footprint: measure a real Videocart first)"
+		(property "Description" "Fairchild Channel F Videocart edge: 22 gold fingers on B.Cu (board copper, not a part)"
 			(at 147.32 134.62 0)
 			(effects
 				(font
@@ -5331,33 +5358,33 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 261.62 149.86 0)
+		(at 271.78 172.72 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "7655f86f-4aff-5e91-8168-870b2390c133")
-		(property "Reference" "TP2"
-			(at 263.652 145.288 0)
+		(uuid "3b8ad587-dbac-5bea-947b-35df8a39fcd5")
+		(property "Reference" "TP10"
+			(at 273.812 174.752 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "WRITE"
-			(at 263.652 147.828 0)
+			(at 273.812 177.292 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" "FujiNet-ChannelF:TestPoint_Pad_D1.5mm"
-			(at 261.62 149.86 0)
+			(at 271.78 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5366,7 +5393,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 261.62 149.86 0)
+			(at 271.78 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5375,7 +5402,7 @@
 			)
 		)
 		(property "Description" "test pad"
-			(at 261.62 149.86 0)
+			(at 271.78 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5384,12 +5411,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "f5d90766-4304-5fd1-96d1-85152913577b")
+			(uuid "539aa05c-3233-51c9-91ef-21107ef47b30")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP2")
+					(reference "TP10")
 					(unit 1)
 				)
 			)
@@ -5403,8 +5430,8 @@
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "7b3715b8-4b34-53c5-9f06-a5d210a4e699")
-		(property "Reference" "TP3"
+		(uuid "5881c94d-ea8d-5e3c-8896-e1b767987b64")
+		(property "Reference" "TP11"
 			(at 263.652 172.212 0)
 			(effects
 				(font
@@ -5450,12 +5477,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "bd1d8209-1a74-5b3a-b23a-1d552ab059c9")
+			(uuid "50686025-ec25-5691-bd98-3b7280fa6ae4")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP3")
+					(reference "TP11")
 					(unit 1)
 				)
 			)
@@ -5469,8 +5496,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "bae88c91-8034-5aa3-ad0c-8b6e4828e5e9")
-		(property "Reference" "R2"
+		(uuid "0d6799ba-9a17-5968-a9e3-26913e6d7668")
+		(property "Reference" "R20"
 			(at 184.15 172.974 90)
 			(effects
 				(font
@@ -5522,6 +5549,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 184.15 170.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C25804"
 			(at 184.15 170.18 90)
 			(effects
@@ -5532,15 +5568,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "0c999e99-7503-5775-9c08-09406a444d20")
+			(uuid "ed6f9b61-ac74-5ffd-a343-24fbb72c2ba3")
 		)
 		(pin "2"
-			(uuid "33b885a5-9c4c-575d-ac44-66ebb31f7cd2")
+			(uuid "e61cac70-fd53-53f8-92b2-33b620049c59")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R2")
+					(reference "R20")
 					(unit 1)
 				)
 			)
@@ -5554,8 +5590,8 @@
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "6528caf4-c737-5a1e-8b0f-2c4e168db887")
-		(property "Reference" "TP1"
+		(uuid "a2084fe5-d710-5e14-be0e-291d06c020a6")
+		(property "Reference" "TP12"
 			(at 258.572 69.088 0)
 			(effects
 				(font
@@ -5601,12 +5637,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "16b216d7-504d-59f1-8b56-da8a5d4c6646")
+			(uuid "7fdad5db-cd00-5ffb-a3e3-8e029fcfa1b6")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP1")
+					(reference "TP12")
 					(unit 1)
 				)
 			)
@@ -5620,8 +5656,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a500a677-1db6-52b7-8aec-e3f295cb4b3e")
-		(property "Reference" "R1"
+		(uuid "b472874c-1521-5823-b6f9-0468b432a2d9")
+		(property "Reference" "R18"
 			(at 271.526 68.58 0)
 			(effects
 				(font
@@ -5675,6 +5711,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 269.24 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C23162"
 			(at 269.24 69.85 0)
 			(effects
@@ -5685,15 +5730,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "bfc33887-397d-5ce2-99ea-ab2bacacc2af")
+			(uuid "33c6601d-f32c-5851-bf27-8b4a5d3b8c3e")
 		)
 		(pin "2"
-			(uuid "f1778e49-c8df-54d6-ba65-b35357b29672")
+			(uuid "1444a8bd-d130-509f-aedd-f2451522b31a")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R1")
+					(reference "R18")
 					(unit 1)
 				)
 			)
@@ -5707,8 +5752,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "57caa3b8-bb58-58ca-bb39-ea4f2d06daa4")
-		(property "Reference" "C1"
+		(uuid "d3865297-72c3-5615-84a7-d5f2fa09f28b")
+		(property "Reference" "C37"
 			(at 199.39 59.69 90)
 			(effects
 				(font
@@ -5760,6 +5805,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 199.39 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 199.39 66.04 90)
 			(effects
@@ -5770,15 +5824,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "446066a4-28f7-5420-b33f-70ca3b69e743")
+			(uuid "de9736d6-ca4c-59b2-8821-81743f47d4f8")
 		)
 		(pin "2"
-			(uuid "af286205-4ba4-56f0-ae4c-2b62329d3eb6")
+			(uuid "1b29111c-8c93-5ddd-8117-1246bc8ab718")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C1")
+					(reference "C37")
 					(unit 1)
 				)
 			)
@@ -5792,8 +5846,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "42908d59-feba-57f4-825f-51db5766b4fc")
-		(property "Reference" "C2"
+		(uuid "8cbb03de-6dbb-5f35-bb97-2b2ce88ec619")
+		(property "Reference" "C34"
 			(at 232.41 59.69 90)
 			(effects
 				(font
@@ -5845,6 +5899,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 232.41 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 232.41 66.04 90)
 			(effects
@@ -5855,15 +5918,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "7c19a5b4-e0f0-514a-8544-f147f7987cf4")
+			(uuid "98e0a55c-23b5-5d3a-a8bd-168db5e081f4")
 		)
 		(pin "2"
-			(uuid "baccb229-47a1-5efe-91bf-cdddb9d66a1f")
+			(uuid "2b2db8e5-6e6c-5198-982a-b6f2f72b8f57")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C2")
+					(reference "C34")
 					(unit 1)
 				)
 			)
@@ -5877,8 +5940,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "371c5554-12d8-523a-997c-c2c3a0609e02")
-		(property "Reference" "C3"
+		(uuid "888ca44a-5d52-5c95-862e-1d0cd5a90d64")
+		(property "Reference" "C38"
 			(at 199.39 125.73 90)
 			(effects
 				(font
@@ -5930,6 +5993,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 199.39 132.08 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 199.39 132.08 90)
 			(effects
@@ -5940,15 +6012,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "1f8b4b22-a5a3-54b8-9abc-b9df1d052704")
+			(uuid "a62a37fb-d995-592c-b939-ced0d5cd5aba")
 		)
 		(pin "2"
-			(uuid "6b34a457-fbb0-5b58-9f3e-e55e48eac8bd")
+			(uuid "a8035c2c-abc2-507c-8ba8-d33df773b822")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C3")
+					(reference "C38")
 					(unit 1)
 				)
 			)
@@ -5962,8 +6034,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "dcf45ffa-8311-5689-8eec-aad1d9af3946")
-		(property "Reference" "C4"
+		(uuid "87ee5b27-3d7a-55eb-9375-08496d9845a2")
+		(property "Reference" "C35"
 			(at 232.41 125.73 90)
 			(effects
 				(font
@@ -6015,6 +6087,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 232.41 132.08 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 232.41 132.08 90)
 			(effects
@@ -6025,15 +6106,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "559d5650-2a66-5635-9a19-4473fee29a89")
+			(uuid "41f5f446-7306-5da6-8b4f-f6f7661883c5")
 		)
 		(pin "2"
-			(uuid "01f62507-4f00-5ab2-9288-2a1b04a5ab2e")
+			(uuid "b426cb92-3ed6-5b4e-9722-acb0160b545a")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C4")
+					(reference "C35")
 					(unit 1)
 				)
 			)
@@ -6103,6 +6184,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Jiangsu Changjing (JSCJ)"
+			(at 246.38 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C8545"
 			(at 246.38 193.04 0)
 			(effects
@@ -6138,8 +6228,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d7e716c0-8011-5ea3-ba56-1dbbf572a663")
-		(property "Reference" "R3"
+		(uuid "73eec8d5-9b55-5df3-b2fd-f619d5318145")
+		(property "Reference" "R19"
 			(at 268.986 198.12 0)
 			(effects
 				(font
@@ -6193,6 +6283,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 266.7 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C25803"
 			(at 266.7 199.39 0)
 			(effects
@@ -6203,15 +6302,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "1118d592-b29a-51b0-8052-0bbcef0020ad")
+			(uuid "a44df938-7dc5-5a2a-b2f4-a97941879361")
 		)
 		(pin "2"
-			(uuid "53321e92-1fb5-5bd5-97d3-59cfeaa093e1")
+			(uuid "ee78c503-6ebf-5081-ae27-650e725487d9")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R3")
+					(reference "R19")
 					(unit 1)
 				)
 			)
@@ -6225,8 +6324,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d014bdff-19c7-5593-8448-889d996e65d5")
-		(property "Reference" "R4"
+		(uuid "668ebf55-8b9a-5627-ba2d-fa1f89e10bb0")
+		(property "Reference" "R6"
 			(at 265.43 215.646 90)
 			(effects
 				(font
@@ -6278,6 +6377,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 265.43 220.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C23138"
 			(at 265.43 220.98 90)
 			(effects
@@ -6288,15 +6396,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "729baae3-199c-58a7-8c92-37b72fc995ed")
+			(uuid "f64014fa-e7d8-5bdd-85ff-08342c4e6058")
 		)
 		(pin "2"
-			(uuid "ce2b3dd9-e694-5e97-a171-d9847c7b3dc7")
+			(uuid "9cd3a581-09ef-574a-b2db-215a48f5e862")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R4")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -6310,8 +6418,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "164f9ac4-05d9-5d20-858d-d2fb51bb702d")
-		(property "Reference" "D1"
+		(uuid "b741565f-ffe9-5649-ae83-9f676e0f4fed")
+		(property "Reference" "D3"
 			(at 245.999 215.392 0)
 			(effects
 				(font
@@ -6363,6 +6471,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Hubei KENTO Elec"
+			(at 247.65 220.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C12624"
 			(at 247.65 220.98 0)
 			(effects
@@ -6373,15 +6490,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "fa60eff4-1ca0-54e5-ada3-0af9d11e4142")
+			(uuid "8ee964ab-97df-54f3-8478-fdfc501dfab3")
 		)
 		(pin "2"
-			(uuid "7097743a-ead5-5c71-a583-388d3ed95527")
+			(uuid "6c12f513-28a5-5dc3-8fc5-d1960ff95883")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "D1")
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -6395,8 +6512,8 @@
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "c16bbd92-323e-5b25-982d-ba51c17ffeb3")
-		(property "Reference" "TP4"
+		(uuid "7655f86f-4aff-5e91-8168-870b2390c133")
+		(property "Reference" "TP2"
 			(at 416.814 74.93 90)
 			(effects
 				(font
@@ -6442,12 +6559,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "dab21d16-0bb3-595b-80fb-6bd6e25a303d")
+			(uuid "f5d90766-4304-5fd1-96d1-85152913577b")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP4")
+					(reference "TP2")
 					(unit 1)
 				)
 			)
@@ -6461,8 +6578,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "1568d0fe-da48-5101-a243-617419b27348")
-		(property "Reference" "C5"
+		(uuid "d759b6e5-2131-5cab-aeb2-6b52584d55e4")
+		(property "Reference" "C28"
 			(at 305.562 58.42 0)
 			(effects
 				(font
@@ -6516,6 +6633,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 302.26 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 302.26 59.69 0)
 			(effects
@@ -6526,15 +6652,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "e4926bd5-c5b5-5736-8df5-3e6e4fff4151")
+			(uuid "da7f7372-7bd5-5362-9c4f-00cecff3ce27")
 		)
 		(pin "2"
-			(uuid "a86ff551-66c6-5652-9302-7f093a98b838")
+			(uuid "1d1453fd-59ec-51d6-b072-298dc98266dc")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C5")
+					(reference "C28")
 					(unit 1)
 				)
 			)
@@ -6548,8 +6674,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "86649761-9d13-516e-b1d8-53976d99c692")
-		(property "Reference" "C6"
+		(uuid "e47f19eb-635d-5f76-b3cf-bf6bcb107d61")
+		(property "Reference" "C32"
 			(at 323.342 58.42 0)
 			(effects
 				(font
@@ -6603,6 +6729,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 320.04 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 320.04 59.69 0)
 			(effects
@@ -6613,15 +6748,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "adc0219e-b4aa-587c-87e6-981db2a934c6")
+			(uuid "f06c028f-2a5c-5632-8996-b015fcf26ef6")
 		)
 		(pin "2"
-			(uuid "ea96fea2-9750-5ca5-b470-c64cc0032ec1")
+			(uuid "94ce3d19-740d-5e11-aa49-85a481fddfbb")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C6")
+					(reference "C32")
 					(unit 1)
 				)
 			)
@@ -6635,8 +6770,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0838ced2-15e4-5815-9e88-bd5dd0544f59")
-		(property "Reference" "C7"
+		(uuid "8f0fe275-3671-5d54-9028-56e67fa4bcd6")
+		(property "Reference" "C31"
 			(at 341.122 58.42 0)
 			(effects
 				(font
@@ -6690,6 +6825,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 337.82 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 337.82 59.69 0)
 			(effects
@@ -6700,15 +6844,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "c503a749-f070-54c6-8465-ff7561e1b0a0")
+			(uuid "99b9a337-e530-53fd-a6ae-fb9386a054f0")
 		)
 		(pin "2"
-			(uuid "7073efae-977d-5bef-8517-aeb1ee1d5d4d")
+			(uuid "326a7f5f-18a3-55f8-9eca-1c1f110f65a1")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C7")
+					(reference "C31")
 					(unit 1)
 				)
 			)
@@ -6722,8 +6866,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a5caf39a-ce0d-5672-bd8e-a1be3fae0085")
-		(property "Reference" "C8"
+		(uuid "7604d509-a770-55b3-816a-0621eb59ebad")
+		(property "Reference" "C21"
 			(at 358.902 58.42 0)
 			(effects
 				(font
@@ -6777,6 +6921,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 355.6 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 355.6 59.69 0)
 			(effects
@@ -6787,15 +6940,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "84a87f0a-3798-5005-aec6-f404bba04846")
+			(uuid "36adfb20-67d6-5497-80f9-acb0ab71e362")
 		)
 		(pin "2"
-			(uuid "dbb443a4-1ae6-5d18-b550-0c22ab2bc1ee")
+			(uuid "8e923221-8b51-5b66-adf4-b821c7bb2596")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C8")
+					(reference "C21")
 					(unit 1)
 				)
 			)
@@ -6809,8 +6962,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "fffa699b-b60b-5975-81b2-1980b14febc6")
-		(property "Reference" "C9"
+		(uuid "486e505a-f6df-5103-8781-fb04df0be4d6")
+		(property "Reference" "C20"
 			(at 376.682 58.42 0)
 			(effects
 				(font
@@ -6864,6 +7017,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 373.38 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 373.38 59.69 0)
 			(effects
@@ -6874,15 +7036,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "830b966d-c319-5a64-bd02-cdc05889c2d8")
+			(uuid "a40db7cf-9c0f-5be7-8d9b-343cd7a5ff64")
 		)
 		(pin "2"
-			(uuid "0f82a6dc-6146-50d6-936f-c7d5f5f8da4c")
+			(uuid "937595a4-97e3-5abd-b697-d32ecbd11ced")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C9")
+					(reference "C20")
 					(unit 1)
 				)
 			)
@@ -6896,8 +7058,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "58e123a3-09d3-53e6-afbb-e90b59e9ad45")
-		(property "Reference" "C10"
+		(uuid "5a2fe494-2337-5953-91ae-522738bc45ba")
+		(property "Reference" "C25"
 			(at 394.462 58.42 0)
 			(effects
 				(font
@@ -6951,6 +7113,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 391.16 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 391.16 59.69 0)
 			(effects
@@ -6961,15 +7132,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "91f5ea29-03d7-56a2-8177-dc651ee3015f")
+			(uuid "9332f8be-4474-5ae4-8137-7c618d685c07")
 		)
 		(pin "2"
-			(uuid "f299f0a0-93c6-5fd1-883e-673fec6ed1fe")
+			(uuid "0ee5d970-1c13-5b64-9a89-a89ddb6fcdb4")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C10")
+					(reference "C25")
 					(unit 1)
 				)
 			)
@@ -6983,8 +7154,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0f85eaa9-0d15-556b-b7de-2b6e0cb0ac3d")
-		(property "Reference" "C11"
+		(uuid "10945f52-1714-5641-b288-b7264eb28b50")
+		(property "Reference" "C26"
 			(at 297.942 317.5 0)
 			(effects
 				(font
@@ -7038,6 +7209,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 294.64 318.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 294.64 318.77 0)
 			(effects
@@ -7048,15 +7228,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "32ce8a58-bda2-5913-ae5a-cff45c37e674")
+			(uuid "ba484062-6b3a-5d28-8a47-3ef824282711")
 		)
 		(pin "2"
-			(uuid "05accc4d-8993-581e-aa1e-8f9061c130be")
+			(uuid "2efef3a0-a112-5e9c-9233-c4e04c4753f4")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C11")
+					(reference "C26")
 					(unit 1)
 				)
 			)
@@ -7070,8 +7250,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "75a8829f-2d17-5f79-b692-e2fed9d121ca")
-		(property "Reference" "C12"
+		(uuid "fd3f2b94-1aa9-5bb6-bc82-d3d26cf2def8")
+		(property "Reference" "C27"
 			(at 315.722 317.5 0)
 			(effects
 				(font
@@ -7125,6 +7305,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 312.42 318.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 312.42 318.77 0)
 			(effects
@@ -7135,15 +7324,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "f888a519-45c0-528c-810e-9b456ed74508")
+			(uuid "fa630a93-3b0c-5412-829c-5784f1c7bae2")
 		)
 		(pin "2"
-			(uuid "a36a5525-f77d-563b-bd0d-d1b0bd9104c8")
+			(uuid "9a1848a0-5c63-5427-b76b-020c88759f57")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C12")
+					(reference "C27")
 					(unit 1)
 				)
 			)
@@ -7157,8 +7346,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "6e040fcf-0e68-58e9-94f9-dc2e8599f0e8")
-		(property "Reference" "C13"
+		(uuid "b5412e0f-b231-5b8a-b3dd-1dea4bb82e07")
+		(property "Reference" "C18"
 			(at 333.502 317.5 0)
 			(effects
 				(font
@@ -7212,6 +7401,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 330.2 318.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C15849"
 			(at 330.2 318.77 0)
 			(effects
@@ -7222,15 +7420,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "33b24e77-395c-5dcf-a642-76beb50c2e91")
+			(uuid "aa6f5519-f241-51d3-bba6-5faef85459f5")
 		)
 		(pin "2"
-			(uuid "f09171cc-5878-5b40-bc19-74a1bea8c15f")
+			(uuid "69690e81-9e8a-568a-b19c-e6b4f39ed117")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C13")
+					(reference "C18")
 					(unit 1)
 				)
 			)
@@ -7244,8 +7442,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3b551fb2-413c-5be1-9d0d-31df9023f231")
-		(property "Reference" "C15"
+		(uuid "c474f7b2-70c6-51b4-ae97-ef0811598e9e")
+		(property "Reference" "C19"
 			(at 351.282 317.5 0)
 			(effects
 				(font
@@ -7299,6 +7497,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 347.98 318.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C15849"
 			(at 347.98 318.77 0)
 			(effects
@@ -7309,15 +7516,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "6f294765-3bec-5708-9ffb-66f307a74c19")
+			(uuid "959894fc-e91f-583c-bbb4-774fdf214ece")
 		)
 		(pin "2"
-			(uuid "5551c884-66e2-5ce1-8e28-cecbe54b238e")
+			(uuid "ab215011-268d-58e3-b6a9-42b1d4e963bc")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C15")
+					(reference "C19")
 					(unit 1)
 				)
 			)
@@ -7378,6 +7585,15 @@
 			)
 		)
 		(property "MPN" "CC0603KRX7R9BB104"
+			(at 365.76 318.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
 			(at 365.76 318.77 0)
 			(effects
 				(font
@@ -7473,6 +7689,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 383.54 318.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 383.54 318.77 0)
 			(effects
@@ -7505,8 +7730,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "dd3a0bdd-6981-56cf-a4a1-c3cc1f21b4a6")
-		(property "Reference" "C14"
+		(uuid "93e1c893-f2b8-5318-b3b1-1646b7238161")
+		(property "Reference" "C23"
 			(at 435.102 66.04 0)
 			(effects
 				(font
@@ -7560,6 +7785,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 431.8 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C19702"
 			(at 431.8 67.31 0)
 			(effects
@@ -7570,15 +7804,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "ee8d8dfb-c49d-59b5-816e-df78e30003cd")
+			(uuid "a291d645-c9d2-5a10-97a6-6540ea9ca029")
 		)
 		(pin "2"
-			(uuid "f8b23c53-5c70-5f97-8e00-1d1f0f3cf40b")
+			(uuid "14e9e4a8-ecfc-5325-a3aa-c357048b1cb1")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C14")
+					(reference "C23")
 					(unit 1)
 				)
 			)
@@ -7593,8 +7827,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "deef8ef5-b72c-534b-95ca-b88ad2ea4b98")
-		(property "Reference" "U4"
+		(uuid "3690d001-6fdf-5397-b198-2c223f26878f")
+		(property "Reference" "U6"
 			(at 199.39 255.27 0)
 			(effects
 				(font
@@ -7648,6 +7882,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Winbond"
+			(at 210.82 264.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C82317"
 			(at 210.82 264.16 0)
 			(effects
@@ -7658,33 +7901,33 @@
 			)
 		)
 		(pin "1"
-			(uuid "824bb2c2-cef3-5748-b681-b793fb0ada7b")
+			(uuid "62973c64-977f-5a7f-83de-ff8875ba2766")
 		)
 		(pin "2"
-			(uuid "657cca81-3790-5663-954a-82f18cb2746d")
+			(uuid "e6e1e9c4-2310-5303-bb5e-e57a176bd5a8")
 		)
 		(pin "3"
-			(uuid "69aa049f-2e0c-581a-8730-e6a7ee07cf2b")
+			(uuid "97f97e46-ca2e-5c99-af13-b8b817004c21")
 		)
 		(pin "4"
-			(uuid "86ad6198-9aff-58f9-8ace-5a2987be4b66")
+			(uuid "e6b5d59a-f5c1-52e7-a8c2-42e3c23f47c8")
 		)
 		(pin "5"
-			(uuid "8c0e9614-e195-5e31-8483-427ea9fb7dc5")
+			(uuid "d429677a-c614-58ee-82d7-269b423e7159")
 		)
 		(pin "6"
-			(uuid "e81608fb-1eb3-55ca-904d-251548c7786e")
+			(uuid "46cff768-54ef-5d55-b489-b65c3ec424a7")
 		)
 		(pin "7"
-			(uuid "2bf3eecf-9e6a-58cc-88cd-620ccc716de7")
+			(uuid "364b21ae-57df-5502-aa63-d8f3937cb957")
 		)
 		(pin "8"
-			(uuid "421e1b21-393a-56fd-9a18-4771edcedf8f")
+			(uuid "4670aa41-6910-5ce5-a89c-2b501abc018d")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "U4")
+					(reference "U6")
 					(unit 1)
 				)
 			)
@@ -7698,8 +7941,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b5412e0f-b231-5b8a-b3dd-1dea4bb82e07")
-		(property "Reference" "C18"
+		(uuid "abbcaabd-28c7-5f93-b6be-48719eea8060")
+		(property "Reference" "C24"
 			(at 219.202 238.76 0)
 			(effects
 				(font
@@ -7753,6 +7996,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "YAGEO"
+			(at 215.9 240.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C14663"
 			(at 215.9 240.03 0)
 			(effects
@@ -7763,15 +8015,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "aa6f5519-f241-51d3-bba6-5faef85459f5")
+			(uuid "ea04de44-3bd4-5cbe-bc78-4f522be0b785")
 		)
 		(pin "2"
-			(uuid "69690e81-9e8a-568a-b19c-e6b4f39ed117")
+			(uuid "b29628cd-538a-51b6-aed8-b5a251414d54")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C18")
+					(reference "C24")
 					(unit 1)
 				)
 			)
@@ -7785,8 +8037,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "668ebf55-8b9a-5627-ba2d-fa1f89e10bb0")
-		(property "Reference" "R6"
+		(uuid "df04d8f8-85c9-5213-a9b9-a9f20e820a64")
+		(property "Reference" "R15"
 			(at 235.966 248.92 0)
 			(effects
 				(font
@@ -7840,6 +8092,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 233.68 250.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C25804"
 			(at 233.68 250.19 0)
 			(effects
@@ -7850,15 +8111,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "f64014fa-e7d8-5bdd-85ff-08342c4e6058")
+			(uuid "5d7d6da4-bfaf-503a-96aa-ed3a915d7a07")
 		)
 		(pin "2"
-			(uuid "9cd3a581-09ef-574a-b2db-215a48f5e862")
+			(uuid "5135e8e6-7e4a-5569-9c72-97bdbc4a9be3")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R6")
+					(reference "R15")
 					(unit 1)
 				)
 			)
@@ -7938,8 +8199,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "43b31f42-e23d-573c-988a-d7f83955ed12")
-		(property "Reference" "R7"
+		(uuid "f40dcafa-417f-59b4-a34c-dd80785f07e2")
+		(property "Reference" "R16"
 			(at 263.906 248.92 0)
 			(effects
 				(font
@@ -7993,6 +8254,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 261.62 250.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C21190"
 			(at 261.62 250.19 0)
 			(effects
@@ -8003,15 +8273,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "f02ac958-e660-58e3-b29c-ecae0f237a5f")
+			(uuid "b1fc2887-45ca-5ac7-92dd-d5bc604eee8b")
 		)
 		(pin "2"
-			(uuid "35cc84d4-1aca-5229-92de-5ba09138616f")
+			(uuid "0f01e271-660e-568a-bbc4-98e7d7f1bd81")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R7")
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -8025,8 +8295,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "dfbf616d-a7e3-51d6-9792-a026ec7fda03")
-		(property "Reference" "SW1"
+		(uuid "d849a6fc-7160-5c41-8bac-4a5da639718f")
+		(property "Reference" "SW4"
 			(at 251.46 236.474 0)
 			(effects
 				(font
@@ -8078,6 +8348,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "E-Switch"
+			(at 251.46 241.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C2886898"
 			(at 251.46 241.3 0)
 			(effects
@@ -8088,15 +8367,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "3e28c12a-8935-57db-9c4f-2d644dc36415")
+			(uuid "8b4938d4-e5c0-581e-95f8-6832f2a87f8b")
 		)
 		(pin "2"
-			(uuid "8137d338-5923-5c31-b587-ea3573a830d5")
+			(uuid "2d9b91af-57f3-5c49-b0f9-a342c73a4fa8")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "SW1")
+					(reference "SW4")
 					(unit 1)
 				)
 			)
@@ -8110,8 +8389,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7e303c84-96b4-5704-b472-ed198fbdac55")
-		(property "Reference" "R8"
+		(uuid "06aeb941-9d3a-5209-aca2-18648db53536")
+		(property "Reference" "R17"
 			(at 276.606 248.92 0)
 			(effects
 				(font
@@ -8165,6 +8444,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 274.32 250.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C21190"
 			(at 274.32 250.19 0)
 			(effects
@@ -8175,15 +8463,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "78e9e89c-f886-51a7-ad9a-1ef7038fa7d6")
+			(uuid "f4c910c7-3cf5-5db3-acd8-12afb30c2e5c")
 		)
 		(pin "2"
-			(uuid "b68300e2-258f-59b9-9fd4-dee18274bc14")
+			(uuid "ded5ea99-6449-5f05-b680-0c6b9280c160")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R8")
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -8252,6 +8540,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Abracon"
+			(at 251.46 280.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C20625731"
 			(at 251.46 280.67 90)
 			(effects
@@ -8290,8 +8587,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c474f7b2-70c6-51b4-ae97-ef0811598e9e")
-		(property "Reference" "C19"
+		(uuid "0db1b6b6-5f45-5684-ac01-2fe9e3b82d3d")
+		(property "Reference" "C29"
 			(at 232.918 281.94 0)
 			(effects
 				(font
@@ -8345,6 +8642,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 236.22 283.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C1644"
 			(at 236.22 283.21 0)
 			(effects
@@ -8355,15 +8661,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "959894fc-e91f-583c-bbb4-774fdf214ece")
+			(uuid "66fd6358-09ec-5bf0-8db9-33aae0277972")
 		)
 		(pin "2"
-			(uuid "ab215011-268d-58e3-b6a9-42b1d4e963bc")
+			(uuid "acb3ae78-3d9f-5d67-932c-87f7c4e36b6e")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C19")
+					(reference "C29")
 					(unit 1)
 				)
 			)
@@ -8377,8 +8683,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "633a2bd2-7b4e-50c4-915f-f6683f659436")
-		(property "Reference" "R5"
+		(uuid "181b5a34-7fde-5a19-a44d-9245f44209f3")
+		(property "Reference" "R14"
 			(at 270.51 279.146 90)
 			(effects
 				(font
@@ -8430,6 +8736,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 270.51 284.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C21190"
 			(at 270.51 284.48 90)
 			(effects
@@ -8440,15 +8755,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "797b9986-a3b1-510e-9be4-607282dc44a9")
+			(uuid "bebe0acf-06b0-5207-ad54-4fc3a520b844")
 		)
 		(pin "2"
-			(uuid "1407ca22-caa8-53f1-b350-136fd27d8246")
+			(uuid "c96a1477-2ae3-5e4e-91cd-71ac52e07156")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R5")
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -8462,8 +8777,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "486e505a-f6df-5103-8781-fb04df0be4d6")
-		(property "Reference" "C20"
+		(uuid "304d0720-14f8-58df-ac6a-e84625fda5ad")
+		(property "Reference" "C22"
 			(at 259.842 289.56 0)
 			(effects
 				(font
@@ -8517,6 +8832,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 256.54 290.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C1644"
 			(at 256.54 290.83 0)
 			(effects
@@ -8527,15 +8851,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "a40db7cf-9c0f-5be7-8d9b-343cd7a5ff64")
+			(uuid "deedd450-c9b1-512b-af1f-ce4cdc33ba20")
 		)
 		(pin "2"
-			(uuid "937595a4-97e3-5abd-b697-d32ecbd11ced")
+			(uuid "a346bcf0-f72f-5929-82b4-37046e844afa")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "C20")
+					(reference "C22")
 					(unit 1)
 				)
 			)
@@ -8594,6 +8918,15 @@
 			)
 		)
 		(property "MPN" "0603WAF270JT5E"
+			(at 435.61 152.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
 			(at 435.61 152.4 90)
 			(effects
 				(font
@@ -8687,6 +9020,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 435.61 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C25190"
 			(at 435.61 154.94 90)
 			(effects
@@ -8719,8 +9061,8 @@
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "32c84c82-434a-5bd8-b9ce-fe2ddc9a8e16")
-		(property "Reference" "TP5"
+		(uuid "8233fbfb-f8cd-54ab-bf1d-454ad932b58c")
+		(property "Reference" "TP6"
 			(at 419.354 161.29 90)
 			(effects
 				(font
@@ -8766,12 +9108,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "d3e57205-d054-5d0e-b1f4-cbfa6e63c187")
+			(uuid "97ff809f-bb34-5b34-87ab-628512fb502c")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP5")
+					(reference "TP6")
 					(unit 1)
 				)
 			)
@@ -8785,8 +9127,8 @@
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "8233fbfb-f8cd-54ab-bf1d-454ad932b58c")
-		(property "Reference" "TP6"
+		(uuid "32c84c82-434a-5bd8-b9ce-fe2ddc9a8e16")
+		(property "Reference" "TP5"
 			(at 419.354 166.37 90)
 			(effects
 				(font
@@ -8832,12 +9174,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "97ff809f-bb34-5b34-87ab-628512fb502c")
+			(uuid "d3e57205-d054-5d0e-b1f4-cbfa6e63c187")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP6")
+					(reference "TP5")
 					(unit 1)
 				)
 			)
@@ -8970,6 +9312,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "Nexperia"
+			(at 439.42 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C37704"
 			(at 439.42 193.04 0)
 			(effects
@@ -9005,8 +9356,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "f9d3d8ac-fc64-59c1-a387-d237d711d937")
-		(property "Reference" "R9"
+		(uuid "b90a8ea8-9c27-551f-b153-3edf66529e53")
+		(property "Reference" "R13"
 			(at 404.114 185.42 0)
 			(effects
 				(font
@@ -9060,6 +9411,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 406.4 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C25804"
 			(at 406.4 186.69 0)
 			(effects
@@ -9070,15 +9430,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "cce15328-7e31-566f-a017-9c0527bd6846")
+			(uuid "0e0764ff-dded-5605-bbb5-b8de312c0ca7")
 		)
 		(pin "2"
-			(uuid "a16a021c-9b84-58b2-8bb5-a0b1b64418e7")
+			(uuid "bdab38b4-acec-5035-a685-2ac5967acc94")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "R9")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -9092,8 +9452,8 @@
 		(in_bom no)
 		(on_board yes)
 		(dnp no)
-		(uuid "7864ca83-8c12-54a9-af72-90f614249092")
-		(property "Reference" "TP8"
+		(uuid "c16bbd92-323e-5b25-982d-ba51c17ffeb3")
+		(property "Reference" "TP4"
 			(at 416.052 197.612 0)
 			(effects
 				(font
@@ -9139,12 +9499,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "f7d9b64c-240a-5277-a073-cc1e2ca39f0c")
+			(uuid "dab21d16-0bb3-595b-80fb-6bd6e25a303d")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "TP8")
+					(reference "TP4")
 					(unit 1)
 				)
 			)
@@ -9213,6 +9573,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 421.64 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C21190"
 			(at 421.64 186.69 0)
 			(effects
@@ -9245,8 +9614,8 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a24de853-96e5-5cbe-b41b-840345a32cf6")
-		(property "Reference" "SW2"
+		(uuid "dfbf616d-a7e3-51d6-9792-a026ec7fda03")
+		(property "Reference" "SW1"
 			(at 443.738 209.55 90)
 			(effects
 				(font
@@ -9300,6 +9669,15 @@
 				(hide yes)
 			)
 		)
+		(property "Manufacturer" "E-Switch"
+			(at 439.42 210.82 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "LCSC" "C2886898"
 			(at 439.42 210.82 90)
 			(effects
@@ -9310,15 +9688,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "f036ff51-bfa6-5c8b-8497-460f78d7fdcb")
+			(uuid "3e28c12a-8935-57db-9c4f-2d644dc36415")
 		)
 		(pin "2"
-			(uuid "f90df4fb-bc89-528c-ba5d-018dfee4111a")
+			(uuid "8137d338-5923-5c31-b587-ea3573a830d5")
 		)
 		(instances
 			(project "FujiNet-ChannelF-Rev0"
 				(path "/94e41297-bf02-5fe3-9e3f-23dd2de0dc13/c37bbd7f-12ea-55b4-a49d-923b7d200ba7"
-					(reference "SW2")
+					(reference "SW1")
 					(unit 1)
 				)
 			)
@@ -13349,35 +13727,13 @@
 	(wire
 		(pts
 			(xy 231.14 152.4)
-			(xy 261.62 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "38c1dadb-d956-50df-9257-a8ae5450b024")
-	)
-	(wire
-		(pts
-			(xy 261.62 152.4)
 			(xy 281.94 152.4)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e85885c6-4ea8-567c-8e7d-eb5593bf1fbc")
-	)
-	(wire
-		(pts
-			(xy 261.62 152.4)
-			(xy 261.62 149.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "31e82546-3b09-5915-b8bb-023f93e76b3c")
+		(uuid "cd90186e-b5ff-5b90-9201-f69b9bb1701f")
 	)
 	(wire
 		(pts
@@ -13481,13 +13837,35 @@
 	(wire
 		(pts
 			(xy 231.14 165.1)
+			(xy 271.78 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c59090f-34ea-5acb-b1e3-0efa1597e407")
+	)
+	(wire
+		(pts
+			(xy 271.78 165.1)
 			(xy 281.94 165.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1ce10dc3-d0a3-5d1a-8a7d-fee8349516da")
+		(uuid "4f7369d6-f518-56d0-88bc-24a41a52a272")
+	)
+	(wire
+		(pts
+			(xy 271.78 165.1)
+			(xy 271.78 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35979190-f201-53f8-941a-9b7e25098d07")
 	)
 	(wire
 		(pts
@@ -14811,12 +15189,6 @@
 		(uuid "d1c74044-d067-5a00-845a-fadb07fc9368")
 	)
 	(junction
-		(at 261.62 152.4)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "78b579b1-4287-5e33-8f03-54ebb8de4813")
-	)
-	(junction
 		(at 261.62 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -14839,6 +15211,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8bda5972-360a-55fc-91cb-050cca32fafa")
+	)
+	(junction
+		(at 271.78 165.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "72aef63b-c6f5-5e34-98b6-216762ea4a78")
 	)
 	(junction
 		(at 274.32 256.54)
@@ -15152,7 +15530,7 @@
 		)
 		(uuid "c81f3720-7c9e-5fa2-9d77-e93626414a85")
 	)
-	(label "WRITE"
+	(label "ROMC0"
 		(at 165.1 152.4 0)
 		(effects
 			(font
@@ -15160,9 +15538,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "3191d0c2-1b1e-5e43-8c73-507453c8eef8")
+		(uuid "5dcb5c18-5c6c-51d9-ace8-d57e3c02eeda")
 	)
-	(label "RP_WRITE"
+	(label "RP_ROMC0"
 		(at 233.68 152.4 0)
 		(effects
 			(font
@@ -15170,9 +15548,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "8d825bfd-443c-5c0e-b0bd-0874c4bcaae8")
+		(uuid "15c423a3-8b01-5a00-9a7d-2e78f81a9663")
 	)
-	(label "ROMC0"
+	(label "ROMC1"
 		(at 165.1 154.94 0)
 		(effects
 			(font
@@ -15180,9 +15558,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "c4784ea2-a198-51d2-b585-4add2d038bad")
+		(uuid "cd27c86f-445c-57fc-8a7a-71957a5cb70c")
 	)
-	(label "RP_ROMC0"
+	(label "RP_ROMC1"
 		(at 233.68 154.94 0)
 		(effects
 			(font
@@ -15190,9 +15568,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "dc59233b-05b7-5168-bf71-97a6b584aca3")
+		(uuid "5a490a63-f2df-554a-b272-50b21216b613")
 	)
-	(label "ROMC1"
+	(label "ROMC2"
 		(at 165.1 157.48 0)
 		(effects
 			(font
@@ -15200,9 +15578,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ef5fcef3-b9a0-510c-9b7f-717e60f85ebb")
+		(uuid "4e014984-0ae6-5f0a-94ba-ef22248912a3")
 	)
-	(label "RP_ROMC1"
+	(label "RP_ROMC2"
 		(at 233.68 157.48 0)
 		(effects
 			(font
@@ -15210,9 +15588,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "c44a0679-804c-509c-b800-2129d35119e6")
+		(uuid "bfc47ba0-7c93-5985-8568-3fb2449e2297")
 	)
-	(label "ROMC2"
+	(label "ROMC3"
 		(at 165.1 160.02 0)
 		(effects
 			(font
@@ -15220,9 +15598,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "913cdba0-ce8c-5cca-9457-21306c5eac4b")
+		(uuid "c44ab264-bcdb-5e19-9d4a-1868c85efd4a")
 	)
-	(label "RP_ROMC2"
+	(label "RP_ROMC3"
 		(at 233.68 160.02 0)
 		(effects
 			(font
@@ -15230,9 +15608,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "87f423f1-f6bf-554b-84ad-6625d9f7e71c")
+		(uuid "c19d0a08-ecc6-53a4-a8e4-54de4a8801ee")
 	)
-	(label "ROMC3"
+	(label "ROMC4"
 		(at 165.1 162.56 0)
 		(effects
 			(font
@@ -15240,9 +15618,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "c2047429-4584-585a-bfc7-f9fc4103d8c8")
+		(uuid "89085f41-8f3c-564d-acc5-b5ab36cdd251")
 	)
-	(label "RP_ROMC3"
+	(label "RP_ROMC4"
 		(at 233.68 162.56 0)
 		(effects
 			(font
@@ -15250,9 +15628,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0477e0a9-bc69-5835-9527-8c25ce1b321f")
+		(uuid "54ce75b1-0aea-5aca-a577-64c169f6de20")
 	)
-	(label "ROMC4"
+	(label "WRITE"
 		(at 165.1 165.1 0)
 		(effects
 			(font
@@ -15260,9 +15638,9 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "b114b115-ef68-5418-8adb-1586ea7774b7")
+		(uuid "c92552fc-f11e-5eab-99b1-bdb6bd8ee925")
 	)
-	(label "RP_ROMC4"
+	(label "RP_WRITE"
 		(at 233.68 165.1 0)
 		(effects
 			(font
@@ -15270,7 +15648,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "95b6d95e-3c62-57ce-8503-2b525d57e5e9")
+		(uuid "16a144e8-0dc2-55e9-8c64-e5d5a427bd18")
 	)
 	(label "PHI"
 		(at 165.1 167.64 0)
@@ -15582,7 +15960,7 @@
 		)
 		(uuid "6d654e20-2e8e-5be4-ab47-41a14842db93")
 	)
-	(text "The Fairchild Channel F Videocart edge, 22 contacts (channelf.se veswiki Pinouts): the F8 bus has NO address\nbus -- D0-D7, five ROMC lines, WRITE (one machine cycle per pulse) and PHI -- and no reset line (a console reset\narrives as ROMC 08).  +12V (22) and NC (21) are left open.\nU2 / U3 SN74LVC4245A: A port on CONS_5V (TTL inputs, VIH 2.0 V; drives 5 V levels -- the F3850 data bus wants\nVIH 2.9 V, Table 7), B port on +3V3_RP (the RP2040 is not 5 V tolerant).  DIR high = A -> B = console -> cart.\nU2, data: DIR = GPIO15 (channelf_cart.h: 1 = console -> cart, 0 = cart drives D0-D7), R1 holds it high through\nreset and boot against the pad pull-down.  U3, control: DIR tied high.  CONS_5V comes straight off the edge,\nahead of the OR diode: with the console off both translators go high-Z (VCC isolation), so a USB-powered cart\ncannot back-power the console.  /INTREQ (GPIO16, never driven) is open drain through Q1."
+	(text "The Fairchild Channel F Videocart edge, 22 contacts (channelf.se veswiki Pinouts): the F8 bus has NO address\nbus -- D0-D7, five ROMC lines, WRITE (one machine cycle per pulse) and PHI -- and no reset line (a console reset\narrives as ROMC 08).  +12V (22) and NC (21) are left open.\nU8 / U9 SN74LVC4245A: A port on CONS_5V (TTL inputs, VIH 2.0 V; drives 5 V levels -- the F3850 data bus wants\nVIH 2.9 V, Table 7), B port on +3V3_RP (the RP2040 is not 5 V tolerant).  DIR high = A -> B = console -> cart.\nU8, data: DIR = GPIO15 (channelf_cart.h: 1 = console -> cart, 0 = cart drives D0-D7), R18 holds it high through\nreset and boot against the pad pull-down.  U9, control: DIR tied high.  CONS_5V comes straight off the edge,\nahead of the OR diode: with the console off both translators go high-Z (VCC isolation), so a USB-powered cart\ncannot back-power the console.  /INTREQ (GPIO16, never driven) is open drain through Q1."
 		(exclude_from_sim no)
 		(at 137.16 25.4 0)
 		(effects

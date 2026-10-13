@@ -8,15 +8,16 @@
   docs/FujiNet-Astrocade-Rev0-schematic.pdf
   docs/layout-front.svg, docs/layout-back.svg, docs/board-top.png, docs/board-bottom.png
 
-CPL rotations: KiCad's footprint zero orientation differs from JLCPCB's for
-some packages; JLC_ROT below holds the corrections (the widely used
-kicad-jlcpcb-tools table for these footprints).  Always check the placement
-preview on JLCPCB's order page before paying -- polarity marks, not
-rotation numbers, are what matter.
+CPL rotations and origins: JLCPCB places each part by the EasyEDA footprint of
+its LCSC code.  tools/audit/jlc/jlc_rotations.json holds, per (footprint, LCSC)
+pair, the rotation correction and the origin offset measured by comparing every
+one of our footprints with that EasyEDA footprint pad by pad (polarity by
+cathode marks, not pad numbers); the CPL applies them.  Still check the
+placement preview on JLCPCB's order page before paying.
 
 Usage: python3 tools/export.py
 """
-import csv, io, os, re, shutil, subprocess, sys, tempfile, zipfile
+import csv, io, json, math, os, re, shutil, subprocess, sys, tempfile, zipfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import design as D
 
@@ -27,18 +28,10 @@ SCH = os.path.join(PRJ, D.PROJECT + '.kicad_sch')
 OUT = os.path.join(PRJ, 'exports', 'jlcpcb')
 DOCS = os.path.join(PRJ, 'docs')
 
-JLC_ROT = [  # (footprint regex, degrees added to KiCad's rotation)
-    (r'^SOT-23$', 180),
-    (r'^SOT-363', 180),
-    (r'^TSOT-23-6', 180),
-    (r'^QFN-', 270),
-    (r'^RPI_RP2350A_QFN60', 270),     # Raspberry Pi's QFN-60: same pin-1 convention as KiCad's QFNs
-    (r'^SOT-23-5', 180),
-    (r'^USB_C_Receptacle_HRO_TYPE-C-31-M-12', 180),
-    (r'^LED_WS2812B-2020', 180),
-    (r'^D_SMA', 180),
-    (r'^R_Array_Convex_4x0603', 270),
-]
+JLC = {}     # (footprint, LCSC) -> (rotation correction deg, origin offset (dx, dy) mm in the footprint frame, confidence)
+for _e in json.load(open(os.path.join(HERE, 'audit', 'jlc', 'jlc_rotations.json'))):
+    JLC[(_e['footprint'], _e['lcsc'])] = (_e['rotation_correction_deg'], tuple(_e['origin_offset_mm']),
+                                          _e.get('confidence', ''))
 
 
 def run(*a):
@@ -82,7 +75,7 @@ def cpl(bom_refs):
     run('kicad-cli', 'pcb', 'export', 'pos', '--format', 'csv', '--units', 'mm', '--side', 'both',
         '--exclude-dnp', '-o', tmp, PCB)
     rows = list(csv.DictReader(open(tmp)))
-    seen = set()
+    seen, low = set(), set()
     with open(os.path.join(OUT, 'CPL-JLCPCB.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['Designator', 'Mid X', 'Mid Y', 'Layer', 'Rotation'])
@@ -91,15 +84,27 @@ def cpl(bom_refs):
             if ref not in bom_refs:
                 continue
             rot = float(r['Rot'])
-            for pat, add in JLC_ROT:
-                if re.search(pat, r['Package']):
-                    rot += add
-                    break
-            w.writerow([ref, r['PosX'], r['PosY'], 'Top' if r['Side'] == 'top' else 'Bottom', '%g' % (rot % 360)])
+            part = D.BY_REF[ref]
+            fpname = part.footprint.split(':')[1]
+            if (fpname, part.lcsc) not in JLC:
+                raise SystemExit('no JLC rotation/offset measured for %s %s' % (fpname, part.lcsc))
+            corr, (dx, dy), conf = JLC[(fpname, part.lcsc)]
+            if conf.startswith('low'):
+                low.add(ref)
+            if r['Side'] != 'top':
+                raise SystemExit('%s is on the bottom: the measured corrections are for top-side parts' % ref)
+            t = math.radians(rot)
+            # the EasyEDA origin, in the .pos frame (Y up): footprint frame +y is down
+            x = float(r['PosX']) + dx * math.cos(t) + dy * math.sin(t)
+            y = float(r['PosY']) + dx * math.sin(t) - dy * math.cos(t)
+            w.writerow([ref, '%.4fmm' % x, '%.4fmm' % y, 'Top', '%g' % ((rot + corr) % 360)])
             seen.add(ref)
     missing = bom_refs - seen
     if missing:
         raise SystemExit('BOM parts missing from the placement file: ' + ' '.join(sorted(missing)))
+    if low:
+        print('CPL: low-confidence rotation for %s (no EasyEDA footprint for its LCSC part): '
+              'check it in JLCPCB\'s placement preview' % ' '.join(sorted(low)))
     return len(seen)
 
 

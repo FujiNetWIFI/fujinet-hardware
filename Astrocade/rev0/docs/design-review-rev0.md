@@ -223,7 +223,7 @@ Two findings along the way changed the tooling. Neither was a placement problem.
 | GP-001 XIN 94 % reference coverage over 14.7 mm | Accepted. The XIN run joins the RP pin, the crystal and its load cap on F.Cu over the In1 GND plane; the 6 % is the crystal pad / via area. The regulator-corner copper is Raspberry Pi's. |
 | DC-002 no decoupling near U4 (high) | False positive: UMH3N is a transistor pair with no supply pin. |
 | KO-001 FID1-3 inside a keep-out (high) | False positive: the keep-out rings exist *for* the fiducials (pads allowed, pour and tracks not). |
-| PM-002 J2 courtyard 0.25 mm over the edge (high) | By design: the microSD slot exits the trailing edge, and the shell has the opening (`case/board-anchors.scad`). |
+| PM-002 J2 courtyard 0.25 mm over the edge (high) | By design: the microSD slot exits the trailing edge, and the shell has the opening (`case/board-anchors.scad`). J3's courtyard also crosses the edge since the Post-layout change of 2026-10-13: its face stands 0.45 mm past it, per HRO. |
 | DFM-001/002 0.1 mm annular ring | Accepted. The 0.45/0.25 vias are within JLCPCB's multilayer minimum (0.25 mm via / 0.15 mm drill). The rest of the board uses 0.6/0.3 (0.15 mm ring). |
 | CC-002 0.15 mm neck-downs (CA0 etc.) | Freerouting neck-downs at the QFN-60 / QFN-28 pins; JLC multilayer minimum is 0.09 mm. |
 | CK-001 XIN/XOUT on an outer layer, CK-003 SD_SCK near J2 | The crystal is a few mm from its pins over the GND plane; SD_SCK ends at the slot it clocks. |
@@ -389,3 +389,24 @@ have had GND shorted to the planes, and USB_DP and CD7 shorted to GND. The DRC g
 - `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
   at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
 - Re-exported: only the copper layers' pours changed (all six; the drill file loses the three stray vias). Outside the zone fills the board is unchanged but for those three vias, now removed (379 vias); `check_vias.py` also tests tracks now.
+
+## Post-layout change (2026-10-13): microSD / USB-C alignment
+
+The same defect as FujiNet-NES Rev0 (found there 2026-10-11 from a reviewer's note; every cart copies the same two footprints and `set_models.py` rows). The 3D render showed the microSD (J2) and USB-C (J3) bodies off their copper.
+
+- **J3 sat too far inside the board (a physical fault).** HRO's recommended PCB layout puts the board edge 5.79 mm in front of the locating pegs, i.e. at footprint y +3.19, with the shell face (+3.65) 0.46 mm past it. At (124, 35) the face sat 1.35 mm inside the trailing edge, where a plug's overmold meets the PCB edge before the plug mates. J3 now sits at (124, 33.2).
+- **The board edit (`tools/usbc_to_edge.py`, no re-route):**
+  - J3 moved 1.8 mm north with its private ties between the pad row and the pegs, including the CC2 via (its In2.Cu segment stretches to it).
+  - Eight straight 1.8 mm F.Cu stubs join the new pad centres to the old ones, where the routing ends: GND x2, VBUS x2, D+ x2, D- x2. D+ / D- grew by 1.8 mm, irrelevant at Full Speed.
+  - The CC1 run west to R17 would have met R17 pad 2 once stretched. It now drops at x 118.15, between R17 and a strip of pour that keeps the rear shield slot's west F.Cu thermal spoke.
+  - No via had to go.
+  - The footprint's front silk (now past the edge) is gone; a dashed Dwgs.User line marks HRO's PCB edge.
+- **J3's 3D model sat 2.47 mm behind its footprint:** KiCad applies the model offset after the 180 degree rotation and the LCSC model's origin is the front shield legs -> offset (0, -1.045, 0), not (0, +1.42, 0).
+- **J2's 3D model sat 5.5 mm behind and 0.9 mm beside its footprint** (`make_tf015_fp.py` dropped easyeda2kicad's offset; the model's origin is the card centre on the peg line) -> offset (-0.9, -5.5, 0). J2's copper and position were right and are unchanged.
+- **Every other bundled 3D model** sits on its pads (STEP vertices vs pads, all footprints).
+- **Result:**
+  - KiCad DRC at every severity with schematic parity on the saved fills: 0 errors, 0 unconnected, 0 parity. The 75 warnings are the earlier 76 less one: J3's dropped silk no longer overlaps R18's reference.
+  - `check_vias.py` and `check_plane_shorts.py` are clean.
+  - Drill changes: J3's slots and pegs and the moved CC2 via. The CPL changes only J3's Y.
+  - `placement.py`, `set_models.py`, `make_tf015_fp.py` and both library footprints carry the fix for a `LAYOUT=1` rebuild. The CC1 patch lives in `usbc_to_edge.py`; a re-route would redo it.
+  - The shell is unchanged: `case/board-anchors.scad` takes the USB-C's x and the edge.

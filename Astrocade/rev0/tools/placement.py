@@ -92,7 +92,10 @@ def do_placement(place):
     place('R16', 98.4, 44.5, 90)
 
     # ---------------- north-east: USB-C, ESD, CP2102N ----------------
-    place('J3', 124, 35, 180)
+    # HRO's recommended layout puts the PCB edge 5.79 mm in front of the locating pegs
+    # (fp y -2.6 -> edge at fp y +3.19): the face (fp y +3.65) overhangs the top edge by
+    # 0.45 mm, so the plug's overmold clears the board edge (at y 35 it sat 1.35 mm inside)
+    place('J3', 124, 33.2, 180)
     place('R17', 117.4, 37.5, 90)
     place('R18', 130.6, 37.5, 90)
     place('D4', 120.6, 43.0, 0)

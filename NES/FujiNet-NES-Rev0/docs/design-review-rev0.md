@@ -24,6 +24,8 @@ This review was done with the first Rev0 schematic (commit `1c9130d`) as the bas
 | Fixed | WS2812B-2020 on 3.3 V against a 3.7-5.3 V datasheet rating -> on +5V (VIH 2.7 V accepts the 3.3 V data) |
 | Fixed | 74HCT rail one Schottky drop under console 5 V (4.5 V minimum) -> AO3401A P-FET, ~24 mV |
 | Fixed | No VBUS decoupling at the USB-C -> 1 uF + 100 nF |
+| Fixed (2026-10-07) | SS34 reverse leakage could lift the P-FET gate (VBUS, pulled down only by the 69k sense divider) -> R22 4.7k VBUS-GND; see Post-layout change |
+| Fixed (2026-10-11) | USB-C face 1.35 mm inside the board edge (plug overmold hits the PCB) -> J3 at HRO's PCB-edge position, face 0.45 mm past the edge; J2 / J3 3D models 5.5 / 2.47 mm off their footprints -> offsets corrected; see Post-layout change |
 | New | CIClone (ATtiny13A, DNP) on the four CIC fingers so a stock NES-001 can run the cart once lockout firmware exists |
 | Open | PRG write-data hold margin is +2 ns worst-case on a PROVISIONAL 30 ns 2A03 figure (bring-up scope item) |
 | Open | AS6C4008 and every 74HCT253 out of JLCPCB stock (see Sourcing) |
@@ -60,6 +62,7 @@ USB-C VBUS -----[D7 SS34]------------------------+      |
                                                         |      +--> +3V3: ESP32-S3, microSD, CP2102N
                                                         +--> U15 AP2112K-3.3 LDO (20 us) --> +3V3_RP: RP IOVDD x8, QSPI_IOVDD, USB_OTP_VDD, ADC_AVDD,
                                                                                              VREG_VIN (+ VREG_AVDD via 33R) --> RP core SMPS 1.1 V (3.3 uH) -> DVDD
+Q1 gate = VBUS, held at 0 V without a cable by R22 4.7k to GND (against the SS34's reverse leakage)
 PWR_OK = 74HCT14( 0.82 x CONS_5V )   sensed before the FET: USB-powered cart in a dead console disables every output toward it
 ```
 Regulator Vout: AP63203WU-7 fixed 3.3 V (`vref_source: fixed_suffix`), AP2112K-3.3 fixed 3.3 V. Both datasheet-verified (pin tables, Deep Review).
@@ -88,9 +91,9 @@ Component count: analyzer 114 = `design.py` 114 (113 placed + the DNP CIClone ca
 | Q1 | AO3401A | AOS p.1 top view | Verified (datasheet): 1 G 2 S 3 D |
 | D1 | BAT54C | Diodes p.1 polarity diagram | Verified (datasheet figure), medium confidence |
 | D3 | WS2812B-2020 | Worldsemi pin function p.2 | Verified (datasheet): 1 DO 2 GND 3 DI 4 VDD |
-| J2 | TF-015 | SOFNG pin definition p.2 | Verified (datasheet) |
+| J2 | TF-015 | SOFNG pin definition + land pattern p.2, outline p.1 | Verified (datasheet): pins, land pattern within 0.1 mm, card face position (see Post-layout change 2026-10-11) |
 | J1 | NES 72-pin edge | nesdev table + NES-EWROM-01 footprint | Verified (reference geometry, `tools/audit/edge_orientation.py`) |
-| J3 | USB-C 16P | KiCad receptacle symbol vs HRO footprint pad names | Consistency only (pad names A1..B12 standard) |
+| J3 | USB-C 16P | HRO TYPE-C-31-M-12 drawing (recommended PCB layout) | Verified (datasheet): pads, shell slots, pegs and the PCB-edge position (see Post-layout change 2026-10-11) |
 | Y1, D2, D4-D7, passives | | ABM8 CL 10 pF, KT-0603G VF, ESD5Z, SS34 | Verified (datasheet) where it matters; 2-pin passives skipped |
 
 ### Pinout Ambiguity
@@ -134,7 +137,7 @@ Edge 1-36 on F.Cu (label side), 37-72 on B.Cu, pin N under pin N+36; pin 1 is at
 - **Crystal:** 12 MHz ABM8-272-T3, 2 x 15 pF, 1k series on XOUT, CL 10.5 pF (SPICE).
 - **Protection:** ESD5Z5.0 on D+, D-, VBUS at the USB-C; CC 5.1k x2 (UFP). No ESD on the edge (console bus) or microSD (inside the shell) - accepted.
 - **LEDs:** D2 green 1k from the '595 (2.1 mA); D3 WS2812B-2020 on +5V with 330R data series.
-- **Transistors:** Q1 P-FET console switch; U13 dual pre-biased NPN auto-program (DevKitC-1 pattern, verified).
+- **Transistors:** Q1 P-FET console switch (gate = VBUS, R22 4.7k pull-down); U13 dual pre-biased NPN auto-program (DevKitC-1 pattern, verified).
 - **Differential pairs:** RP_USB_DP/DM (27R series, RP internal termination), USB_DP/DM to the S3 host pads, UBRG_DP/DM (CP2102N, ESD).
 - **Simulation:** ngspice verified 15 subcircuits, 15 pass, 0 warn/fail/skip (two dividers, one RC, crystal load, three protection devices, six decoupling networks, two inrush models).
 
@@ -191,7 +194,7 @@ The PCB, cross-domain, EMC, thermal and gerber analyzers raised 147 findings bet
 | TS-003 AP2112K Tj 96 C (0.286 W assumed), TP-001 MLCCs near it | Not supported by the datasheets: RP2350 draws 11.0 mA on VREG_VIN running CoreMark at 150 MHz and 14.7 mA in `hello_usb` (RP2350 datasheet Table 1446); its core regulator is a switcher, so the LDO never sees the core current. With the bus-driving IOVDD load this is tens of mA, not 170. At a pessimistic 150 mA: 0.26 W x 184 C/W (AP2112 datasheet, SOT-25) = +47 C. Keep the SOT-23-5 |
 | DC-001 SRAM decoupling 6.4 mm from U2/U3 | Measured to the package centre; C22/C23 sit 1.3 mm from the VCC pin (pin 8) of each TSOP. False positive |
 | DC-002 no decoupling near U13 | UMH3N is a transistor pair, no supply pin. False positive |
-| PM-002 J2 0.2 mm from the edge, J3, U11 | microSD and USB-C are edge-mounted by design; the ESP32 antenna overhang is the module's keep-out |
+| PM-002 J2 0.2 mm from the edge, J3, U11 | microSD and USB-C are edge-mounted by design (J2's face 0.5 mm inside the edge, J3's face 0.45 mm past it per HRO, Post-layout change 2026-10-11); the ESP32 antenna overhang is the module's keep-out |
 | CC-002 0.15 mm segments on CD1, ROMSEL_N, SRAM_EN, UART_* | Freerouting neck-downs near fine-pitch pads; above JLCPCB's 0.09 mm minimum. Accepted |
 | CK-001 CIC_CLK on an outer layer, CK-003 SD_SCK near J2 | CIC_CLK is the console's 4 MHz lockout clock on a finger (the CIClone is DNP); SD_SCK ends at the card slot it clocks |
 | XT-001 CA5/CA6, CA4/CA5 parallel within 0.5 mm | 1.8 MHz address lines; accepted |
@@ -240,9 +243,56 @@ These are listed in `.kicad-happy.json` as suppressions (the schematic analyzer 
 - The 2A03 write-data hold (30 ns) is the firmware's PROVISIONAL figure; nothing in CAD can settle it.
 - Structured datasheet extractions (`datasheets/extracted/`) were not produced; all pin-level claims above are direct PDF reads with page numbers in `analysis/deep_review.json`.
 
+## Post-layout change (2026-10-07): R22 VBUS pull-down
+
+Found by the FujiNet-SMS Rev0 audit, which has the same power path (`SMS/FujiNet-SMS-Rev0/docs/design-review-rev0.md`, Part 1 finding 1); the Fujiversal-Atari2600 Rev1 audit had found it first (`R_VBPD`).
+
+- **The problem.** Q1's gate is VBUS. With no cable, VBUS was pulled down only through the CP2102N sense divider, R19/R20 22k/47k (69k). Whenever the console powers the cart, the SS34 (D7) is reverse-biased by +5V and leaks into VBUS: 0.5 mA max at 25 C and 20 mA at 100 C (SS34 datasheet p.2).
+  - At 50 uA, VGS is about -1.55 V and the FET is weakly on.
+  - At 100 uA or more, VGS passes the AO3401A's -0.5 to -1.3 V threshold, so the FET turns off. The console then feeds the cart through the body diode, about 0.7 V down, which puts the 74HCTs and SRAMs under their 4.5 V minimum.
+- **The fix.** R22, 4.7k from VBUS to GND (0603WAF4701T5E, C23162). It holds VGS at -2.8 V or beyond up to 500 uA of leakage, pulls VBUS back down about 4 ms after the cable is unplugged, and costs 1.06 mA from USB.
+- **Schematic.** R22 is declared after every other resistor, so no reference changed. ERC is clean and `check_nets.py` passes 453/453.
+- **Board.** R22 was inserted into the routed board without re-routing. It sits at (141.45, 59.6), beside the F.Cu VBUS run into D7, with a 1 mm VBUS stub and a GND via to In1 under pin 2. `placement.py` carries its position for a full `LAYOUT=1` rebuild.
+  - `fix_silk.py` moved the C45 and R22 references.
+  - KiCad DRC at every severity: 0 violations, 0 unconnected, 0 schematic-parity issues.
+  - The exports were regenerated: 105 BOM refs and 105 CPL rows.
+
+## Post-layout change (2026-10-11): microSD / USB-C alignment
+
+A reviewer reported the microSD (J2) and USB-C (J3) footprints as misaligned on the board. Both parts were re-checked against the manufacturer drawings, against the vertices of the bundled STEP models, and in a zoomed 3D render.
+
+- **J3 sat too far inside the board (a physical fault).**
+  - HRO's recommended PCB layout puts the board edge 5.79 mm in front of the locating pegs. The pegs are at footprint y -2.6, so the edge belongs at footprint y +3.19, and the shell face (+3.65) overhangs it by 0.46 mm.
+  - At (125, 35) the edge was at footprint y +5.0, so the face sat 1.35 mm inside the board. A USB-C plug's overmold reaches below the PCB's top surface, so it would hit the board edge before the plug fully mated.
+  - J3 now sits at (125, 33.2): the face is 0.45 mm past the top edge, and the front shield slots are still 1.35 mm from the edge.
+  - The board edit (no re-route):
+    - J3 moved 1.8 mm north, and its two private ties between the pad row and the pegs (VBUS A4/B9-A9/B4, D- A7-B7) moved with it, keeping every clearance.
+    - Each of the nine pads whose track leaves southward gets a straight F.Cu stub, 1.8 mm long, back to its old centre: GND x2, VBUS x2, CC1, CC2, D+ x2, D-. Nothing south of the old pad row changed.
+    - Both D+ and D- grew by 1.8 mm; that is irrelevant at Full Speed.
+    - One edge-row GND stitching via (120.27, 31.2) under the new front shield slot was removed.
+  - The footprint's front silk lines would now lie past the board edge, so they were dropped. A dashed Dwgs.User line marks HRO's PCB-edge position.
+- **J3's 3D model sat 2.47 mm behind its footprint.**
+  - KiCad places a model as footprint * T(offset) * R(rotation) * v, so the offset applies after the 180 degree turn.
+  - The LCSC model's origin is the front shield legs, so the offset is (0, -1.045, 0). The old value was (0, +1.42, 0), with the wrong sign and the wrong datum.
+- **J2's 3D model sat 5.5 mm behind and 0.9 mm beside its footprint.**
+  - `make_tf015_fp.py` had dropped easyeda2kicad's model offset. The LCSC model's origin is the card centre on the peg line.
+  - The offset is now (-0.9, -5.5, 0).
+- **Checked and unchanged.**
+  - J2's copper matches the SOFNG land pattern (p.2) within 0.1 mm, and its pin map matches p.2.
+  - One difference: the EasyEDA signal pads are 2.0 mm long against SOFNG's 1.6 mm, and centred 0.4 mm further under the body. Both cover the 0.45 mm solder foot. Accepted.
+  - J2's card face stays 0.5 mm inside the edge. The latched card sits 2.50 mm proud of the face (p.1), so about 2 mm of card stands outside the board.
+  - J3's copper is KiCad's stock HRO footprint and matches HRO's pads, the 4.18 mm slot pitch and the pegs.
+  - Every other bundled 3D model sits on its pads.
+- **Result.**
+  - Every model feature checked (pegs, shield legs, solder tails and feet) lands within 0.02 mm of its pad or hole.
+  - The board's model offsets equal the library's. KiCad's `lib_footprint_mismatch` check compares graphics, not model offsets, so this was checked separately.
+  - KiCad DRC at every severity: 0 violations, 0 unconnected, 0 schematic-parity issues.
+  - `placement.py`, `set_models.py`, `make_tf015_fp.py` and both library footprints carry the fix for a full `LAYOUT=1` rebuild. The CPL changes only J3's Y.
+- **At order time.** JLCPCB places the USB-C by its own (EasyEDA) footprint origin, which can differ from KiCad's by about 1.4 mm in Y. Check the placement preview, as `tools/export.py` already says.
+
 ## Verdict (layout)
 
-Ready to order as a first prototype. Routing is complete: KiCad DRC reports 0 errors, 0 unconnected items and 0 schematic-parity issues; ERC is clean; `check_nets.py` passes 453/453 against the firmware headers. No analyzer finding is an unresolved design error: each is fixed, a documented false positive, or an accepted trade-off in the table above. Open items are the Part 1 bench measurements, the two consigned parts, the shell VERIFY items, and the two via-in-pad spots (fab option).
+Ready to order as a first prototype. Routing is complete: KiCad DRC reports 0 errors, 0 unconnected items and 0 schematic-parity issues; ERC is clean; `check_nets.py` passes 453/453 against the firmware headers. No analyzer finding is an unresolved design error: each is fixed, a documented false positive, or an accepted trade-off in the table above. Open items are the Part 1 bench measurements, the two consigned parts, the shell VERIFY items, and the two via-in-pad spots (fab option). The microSD / USB-C alignment fix (2026-10-11) moved J3 to HRO's board-edge position and re-seated both 3D models; DRC is still 0 / 0 / 0.
 
 Layout notes worth keeping for Rev1: the RP2354B's 0.4 mm-pitch pin rows were the routing bottleneck. Supply-pin fan-out vias placed at the escape-lane ends left no room for 3-4 signal pins between them (pins 25-28), so `fanout.FAR_VIA` moves those vias out. The final links were closed at 0.15 mm / 0.12 mm (`finish_route.py --neck`, within JLCPCB's 0.09 mm minimum). The CHR-side glue ('32, '253) had to leave the band between the west fingers and the CHR SRAM.
 

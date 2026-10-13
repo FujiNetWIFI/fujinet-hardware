@@ -12,8 +12,8 @@ not measured on a real part and must be checked before printing in anger.
 | Side notches | left: 5.0 mm deep for 23..25.5 mm above the tab base, 1.5 mm deep for 17..23; right: 5.0 mm for 25.5..28, 1.5 mm for 19.5..25.5 | same |
 | Shell-post holes | 5.0 mm at (100, 72) = 53.5 mm above the tab base on the centre line; 3.0 mm at (105.5, 62.5) | same |
 | Shell-post pads (no parts) | 3 mm radius at (54.05, 92.2) and (145.95, 92.2); 6.5 mm around the 5 mm hole; 4 mm around the 3 mm hole | NES-EWROM-01 courtyard marks |
-| USB-C | centre x 125, face at the top edge (y 30), 9 x 3.3 mm opening; the plug body needs ~12 x 7 mm clearance outside | placement.py |
-| microSD (push-push) | centre x 100, slot at the top edge; card protrudes ~2 mm, 12 x 2.5 mm opening | placement.py / TF-015 drawing |
+| USB-C | centre x 125, shell face 0.45 mm past the top edge (y 29.55; HRO recommended layout: PCB edge 5.79 mm in front of the pegs), 9 x 3.3 mm opening; the plug body needs ~12 x 7 mm clearance outside | placement.py / HRO TYPE-C-31-M-12 drawing |
+| microSD (push-push) | centre x 100, socket face 0.5 mm inside the top edge (y 30.5); a latched card stands 2.5 mm proud of the face (~2 mm past the edge), 1.3 mm at full push, 5.6 mm ejected; 12 x 2.5 mm opening | placement.py / TF-015 drawing p.1 |
 | ESP32 antenna | centre x 66 at the top edge; no metal within 15 mm, keep plastic thin there | Espressif module guidelines |
 | Buttons (top face) | RESET (143.5, 72), BOOTSEL (144.5, 112), S3 EN (56.5, 62), S3 BOOT (56.5, 72); TL3342 5.2 mm square, 1.5 mm stem | placement.py |
 | Status LED | WS2812B-2020 at (121, 66), light pipe 2-3 mm | placement.py |

@@ -3,7 +3,7 @@
 	(generator "pcbnew")
 	(generator_version "10.0")
 	(layer "F.Cu")
-	(descr "USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf")
+	(descr "USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf; PCB edge at y 3.19 (HRO recommended layout: 5.79 mm in front of the pegs), the shell face overhangs it by 0.46 mm")
 	(tags "usb usb-c 2.0 pd")
 	(property "Reference" "REF**"
 		(at 0 -5.645 0)
@@ -56,6 +56,16 @@
 	(attr smd)
 	(duplicate_pad_numbers_are_jumpers no)
 	(fp_line
+		(start -5.32 3.19)
+		(end 5.32 3.19)
+		(stroke
+			(width 0.1)
+			(type dash)
+		)
+		(layer "Dwgs.User")
+		(uuid "5d0c6c1e-2b7a-4f0e-9a51-3e1f0c6a8b19")
+	)
+	(fp_line
 		(start -4.7 -1.9)
 		(end -4.7 0.1)
 		(stroke
@@ -66,26 +76,6 @@
 		(uuid "9513b845-7495-41b4-99da-c8a12a5f4b76")
 	)
 	(fp_line
-		(start -4.7 2)
-		(end -4.7 3.9)
-		(stroke
-			(width 0.12)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "7abeef8d-db92-4e88-b3d6-7c7e4efa4938")
-	)
-	(fp_line
-		(start -4.7 3.9)
-		(end 4.7 3.9)
-		(stroke
-			(width 0.12)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "f40329f5-4d09-479c-8f81-97fdcd13c5cd")
-	)
-	(fp_line
 		(start 4.7 -1.9)
 		(end 4.7 0.1)
 		(stroke
@@ -94,16 +84,6 @@
 		)
 		(layer "F.SilkS")
 		(uuid "177e7db1-b916-4e65-ace8-532e6e1f85db")
-	)
-	(fp_line
-		(start 4.7 2)
-		(end 4.7 3.9)
-		(stroke
-			(width 0.12)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "bd122681-67e3-4c23-b564-57e345c7c818")
 	)
 	(fp_line
 		(start -5.32 -5.27)
@@ -360,7 +340,7 @@
 	)
 	(model "${KIPRJMOD}/3d/USB-C_HRO_TYPE-C-31-M-12.step"
 		(offset
-			(xyz 0 1.42 0)
+			(xyz 0 -1.045 0)
 		)
 		(scale
 			(xyz 1 1 1)

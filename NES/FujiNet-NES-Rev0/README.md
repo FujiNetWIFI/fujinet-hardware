@@ -139,7 +139,11 @@ the first draft was 110 ns), and `FOURSCREEN` is a '595 bit with a pull-down.
   P-FET** whose gate is VBUS: with no cable it is fully on (~24 mV at
   0.4 A), with USB present it is off and only its body diode remains,
   pointing into the cart, so USB never back-feeds the console. USB VBUS
-  comes in through an SS34. Both meet on **+5V**.
+  comes in through an SS34. Both meet on **+5V**. R22 (4.7k, VBUS to GND)
+  holds the gate at 0 V with no cable: the SS34 is reverse-biased whenever
+  the console powers the cart, and its leakage (0.5 mA max at 25 C) would
+  otherwise lift the gate through the 69k sense divider alone and turn the
+  FET off (added 2026-10-07, after layout; found by the SMS Rev0 audit).
 - **+5V** feeds the two SRAMs, the six 74HCT packages (VCC minimum 4.5 V,
   which the Schottky drop of the first draft left no margin for), the
   WS2812B (datasheet VDD 3.7-5.3 V), the AP63203 buck and the AP2112K LDO.
@@ -198,7 +202,9 @@ the first draft was 110 ns), and `FOURSCREEN` is a '595 bit with a pull-down.
   half, the PPU bus on the west), the PRG SRAM north-east, the CHR SRAM
   north-west, the glue in the band between the RP and the tab, the ESP32 at
   the north-west with its antenna at the top edge, microSD and USB-C on the
-  top edge, buck at the north-east, buttons on the east and west edges away
+  top edge (USB-C shell face 0.45 mm past it, at HRO's recommended PCB-edge
+  position; microSD face 0.5 mm inside, so a latched card stands ~2 mm out),
+  buck at the north-east, buttons on the east and west edges away
   from the shell posts. The RP's decoupling ring sits 10 mm from the package
   centre: each supply pin's fan-out via lands at the end of its 1.2 mm escape
   lane, and the extra millimetre leaves a second via column for the signal
@@ -281,8 +287,12 @@ Rev0 is **schematic- and layout-complete, not yet built**.
   (DRC with schematic parity 0 / 0 / 0).
 - Layout: 6 layers, 1.2 mm, 100 x 110 mm (NES-EWROM-01 outline), all parts on the
   label side. KiCad DRC with schematic parity: 0 errors, 0 unconnected, 0 parity
-  issues. 766 vias (221 GND stitching), 3 fiducials. Reviewed with the kicad-happy
+  issues. 766 vias (220 GND stitching), 3 fiducials. Reviewed with the kicad-happy
   PCB/EMC/thermal/gerber analyzers (`docs/design-review-rev0.md`, Part 2).
+- Connector alignment (2026-10-11): the USB-C (J3) moved 1.8 mm to HRO's
+  recommended PCB-edge position (its face had sat 1.35 mm inside the board, where a
+  plug's overmold meets the PCB edge), and the microSD / USB-C 3D models were
+  re-seated on their footprints; DRC still 0 / 0 / 0 (review, "Post-layout change").
 - Fab outputs: `exports/jlcpcb/` (gerbers, BOM, CPL; the CIClone is DNP), renders in
   `docs/`. Order 6-layer, 1.2 mm, gold fingers with a bevel.
 - Before ordering: consign or substitute the AS6C4008 SRAMs and the 74HCT253 (out of

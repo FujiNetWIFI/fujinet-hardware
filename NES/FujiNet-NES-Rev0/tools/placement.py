@@ -156,7 +156,10 @@ def do_placement(place):
     place('C35', 111.2, 45.0, 90)
 
     # ---------------- north-east: USB-C, CP2102N, buck ----------------
-    place('J3', 125.0, 35.0, 180)
+    # HRO's recommended layout puts the PCB edge 5.79 mm in front of the locating pegs
+    # (fp y -2.6 -> edge at fp y +3.19): the face (fp y +3.65) overhangs the top edge by
+    # 0.45 mm, so the plug's overmold clears the board edge (at y 35 it sat 1.35 mm inside)
+    place('J3', 125.0, 33.2, 180)
     place('R17', 118.0, 37.5, 90)             # CC1 Rd
     place('R18', 132.0, 37.5, 90)             # CC2 Rd
     place('D4', 121.5, 43.5, 0)               # ESD D+
@@ -180,6 +183,7 @@ def do_placement(place):
     place('C47', 129.5, 54.0, 90)             # buck out 22 uF x2 (+3V3 plane)
     place('C48', 129.5, 58.0, 90)
     place('D7', 140.0, 66.0, 0)               # SS34 VBUS -> +5V (island)
+    place('R22', 141.45, 59.6, 0)             # VBUS (P-FET gate) pull-down, beside the VBUS run into D7
     place('C44', 144.6, 67.0, 90)             # +5V bulk
     place('D3', 121.0, 66.0, 0)               # WS2812 status LED (light pipe)
     place('R16', 117.5, 66.0, 0)

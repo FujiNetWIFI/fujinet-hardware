@@ -132,7 +132,12 @@ nowhere. That is why the tab carries no parts, and why `docs/tab-overlay-1to1.pd
   - The console's 5 V enters on fingers 19 / 20 into a CONS_5V island under the translators.
 - **The grip end** stays outside the console. The ESP32-S3's antenna sits flush with it, over a
   copper-free keep-out on every layer, beside the microSD and the USB-C. RESET (SW1) and both LEDs
-  are just inside.
+  are just inside. The USB-C's shell face stands 0.45 mm past the edge (HRO's recommended PCB-edge
+  position) and the microSD's face 0.5 mm inside it.
+- **Connector alignment (2026-10-13).** The USB-C (J2) moved 1.8 mm to HRO's recommended PCB-edge
+  position (its face had sat 1.35 mm inside the board, where a plug's overmold meets the PCB edge),
+  and the microSD / USB-C 3D models were re-seated on their footprints; DRC still 0 / 0 / 0 (design
+  review, "Post-layout change").
 - **Stack-up** JLC04161H-7628: F.Cu signal / In1 GND / In2 power islands / B.Cu signal.
 
 ## Build
@@ -186,7 +191,7 @@ The audits:
 | `tools/check_nets.py` (netlist vs the firmware) | 204 checks, 0 failed, 1 warning (the pin map lacks `PIN_RP2040_RUN` / `_BOOTSEL`: open item 1) |
 | `tools/audit/edge_orientation.py` | every check against aotta, fart and the veswiki numbers |
 | KiCad DRC, schematic parity, all severities | 0 violations, 0 unconnected, 0 parity issues |
-| `tools/check_vias.py` | 758 vias, none in a foreign pad |
+| `tools/check_vias.py` | 756 vias, none in a foreign pad (758 before the connector alignment below) |
 | `tools/audit/layout_checks.py` | 9 / 9: decoupling, the buck's loop, crystal, exposed-pad vias, USB skew, antenna keep-out |
 | `tools/audit/margins.py` | all positive |
 | `tools/audit/check_fab.py` + `check_gerbers.py` | 10 / 10; every gerber check |

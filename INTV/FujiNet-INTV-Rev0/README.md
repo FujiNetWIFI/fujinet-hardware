@@ -54,7 +54,7 @@ Espressif ESP32-S3-DevKitC-1 v1.1 reference schematic.
 | Outline | 58.2 × 78.0 mm, PiRTO-II-profile shell fit: bottom tongue with 45° chamfers, left shell notch, two Ø5.38 mm shell-post holes |
 | Edge | 2×22 fingers, 2.54 mm pitch, 1.32 × 7.0 mm pads, copper held 0.9 mm off the edge (per PiNTY) |
 | ESP32 antenna | module **overhangs the top edge by ~5.7 mm** so the RF keepout falls off-board (Espressif best practice) — the cart shell needs a matching relief |
-| USB-C / microSD | both exit through the top edge |
+| USB-C / microSD | both exit through the top edge; the USB-C (J3 at y 75.2) has its shell face 0.45 mm past the edge, HRO's recommended PCB-edge position (moved 1.8 mm on 2026-10-13: at y 77 the face sat 1.35 mm inside, where a plug's overmold meets the PCB edge) |
 | Power | cart +5 V (edge 43) ⊕ USB VBUS → SS34 OR → 470 µF → AP63203 3.3 V/2 A buck → both MCUs. Estimated draw ~80 mA avg / ~400 mA peak (WiFi bursts) |
 | ECS audio | GPIO28 → R5 1k / C18 1 µF → edge pin 6, **DNP** (firmware `CONFIG_ECS_AUDIO=OFF`); fit R5/C18 to enable once firmware supports it |
 

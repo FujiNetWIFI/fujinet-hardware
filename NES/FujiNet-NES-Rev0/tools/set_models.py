@@ -23,6 +23,8 @@ LIB = os.path.join(PRJ, 'FujiNet-NES.pretty')
 PCB = os.path.join(PRJ, 'FujiNet-NES-Rev0.kicad_pcb')
 
 # footprint -> (model file in 3d/, offset xyz mm (KiCad 3D: +y is up), rotate xyz deg)
+# KiCad places a model as  footprint * T(offset) * R(rotate) * v : the offset is applied
+# AFTER the rotation, in the footprint frame (3D +y = footprint -y).
 MODELS = {
     'C_0603_1608Metric': ('C_0603_1608Metric.step', (0, 0, 0), (0, 0, 0)),
     'C_0805_2012Metric': ('C_0805_2012Metric.step', (0, 0, 0), (0, 0, 0)),
@@ -47,9 +49,13 @@ MODELS = {
     'SOT-23-5': ('SOT-23-5.step', (0, 0, 0), (0, 0, 0)),
     'ESP32-S3-WROOM-1': ('ESP32-S3-WROOM-1.step', (0, 0, 0), (0, 0, 0)),
     'SW_SPST_TL3342': ('SW_SPST_TL3342.step', (0, 0, 0), (0, 0, 0)),
-    # LCSC model origin is 1.42 mm behind KiCad's footprint origin (shell tabs)
-    'USB_C_Receptacle_HRO_TYPE-C-31-M-12': ('USB-C_HRO_TYPE-C-31-M-12.step', (0, 1.42, 0), (0, 0, 180)),
-    'TF-SMD_TF-015': ('TF-015.step', (0, 0, 0), (0, 0, 0)),
+    # LCSC model origin is on the front shell legs, mouth toward model +y: turned 180 the legs
+    # sit at the footprint origin, so move them 1.045 mm toward the mouth (footprint +y) onto
+    # the front SH slots (fp y +1.05); rear legs -> -3.13 slots, pegs -> -2.6 NPTH, tails over the pads
+    'USB_C_Receptacle_HRO_TYPE-C-31-M-12': ('USB-C_HRO_TYPE-C-31-M-12.step', (0, -1.045, 0), (0, 0, 180)),
+    # LCSC model origin is the card centre on the locating-peg line (pegs at model (+/-4, 0));
+    # the EasyEDA footprint has the pegs at (-4.9, 5.5) / (3.1, 5.5)
+    'TF-SMD_TF-015': ('TF-015.step', (-0.9, -5.5, 0), (0, 0, 0)),
 }
 
 

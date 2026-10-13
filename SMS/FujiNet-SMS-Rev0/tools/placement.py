@@ -352,7 +352,10 @@ def p3(place, fid):
     place('D_LED', 66.0, 88.0, 0)
     place('R_LED', 66.0, 85.0, 0)
     place('J_DBG', 70.0, 96.0, 90)
-    place('J_USB', 128.0, 37.0, 180)
+    # HRO's recommended layout puts the PCB edge 5.79 mm in front of the locating pegs
+    # (fp y -2.6 -> edge at fp y +3.19): the face (fp y +3.65) overhangs the top edge by
+    # 0.45 mm, so the plug's overmold clears the board edge (at y 37 it sat 1.35 mm inside)
+    place('J_USB', 128.0, 35.2, 180)
     place('R_CC1', 120.5, 38.0, 90)
     place('R_CC2', 135.5, 38.0, 90)
     place('D_ESDV', 120.5, 42.5, 90)

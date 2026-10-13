@@ -244,8 +244,13 @@ The 0.4 mm-pitch RP pins' last links neck down to 0.15 / 0.12 mm; JLCPCB's 6-lay
 
 The routed board:
 - 117 nets, all routed;
-- 1682 segments and 5074 mm of track;
-- 686 vias, 362 of them GND (249 stitching, edge guard and USB return vias).
+- 1690 segments and 5090 mm of track;
+- 682 vias, 358 of them GND (245 stitching, edge guard and USB return vias).
+
+Connector alignment (2026-10-13): the USB-C (J4) moved 1.8 mm to HRO's recommended PCB-edge
+position (its face had sat 1.35 mm inside the board, where a plug's overmold meets the PCB edge), and
+the microSD / USB-C 3D models were re-seated on their footprints; DRC still 0 / 0 / 0 (design review,
+"Post-layout change").
 
 ## Ordering
 

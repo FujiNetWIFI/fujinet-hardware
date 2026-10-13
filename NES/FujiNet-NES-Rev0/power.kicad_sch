@@ -349,6 +349,146 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Diode:SS34"
 			(pin_numbers
 				(hide yes)
@@ -2186,6 +2326,93 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 121.92 135.89 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "26d8a76d-658d-5cf2-a3a7-abcf3e462d14")
+		(property "Reference" "R22"
+			(at 124.206 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 124.206 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "FujiNet-NES:R_0603_1608Metric"
+			(at 121.92 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 121.92 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "P-FET gate pull-down against the SS34 reverse leakage"
+			(at 121.92 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "0603WAF4701T5E"
+			(at 121.92 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23162"
+			(at 121.92 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "30deaa76-13cd-52bf-a6ee-ecfb2b44f748")
+		)
+		(pin "2"
+			(uuid "ce41a8cc-d2e2-5012-9c60-9b4f804815e6")
+		)
+		(instances
+			(project "FujiNet-NES-Rev0"
+				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
+					(reference "R22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 182.88 107.95 0)
 		(unit 1)
@@ -3444,6 +3671,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 121.92 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "1cb2ad25-bec5-55e3-a38a-73e5b2307849")
+		(property "Reference" "#PWR121"
+			(at 121.92 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 121.92 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 121.92 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 121.92 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 121.92 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5b279560-79ad-58d5-b7a0-c9aa6ac4b50d")
+		)
+		(instances
+			(project "FujiNet-NES-Rev0"
+				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
+					(reference "#PWR121")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
 		(at 172.72 104.14 0)
 		(unit 1)
@@ -3452,7 +3744,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "fd84970e-8a6d-5b7d-a886-706281960f2d")
-		(property "Reference" "#PWR121"
+		(property "Reference" "#PWR122"
 			(at 172.72 97.79 0)
 			(effects
 				(font
@@ -3497,12 +3789,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "5b279560-79ad-58d5-b7a0-c9aa6ac4b50d")
+			(uuid "32493818-ee50-5764-aad3-4019f382e450")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR121")
+					(reference "#PWR122")
 					(unit 1)
 				)
 			)
@@ -3517,7 +3809,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "e59bbdaa-4ac0-5a1a-92db-2c0ab3d7bfdd")
-		(property "Reference" "#PWR122"
+		(property "Reference" "#PWR123"
 			(at 182.88 118.11 0)
 			(effects
 				(font
@@ -3562,12 +3854,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "32493818-ee50-5764-aad3-4019f382e450")
+			(uuid "dcbbe1d7-e913-5b5e-b70f-eb83ed85c34d")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR122")
+					(reference "#PWR123")
 					(unit 1)
 				)
 			)
@@ -3582,7 +3874,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "58f76498-b74a-5036-bee8-ca83acd316ff")
-		(property "Reference" "#PWR123"
+		(property "Reference" "#PWR124"
 			(at 193.04 118.11 0)
 			(effects
 				(font
@@ -3627,12 +3919,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "dcbbe1d7-e913-5b5e-b70f-eb83ed85c34d")
+			(uuid "20aec3a1-c24a-5534-901e-37d25983be24")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR123")
+					(reference "#PWR124")
 					(unit 1)
 				)
 			)
@@ -3647,7 +3939,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "deccf2c5-c961-5a23-97ec-5a902020b474")
-		(property "Reference" "#PWR124"
+		(property "Reference" "#PWR125"
 			(at 203.2 118.11 0)
 			(effects
 				(font
@@ -3692,12 +3984,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "20aec3a1-c24a-5534-901e-37d25983be24")
+			(uuid "dccc4db9-e69d-5baf-9f8e-f9d1c077f3f8")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR124")
+					(reference "#PWR125")
 					(unit 1)
 				)
 			)
@@ -3712,7 +4004,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "ff9b3896-3aa5-50dc-9f71-aa0f3359cd57")
-		(property "Reference" "#PWR125"
+		(property "Reference" "#PWR126"
 			(at 213.36 118.11 0)
 			(effects
 				(font
@@ -3757,12 +4049,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "dccc4db9-e69d-5baf-9f8e-f9d1c077f3f8")
+			(uuid "1e863212-ed66-5da4-8526-57f15f85b244")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR125")
+					(reference "#PWR126")
 					(unit 1)
 				)
 			)
@@ -3777,7 +4069,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "779dc27b-db8b-5cce-8bda-74d26bb84c8a")
-		(property "Reference" "#PWR126"
+		(property "Reference" "#PWR127"
 			(at 246.38 120.65 0)
 			(effects
 				(font
@@ -3822,12 +4114,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "1e863212-ed66-5da4-8526-57f15f85b244")
+			(uuid "6ed4bbc4-8dfb-5871-9312-7686d3cd2564")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR126")
+					(reference "#PWR127")
 					(unit 1)
 				)
 			)
@@ -3842,7 +4134,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "7b8c017b-3015-5c4c-b885-0d4be3db2170")
-		(property "Reference" "#PWR127"
+		(property "Reference" "#PWR128"
 			(at 288.29 97.79 0)
 			(effects
 				(font
@@ -3887,12 +4179,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "6ed4bbc4-8dfb-5871-9312-7686d3cd2564")
+			(uuid "ccb8d174-593d-5034-976e-b56244cd537d")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR127")
+					(reference "#PWR128")
 					(unit 1)
 				)
 			)
@@ -3907,7 +4199,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "2bd441e4-a73f-5317-bcbc-870268b9e887")
-		(property "Reference" "#PWR128"
+		(property "Reference" "#PWR129"
 			(at 293.37 118.11 0)
 			(effects
 				(font
@@ -3952,12 +4244,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "ccb8d174-593d-5034-976e-b56244cd537d")
+			(uuid "adc6bfd5-5263-5309-af9c-5e8a0591c0f2")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR128")
+					(reference "#PWR129")
 					(unit 1)
 				)
 			)
@@ -3972,7 +4264,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "f1673c84-741f-54e8-8eb0-045f5b975dc0")
-		(property "Reference" "#PWR129"
+		(property "Reference" "#PWR130"
 			(at 303.53 118.11 0)
 			(effects
 				(font
@@ -4017,12 +4309,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "adc6bfd5-5263-5309-af9c-5e8a0591c0f2")
+			(uuid "e5ad546f-5e1e-559d-9e4f-26daf7524129")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR129")
+					(reference "#PWR130")
 					(unit 1)
 				)
 			)
@@ -4037,7 +4329,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "7e4c9070-de20-5bd3-a52a-8c7173c02848")
-		(property "Reference" "#PWR130"
+		(property "Reference" "#PWR131"
 			(at 223.52 168.91 0)
 			(effects
 				(font
@@ -4082,12 +4374,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "e5ad546f-5e1e-559d-9e4f-26daf7524129")
+			(uuid "34cd8a9d-5f41-58a2-8575-9d4cebef964f")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR130")
+					(reference "#PWR131")
 					(unit 1)
 				)
 			)
@@ -4102,7 +4394,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "ff00d70b-ab5c-523d-b732-b5803a328432")
-		(property "Reference" "#PWR131"
+		(property "Reference" "#PWR132"
 			(at 238.76 171.45 0)
 			(effects
 				(font
@@ -4147,12 +4439,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "34cd8a9d-5f41-58a2-8575-9d4cebef964f")
+			(uuid "145aab9c-3305-593e-a487-bdeca1ef06b9")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR131")
+					(reference "#PWR132")
 					(unit 1)
 				)
 			)
@@ -4167,7 +4459,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "97eab724-0b33-5178-b767-352e36558193")
-		(property "Reference" "#PWR132"
+		(property "Reference" "#PWR133"
 			(at 254 168.91 0)
 			(effects
 				(font
@@ -4212,12 +4504,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "145aab9c-3305-593e-a487-bdeca1ef06b9")
+			(uuid "581ad697-e97b-5d7a-b307-95f11d909d19")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR132")
+					(reference "#PWR133")
 					(unit 1)
 				)
 			)
@@ -4232,7 +4524,7 @@
 		(on_board no)
 		(dnp no)
 		(uuid "7bc451c6-fdf2-59a4-b7a4-6985e8ebabd7")
-		(property "Reference" "#PWR133"
+		(property "Reference" "#PWR134"
 			(at 259.08 148.59 0)
 			(effects
 				(font
@@ -4277,12 +4569,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "581ad697-e97b-5d7a-b307-95f11d909d19")
+			(uuid "7a241535-e05c-5d4e-99c4-ed9f22c8575c")
 		)
 		(instances
 			(project "FujiNet-NES-Rev0"
 				(path "/5810f54f-2240-53c0-bbad-5b0b7a2c3f6b/d44cc47e-bd9a-52ed-901d-413852c5812b"
-					(reference "#PWR133")
+					(reference "#PWR134")
 					(unit 1)
 				)
 			)
@@ -4660,13 +4952,24 @@
 	(wire
 		(pts
 			(xy 111.76 132.08)
+			(xy 121.92 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea3a9d17-4934-5d27-a469-16ceed94a660")
+	)
+	(wire
+		(pts
+			(xy 121.92 132.08)
 			(xy 132.08 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6819b52f-799f-58a5-a6f9-ff8485aad75e")
+		(uuid "647d2bd9-d82f-5aa3-8b90-03d5c7ec58b5")
 	)
 	(wire
 		(pts
@@ -5096,6 +5399,12 @@
 			(type default)
 		)
 		(uuid "b026ea5f-1c40-5277-8eff-c9ac6996dbf5")
+	)
+	(junction
+		(at 121.92 132.08)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4ca213e5-bbf8-56c9-80df-022172324550")
 	)
 	(junction
 		(at 127 104.14)

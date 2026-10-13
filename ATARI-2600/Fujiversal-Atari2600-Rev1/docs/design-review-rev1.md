@@ -138,7 +138,7 @@ Computations: `tools/audit/margins.py`. Generator: `tools/audit/make_deep_review
 | Rule | Finding | Disposition |
 |---|---|---|
 | KO-001 | J1 inside the finger-strip rule area | False positive: the rule area allows pads; the fingers belong there |
-| PM-002 | J2 at the edge; R15, C34/C35, L2, SW1/3/4 0.47-0.9 mm from the edge | Edge connectors by design; the rest is fine for fab (copper-to-edge 0.25 mm) and JLC adds assembly rails |
+| PM-002 | J2 at the edge; R15, C34/C35, L2, SW1/3/4 0.47-0.9 mm from the edge | Edge connectors by design (J3's face 0.45 mm past the top edge per HRO since the Post-layout change of 2026-10-13, so its courtyard crosses it); the rest is fine for fab (copper-to-edge 0.25 mm) and JLC adds assembly rails |
 | DC-002 | No cap near U4 / U2 | U4 (UMH3N) has no supply pin. U2: the module's 3V3 pad is at the board edge under the antenna band, so its 22 uF + 100 nF sit 15 mm away on the +3V3 plane (the module carries its own decoupling) |
 | DP-001/003/004 | USB pair skew, layer changes, outer layer | Full-speed USB only (12 Mb/s): ~40 ps skew, see Deep Review |
 | NR-001 | USB_DP 0.7 mm from the edge | The S3's USB pads are on its edge-side column; FS USB, accepted |
@@ -189,3 +189,25 @@ A board made from it would have had GND shorted to the planes. The DRC gate chec
 - `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
   at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
 - Re-exported: only the copper layers' pours changed (In2 and the outer pours; drills unchanged). Outside the zone fills the board is unchanged.
+
+## Post-layout change (2026-10-13): microSD / USB-C alignment
+
+The same defect as FujiNet-NES Rev0 (found there 2026-10-11 from a reviewer's note; every cart copies the same two footprints and `set_models.py` rows). The 3D render showed the microSD (J2) and USB-C (J3) bodies off their copper.
+
+- **J3 sat too far inside the board (a physical fault).** HRO's recommended PCB layout puts the board edge 5.79 mm in front of the locating pegs, i.e. at footprint y +3.19, with the shell face (+3.65) 0.46 mm past it. At (121, 34.2) the face sat 0.55 mm inside the top edge, where a plug's overmold meets the PCB edge before the plug fully mates. J3 now sits at (121, 33.2).
+- **The board edit (`tools/usbc_to_edge.py`, no re-route):**
+  - J3 moved 1.0 mm north with its private ties between the pad row and the pegs: D-, and the VBUS, CC2 and CC1 vias. Their B.Cu segments stretch to them.
+  - Six straight 1.0 mm F.Cu stubs join the new pad centres to the old ones, where the routing ends.
+  - The B.Cu CC1 run under the connector would have met the moved peg, a slot and the moved vias; it now runs 1.0 mm north and steps back down at x 115-114.
+  - The D- exit west, stretched to a shallow diagonal, is back at 45 degrees.
+  - Three GND stitching vias that the new pads, slots and the D- tie land on were removed: (118, 33.2), (126, 35.42), (116.32, 31.2).
+  - The footprint's front silk (now past the edge) is gone; a dashed Dwgs.User line marks HRO's PCB edge.
+- **J3's 3D model sat 2.47 mm behind its footprint:** KiCad applies the model offset after the 180 degree rotation and the LCSC model's origin is the front shield legs -> offset (0, -1.045, 0), not (0, +1.42, 0).
+- **J2's 3D model sat 5.5 mm behind and 0.9 mm beside its footprint** (`make_tf015_fp.py` dropped easyeda2kicad's offset; the model's origin is the card centre on the peg line) -> offset (-0.9, -5.5, 0). J2's copper and position (face ~0.3 mm inside the right edge) were right and are unchanged.
+- **Every other bundled 3D model** sits on its pads (STEP vertices vs pads, all footprints).
+- **Result:**
+  - KiCad DRC at every severity with schematic parity on the saved fills: 0 errors, 0 unconnected, 0 parity, plus the same 4 silk warnings as before.
+  - No via touches a foreign pad (339 checked), and `check_plane_shorts.py` is clean.
+  - Drill changes: J3's slots and pegs, the three removed vias and the three moved vias. The CPL changes only J3's Y.
+  - `placement.py`, `set_models.py`, `make_tf015_fp.py` and both library footprints carry the fix for a `LAYOUT=1` rebuild. The CC1 / D- patches live in `usbc_to_edge.py`; a re-route would redo them.
+  - The shells are unchanged: the USB-C opening is cut from the board edge.

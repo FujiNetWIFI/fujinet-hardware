@@ -132,7 +132,10 @@ def p1(place, fid):
     place('RN_SD', 106.0, 40.4, 90)
     place('R_SDCD', 108.6, 40.4, 90)
     place('C_SD', 111.0, 40.4, 90)
-    place('J_USB', 131.0, 23.5, 180)
+    # HRO's recommended layout puts the PCB edge 5.79 mm in front of the locating pegs
+    # (fp y -2.6 -> edge at fp y +3.19): the face (fp y +3.65) overhangs the top edge by
+    # 0.45 mm, so the plug's overmold clears the board edge (at y 23.5 it sat 1.35 mm inside)
+    place('J_USB', 131.0, 21.7, 180)
     # the USB-C's lines leave south through the 6 mm corridor between the microSD and the boss hole's
     # copper keep-out (H4): no parts in it (V7 left UBRG_DM open there); the ESD diodes, CC resistors and
     # VBUS capacitors sit in a row just below it, on the way to the CP2102N

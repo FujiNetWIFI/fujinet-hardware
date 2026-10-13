@@ -142,7 +142,7 @@ The sourced dossier is `case/case-spec.md`, and the parametric shell is
 | Blade strip | B.Cu rule area over the south 16.5 mm (y >= 71.5): no tracks, vias or pour where the blade wipes |
 | Land escapes | Each land's footprint carries a 0.5 mm neck under solder mask to a 0.3/0.6 mm plated hole **17.4 mm** in from the edge, beyond the blade's reach |
 | Stack-up | **6 layers, 1.6 mm** (JLC06161H-2116 class): F.Cu signals + GND pour / In1.Cu **GND plane** / In2.Cu + In3.Cu signals / In4.Cu **power plane**: +3V3, a +3V3_RP island under the RP2354A region, a DVDD island under its core / B.Cu signals + GND pour (outside the blade strip). 4 layers was tried first and did not close (see *Status*) |
-| Trailing edge (y=30) | USB-C, microSD slot, and the ESP32-S3 antenna overhanging about 6.4 mm (shell antenna window) |
+| Trailing edge (y=30) | USB-C (shell face 0.45 mm past the edge, HRO's recommended PCB-edge position), microSD slot (face 0.05 mm inside), and the ESP32-S3 antenna overhanging about 6.4 mm (shell antenna window) |
 | Top face | SW4 RESET, SW1 BOOTSEL pinhole, D3 WS2812 light pipe |
 | Assembly | 3 fiducials (FID1-3, 1 mm copper / 2 mm mask), all SMD parts on the top side |
 
@@ -230,6 +230,7 @@ Rev0 redo, generated 2026-10-02 from a clean `tools/build_all.sh` run. The schem
 | `check_nets.py` | 182 / 182 against the firmware headers (branch `astrocade-rp2354-board`), the Tilton edge map and the power tree |
 | DRC (`--refill-zones --schematic-parity`) | **0 errors, 0 unconnected, 0 parity.** 77 warnings: silkscreen cosmetics (silk over pads is clipped by the mask in the gerbers; the ESP32 / microSD / USB-C silk runs off the trailing edge where those parts overhang) and 1 copper sliver |
 | `check_vias.py` | 379 vias, none touching a pad or a track of another net |
+| Connector alignment (2026-10-13) | The USB-C (J3) moved 1.8 mm to HRO's recommended PCB-edge position (its face had sat 1.35 mm inside the board, where a plug's overmold meets the PCB edge), and the microSD / USB-C 3D models were re-seated on their footprints. DRC: no new findings, one silk warning fewer (design review, "Post-layout change") |
 | kicad-happy | Schematic + SPICE 16/16 pass; Deep Review 25/25 evidence-verified (Part 3 adds two datasheet deviations to decide: VSENSE vs RP2350-E9, DVDD decoupling); PCB / EMC / thermal (score 97) / gerbers dispositioned in `docs/design-review-rev0.md` |
 | Firmware | `fujicade_rp2354` (fujinet-firmware `astrocade-rp2354-board`) is unchanged by the redo: same pin map, same RUN/BOOTSEL contract |
 | Shell | Both halves render in OpenSCAD with the generated anchors (the existing non-manifold warning remains) |

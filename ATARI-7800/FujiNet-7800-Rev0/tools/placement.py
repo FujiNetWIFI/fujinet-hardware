@@ -146,7 +146,10 @@ def do_placement(place, fiducials):
     place('RN_SD', 104.0, Y0 + 20.0, 90)
     place('R_SDCD', 109.0, Y0 + 19.5, 90)
     place('C_SD', 111.0, Y0 + 19.5, 90)
-    place('J_USB', 127.4, Y0 + 5.0, 180)
+    # HRO's recommended layout puts the PCB edge 5.79 mm in front of the locating pegs
+    # (fp y -2.6 -> edge at fp y +3.19): the face (fp y +3.65) overhangs the top edge by
+    # 0.45 mm, so the plug's overmold clears the board edge (at Y0 + 5.0 it sat 1.35 mm inside)
+    place('J_USB', 127.4, Y0 + 3.2, 180)
     # status LEDs between the microSD and the USB-C, at the top edge (a shell window)
     place('D_WS', 120.0, Y0 + 2.5, 0)
     place('R_WS', 120.0, Y0 + 6.0, 90)

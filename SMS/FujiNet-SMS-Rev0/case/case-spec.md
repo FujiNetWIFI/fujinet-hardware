@@ -46,7 +46,7 @@ Print each half outside down, with no supports, 0.2 mm layers, in PETG or PLA. T
 | Connector tab | 65.8 x 15.0 mm (x 67.1..132.9, y 110..125), 1 mm chamfers at the insertion edge | original board 66.0 x 40.1 (scan), raphnet 65.80, barbeque 65.8 |
 | Fingers | 2.54 mm pitch, 1.75 x 8.75 mm, 0.75-9.5 mm from the edge; even pins on the component (label) side, pins 1/2 at the right seen from the front | `tools/make_edge_fp.py`, `tools/audit/edge_orientation.py` |
 | Screw holes | 3.2 mm at (54, 64), (146, 64), (54, 104.5), (146, 104.5); no parts within 3 mm | `gen_pcb.HOLES` |
-| USB-C, microSD | at the top edge, x 126 and x 100 | `placement.py` |
+| USB-C, microSD | at the top edge, x 128 and x 100; the USB-C shell face 0.45 mm past the edge (HRO's recommended PCB-edge position), the microSD face 0.5 mm inside it (a latched card stands ~2 mm out) | `placement.py` / HRO and SOFNG drawings |
 | ESP32-S3 antenna | top-left, flush with the top edge; plastic only over it | `placement.py` |
 | Tallest parts | USB-C 3.2, ESP32-S3 3.1, microSD 1.85, TS-1187A buttons 1.5 | datasheets |
 

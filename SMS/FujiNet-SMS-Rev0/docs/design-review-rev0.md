@@ -265,7 +265,7 @@ Two changes after routing:
 | Rule | Count | Disposition |
 |---|---|---|
 | KO-001 H1-H4, J1 inside keep-outs | 6 | Deliberate rule areas. The screw keep-outs exist for the holes; the tab keep-outs allow pads (the fingers). |
-| PM-002 J3 0.2 mm, U1 0.15 mm, J2 0.85 mm, FID1 / TP14 0.75 mm from the edge | 1 + 5 | The microSD and USB-C mouths and the S3 antenna face the shell's top wall by design; JLCPCB mills the outline. FID1's centre is 2.0 mm in: its copper and mask ring stay 1 mm clear, and JLC adds its own rail fiducials. TP14 is a probe pad. |
+| PM-002 J3 0.2 mm, U1 0.15 mm, J2 0.85 mm, FID1 / TP14 0.75 mm from the edge | 1 + 5 | The microSD and USB-C mouths and the S3 antenna face the shell's top wall by design (since the Post-layout change of 2026-10-13, J2's face is 0.45 mm past the edge per HRO, so its courtyard crosses it; J3's face stays 0.5 mm inside); JLCPCB mills the outline. FID1's centre is 2.0 mm in: its copper and mask ring stay 1 mm clear, and JLC adds its own rail fiducials. TP14 is a probe pad. |
 | GP-001 reference-plane gap: BUSREQ_N 67 %, A10 78 %, WAIT_N 80 %; 18 more nets at 87-95 % | 3 + 18 | Accepted. Each finger stub crosses the tab, which carries no inner copper (about 5.5 mm per net); the rest are In3 runs crossing In4 island boundaries. The bus runs at 3.58 MHz with HCT / Z80 edges, and every cartridge board has the same stubs over no plane. |
 | RP-001 layer change without a GND via within 1 mm | 1 high (/USB_DM) + 20 warning + 1 info | /USB_DM: one of its three transitions lacks a GND via within 1 mm (`stitch_gnd` placed 3 of 5 USB return vias; 2 had no room). Full-speed USB (12 Mb/s) over a short run is tolerant; the S3-RP pair stays on the board. The 20 warnings are 3.58 MHz bus nets through the RP and SRAM fan-out. |
 | **DC-001 U10 (SRAM0) nearest 100 nF 8.7 mm** | 1 high | Measured: C42 is 9.2 mm from VCC pin 8, pad to pin; U7's cap is 6.6 mm from its pin. The TSOP-I puts VCC (pin 8) and VSS (pin 24) mid-row on opposite ends, 19.4 mm apart, and in the ROM spot pin 8 faces the RP's fan-out, so it drops through a via straight into the In4 +5V island under both SRAMs. C42 has its own vias to In4 and In1 0.9 mm from its pads. Moving it into the one clear patch nearby (6.6 mm) would cost its GND via (the nearest GND via there is 4 mm away), with no net gain, so it stays. The SRAM draws <= 10 mA at a 1 us cycle on a 3.58 MHz bus. **Rev1:** a dedicated 100 nF at pin 8 (needs a local reroute). |
@@ -328,3 +328,19 @@ A board made from them would have had GND shorted to the planes. The DRC gate ch
 - `tools/audit/check_plane_shorts.py` checks each zip: every plated hole takes its net from the copper flashed
   at it (KiCad's X2 attributes), and no inner pour of another net may contain it. Now: 0.
 - Re-exported: only the copper layers' pours changed (In1, In4 and the outer pours; drills unchanged). Outside the zone fills the board is unchanged.
+
+## Post-layout change (2026-10-13): microSD / USB-C alignment
+
+The same defect as FujiNet-NES Rev0 (found there 2026-10-11 from a reviewer's note; every cart copies the same two footprints and `set_models.py` rows). The 3D render showed the microSD (J3) and USB-C (J2) bodies off their copper.
+
+- **J2 sat too far inside the board (a physical fault).** HRO's recommended PCB layout puts the board edge 5.79 mm in front of the locating pegs, i.e. at footprint y +3.19, with the shell face (+3.65) 0.46 mm past it. At (128, 37) the face sat 1.35 mm inside the board, where a plug's overmold meets the PCB edge before the plug mates. J2 now sits at (128, 35.2).
+- **The board edit (`tools/usbc_to_edge.py`, no re-route):**
+  - J2 moved 1.8 mm north with its private ties between the pad row and the pegs (VBUS A4/B9-A9/B4, D- A7-B7).
+  - Eight straight 1.8 mm F.Cu stubs join the new pad centres to the old ones, where the routing ends: GND x2, VBUS, CC1, CC2, D+ x2, D-. D+ / D- grew by 1.8 mm, irrelevant at Full Speed.
+  - The VBUS exit east (to C4 / C5) would have cut the rear shield slot, and run so close to it that the slot kept a single F.Cu thermal spoke. The CC2 via beside it moved 0.44 mm east onto its own bend (134.20 -> 134.64, 37.97; its In2.Cu segment follows), and VBUS now drops at x 134 onto its original 45 degree line to C4, at the original clearance.
+  - Two edge-row GND stitching vias under the new front shield slots were removed: (124, 33.2), (132, 33.2).
+  - The footprint's front silk (now past the edge) is gone; a dashed Dwgs.User line marks HRO's PCB edge.
+- **J2's 3D model sat 2.47 mm behind its footprint:** KiCad applies the model offset after the 180 degree rotation and the LCSC model's origin is the front shield legs -> offset (0, -1.045, 0), not (0, +1.42, 0).
+- **J3's 3D model sat 5.5 mm behind and 0.9 mm beside its footprint** (easyeda2kicad's offset was dropped; the model's origin is the card centre on the peg line) -> offset (-0.9, -5.5, 0). J3's copper and position (face 0.5 mm inside the edge) were right and are unchanged.
+- **Every other bundled 3D model** sits on its pads (STEP vertices vs pads, all footprints).
+- **Result:** KiCad DRC at every severity with schematic parity on the saved fills: 0 / 0 / 0. `check_vias.py`, `check_plane_shorts.py` (both zips), `check_gerbers.py` and `check_fab.py` clean. Drill changes: J2's slots and pegs, the two removed vias and the moved CC2 via. The CPLs change only J2's Y (the JLC EasyEDA origin offset is unchanged). `placement.py`, `set_models.py` and both library footprints carry the fix for a `LAYOUT=1` rebuild; the VBUS / CC2 patch lives in `usbc_to_edge.py` (a re-route would redo it). The shell is unchanged: its openings are cut from the board edge.

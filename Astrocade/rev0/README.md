@@ -199,6 +199,7 @@ firmware from `$FUJINET_FIRMWARE`. Its default is the worktree
 | `make_deep_review.py` | Datasheet-cited findings, for kicad-happy's evidence gate |
 | `e9_vsense.py`, `dvdd_far_pin.py`, `vbus_leakage.py` | The numbers behind design-review Part 3 findings 1-3 |
 | `stock_check.py` | JLC / LCSC stock for every assembled line (network) |
+| `jlc/measure_rotations.py` | JLC CPL rotation / origin per (footprint, LCSC) against the EasyEDA footprints -> `jlc/jlc_rotations.json`, which `export.py` applies |
 | `run_pcb_audit.sh` | All kicad-happy analyzers, the deep-review gate and the fab release gate (writes `analysis/`, gitignored) |
 
 `datasheets/manifest.json` lists the datasheet for every MPN. The PDFs are gitignored; they were copied from the sibling carts' `datasheets/`.
@@ -269,9 +270,10 @@ The 6-layer stack closes completely.
 5. **Console 5 V headroom** under WiFi bursts (about 400 mA peak on +3V3).
 6. **Hardware BOOTSEL forcing** (IO5 low across an IO4 pulse) before trusting
    the PICOBOOT reflash.
-7. **JLC CPL rotations:** check the placement preview, especially the QFN-60,
-   QFN-28, SOT-23(-5/-6), SOT-363, USB-C and SMA diodes. The table is in
-   `tools/export.py`.
+7. **JLC CPL:** the rotations and origins are measured against each part's
+   EasyEDA footprint (`tools/audit/jlc/`). Still check the placement preview,
+   especially U2 (ESP32-S3) on its pads, pin 1 of U1 and U3, and the cathode
+   band of D7 and D8.
 8. **WiFi RSSI** in the shell. The antenna overhangs the trailing edge, and
    the microSD shell is about 2 mm from it.
 9. **TL3342 RESET actuator** height against the roof (printed plunger, see

@@ -258,7 +258,8 @@ the KiCad files.
 the first schematic got wrong and what changed. `analysis/` (gitignored)
 holds the analyzer runs and `analysis/deep_review.json`; `tools/audit/`
 holds the computations the review cites and the generator for the
-deep-review file. `.kicad-happy.json` documents the analyzer findings that
+deep-review file; `tools/audit/jlc/` measures the JLC CPL rotations and
+origins (see its README). `.kicad-happy.json` documents the analyzer findings that
 are intentional (the 5 V bus crossings, the console-defined connector).
 Datasheets go in `datasheets/` (gitignored PDFs; `manifest.json` kept):
 
@@ -293,8 +294,14 @@ Rev0 is **schematic- and layout-complete, not yet built**.
   recommended PCB-edge position (its face had sat 1.35 mm inside the board, where a
   plug's overmold meets the PCB edge), and the microSD / USB-C 3D models were
   re-seated on their footprints; DRC still 0 / 0 / 0 (review, "Post-layout change").
+- JLC CPL (2026-10-13): rotations and origins are measured against each part's
+  EasyEDA footprint (`tools/audit/jlc/`). Before, 10 of 105 rows were wrong, among
+  them the ESP32-S3 3.62 mm off, the RP2354B and both SRAMs turned 90 degrees, and
+  SS34 D7 reversed (review, "Post-layout change").
 - Fab outputs: `exports/jlcpcb/` (gerbers, BOM, CPL; the CIClone is DNP), renders in
-  `docs/`. Order 6-layer, 1.2 mm, gold fingers with a bevel.
+  `docs/`. Order 6-layer, 1.2 mm, gold fingers with a bevel. In JLC's placement
+  preview, check U11 (ESP32-S3) on its pads, pin 1 of U1, U12, U4 and U5, the SRAMs
+  U2 / U3 (no EasyEDA footprint), and D7's cathode band.
 - Before ordering: consign or substitute the AS6C4008 SRAMs and the 74HCT253 (out of
   JLC stock); decide on filled vias for the two via-in-pad spots (review, Part 2).
 - On the bench: the Part 1 measurements (2A03 write-data hold, console 5 V headroom,

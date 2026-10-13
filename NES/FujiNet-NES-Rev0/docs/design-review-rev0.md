@@ -288,7 +288,39 @@ A reviewer reported the microSD (J2) and USB-C (J3) footprints as misaligned on 
   - The board's model offsets equal the library's. KiCad's `lib_footprint_mismatch` check compares graphics, not model offsets, so this was checked separately.
   - KiCad DRC at every severity: 0 violations, 0 unconnected, 0 schematic-parity issues.
   - `placement.py`, `set_models.py`, `make_tf015_fp.py` and both library footprints carry the fix for a full `LAYOUT=1` rebuild. The CPL changes only J3's Y.
-- **At order time.** JLCPCB places the USB-C by its own (EasyEDA) footprint origin, which can differ from KiCad's by about 1.4 mm in Y. Check the placement preview, as `tools/export.py` already says.
+- **At order time.** JLCPCB places the USB-C by its own (EasyEDA) footprint origin, which can differ from KiCad's by about 1.4 mm in Y. The CPL has applied that offset since 2026-10-13 (next section).
+
+## Post-layout change (2026-10-13): JLC CPL from measured EasyEDA corrections
+
+The same defect as FujiNet-Astrocade Rev0, where the user saw the ESP32-S3 off its pads in JLC's placement preview. JLC places every part by the EasyEDA footprint of its LCSC code, and EasyEDA can put the origin and the zero orientation somewhere else than our KiCad footprint does. `tools/export.py` still used a generic regex rotation table (kicad-jlcpcb-tools style) and applied no origin offsets. The other carts had already moved to a measured table.
+
+- **Measured:** `tools/audit/jlc/measure_rotations.py` (the Studio II / ChannelF tool) compares every (footprint, LCSC) pair in `design.py` with its EasyEDA footprint, pad by pad, with diodes and LEDs matched cathode to cathode. It wrote `jlc_rotations.json`: 44 pairs. The 39 pairs other boards share agree exactly with their tables. New on this board: both SOIC-16s, the 74HCT32 C5985, the 4x100k C1996 and the DNP ATtiny13A.
+- **Three pairs are low confidence.** All three were checked by hand.
+  - **U2/U3, AS6C4008-55TIN (C5569980), has no EasyEDA footprint**, the same as on FujiNet-SMS Rev0. The table uses the TSOPI-32 `-TL` proxy (0 degrees); one other EasyEDA TSOP-32 footprint is drawn 90 degrees from it. JLC has no placement data of its own for this part, and it is out of stock there, so it will be consigned. Confirm its orientation in the preview / DFM.
+  - **U4 74HCT595 (C282339) and U5 74HCT253 (C547509), SOIC-16, new on this board.** They are flagged only because EasyEDA names the symbol pins differently: Q0-Q7 / DS / SHCP / STCP / MR# for QA-QH / SER / SRCLK / RCLK / ~SRCLR, and 1I0 / 2Y / S0 / #1OE for I0a / Zb / A0 / OEa. All 16 pins agree by function on both parts. 270 degrees, the same as the SOIC-14s; EasyEDA's package is `-BL`.
+  - The '253's 0.497 mm residual is EasyEDA's wider land pattern (`LS6.2`): its pad rows sit 0.497 mm farther out on each side, with zero error along the rows.
+- **`export.py`** looks the correction up by (footprint, LCSC), moves the position to EasyEDA's origin, refuses bottom-side parts, and names the low-confidence refs.
+- **10 of the 105 CPL rows were wrong:**
+
+| Ref | Part | Was | Now | At JLC it would have been |
+|---|---|---|---|---|
+| U11 | ESP32-S3-WROOM-1 | KiCad origin (body centre) | EasyEDA origin, 3.62 mm toward pins 15-26 | 3.62 mm off |
+| U1 | RP2354B QFN-80 | 0 | 90 | turned 90 degrees |
+| U12 | CP2102N QFN-28 | 180 | 270 | turned 90 degrees |
+| U14 | AP63203WU TSOT-23-6 | 0 | 90 | turned 90 degrees |
+| U15 | AP2112K SOT-23-5 | 180 | 270 | turned 90 degrees |
+| U2, U3 | AS6C4008 TSOP-I-32 | 270 | 0 (proxy) | turned 90 degrees against the proxy footprint |
+| D7 | SS34 SMA | KiCad + 180 | KiCad + 0 | reversed |
+| D3 | WS2812B-2020 | 180 | 0 | turned 180 degrees |
+| J3 | USB-C HRO | 0, KiCad origin | 180, origin 1.414 mm along the part | turned 180 degrees and 1.4 mm off |
+
+- **The other 95 rows are unchanged**, apart from the number format (`%.4fmm`, as on the other carts). This includes the six SOICs at KiCad + 270, which the old table had right.
+- **Checked independently of the table:**
+  - The check places each cached EasyEDA footprint (the proxy for U2/U3) at its CPL position and rotation, the way JLC's preview does, and compares it with the board's own pads (pcbnew). Split pads such as EPs are compared by group centre, and diodes and LEDs cathode on cathode.
+  - New CPL: all 105 parts land on their pads with matching numbers and polarity. The worst pad is 0.30 mm off, on L1 and D1, apart from the '253's 0.497 mm row offset explained above.
+  - Old CPL: exactly the 10 rows above fail.
+  - Every footprint embedded in the board matches its `.pretty` copy.
+- **Unchanged:** board, BOMs (byte-identical), gerbers, drill and renders. `check_plane_shorts.py` (from Astrocade) finds no plated hole inside an inner pour of another net in the zip. JLC's placement preview is still the final check before paying.
 
 ## Verdict (layout)
 

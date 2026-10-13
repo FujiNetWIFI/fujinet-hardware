@@ -11,7 +11,7 @@ so the openings follow the board.
 | Outside | 58.2 x 64.1 x 10.2 mm (Rev1: the ESP32-S3 antenna is flush with the board edge, no pocket) |
 | Front half | plate on the console-front (B.Cu, label) face; rim up to the board, screw counterbores, 44 x 36 mm label recess |
 | Rear half | walls + roof over the component (F.Cu) face; RESET hole (5 mm), pin-holes for BOOTSEL / S3 EN / S3 BOOT, light holes for the WS2812 and the RP LED |
-| Top edge | USB-C opening sized for a plug overmold |
+| Top edge | USB-C opening sized for a plug overmold; the receptacle's shell face stands 0.45 mm past the board edge (HRO's recommended PCB-edge position) |
 | Right edge | microSD slot with a finger notch (Rev1 moved the socket off the top edge, away from the antenna) |
 | Bottom edge | the board exits between the halves; the shell's bottom face is ~25.5 mm above the contact edge |
 | Fasteners | 4x M3x10 pan head from the front into the rear bosses (2.6 mm pilot for self-tapping, or open to 4.0 mm for heat-set inserts) |

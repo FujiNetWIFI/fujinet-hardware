@@ -113,7 +113,8 @@ net by net.
   Pi's own RP2350A minimal-design layout (MIT), grafted at the RP and turned with
   it. The ESP32-S3 sits top-left with its antenna flush with the top edge over a
   band that is copper-free on every layer; microSD on the right edge, USB-C on
-  the top edge, power at the bottom right, buttons on the left edge.
+  the top edge (its shell face 0.45 mm past the edge, HRO's recommended PCB-edge
+  position), power at the bottom right, buttons on the left edge.
 - **Rules:** 0.2 mm / 0.15 mm default (0.5 mm power, 0.3 mm VBUS, 0.25 mm USB),
   0.6/0.3 mm vias (0.5/0.25 under the RP), 0.25 mm copper-to-edge, 0.125 mm
   annular, 0.12 mm clearance floor for the neck-downs at 0.4 mm pitch. JLCPCB
@@ -214,7 +215,8 @@ Rev1, generated 2026-10-06. **Not built or tested on hardware.**
 | ERC (`--severity-all`) | 0 violations |
 | `tools/check_nets.py` | 290 / 290 (NOTE: firmware not yet ported to the RP2350) |
 | DRC (`--refill-zones --schematic-parity`) | 0 errors, 0 unconnected, 0 parity; 4 warnings (the ESP32 module's silkscreen meets the top edge it sits flush with) |
-| Routing | 100 %, 342 vias (120 GND stitching) |
+| Routing | 100 %, 339 vias (117 GND stitching) |
+| Connector alignment (2026-10-13) | The USB-C (J3) moved 1.0 mm to HRO's recommended PCB-edge position (its face had sat 0.55 mm inside the board, where a plug's overmold meets the PCB edge), and the microSD / USB-C 3D models were re-seated on their footprints. DRC: no new findings (review, "Post-layout change") |
 | kicad-happy | schematic 0 errors; SPICE 16/16 pass; DFM (JLC standard tier) 0 violations; Deep Review 19/19 verified; dispositions in the review |
 | Shell | clamshell: both halves render 2-manifold in OpenSCAD; cart shell: front, rear and holder render 2-manifold, the board/part interference check is empty, outside faces match norm8332's STLs within 0.3 mm |
 | LCSC / JLC | every part in stock |

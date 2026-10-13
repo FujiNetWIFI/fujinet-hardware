@@ -108,7 +108,10 @@ def do_placement(place):
     place('R_SSCTL', 105.6, 57.4, 0)
 
     # ---------------- top-right: USB-C ----------------
-    place('J_USB', 121.0, 34.2, 180)         # opening on the top edge
+    # HRO's recommended layout puts the PCB edge 5.79 mm in front of the locating pegs
+    # (fp y -2.6 -> edge at fp y +3.19): the face (fp y +3.65) overhangs the top edge by
+    # 0.45 mm, so the plug's overmold clears the board edge (at y 34.2 it sat 0.55 mm inside)
+    place('J_USB', 121.0, 33.2, 180)         # opening on the top edge
     place('R_CC1', 114.2, 36.2, 90)
     place('R_CC2', 126.0, 41.8, 90)
     place('D_ESDP', 117.4, 41.2, 0)

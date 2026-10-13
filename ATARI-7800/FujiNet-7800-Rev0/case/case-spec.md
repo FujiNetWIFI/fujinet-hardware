@@ -55,7 +55,7 @@ The plunger prints cap-down. At rest the cap stands 0.6 mm proud of the label fa
 | Key slots | 2.4 mm wide, 10 mm deep, centred on positions 3 and 16 (x 100 -/+ 16.51) | `tools/edge_geom.py`, `tools/audit/edge_orientation.py` |
 | Fingers | 2.54 mm pitch on 18 positions, 1.5 x 7.0 mm, 0.5-7.5 mm from the edge; pins 1-16 on F.Cu (console rear), pin 1 at the left seen from F.Cu | as above |
 | Screw holes | 3.2 mm at (67.4, 95), (132.6, 95), (67.4, 129.9), (132.6, 129.9); no parts within 3 mm | `gen_pcb.HOLES` |
-| USB-C, microSD | at the top edge, x 127.4 and x 109.3 | `placement.py` |
+| USB-C, microSD | at the top edge, x 127.4 and x 109.3; the USB-C shell face 0.45 mm past the edge (HRO's recommended PCB-edge position), the microSD face 0.5 mm inside it (a latched card stands ~2 mm out) | `placement.py` / HRO and SOFNG drawings |
 | ESP32-S3 antenna | top-left, flush with the top edge; plastic only over it | `placement.py` |
 | Tallest parts | USB-C 3.2, ESP32-S3 3.1, microSD 1.85, TS-1187A buttons 1.5 | datasheets |
 

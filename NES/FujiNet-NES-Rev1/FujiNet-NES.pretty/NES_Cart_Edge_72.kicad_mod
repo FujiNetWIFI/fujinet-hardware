@@ -1,0 +1,482 @@
+(footprint "NES_Cart_Edge_72"
+	(version 20241229)
+	(generator "fujinet_gen")
+	(generator_version "1.0")
+	(layer "F.Cu")
+	(descr "NES 72-pin cartridge edge: 2 x 36 fingers 2.0 x 12 mm (ends 3.0 mm), 2.50 mm pitch (not 0.1in), 87.5 mm span, copper 1.0-13.0 mm from the edge; pins 1-36 label side (F.Cu, pin 1 east), 37-72 back (B.Cu), pin N over pin N+36.  NES-EWROM-01 geometry (nesdev). Hard gold, bevel.")
+	(tags "nes nintendo cartridge edge connector")
+	(property "Reference" "REF**"
+		(at 0 -16 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "NES_Cart_Edge_72"
+		(at 0 -18 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd exclude_from_pos_files exclude_from_bom allow_soldermask_bridges)
+	(fp_rect
+		(start -46.75 0)
+		(end 46.75 -14.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+	)
+	(fp_rect
+		(start -46.75 0)
+		(end 46.75 -14.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(fp_rect
+		(start -46.75 0)
+		(end 46.75 -14.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "B.CrtYd")
+	)
+	(fp_rect
+		(start -46.75 0.2)
+		(end 46.75 -6.5)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Mask")
+	)
+	(fp_rect
+		(start -46.75 0.2)
+		(end 46.75 -11)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "B.Mask")
+	)
+	(fp_text user "1"
+		(at 44.25 -15.4 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "36"
+		(at -44.25 -15.4 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "37"
+		(at 44.25 -15.4 0)
+		(layer "B.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(fp_text user "72"
+		(at -44.25 -15.4 0)
+		(layer "B.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(pad "1" smd rect
+		(at 44.25 -7)
+		(size 3 12)
+		(layers "F.Cu")
+	)
+	(pad "37" smd rect
+		(at 44.25 -7)
+		(size 3 12)
+		(layers "B.Cu")
+	)
+	(pad "2" smd rect
+		(at 41.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "38" smd rect
+		(at 41.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "3" smd rect
+		(at 38.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "39" smd rect
+		(at 38.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "4" smd rect
+		(at 36.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "40" smd rect
+		(at 36.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "5" smd rect
+		(at 33.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "41" smd rect
+		(at 33.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "6" smd rect
+		(at 31.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "42" smd rect
+		(at 31.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "7" smd rect
+		(at 28.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "43" smd rect
+		(at 28.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "8" smd rect
+		(at 26.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "44" smd rect
+		(at 26.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "9" smd rect
+		(at 23.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "45" smd rect
+		(at 23.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "10" smd rect
+		(at 21.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "46" smd rect
+		(at 21.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "11" smd rect
+		(at 18.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "47" smd rect
+		(at 18.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "12" smd rect
+		(at 16.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "48" smd rect
+		(at 16.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "13" smd rect
+		(at 13.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "49" smd rect
+		(at 13.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "14" smd rect
+		(at 11.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "50" smd rect
+		(at 11.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "15" smd rect
+		(at 8.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "51" smd rect
+		(at 8.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "16" smd rect
+		(at 6.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "52" smd rect
+		(at 6.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "17" smd rect
+		(at 3.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "53" smd rect
+		(at 3.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "18" smd rect
+		(at 1.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "54" smd rect
+		(at 1.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "19" smd rect
+		(at -1.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "55" smd rect
+		(at -1.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "20" smd rect
+		(at -3.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "56" smd rect
+		(at -3.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "21" smd rect
+		(at -6.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "57" smd rect
+		(at -6.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "22" smd rect
+		(at -8.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "58" smd rect
+		(at -8.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "23" smd rect
+		(at -11.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "59" smd rect
+		(at -11.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "24" smd rect
+		(at -13.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "60" smd rect
+		(at -13.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "25" smd rect
+		(at -16.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "61" smd rect
+		(at -16.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "26" smd rect
+		(at -18.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "62" smd rect
+		(at -18.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "27" smd rect
+		(at -21.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "63" smd rect
+		(at -21.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "28" smd rect
+		(at -23.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "64" smd rect
+		(at -23.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "29" smd rect
+		(at -26.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "65" smd rect
+		(at -26.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "30" smd rect
+		(at -28.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "66" smd rect
+		(at -28.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "31" smd rect
+		(at -31.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "67" smd rect
+		(at -31.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "32" smd rect
+		(at -33.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "68" smd rect
+		(at -33.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "33" smd rect
+		(at -36.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "69" smd rect
+		(at -36.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "34" smd rect
+		(at -38.75 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "70" smd rect
+		(at -38.75 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "35" smd rect
+		(at -41.25 -7)
+		(size 2 12)
+		(layers "F.Cu")
+	)
+	(pad "71" smd rect
+		(at -41.25 -7)
+		(size 2 12)
+		(layers "B.Cu")
+	)
+	(pad "36" smd rect
+		(at -44.25 -7)
+		(size 3 12)
+		(layers "F.Cu")
+	)
+	(pad "72" smd rect
+		(at -44.25 -7)
+		(size 3 12)
+		(layers "B.Cu")
+	)
+	(embedded_fonts no)
+)

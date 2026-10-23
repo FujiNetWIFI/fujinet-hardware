@@ -41,6 +41,14 @@ are in [binaries](binaries):
 - `fujinet-COCO-HS-UART-v1.6.2-dev.zip` - the ESP32-side FujiNet firmware to
   flash onto the separate ESP32 board.
 
+For now, the source code for these is available in my repositories, soon to
+be published and merged into the main FujiNet repositories:
+
+- One ROM firmware and plugin: [wdathing/one-rom](https://github.com/wdathing/one-rom)
+- HDB-DOS: [wdathing/toolshed_n6il](https://github.com/wdathing/toolshed_n6il) (`onerom-hdb` branch)
+- Config: [wdathing/fujinet-config](https://github.com/wdathing/fujinet-config) (`cart-autoboot` branch)
+- ESP32 firmware: [wdathing/dragon](https://github.com/wdathing/dragon)
+
 Using the [One ROM CLI](https://onerom.org/cli):
 
 ```bash

@@ -189,6 +189,15 @@ Every part is JLCPCB-assemblable. `FujiNet-O2-Rev0-BOM.csv` has every line with 
 - Standard PCBA, top side;
 - `BOM-JLCPCB.csv` and `CPL-JLCPCB.csv`, whose rotations and origins are measured against each LCSC part's EasyEDA footprint (`tools/audit/jlc/`).
 
+## Printed shell
+
+`case/FujiNet-O2-Shell.scad`, with `case/FujiNet-O2-Shell.stl` (both halves and the RESET plunger, laid out for printing) and the dimension dossier `case/case-spec.md`.
+- **Size:** 70 x 71.5 x 13.6 mm, a two-piece clamshell that leaves the bottom 17 mm of the board bare for the console's slot.
+- **Holding the board:** posts through the board's 5 mm holes (two M2.5 screws from the back), keys through its side notches, two snap hooks at the top.
+- **Openings:** the USB-C in the top wall, the microSD in the left wall; a RESET plunger, pin-holes for BOOTSEL / S3 EN / S3 BOOT, LED windows; label recesses on both faces.
+- **Checked in OpenSCAD:** the board, the plunger and every part's courtyard (to its height) clear both halves; a raised control does not.
+- **Estimated, not measured** (no original cart or console was measured): how deep the slot takes the cart, and the slot's size. Fit one print before printing more.
+
 ## Firmware changes this board needs (not made here)
 
 The board needs these changes in a fujinet-firmware PR off master:
@@ -204,7 +213,7 @@ The board needs these changes in a fujinet-firmware PR off master:
 ## Known limits
 
 - **No Voice passthrough.** The Voice reuses pins A, B, E, 1, 10 and 11 and passes only P10 / P11 through, so a cart behind it cannot use /WR, E, T0, A10 or P14. FujiNet's mailbox needs /WR and P14.
-- **The original shell.** The outline fits bwack's / PicoPAC's shells, but the USB-C and the microSD sit on the board's top and left edges, inside an original shell: cut openings, or print a shell (not drawn yet; `case/board-anchors.scad` holds the positions).
+- **The shell.** The USB-C and the microSD sit on the board's top and left edges, inside an original shell's handle. `case/FujiNet-O2-Shell.scad` is a printed two-piece shell with openings for both (see *Printed shell*).
 
 ## Bring-up checklist
 

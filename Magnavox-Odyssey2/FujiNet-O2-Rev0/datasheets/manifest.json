@@ -1,0 +1,420 @@
+{
+ "schematic": "FujiNet-O2-Rev0.kicad_sch",
+ "last_sync": "2026-10-30",
+ "note": "copied from the sibling carts (same MPNs); the 8048 and the Videopac edge are referenced, not BOM parts",
+ "references": {
+  "Intel MCS-48 (8048AH / 8049AH) datasheet, D.C. characteristics": "https://www.kutilovo.cz/vincom/sheets/115801.pdf",
+  "Dan Boris, Odyssey 2 Technical Specs v1.1 (cartridge pinout, section 2.0)": "https://atarihq.com/danb/files/o2doc.pdf"
+ },
+ "parts": {
+  "0603WAF3300T5E": {
+   "lcsc": "C23138",
+   "refs": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "R17",
+    "R18",
+    "R19",
+    "R20",
+    "R21",
+    "R22",
+    "R23",
+    "R24",
+    "R25",
+    "R26",
+    "R27",
+    "R44"
+   ],
+   "file": "0603WAF3300T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF1001T5E": {
+   "lcsc": "C21190",
+   "refs": [
+    "R28",
+    "R34",
+    "R36",
+    "R38",
+    "R39",
+    "R49"
+   ],
+   "file": "0603WAF1001T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF1002T5E": {
+   "lcsc": "C25804",
+   "refs": [
+    "R29",
+    "R31",
+    "R35",
+    "R37",
+    "R42",
+    "R43",
+    "R51"
+   ],
+   "file": "0603WAF1002T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "RP2354B": {
+   "lcsc": "C39843328",
+   "refs": [
+    "U1"
+   ],
+   "file": "RP2354B.pdf",
+   "present": true,
+   "source": "the RP2350 datasheet (covers the RP2354A / B), copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF6800T5E": {
+   "lcsc": "C23228",
+   "refs": [
+    "R30"
+   ],
+   "file": "0603WAF6800T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "KT-0603R": {
+   "lcsc": "C2286",
+   "refs": [
+    "D1"
+   ],
+   "file": "KT-0603R.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF1502T5E": {
+   "lcsc": "C22809",
+   "refs": [
+    "R32"
+   ],
+   "file": "0603WAF1502T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CC0603KRX7R9BB104": {
+   "lcsc": "C14663",
+   "refs": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C8",
+    "C9",
+    "C10",
+    "C12",
+    "C15",
+    "C16",
+    "C23",
+    "C26",
+    "C28",
+    "C29",
+    "C33",
+    "C36",
+    "C37"
+   ],
+   "file": "CC0603KRX7R9BB104.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL05B104KO5NNNC": {
+   "lcsc": "C1525",
+   "refs": [
+    "C7",
+    "C11",
+    "C17"
+   ],
+   "file": "CL05B104KO5NNNC.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL10A106KP8NNNC": {
+   "lcsc": "C19702",
+   "refs": [
+    "C13",
+    "C25",
+    "C32"
+   ],
+   "file": "CL10A106KP8NNNC.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL05A475MP5NRNC": {
+   "lcsc": "C23733",
+   "refs": [
+    "C14",
+    "C18",
+    "C19"
+   ],
+   "file": "CL05A475MP5NRNC.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0402WGF330JTCE": {
+   "lcsc": "C25105",
+   "refs": [
+    "R33"
+   ],
+   "file": "0402WGF330JTCE.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "AOTA-B201610S3R3-101-T": {
+   "lcsc": "C42411119",
+   "refs": [
+    "L1"
+   ],
+   "file": "AOTA-B201610S3R3-101-T.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "ABM8-272-T3": {
+   "lcsc": "C20625731",
+   "refs": [
+    "Y1"
+   ],
+   "file": "ABM8-272-T3.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL10C150JB8NNNC": {
+   "lcsc": "C1644",
+   "refs": [
+    "C20",
+    "C21"
+   ],
+   "file": "CL10C150JB8NNNC.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "TS-1187A-B-A-B": {
+   "lcsc": "C318884",
+   "refs": [
+    "SW1",
+    "SW2",
+    "SW3",
+    "SW4"
+   ],
+   "file": "TS-1187A-B-A-B.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "BAT54C,215": {
+   "lcsc": "C37704",
+   "refs": [
+    "D2"
+   ],
+   "file": "BAT54C_215.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0402WGF270JTCE": {
+   "lcsc": "C25100",
+   "refs": [
+    "R40",
+    "R41"
+   ],
+   "file": "0402WGF270JTCE.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "ESP32-S3-WROOM-1-N16R8": {
+   "lcsc": "C2913202",
+   "refs": [
+    "U2"
+   ],
+   "file": "ESP32-S3-WROOM-1-N16R8.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL21A226MAQNNNE": {
+   "lcsc": "C45783",
+   "refs": [
+    "C22",
+    "C34",
+    "C35",
+    "C38",
+    "C39"
+   ],
+   "file": "CL21A226MAQNNNE.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL10A105KB8NNNC": {
+   "lcsc": "C15849",
+   "refs": [
+    "C24",
+    "C27",
+    "C31",
+    "C40",
+    "C41"
+   ],
+   "file": "CL10A105KB8NNNC.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "TF-015": {
+   "lcsc": "C113206",
+   "refs": [
+    "J2"
+   ],
+   "file": "TF-015.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "4D03WGJ0103T5E": {
+   "lcsc": "C29718",
+   "refs": [
+    "RN1"
+   ],
+   "file": "4D03WGJ0103T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "WS2812B-2020-V6": {
+   "lcsc": "C52917434",
+   "refs": [
+    "D3"
+   ],
+   "file": "WS2812B-2020-V6.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "TYPE-C-31-M-12": {
+   "lcsc": "C165948",
+   "refs": [
+    "J3"
+   ],
+   "file": "TYPE-C-31-M-12.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF5101T5E": {
+   "lcsc": "C23186",
+   "refs": [
+    "R45",
+    "R46"
+   ],
+   "file": "0603WAF5101T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "USBLC6-2SC6": {
+   "lcsc": "C7519",
+   "refs": [
+    "U3"
+   ],
+   "file": "USBLC6-2SC6.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CP2102N-A02-GQFN28R": {
+   "lcsc": "C964632",
+   "refs": [
+    "U4"
+   ],
+   "file": "CP2102N-A02-GQFN28R.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "CL10A475KO8NNNC": {
+   "lcsc": "C19666",
+   "refs": [
+    "C30"
+   ],
+   "file": "CL10A475KO8NNNC.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF2202T5E": {
+   "lcsc": "C31850",
+   "refs": [
+    "R47"
+   ],
+   "file": "0603WAF2202T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF4702T5E": {
+   "lcsc": "C25819",
+   "refs": [
+    "R48"
+   ],
+   "file": "0603WAF4702T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "UMH3N": {
+   "lcsc": "C62892",
+   "refs": [
+    "U5"
+   ],
+   "file": "UMH3N.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "TPS2116DRLR": {
+   "lcsc": "C3235557",
+   "refs": [
+    "U6"
+   ],
+   "file": "TPS2116DRLR.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "0603WAF3302T5E": {
+   "lcsc": "C4216",
+   "refs": [
+    "R50"
+   ],
+   "file": "0603WAF3302T5E.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "AP63203WU-7": {
+   "lcsc": "C780769",
+   "refs": [
+    "U7"
+   ],
+   "file": "AP63203WU-7.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "SWPA4030S6R8MT": {
+   "lcsc": "C62684",
+   "refs": [
+    "L2"
+   ],
+   "file": "SWPA4030S6R8MT.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  },
+  "AP2112K-3.3TRG1": {
+   "lcsc": "C51118",
+   "refs": [
+    "U8"
+   ],
+   "file": "AP2112K-3.3TRG1.pdf",
+   "present": true,
+   "source": "copied from Emerson-Arcadia/FujiNet-Arcadia-Rev0/datasheets"
+  }
+ }
+}

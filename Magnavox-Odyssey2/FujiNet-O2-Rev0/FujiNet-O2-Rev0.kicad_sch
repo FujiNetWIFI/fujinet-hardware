@@ -1,0 +1,703 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "88b59a31-f1e0-5270-966c-0a51e633cd96")
+	(paper "A3")
+	(title_block
+		(title "FujiNet Odyssey 2 / Videopac Rev0")
+		(date "2026-10-30")
+		(rev "0")
+		(company "FujiNet")
+		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
+		(comment 2 "CERN-OHL-W-2.0; RP2350 regulator corner after Raspberry Pi RP2350A minimal design (MIT)")
+		(comment 3 "Rev0 2026-10-30: RP2354B + ESP32-S3; firmware pico/o2 picopac_cart.c pin map")
+	)
+	(lib_symbols)
+	(sheet
+		(at 30.48 33.02)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "32ea9bbf-c0f4-5cd8-a8c6-c886b83f8a18")
+		(property "Sheetname" "power"
+			(at 30.48 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 30.48 53.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-O2-Rev0"
+				(path "/88b59a31-f1e0-5270-966c-0a51e633cd96"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 172.72)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "95e1bfb9-86e1-5d2b-adf5-c75ac77d6a89")
+		(property "Sheetname" "cart-bus"
+			(at 30.48 172.02 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cart-bus.kicad_sch"
+			(at 30.48 193.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-O2-Rev0"
+				(path "/88b59a31-f1e0-5270-966c-0a51e633cd96"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 76.2)
+		(size 63.5 81.28)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "0311a302-f663-5d04-b02d-44956f7eac9c")
+		(property "Sheetname" "rp-core"
+			(at 30.48 75.5 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "rp-core.kicad_sch"
+			(at 30.48 158.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 93.98 81.28 0)
+			(uuid "eb5a0347-ceea-5462-8bc1-924eac32af22")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 93.98 83.82 0)
+			(uuid "f4d20eca-0ee3-56ce-be44-02fe05ea808f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RUN_CTL" input
+			(at 93.98 86.36 0)
+			(uuid "03b0de08-3601-5273-bf2b-64055370c4a8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "BOOTSEL_CTL" input
+			(at 93.98 88.9 0)
+			(uuid "ce155a34-3870-5868-8adb-aa5d74903579")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 93.98 127 0)
+			(uuid "3f00121e-7107-58d2-818e-015560c2ac36")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "FujiNet-O2-Rev0"
+				(path "/88b59a31-f1e0-5270-966c-0a51e633cd96"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 33.02)
+		(size 30.48 99.06)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "96fd578a-d6c8-51bf-a199-60e3d9097388")
+		(property "Sheetname" "fujinet"
+			(at 132.08 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "fujinet.kicad_sch"
+			(at 132.08 132.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 132.08 81.28 180)
+			(uuid "12678868-1bb6-5ea5-be48-91cae030a156")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 132.08 83.82 180)
+			(uuid "975897ef-7e7b-5057-af40-ca8836a088fb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RUN_CTL" output
+			(at 132.08 86.36 180)
+			(uuid "7e8f5a90-20cd-5ed9-8c3f-9bd04112b1e2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "BOOTSEL_CTL" output
+			(at 132.08 88.9 180)
+			(uuid "122c7ebd-674d-536f-bfa6-64a1b682cf69")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 116.84 180)
+			(uuid "80e237f0-d682-566c-9c4e-d25efc294c2c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 119.38 180)
+			(uuid "711d6ae9-209f-584a-8592-cb88a4d1dac5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" output
+			(at 132.08 121.92 180)
+			(uuid "c7904280-91c3-58a3-ab3a-e13c81257d0a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_RXD" input
+			(at 132.08 124.46 180)
+			(uuid "d03ac0eb-736c-50f9-ba36-9ecbb3ba7874")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-O2-Rev0"
+				(path "/88b59a31-f1e0-5270-966c-0a51e633cd96"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 152.4)
+		(size 30.48 35.56)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "e602f859-b829-5714-b210-8e2f34041d4a")
+		(property "Sheetname" "usb"
+			(at 132.08 151.7 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 132.08 188.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "S3_RXD" output
+			(at 132.08 157.48 180)
+			(uuid "e0795f49-d18e-5557-9420-5ff660fd29fb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" input
+			(at 132.08 160.02 180)
+			(uuid "b21a0dff-edcd-54d4-ac16-6b33e2b3d68c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 162.56 180)
+			(uuid "6f77ca79-b8e4-50a1-955a-3de4f085b537")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 165.1 180)
+			(uuid "62ceb285-d630-5ee1-b234-81f67a8a226a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-O2-Rev0"
+				(path "/88b59a31-f1e0-5270-966c-0a51e633cd96"
+					(page "5")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 93.98 81.28)
+			(xy 132.08 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83565c2f-b837-5288-8ce2-6f370534b26f")
+	)
+	(wire
+		(pts
+			(xy 93.98 83.82)
+			(xy 132.08 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef8d08e8-7478-517e-9fe6-a8a3a1c7ef69")
+	)
+	(wire
+		(pts
+			(xy 93.98 86.36)
+			(xy 132.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4625ccd5-3840-5ac7-a1df-198289ade8c9")
+	)
+	(wire
+		(pts
+			(xy 93.98 88.9)
+			(xy 132.08 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c5f1ee4-0e93-5979-b60c-f1a143bf67dd")
+	)
+	(wire
+		(pts
+			(xy 132.08 116.84)
+			(xy 121.92 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ffd01fc-16f9-5e66-b595-450b38db5d9a")
+	)
+	(wire
+		(pts
+			(xy 121.92 116.84)
+			(xy 121.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2eba976-f037-5ae1-9be4-04df10230837")
+	)
+	(wire
+		(pts
+			(xy 121.92 165.1)
+			(xy 132.08 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c00a115-5488-50fc-8897-63166a30392e")
+	)
+	(wire
+		(pts
+			(xy 132.08 119.38)
+			(xy 124.46 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3504ade5-052b-569d-9498-e35f51762465")
+	)
+	(wire
+		(pts
+			(xy 124.46 119.38)
+			(xy 124.46 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "13edf992-2ce6-5408-9193-5bd9621218e1")
+	)
+	(wire
+		(pts
+			(xy 124.46 162.56)
+			(xy 132.08 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28821eb2-74a3-5ec0-8871-a71b8b570c5f")
+	)
+	(wire
+		(pts
+			(xy 132.08 121.92)
+			(xy 127 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d91ccd4f-cbd5-596c-b5f3-2980046742e6")
+	)
+	(wire
+		(pts
+			(xy 127 121.92)
+			(xy 127 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "388e228f-c788-5013-b8d7-538324dfd49d")
+	)
+	(wire
+		(pts
+			(xy 127 160.02)
+			(xy 132.08 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d41891ba-a5c2-55c3-8d6d-40e557c7b8dd")
+	)
+	(wire
+		(pts
+			(xy 132.08 124.46)
+			(xy 129.54 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2fadbbcc-2c78-5f54-8c05-16398b7c8966")
+	)
+	(wire
+		(pts
+			(xy 129.54 124.46)
+			(xy 129.54 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28591ecd-e3db-501b-8ed8-e6f67c468973")
+	)
+	(wire
+		(pts
+			(xy 129.54 157.48)
+			(xy 132.08 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f4cb5ddd-6c1f-5891-a801-9003c08e08f6")
+	)
+	(wire
+		(pts
+			(xy 93.98 127)
+			(xy 121.92 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b703f091-d8c6-5d2b-b46f-b1fc3a933c36")
+	)
+	(junction
+		(at 121.92 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e65e1d8a-3e25-5966-add4-5063e5c930fc")
+	)
+	(label "USB_DP"
+		(at 95.25 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8f931af3-069e-590b-aa3a-6f492068651f")
+	)
+	(label "USB_DM"
+		(at 95.25 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "53ecba5a-6253-5a43-916a-8456cb02af13")
+	)
+	(label "RUN_CTL"
+		(at 95.25 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "045965cd-0d16-5d8b-bfad-bb4bf547f327")
+	)
+	(label "BOOTSEL_CTL"
+		(at 95.25 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "56cc9523-8829-509e-985d-bbc09c92befb")
+	)
+	(label "S3_EN"
+		(at 121.92 163.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a82deada-802a-5b32-88d9-c84b9be35f47")
+	)
+	(label "S3_IO0"
+		(at 124.46 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "69d7ef4d-0e80-5c0f-976b-bf6d65d766db")
+	)
+	(label "S3_TXD"
+		(at 127 158.75 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5022ef16-e6fc-5ed8-b33f-22b47b959702")
+	)
+	(label "S3_RXD"
+		(at 129.54 156.21 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "39215b78-2068-5dc6-b9a8-cf47eb17617a")
+	)
+	(text "the console cartridge slot (the 30-finger edge) is on cart-bus"
+		(exclude_from_sim no)
+		(at 30.48 203.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "20a8bff2-856a-5a18-a6b9-9a03f33e366a")
+	)
+	(text "FujiNet for the Magnavox Odyssey 2 / Philips Videopac, Rev0: an RP2354B cartridge on the 8048's\nbus + ESP32-S3.\n\nThe cart serves the console's fetches in software (fujinet-firmware pico/o2): /PSEN low reads the\ncart, the RP drives DB0-DB7 while it lasts and lets go otherwise; the console writes the mailbox\nwith /WR while P14 is low; P10 / P11 select the bank.\n\n  cart-bus   the 30-finger edge, 330R into the RP2354B's GPIO0-28 (PicoPAC map), pin B's pull-down,\n             the console-5V sense divider, the activity LED, the self-test and debug-UART pads\n  rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL /\n             RESET, its USB out to the S3\n  fujinet    the ESP32-S3 (the FujiNet, the RP's USB host), microSD, WS2812 status light\n  usb        USB-C, the USBLC6 ESD array, the CP2102N bridge and esptool's auto-program pair\n  power      +5V = the TPS2116 mux (USB VBUS first, console 5 V second), the RP's LDO (+3V3_RP), the\n             S3's buck (+3V3)\n\nRails (GND, CONS_5V, VBUS, +5V, +3V3, +3V3_RP, DVDD) join by their power symbols.\n\nFirmware contract (tools/check_nets.py checks this netlist against it): fujinet-firmware pico/o2\npicopac_cart.c (A0-A11 GPIO0-11, P11 12, P10 13, D0-D7 GPIO14-21, /PSEN 22, /WR 23, P14 24, LED 25,\nE 26, T0 27); this board adds pin B on GP28, self-test GP29, console 5 V sense GP40, debug UART\nGP44 / 45.  The S3: fujiversal-o2.h (SD 38-41, UART0 43 / 44, WS2812 48, USB host 19 / 20) + RUN /\nBOOTSEL on IO4 / IO5 and SD card detect on IO42 (README: firmware changes)."
+		(exclude_from_sim no)
+		(at 187.96 25.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b59b5c57-6f42-542b-b6eb-d38838812464")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

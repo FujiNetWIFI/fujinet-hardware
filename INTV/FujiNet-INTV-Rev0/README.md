@@ -28,6 +28,10 @@ geometry, the direct-connect CP-1610 bus interface, the RP2354A support circuit
 PiNTY CARD design; the full bus/edge net map was verified by tracing the published
 PiNTY gerbers. This derivative is likewise released under **CERN-OHL-W-2.0**.
 
+The outline, the left shell notch and the two shell-post holes follow Andrea Ottaviani's
+**[PiRTO II](https://github.com/aotta/PiRTOII)** (GPL-3.0), so the board fits a PiRTO II
+shell. Dimensions only: no file from it is in this repository.
+
 Additional sources: standard package footprints from the official KiCad footprint
 library (CC-BY-SA 4.0 with the KiCad libraries exception); microSD footprint reused
 from `Coco/CoCo-FujiNet-Rev0000` in this repository; USB-UART port per the public

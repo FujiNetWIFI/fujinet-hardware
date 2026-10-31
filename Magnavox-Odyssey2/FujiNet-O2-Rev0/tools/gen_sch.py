@@ -30,6 +30,7 @@ DATE = '2026-10-30'
 TITLE = 'FujiNet Odyssey 2 / Videopac Rev0'
 COMMENT2 = 'CERN-OHL-W-2.0; RP2350 regulator corner after Raspberry Pi RP2350A minimal design (MIT)'
 COMMENT3 = 'Rev0 2026-10-30: RP2354B + ESP32-S3; firmware pico/o2 picopac_cart.c pin map'
+COMMENT4 = "Pin map, outline and post holes after Andrea Ottaviani's PicoPAC (GPL-3.0)"
 NS = uuid.UUID('3b6f0d52-8a41-4c9e-b7d2-5e0c1f7a2002')   # the O2 Rev0 namespace
 
 
@@ -484,7 +485,8 @@ def serialize(sh, title, root_uuid, sheet_uuid, pwr):
           ['rev', Q('0')], ['company', Q('FujiNet')],
           ['comment', 1, Q('Generated from tools/design.py + tools/sch_layout.py - edit those, not this file')],
           ['comment', 2, Q(COMMENT2)],
-          ['comment', 3, Q(COMMENT3)]]
+          ['comment', 3, Q(COMMENT3)],
+          ['comment', 4, Q(COMMENT4)]]
     return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
             ['generator_version', Q('9.0')], ['uuid', Q(sheet_uuid)], ['paper', Q(sh.paper)], tb,
             lib_symbols] + items + [['embedded_fonts', 'no']]
@@ -538,7 +540,8 @@ def serialize_root(sh, root_uuid, sheet_uuids):
           ['company', Q('FujiNet')],
           ['comment', 1, Q('Generated from tools/design.py + tools/sch_layout.py - edit those, not this file')],
           ['comment', 2, Q(COMMENT2)],
-          ['comment', 3, Q(COMMENT3)]]
+          ['comment', 3, Q(COMMENT3)],
+          ['comment', 4, Q(COMMENT4)]]
     return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
             ['generator_version', Q('9.0')], ['uuid', Q(root_uuid)], ['paper', Q(sh.paper)], tb,
             ['lib_symbols']] + items + [['sheet_instances', ['path', Q('/'), ['page', Q('1')]]],

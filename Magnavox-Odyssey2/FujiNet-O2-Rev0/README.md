@@ -65,7 +65,7 @@ The Videopac port is 30 contacts in two rows of 15: **1-15** on one face and **A
 - **N = A7, P = A6.** Boris and the nets of all three built boards below agree. The comment in MAME's `bus/odyssey2/slot.h` has them swapped; it is not used.
 - **Three built, working carts**, read from their design files (numbers and names only, no file copied):
   - bwack's Videopac_USBCART (LGPL-3.0): the edge footprint as placed in its board, and its nets;
-  - aotta's PicoPAC (no licence; dimensions only): the same footprint and outline, its own nets, and the GPIO map our firmware inherited;
+  - Andrea Ottaviani's PicoPAC (GPL-3.0): the same footprint and outline, its own nets, and the GPIO map our firmware inherited;
   - wilco2009's Videopac-micro-SD-Cart v2.2 (GPL-3.0, Eagle): its edge element and signals.
 - `tools/audit/edge_orientation.py` checks the footprint and the netlist against all four. It passes, so `tools/edge_geom.VERIFIED` is True and the package is not provisional.
 
@@ -243,7 +243,7 @@ Everything is generated from `tools/design.py` (the circuit), `tools/sch_layout.
   - the pipeline, the cart side (330R into the FT pads, VSENSE), the S3 half, the USB-C and the power mux come from FujiNet-Arcadia Rev0, and through it from Fujiversal-Atari2600 Rev1 and FujiNet-StudioII Rev0;
   - the RP2354B core, its supply rings and its drawing come from FujiNet-StudioII Rev0.
 - **The regulator corner:** Raspberry Pi's RP2350 minimal design (MIT, `tools/RPI-MINIMAL-LICENSE.txt`), moved onto the QFN-80 by FujiNet-StudioII's `tools/rpi_graft.py`: its parts, its copper and the RPI_* footprints.
-- **The edge:** Dan Boris's pinout; the geometry read from bwack's (LGPL-3.0), PicoPAC's (unlicensed) and wilco2009's (GPL-3.0) board files. Numbers and names only: no file from those projects is in this repository.
-- **The pin map:** `fujinet-firmware` `pico/o2` (PicoPAC's, used with Andrea Ottaviani's permission; see its `PROVENANCE.md`) and `include/pinmap/fujiversal-o2.h`.
+- **The edge:** Dan Boris's pinout; the geometry (outline, fingers, shell-post holes) read from bwack's (LGPL-3.0), Andrea Ottaviani's PicoPAC (GPL-3.0) and wilco2009's (GPL-3.0) board files. Numbers and names only: no file from those projects is in this repository.
+- **The pin map:** `fujinet-firmware` `pico/o2` (Andrea Ottaviani's PicoPAC, GPL-3.0; see its `PROVENANCE.md`) and `include/pinmap/fujiversal-o2.h`.
 - **Symbols:** official KiCad libraries (CC-BY-SA 4.0 with exception); project symbols: the edge, the RP2354B in two units, the ESP32-S3-WROOM-1 by function, the microSD, the USB-C 16P by function.
 - **3D models:** `3d/README.md`.

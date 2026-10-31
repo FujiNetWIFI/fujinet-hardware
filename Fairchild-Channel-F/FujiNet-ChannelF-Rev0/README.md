@@ -104,11 +104,14 @@ contacts push up from below.
 
 Sources, transcribed and checked by `tools/audit/edge_orientation.py`:
 
-- aotta/PicoVideocart's fab gerbers. It works in a console. Its footprint numbers its pads in
-  reverse.
+- Andrea Ottaviani's aotta/PicoVideocart (GPL-3.0), its fab gerbers: the outline, the key slot,
+  the shell holes, the thickness and the finger order. It works in a console. Its footprint
+  numbers its pads in reverse.
 - timtashpulatov/fart's `Cart_Conn` footprint.
 - US 4,095,791.
 - The veswiki photo of a real cart's contact face.
+
+Numbers only: no file from these sources is in this repository. The board is CERN-OHL-W-2.0.
 
 The original thickness, the console key's width and the console connector's reach are documented
 nowhere. That is why the tab carries no parts, and why `docs/tab-overlay-1to1.pdf` exists.

@@ -11,7 +11,7 @@ Sources (2026-10-30):
         F..K reversed -- not used).  Pads 1..15 on F.Cu at x = -27.5 .. +27.5 step 3.9286 (55 / 14),
         A..R on B.Cu at the same x (A behind 1), each 2.0 x 8.0 mm from the board edge; two 5.0 mm
         NPTH at (+-27, -25); outline 63 x 85 with the side notches and bottom chamfers below.
-      - aotta, PicoPAC: the same outline and footprint as bwack's (dimensions only: no licence).
+      - aotta, PicoPAC (GPL-3.0): the same outline and footprint as bwack's (dimensions only).
       - wilco2009, Videopac-micro-SD-Cart v2.2 (GPL-3.0): 3.96 mm pitch, 2.6 x 10.16 mm fingers
         from 0.45 mm, 62.2 mm wide; Soeren Gust's G7000RAM: 3.937 mm (0.155").
     Every one of them plays in a console, so a pitch anywhere in 3.9286 .. 3.96 and a 2.0 mm finger

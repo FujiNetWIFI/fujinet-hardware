@@ -30,6 +30,7 @@ DATE = '2026-10-09'
 TITLE = 'FujiNet Channel F Rev0'
 COMMENT2 = 'CERN-OHL-W-2.0 (S3/USB/power from FujiNet-Astrocade-Rev0 and its sources)'
 COMMENT3 = 'Firmware: fujinet-firmware pico/channelf (as-is) + fujiversal-channelf'
+COMMENT4 = "Outline, key slot and shell holes after Andrea Ottaviani's PicoVideocart (GPL-3.0)"
 NS = uuid.UUID('c4a11e1f-0f8a-4c5e-9d3b-c4a11e1f0f8a')   # the Channel F Rev0 namespace
 
 
@@ -565,7 +566,8 @@ def serialize(sh, title, root_uuid, sheet_uuid, pwr):
           ['rev', Q('0')], ['company', Q('FujiNet')],
           ['comment', 1, Q('Generated from tools/design.py + tools/sch_layout.py - edit those, not this file')],
           ['comment', 2, Q(COMMENT2)],
-          ['comment', 3, Q(COMMENT3)]]
+          ['comment', 3, Q(COMMENT3)],
+          ['comment', 4, Q(COMMENT4)]]
     return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
             ['generator_version', Q('9.0')], ['uuid', Q(sheet_uuid)], ['paper', Q(sh.paper)], tb,
             lib_symbols] + items + [['embedded_fonts', 'no']]
@@ -619,7 +621,8 @@ def serialize_root(sh, root_uuid, sheet_uuids):
           ['company', Q('FujiNet')],
           ['comment', 1, Q('Generated from tools/design.py + tools/sch_layout.py - edit those, not this file')],
           ['comment', 2, Q(COMMENT2)],
-          ['comment', 3, Q(COMMENT3)]]
+          ['comment', 3, Q(COMMENT3)],
+          ['comment', 4, Q(COMMENT4)]]
     return ['kicad_sch', ['version', 20250114], ['generator', Q('eeschema')],
             ['generator_version', Q('9.0')], ['uuid', Q(root_uuid)], ['paper', Q(sh.paper)], tb,
             ['lib_symbols']] + items + [['sheet_instances', ['path', Q('/'), ['page', Q('1')]]],

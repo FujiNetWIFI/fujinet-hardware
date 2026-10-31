@@ -8,7 +8,7 @@ The bottom 17 mm of the board stays bare, to enter the console's slot. `board-an
 
 **No original cartridge or console was measured for this shell.**
 - An original Odyssey 2 / Videopac cartridge is reportedly 127 x 80 x 21 mm (ConsoleMods' cartridge-dimension table, seen only in a search snippet).
-- PicoPAC's printed shell (aotta/PicoPAC `3dPrint/`, measurements only: the project has no licence) is 80.2 x 134.5 x 20.5 mm. Its bosses sit at x +-27 mm, 25 mm above the contact edge, matching the board's holes. Its README calls it a work in progress.
+- PicoPAC's printed shell (Andrea Ottaviani's aotta/PicoPAC `3dPrint/`, GPL-3.0; measurements only) is 80.2 x 134.5 x 20.5 mm. Its bosses sit at x +-27 mm, 25 mm above the contact edge, matching the board's holes. Its README calls it a work in progress.
 - PicoPAC's photos show its bare board standing in a G7000's slot with the parts toward the player.
 
 So the shell's size comes from the board. **VERIFY** marks every number that stands in for a measurement nobody has made. Check each one before printing more than one shell.

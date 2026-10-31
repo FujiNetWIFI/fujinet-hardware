@@ -13,7 +13,7 @@ Sources (copied here by hand on 2026-10-30, not imported, so a slip in design.py
            = P11, 13 "A13" = P10 (the bank lines as address bits), E "#CS".
   PICOPAC  aotta, PicoPAC, Kicad/PicoPAC.kicad_pcb: the same footprint and outline as bwack's, its own
            nets (12 "A12" and 13 "A13" go to GP12 / GP13, which picopac_cart.c calls P11_PIN /
-           P10_PIN; 11 "CS" = CS_PIN = P14; E "~{CS}" = NOTCS_PIN).  Dimensions and names only: no licence.
+           P10_PIN; 11 "CS" = CS_PIN = P14; E "~{CS}" = NOTCS_PIN).  Dimensions and names only (GPL-3.0).
   WILCO    wilco2009, Videopac-micro-SD-Cart v2.2 (GPL-3.0), Eagle "... 2.2 - alt.brd": element U$1
            (pad, x, layer 1 = top / 16 = bottom, signal); 3.96 mm pitch.  B goes to a jumper (N$7).
 Checks:

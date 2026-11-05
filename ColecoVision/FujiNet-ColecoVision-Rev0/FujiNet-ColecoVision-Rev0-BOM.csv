@@ -1,0 +1,59 @@
+Qty,References,Value,Footprint,MPN,Manufacturer,LCSC,Description,Notes
+16,C1 C2 C3 C4 C8 C9 C10 C11 C20 C24 C27 C29 C30 C34 C37 C38,100nF,C_0603_1608Metric,CC0603KRX7R9BB104,YAGEO,C14663,capacitor (several uses: see schematic),
+6,C5 C6 C7 C12 C17 C18,100nF,RPI_C0402,CL05B104KO5NNNC,Samsung Electro-Mechanics,C1525,capacitor (several uses: see schematic),
+3,C13 C26 C33,10uF,C_0603_1608Metric,CL10A106KP8NNNC,Samsung Electro-Mechanics,C19702,capacitor (several uses: see schematic),
+2,C14 C16,4.7uF,RPI_C0402_wide,CL05A475MP5NRNC,Samsung Electro-Mechanics,C23733,capacitor (several uses: see schematic),
+2,C15 C19,4.7uF,RPI_C0402,CL05A475MP5NRNC,Samsung Electro-Mechanics,C23733,capacitor (several uses: see schematic),
+2,C21 C22,15pF,C_0603_1608Metric,CL10C150JB8NNNC,Samsung Electro-Mechanics,C1644,crystal load,
+5,C23 C35 C36 C39 C40,22uF,C_0805_2012Metric,CL21A226MAQNNNE,Samsung Electro-Mechanics,C45783,capacitor (several uses: see schematic),
+5,C25 C28 C32 C41 C42,1uF,C_0603_1608Metric,CL10A105KB8NNNC,Samsung Electro-Mechanics,C15849,capacitor (several uses: see schematic),
+1,C31,4.7uF,C_0603_1608Metric,CL10A475KO8NNNC,Samsung Electro-Mechanics,C19666,CP2102N VDD bulk,
+1,D1,red,LED_0603_1608Metric,KT-0603R,Hubei KENTO Elec,C2286,RP activity LED (GP25),
+1,D2,BAT54C,SOT-23,"BAT54C,215",Nexperia,C37704,"RESET steering, common cathode",
+1,D3,WS2812B-2020-V6,LED_WS2812B-2020_PLCC4_2.0x2.0mm,WS2812B-2020-V6,Worldsemi,C52917434,status LED on +5V (datasheet VDD 3.7-5.3 V; VIH 2.7 V takes 3.3 V data),
+1,J1,Coleco_Cart_Edge_30,Coleco_Cart_Edge_30,,,,"ColecoVision cartridge edge, 2x15 gold fingers, 2.54 mm pitch; odd pins on the back, even pins on the component face",not in BOM
+1,J2,microSD,TF-SMD_TF-015,TF-015,SOFNG,C113206,"microSD push-push, SPI mode",
+1,J3,USB-C,USB_C_Receptacle_HRO_TYPE-C-31-M-12,TYPE-C-31-M-12,Korean Hroparts Elec,C165948,power + S3 programming / console,
+1,L1,3.3uH,RPI_L_AOTA-B201610S3R3,AOTA-B201610S3R3-101-T,Abracon,C42411119,RP2350 core SMPS inductor (polarity marked),
+1,L2,6.8uH,L_Sunlord_SWPA4030S,SWPA4030S6R8MT,Sunlord,C62684,buck inductor,
+7,R1 R3 R7 R9 R14 R15 R23,10k,R_0603_1608Metric,0603WAF1002T5E,UNI-ROYAL,C25804,resistor (several uses: see schematic),
+1,R2,680R,R_0603_1608Metric,0603WAF6800T5E,UNI-ROYAL,C23228,LED series (~2 mA),
+1,R4,15k,R_0603_1608Metric,0603WAF1502T5E,UNI-ROYAL,C22809,console 5V sense divider (0.6 x CONS_5V),
+1,R5,33R,RPI_R0402,0402WGF330JTCE,UNI-ROYAL,C25105,VREG_AVDD RC filter (R_FILT),
+5,R6 R8 R10 R11 R21,1k,R_0603_1608Metric,0603WAF1001T5E,UNI-ROYAL,C21190,resistor (several uses: see schematic),
+2,R12 R13,27R,RPI_R0402,0402WGF270JTCE,UNI-ROYAL,C25100,USB series,
+1,R16,330R,R_0603_1608Metric,0603WAF3300T5E,UNI-ROYAL,C23138,WS2812 data series,
+2,R17 R18,5.1k,R_0603_1608Metric,0603WAF5101T5E,UNI-ROYAL,C23186,UFP Rd,
+1,R19,22k,R_0603_1608Metric,0603WAF2202T5E,UNI-ROYAL,C31850,VBUS sense divider,
+1,R20,47k,R_0603_1608Metric,0603WAF4702T5E,UNI-ROYAL,C25819,VBUS sense divider,
+1,R22,33k,R_0603_1608Metric,0603WAF3302T5E,UNI-ROYAL,C4216,mux priority threshold (VBUS > 4.3 V),
+4,RN1 RN2 RN3 RN4,4x330R,R_Array_Convex_4x0603,4D03WGJ0331T5E,UNI-ROYAL,C12018,RN (several uses: see schematic),
+2,RN5 RN6,4x10k,R_Array_Convex_4x0603,4D03WGJ0103T5E,UNI-ROYAL,C29718,RN (several uses: see schematic),
+1,SW1,RESET,SW_SPST_TS-1187A,TS-1187A-B-A-B,XKB Connection,C318884,cart RESET: RP RUN + S3 EN through the BAT54C,
+1,SW2,BOOTSEL,SW_SPST_TS-1187A,TS-1187A-B-A-B,XKB Connection,C318884,RP2350A BOOTSEL (hold while pressing RESET),
+1,SW3,S3_BOOT,SW_SPST_TS-1187A,TS-1187A-B-A-B,XKB Connection,C318884,ESP32-S3 BOOT (IO0),
+1,TP1,SELFTEST,TestPoint_Pad_D1.5mm,,,,"test pad: GP29, a self-test trigger for bring-up",not in BOM
+1,TP2,DBG_TX,TestPoint_Pad_D1.5mm,,,,"test pad: GP24 (UART1 TX), debug UART (3.3 V)",not in BOM
+1,TP3,GP23,TestPoint_Pad_D1.5mm,,,,"test pad: GP23, spare",not in BOM
+1,TP4,SWCLK,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP5,SWDIO,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP6,GND,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP7,RUN,TestPoint_Pad_D1.5mm,,,,test pad,not in BOM
+1,TP8,CONS_5V,TestPoint_Pad_D1.5mm,,,,bring-up pad: console 5V (edge pin 30),not in BOM
+1,TP9,VBUS,TestPoint_Pad_D1.5mm,,,,bring-up pad: USB VBUS,not in BOM
+1,TP10,+5V,TestPoint_Pad_D1.5mm,,,,bring-up pad: +5V (mux output),not in BOM
+1,TP11,+3V3_RP,TestPoint_Pad_D1.5mm,,,,bring-up pad: +3V3_RP (RP LDO),not in BOM
+1,TP12,+3V3,TestPoint_Pad_D1.5mm,,,,bring-up pad: +3V3 (buck: S3 side),not in BOM
+1,U1,RP2350A,RPI_RP2350A_QFN60,RP2350A,Raspberry Pi,C42411118,RP2350A: serves the ColecoVision cart bus (fujicoleco),
+1,U2,74LVC1G11,SOT-23-6,SN74LVC1G11DBVR,Texas Instruments,C22046,select AND: /8000 . /A000 . /C000,
+1,U3,74LVC1G08,SOT-23-5,SN74LVC1G08DBVR,Texas Instruments,C7666,select AND: . /E000 = /CE (GP26 and the buffer /OE),
+1,U4,74LVC245A,TSSOP-20_4.4x6.5mm_P0.65mm,SN74LVC245APWR,Texas Instruments,C7848,"data buffer, 5V-tolerant at 3.3V: edge D0-D7 <-> GP15-22",
+1,U5,W25Q16JVUXIQ,Winbond_USON-8-1EP_3x2mm_P0.5mm_EP0.2x1.6mm,W25Q16JVUXIQ,Winbond,C2843335,2 MB QSPI boot flash,
+1,U6,ESP32-S3-WROOM-1-N16R8,ESP32-S3-WROOM-1,ESP32-S3-WROOM-1-N16R8,Espressif,C2913202,FujiNet core (fujiversal-coleco),
+1,U7,USBLC6-2SC6,SOT-23-6,USBLC6-2SC6,STMicroelectronics,C7519,"USB ESD: D+, D-, VBUS",
+1,U8,CP2102N-A02-GQFN28,QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm,CP2102N-A02-GQFN28R,Silicon Labs,C964632,USB-UART for S3 flashing/console (self-powered),
+1,U9,UMH3N,SOT-363_SC-70-6,UMH3N,Jiangsu Changjing (JSCJ),C62892,esptool auto-program (DevKitC-1 style),
+1,U10,TPS2116,SOT-583-8,TPS2116DRLR,Texas Instruments,C3235557,"power mux: VBUS first, console 5V second",
+1,U11,AP63203WU,TSOT-23-6,AP63203WU-7,Diodes Incorporated,C780769,"3.3V 2A buck (S3, SD, CP2102N)",
+1,U12,AP2112K-3.3,SOT-23-5,AP2112K-3.3TRG1,Diodes Incorporated,C51118,"RP2350A 3.3V LDO (IOVDD, VREG_VIN, VREG_AVDD, flash, bus logic), 600mA, fast start",
+1,Y1,12MHz,Crystal_SMD_3225-4Pin_3.2x2.5mm,ABM8-272-T3,Abracon,C20625731,RP2350 12 MHz crystal,

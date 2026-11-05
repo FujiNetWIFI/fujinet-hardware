@@ -1,0 +1,432 @@
+(footprint "Coleco_Cart_Edge_30"
+	(version 20241229)
+	(generator "fujinet_gen")
+	(generator_version "1.0")
+	(layer "F.Cu")
+	(descr "ColecoVision cartridge edge: 2x15 gold fingers, 2.54mm pitch, 1.6x8mm, 0.5mm from the edge (+5V from 1.5mm: mates last). F.Cu = even pins 2-30, B.Cu = odd pins 1-29, pin 1 behind 2. Order ENIG + gold fingers + 30deg bevel. Geometry and sources: tools/edge_geom.py.")
+	(tags "colecovision coleco adam cartridge edge connector gold finger")
+	(property "Reference" "REF**"
+		(at 0 -13 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Coleco_Cart_Edge_30"
+		(at 0 -14.3 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd exclude_from_pos_files exclude_from_bom)
+	(fp_line
+		(start -20.1 0)
+		(end 20.1 0)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.Fab")
+	)
+	(fp_rect
+		(start -18.88 0)
+		(end 18.88 -11.3)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(fp_rect
+		(start -18.88 0)
+		(end 18.88 -11.3)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "B.CrtYd")
+	)
+	(pad "2" smd rect
+		(at -17.78 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "2" smd rect
+		(at -17.78 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "4" smd rect
+		(at -15.24 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "4" smd rect
+		(at -15.24 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "6" smd rect
+		(at -12.7 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "6" smd rect
+		(at -12.7 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "8" smd rect
+		(at -10.16 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "8" smd rect
+		(at -10.16 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "10" smd rect
+		(at -7.62 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "10" smd rect
+		(at -7.62 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "12" smd rect
+		(at -5.08 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "12" smd rect
+		(at -5.08 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "14" smd rect
+		(at -2.54 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "14" smd rect
+		(at -2.54 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "16" smd rect
+		(at 0 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "16" smd rect
+		(at 0 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "18" smd rect
+		(at 2.54 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "18" smd rect
+		(at 2.54 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "20" smd rect
+		(at 5.08 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "20" smd rect
+		(at 5.08 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "22" smd rect
+		(at 7.62 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "22" smd rect
+		(at 7.62 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "24" smd rect
+		(at 10.16 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "24" smd rect
+		(at 10.16 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "26" smd rect
+		(at 12.7 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "26" smd rect
+		(at 12.7 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "28" smd rect
+		(at 15.24 -4.5)
+		(size 1.6 8)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "28" smd rect
+		(at 15.24 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "30" smd rect
+		(at 17.78 -5)
+		(size 1.6 7)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "30" smd rect
+		(at 17.78 -9.6)
+		(size 0.5 2.8)
+		(layers "F.Cu")
+	)
+	(pad "1" smd rect
+		(at -17.78 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "1" smd rect
+		(at -17.78 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "3" smd rect
+		(at -15.24 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "3" smd rect
+		(at -15.24 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "5" smd rect
+		(at -12.7 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "5" smd rect
+		(at -12.7 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "7" smd rect
+		(at -10.16 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "7" smd rect
+		(at -10.16 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "9" smd rect
+		(at -7.62 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "9" smd rect
+		(at -7.62 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "11" smd rect
+		(at -5.08 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "11" smd rect
+		(at -5.08 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "13" smd rect
+		(at -2.54 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "13" smd rect
+		(at -2.54 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "15" smd rect
+		(at 0 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "15" smd rect
+		(at 0 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "17" smd rect
+		(at 2.54 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "17" smd rect
+		(at 2.54 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "19" smd rect
+		(at 5.08 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "19" smd rect
+		(at 5.08 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "21" smd rect
+		(at 7.62 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "21" smd rect
+		(at 7.62 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "23" smd rect
+		(at 10.16 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "23" smd rect
+		(at 10.16 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "25" smd rect
+		(at 12.7 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "25" smd rect
+		(at 12.7 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "27" smd rect
+		(at 15.24 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "27" smd rect
+		(at 15.24 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(pad "29" smd rect
+		(at 17.78 -4.5)
+		(size 1.6 8)
+		(layers "B.Cu" "B.Mask")
+		(solder_mask_margin 0.05)
+	)
+	(pad "29" smd rect
+		(at 17.78 -9.6)
+		(size 0.5 2.8)
+		(layers "B.Cu")
+	)
+	(fp_text user "2"
+		(at -17.78 -11.9 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "30"
+		(at 17.78 -11.9 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "1"
+		(at -17.78 -11.9 0)
+		(layer "B.SilkS")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+			(justify mirror)
+		)
+	)
+	(fp_text user "29"
+		(at 17.78 -11.9 0)
+		(layer "B.SilkS")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+			(justify mirror)
+		)
+	)
+	(embedded_fonts no)
+)

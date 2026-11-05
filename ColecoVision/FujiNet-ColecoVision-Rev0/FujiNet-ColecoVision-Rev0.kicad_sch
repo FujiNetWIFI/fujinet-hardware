@@ -1,0 +1,704 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "b3b8b4b9-0a24-5492-a9e1-149dbcf958d1")
+	(paper "A3")
+	(title_block
+		(title "FujiNet ColecoVision Rev0")
+		(date "2026-11-04")
+		(rev "0")
+		(company "FujiNet")
+		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
+		(comment 2 "CERN-OHL-W-2.0; RP2350 regulator corner after Raspberry Pi RP2350A minimal design (MIT)")
+		(comment 3 "Rev0 2026-11-04: RP2350A + W25Q16 + ESP32-S3; firmware pico/coleco coleco_cart.h pin map")
+		(comment 4 "Edge after MAME exp.h / ADAM TRM J1; outline after the ThatOldNerd, Commodore-Bench and Joe Grand carts")
+	)
+	(lib_symbols)
+	(sheet
+		(at 30.48 33.02)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "ccaf90c4-a9aa-5ec1-9e6f-da55a1a01f9a")
+		(property "Sheetname" "power"
+			(at 30.48 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 30.48 53.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-ColecoVision-Rev0"
+				(path "/b3b8b4b9-0a24-5492-a9e1-149dbcf958d1"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 172.72)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "ceedd788-4a56-55b1-ac34-65ce8709cb9e")
+		(property "Sheetname" "cart-bus"
+			(at 30.48 172.02 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "cart-bus.kicad_sch"
+			(at 30.48 193.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-ColecoVision-Rev0"
+				(path "/b3b8b4b9-0a24-5492-a9e1-149dbcf958d1"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 76.2)
+		(size 63.5 81.28)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "87eab7d0-107e-58a9-aa59-c6d56fb54491")
+		(property "Sheetname" "rp-core"
+			(at 30.48 75.5 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "rp-core.kicad_sch"
+			(at 30.48 158.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 93.98 81.28 0)
+			(uuid "22af7225-0976-5843-b416-95ef16f4bffe")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 93.98 83.82 0)
+			(uuid "b51f3cb4-1e4d-5f97-9fc1-9714468a7481")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RUN_CTL" input
+			(at 93.98 86.36 0)
+			(uuid "1af153fd-234e-550c-ae7c-a06bbcf6b285")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "BOOTSEL_CTL" input
+			(at 93.98 88.9 0)
+			(uuid "fec9daa3-8262-5cc3-bc49-e8a46d7ce5b7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 93.98 127 0)
+			(uuid "d6ef3e2e-1809-5100-b809-6bd8b60b9c61")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "FujiNet-ColecoVision-Rev0"
+				(path "/b3b8b4b9-0a24-5492-a9e1-149dbcf958d1"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 33.02)
+		(size 30.48 99.06)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "12ca0006-e285-5a71-8f42-4df55ddfa001")
+		(property "Sheetname" "fujinet"
+			(at 132.08 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "fujinet.kicad_sch"
+			(at 132.08 132.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 132.08 81.28 180)
+			(uuid "876f7126-b1d2-5403-a2f6-29ceb78e72e6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 132.08 83.82 180)
+			(uuid "a2382660-ea0d-567c-94fa-13a6bb94a7e8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RUN_CTL" output
+			(at 132.08 86.36 180)
+			(uuid "ee55e392-11be-5958-bf70-08f12b11048c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "BOOTSEL_CTL" output
+			(at 132.08 88.9 180)
+			(uuid "9dce1c0e-c530-5cba-b028-29c89c5f3164")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 116.84 180)
+			(uuid "9203de04-5ced-5f12-b2d4-43dbe6b613b7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 119.38 180)
+			(uuid "6634ec85-6807-5d9f-a340-8481507480ae")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" output
+			(at 132.08 121.92 180)
+			(uuid "a49184f9-1a09-55bb-8756-02b58ea91eaa")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_RXD" input
+			(at 132.08 124.46 180)
+			(uuid "7c76eb84-9a07-5401-8994-edcb9df26856")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-ColecoVision-Rev0"
+				(path "/b3b8b4b9-0a24-5492-a9e1-149dbcf958d1"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 152.4)
+		(size 30.48 35.56)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "629b57ab-73a2-5f4a-a7ee-938ee9fde424")
+		(property "Sheetname" "usb"
+			(at 132.08 151.7 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 132.08 188.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "S3_RXD" output
+			(at 132.08 157.48 180)
+			(uuid "5f9e6847-538b-59f3-8b8c-04c9e07635e9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" input
+			(at 132.08 160.02 180)
+			(uuid "1716d7a3-5d18-5a77-85c6-3b73d2505084")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 162.56 180)
+			(uuid "a2432def-f718-5e5a-9b12-226268afb09d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 165.1 180)
+			(uuid "1e794d79-ed37-5b06-b743-fdf002b2976d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-ColecoVision-Rev0"
+				(path "/b3b8b4b9-0a24-5492-a9e1-149dbcf958d1"
+					(page "5")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 93.98 81.28)
+			(xy 132.08 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f2c3121b-f219-5554-bcbc-5eeec081bfc3")
+	)
+	(wire
+		(pts
+			(xy 93.98 83.82)
+			(xy 132.08 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb062698-4ac7-548d-8ceb-87e6903e7fbe")
+	)
+	(wire
+		(pts
+			(xy 93.98 86.36)
+			(xy 132.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9610cf6e-727c-5d0c-96e4-93de12b4aec5")
+	)
+	(wire
+		(pts
+			(xy 93.98 88.9)
+			(xy 132.08 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2510039d-12d1-5a54-83bc-1c3ae2cbdf61")
+	)
+	(wire
+		(pts
+			(xy 132.08 116.84)
+			(xy 121.92 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57bcab1c-676a-5274-8c87-4e20f674827e")
+	)
+	(wire
+		(pts
+			(xy 121.92 116.84)
+			(xy 121.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35fa0af5-47e6-5a0e-899b-90df094614d6")
+	)
+	(wire
+		(pts
+			(xy 121.92 165.1)
+			(xy 132.08 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcbd1fe9-139b-5445-a662-140483b671ae")
+	)
+	(wire
+		(pts
+			(xy 132.08 119.38)
+			(xy 124.46 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "063a1c3a-ba72-5d3d-b0f1-3c3d600c8fa9")
+	)
+	(wire
+		(pts
+			(xy 124.46 119.38)
+			(xy 124.46 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "053dcb2c-c92b-55bf-9f89-b844e52519c3")
+	)
+	(wire
+		(pts
+			(xy 124.46 162.56)
+			(xy 132.08 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c499d8e-5712-5732-92be-5f474971fe8c")
+	)
+	(wire
+		(pts
+			(xy 132.08 121.92)
+			(xy 127 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "314334ca-92c9-5cfd-adfe-f86315276c8c")
+	)
+	(wire
+		(pts
+			(xy 127 121.92)
+			(xy 127 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "40bf4f5b-7850-51c9-855d-ec0f5f69d983")
+	)
+	(wire
+		(pts
+			(xy 127 160.02)
+			(xy 132.08 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9bd33e2d-176b-52ed-9eee-068a71e914e4")
+	)
+	(wire
+		(pts
+			(xy 132.08 124.46)
+			(xy 129.54 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35085881-2059-580b-ac15-25b51c8f9f5b")
+	)
+	(wire
+		(pts
+			(xy 129.54 124.46)
+			(xy 129.54 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c751597d-d17c-5684-a363-a547561aeb48")
+	)
+	(wire
+		(pts
+			(xy 129.54 157.48)
+			(xy 132.08 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3a343da-4471-591c-83f4-95e88f76e28c")
+	)
+	(wire
+		(pts
+			(xy 93.98 127)
+			(xy 121.92 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59cdebe0-58ff-56ce-a58d-2c0f62c7868c")
+	)
+	(junction
+		(at 121.92 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ce212d25-bc93-50c6-a0ed-18bca8224578")
+	)
+	(label "USB_DP"
+		(at 95.25 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1b573d6d-48ec-529f-964e-e00373d494d9")
+	)
+	(label "USB_DM"
+		(at 95.25 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "43c01285-2cdb-5c68-8771-4d0564c6bd03")
+	)
+	(label "RUN_CTL"
+		(at 95.25 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bf2f69df-6a18-5fb2-90d6-2f392b521522")
+	)
+	(label "BOOTSEL_CTL"
+		(at 95.25 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c0c00347-f0a8-58d1-b507-ce6e3bc1ac1b")
+	)
+	(label "S3_EN"
+		(at 121.92 163.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cd7b4298-8ace-53d8-a5cf-a14469f1fb8e")
+	)
+	(label "S3_IO0"
+		(at 124.46 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1ebeb78d-aa2f-5462-b7e3-052506b58f62")
+	)
+	(label "S3_TXD"
+		(at 127 158.75 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a526d764-8aa5-5228-9f49-d02e95bddf66")
+	)
+	(label "S3_RXD"
+		(at 129.54 156.21 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f913b376-4139-5db8-ae47-6b4d6c589002")
+	)
+	(text "the console cartridge slot (the 30-finger edge) is on cart-bus"
+		(exclude_from_sim no)
+		(at 30.48 203.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "c094f7e8-75e3-5851-bcb2-605f44156db3")
+	)
+	(text "FujiNet for the ColecoVision (and the ADAM's cartridge slot), Rev0: an RP2350A cartridge on the\nZ80's bus + ESP32-S3.\n\nThe cart serves the console's fetches in software (fujinet-firmware pico/coleco): core1 drives\nD0-D7 off the bare address, the 74LVC245A lets the byte onto the bus only while a cart select\n(/8000 /A000 /C000 /E000, ANDed to /CE) is low, and DIR turns it round for the bank-register writes.\n\n  cart-bus   the 30-finger edge, 330R into GP0-14 (A0-A14), the 74LVC245A between the edge's D0-D7\n             and GP15-22, the select pull-ups and AND pair (/CE on GP26 and the buffer's /OE), DIR\n             on GP27, the console-5V sense on GP28, the activity LED, the bring-up pads\n  rp-core    the RP2350A's supplies and decoupling, core regulator, the W25Q16 QSPI flash, crystal,\n             SWD, RUN / BOOTSEL / RESET, its USB out to the S3\n  fujinet    the ESP32-S3 (the FujiNet, the RP's USB host), microSD, WS2812 status light\n  usb        USB-C, the USBLC6 ESD array, the CP2102N bridge and esptool's auto-program pair\n  power      +5V = the TPS2116 mux (USB VBUS first, console 5 V second), the RP's LDO (+3V3_RP), the\n             S3's buck (+3V3)\n\nRails (GND, CONS_5V, VBUS, +5V, +3V3, +3V3_RP, DVDD) join by their power symbols.\n\nFirmware contract (tools/check_nets.py checks this netlist against it): fujinet-firmware pico/coleco\ncoleco_cart.h (A0-A14 GPIO0-14, D0-D7 GPIO15-22, LED 25, /CE 26, DIR 27, PWR 28); this board adds\nGP23 / GP24 (UART1 TX) / GP29 bring-up pads.  The S3: fujiversal-coleco.h (SD 38-41, UART0 43 / 44,\nWS2812 48, USB host 19 / 20) + RUN / BOOTSEL on IO4 / IO5 and SD card detect on IO42 (README:\nfirmware changes)."
+		(exclude_from_sim no)
+		(at 187.96 25.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "e8342723-db82-55ad-a58c-ba4bae00b4ed")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

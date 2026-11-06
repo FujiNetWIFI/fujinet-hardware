@@ -1,0 +1,36 @@
+(version 1)
+# Yannick Erb's EasyEDA copper against JLCPCB's standard 1-2 layer figures (kicad-happy jlcpcb
+# 2.2.1).  The Board Setup minimums (tools/rules.json) are the lowest values his copper needs; these
+# rules hold everything else to JLCPCB's figures.  Each exception is measured, as narrow as the
+# copper it admits, and listed in README "Design rules".  Nothing here was relaxed to pass a check
+# the board would fail at the fab: the board is as Yannick ordered it.
+
+# 0.127 mm between copper of different nets, except in the RP2354A's and the CP2102N's fan-out
+# (0.4 / 0.5 mm pitch QFNs): six spots at 0.107-0.121 mm, Yannick's EasyEDA rule there is 0.1016 mm
+(rule "jlc_clearance"
+	(condition "!(A.intersectsCourtyard('U1') || B.intersectsCourtyard('U1') || A.intersectsCourtyard('U3') || B.intersectsCourtyard('U3'))")
+	(constraint clearance (min 0.127mm)))
+
+# 0.3 mm copper to the board edge, except the two GND pours (0.259 mm from the outline's centre line)
+(rule "jlc_edge_clearance"
+	(condition "!((A.Type == 'Zone' && A.NetName == 'GND') || (B.Type == 'Zone' && B.NetName == 'GND'))")
+	(constraint edge_clearance (min 0.3mm)))
+
+# 0.25 mm from a hole to foreign copper, except the USB-C's own pads round its two locating pegs
+# (0.171-0.213 mm: the connector's footprint) and one B.Cu track by a via (GPIO09 by GPIO08's via, 0.243 mm)
+(rule "jlc_hole_clearance"
+	(condition "!(A.memberOfFootprint('J1') || B.memberOfFootprint('J1') || (A.NetName == '/cart-bus/GPIO09' && B.NetName == '/cart-bus/GPIO08') || (A.NetName == '/cart-bus/GPIO08' && B.NetName == '/cart-bus/GPIO09'))")
+	(constraint hole_clearance (min 0.25mm)))
+
+# Yannick's placement: four of the RP2354A's capacitors and R3 / L1 sit inside each other's
+# courtyards (EasyEDA's courtyards are the parts' 3D outlines plus a margin)
+(rule "placement_courtyards"
+	(condition "(A.Reference == 'U1' && (B.Reference == 'C9' || B.Reference == 'C10' || B.Reference == 'C13' || B.Reference == 'C19')) || (B.Reference == 'U1' && (A.Reference == 'C9' || A.Reference == 'C10' || A.Reference == 'C13' || A.Reference == 'C19')) || (A.Reference == 'R3' && B.Reference == 'L1') || (A.Reference == 'L1' && B.Reference == 'R3')")
+	(constraint courtyard_clearance (min 0mm))
+	(severity ignore))
+
+# the CP2102N's GND pads: EasyEDA's pour reaches pad 23 by one spoke (its other pads and the
+# exposed pad carry GND to it)
+(rule "u3_gnd_spokes"
+	(condition "A.memberOfFootprint('U3') && A.NetName == 'GND'")
+	(constraint min_resolved_spokes 1))

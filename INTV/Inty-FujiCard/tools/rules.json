@@ -1,0 +1,14 @@
+{
+  "_comment": "Board Setup minimums for Inty-FujiCard.kicad_pro.  KiCad applies these as an absolute floor that no custom rule can lower, so each one is the lowest value Yannick Erb's copper needs (measured, README 'Design rules'); Inty-FujiCard.kicad_dru then holds every item to JLCPCB's standard 1-2 layer figures (kicad-happy jlcpcb 2.2.1: 0.127 mm space, 0.45 / 0.2 mm via, 0.125 mm ring, 0.3 mm to the edge) except the measured exceptions it names.",
+  "constraints": {
+    "min_clearance": 0.1,
+    "min_track_width": 0.127,
+    "min_via_diameter": 0.45,
+    "min_through_hole_diameter": 0.2,
+    "min_via_annular_width": 0.1,
+    "min_copper_edge_clearance": 0.25,
+    "min_hole_clearance": 0.15,
+    "min_hole_to_hole": 0.25
+  },
+  "severities": {}
+}

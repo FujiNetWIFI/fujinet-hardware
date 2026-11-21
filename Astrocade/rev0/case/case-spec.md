@@ -60,14 +60,14 @@ the rib. The lands' plated escapes are 19.0 mm in, behind the rib, so the blade 
 |---|---|---|
 | Leading section | 100 x 12.0, 0 .. 18 mm deep | Komb. No top-side part is within 19.3 mm of the face. |
 | Chamfer | 45 degrees, 18 .. 21.5 mm | SW3 and D7 (SMA, 2.45 mm) start about 20 mm in. |
-| Rear body | 15.5 mm tall, 1.5 mm roof | The USB-C (3.31) and the ESP32-S3 module (3.3) stand on the board top at 9.25. |
+| Rear body | 15.5 mm tall, 1.6 mm roof (1.2 under the label recess) | The USB-C (3.31) and the ESP32-S3 module (3.3) stand on the board top at 9.25. |
 | Trailing face | 61.2 mm from the leading face | The board edge is 59.6 mm in; 0.3 mm clearance and a 1.3 mm wall follow. |
-| USB-C | 9.8 x 4.0 opening, plus a 12.8 x 7.0 x 0.8 overmold counterbore | The receptacle's face is 0.5 mm past the board edge, so a plug seats with 0.3 mm to spare. |
-| microSD | 14 x 2.2 slot, and a finger dish over the card's end | The push-push card is reached through the dish. |
-| Antenna hood | Behind the trailing face, x = U2 +/- 0.4, out to **67.65 mm** | The ESP32-S3 antenna overhangs the board edge by 6.45 mm. The hood keeps plastic, not air, around it. |
+| USB-C | A 12.8 mm wide opening from the parting plane to 3.25 mm above the receptacle's centre | A plug's overmold enters the 1.3 mm wall. The receptacle's face is 0.5 mm past the board edge. |
+| microSD | A 14 mm open-top notch through the trailing wall, with the roof cut back 3.5 mm over the card's end | A finger pushes the push-push card home. |
+| Antenna hood | Behind the trailing face, x = U2 +/- 0.4, a 1.4 mm wall, out to **67.85 mm** | The ESP32-S3 antenna overhangs the board edge by 6.45 mm. The hood keeps plastic, not air, around it. |
 | Side walls | 1.5 mm, inner cavity square | The 96 mm board has 0.5 mm per side. |
-| Screws | 4x M3 from the bottom, through the board, into 2.6 mm pilots in the top half | **M3x10 at the front holes** (the shell is 12 mm there, about 2 mm of thread) and **M3x12 at the rear** (about 4 mm) |
-| RESET | A printed plunger in a guide, cap 0.6 mm proud | At rest the stem is 0.15 mm above the SKQGABE010's stem, and the switch travels 0.25 mm. |
+| Screws | 4x M3 pan head from the bottom, through 8 mm bosses and the board, into 2.6 mm pilots in the top half | **M3x10 at the front holes.** The pilots there go through the 12 mm section, so the tip stops 0.8 under the face, with about 2 mm of thread. **M3x12 at the rear.** Those pilots stop 2 mm under the face, with about 4 mm of thread. |
+| RESET | A printed plunger (1.0 mm flange) in a 1.2 mm-walled guide, cap 0.6 mm proud | At rest the stem is 0.15 mm above the SKQGABE010's stem, and the switch travels 0.25 mm. |
 | BOOTSEL, S3 EN, S3 BOOT | 2.2 mm pinholes | They take a paperclip. The switch stems are 4.75 mm below the face. |
 | LEDs | 3.0 mm window over D3 (WS2812B), 2.0 mm window over D1 | |
 | Label recess | 35 x 32 x 0.4 mm, left of centre | It clears the buttons, the LED windows and the microSD dish. |
@@ -75,12 +75,18 @@ the rib. The lands' plated escapes are 19.0 mm in, behind the rib, so the blade 
 Print the bottom half floor-down, the top half roof-down and the plunger cap-down. Resin (JLC3DP)
 or FDM works, with no supports. All three exports are 2-manifold.
 
+JLC3DP asks for walls of at least 1.2 mm, and no part thinner than 0.8 mm. Its "thin walls" flag hit
+the first draft: blind-pilot skins of 0.5 mm, a 0.5 mm USB counterbore frame, a 0.45 mm bar over the
+microSD slot, and a 0.8 mm plunger guide. All are gone. A ray cast inward from every face of the
+2026-11-21 exports gives these minimums: bottom 1.14 mm, top 1.14 mm (the rounded outer corners
+only) and plunger 1.0 mm (its flange).
+
 ## Still to VERIFY on a console
 
 1. **Mouth depth.** The shell is 12.0 mm thick only for its leading 18 mm, and the chamfer rises
    behind that. If the console's mouth covers more than 18 mm of the cart, the chamfer meets it.
    Komb's whole shell is 12 mm thick, so it never tested this.
-2. **Well length.** The cart is 61.2 mm deep, and 67.65 mm at the antenna hood (stock is about
+2. **Well length.** The cart is 61.2 mm deep, and 67.85 mm at the antenna hood (stock is about
    63). The well behind the mouth must take the hood.
 3. **Well rim.** The 15.5 mm rear body and the trailing-face USB-C / microSD must clear the
    well's rim and side clearance.

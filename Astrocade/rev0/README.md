@@ -21,8 +21,11 @@ cassette shell carrying both halves of the Astrocade FujiNet stack.
 - **WS2812B-2020** status LED under a light pipe, on **+5V**: its datasheet
   rates VDD 3.7-5.3 V. VIH min is 2.7 V, so the S3's 3.3 V data drives it
   without a level shifter.
-- **Buttons:** top-face **RESET** (SW4, resets the RP and the S3), **BOOTSEL**
-  pinhole (SW1), S3 **EN/BOOT** (SW2/SW3, board-level).
+- **Buttons:** top-face **RESET** (SW4, resets the RP and the S3, through a
+  printed plunger), **BOOTSEL** pinhole (SW1), and S3 **EN/BOOT** pinholes
+  (SW2/SW3). All four are ALPS SKQGABE010 on the TL3342 land (same lead
+  pattern; pins 1-2 and 3-4 tied the same way). The TL3342F160QG ran out at JLC
+  in 2026-11.
 
 This revision was audited with kicad-happy and the manufacturer datasheets,
 and then redone. The schematic, board and fabrication files are all generated
@@ -125,13 +128,20 @@ NPN driver (as on INTV Rev0) would invert that. Both chips run at 3.3 V
 ## Mechanics: a cassette, not a finger cart
 
 A Videocade is a closed cassette-style box lying label-up in an **open-top
-well**. The console's 26-contact **blade** (0.100" pitch, about 74 mm wide
-and 3.6-3.8 mm thick, reaching about 17-18 mm in) enters a slot in the
-leading face. It presses **up** against gold lands on the **PCB underside**.
+well**. The console's 26-contact **blade** (0.100" pitch, about 74 mm wide)
+enters a slot in the leading face, under the board. It presses **up** against
+gold lands on the **PCB underside**.
 
-The sourced dossier is `case/case-spec.md`, and the parametric shell is
-`case/FujiNet-Astrocade-Shell.scad`. Its openings come from
-`case/board-anchors.scad`, which is generated from the placement.
+The shell is `case/FujiNet-Astrocade-Shell.scad`, and `case/case-spec.md` is
+its dimension dossier. The leading section is a stock cart's: 100 mm wide,
+12.0 mm thick, with the blade slot, the blade-stop rib 12.86 mm in, and the
+board plane. These are measured from Lance F. Squire's printed cart shell
+(Thingiverse thing:173532, CC BY). Behind it the shell rises to 15.5 mm. The
+USB-C and microSD sit flush with the trailing face, and a hood covers the
+antenna. `case/board-anchors.scad` (from the placement) and
+`case/board-parts.scad` (from the routed board) feed it. Its `check` view
+proves that nothing touches the board, the parts, the plunger or the blade's
+room.
 
 **Board:**
 
@@ -142,7 +152,7 @@ The sourced dossier is `case/case-spec.md`, and the parametric shell is
 | Blade strip | B.Cu rule area over the south 16.5 mm (y >= 71.5): no tracks, vias or pour where the blade wipes |
 | Land escapes | Each land's footprint carries a 0.5 mm neck under solder mask to a 0.3/0.6 mm plated hole **17.4 mm** in from the edge, beyond the blade's reach |
 | Stack-up | **6 layers, 1.6 mm** (JLC06161H-2116 class): F.Cu signals + GND pour / In1.Cu **GND plane** / In2.Cu + In3.Cu signals / In4.Cu **power plane**: +3V3, a +3V3_RP island under the RP2354A region, a DVDD island under its core / B.Cu signals + GND pour (outside the blade strip). 4 layers was tried first and did not close (see *Status*) |
-| Trailing edge (y=30) | USB-C (shell face 0.45 mm past the edge, HRO's recommended PCB-edge position), microSD slot (face 0.05 mm inside), and the ESP32-S3 antenna overhanging about 6.4 mm (shell antenna window) |
+| Trailing edge (y=30) | USB-C (shell face 0.45 mm past the edge, HRO's recommended PCB-edge position), microSD slot (face 0.05 mm inside), and the ESP32-S3 antenna overhanging about 6.4 mm (under the shell's antenna hood) |
 | Top face | SW4 RESET, SW1 BOOTSEL pinhole, D3 WS2812 light pipe |
 | Assembly | 3 fiducials (FID1-3, 1 mm copper / 2 mm mask), all SMD parts on the top side |
 
@@ -188,6 +198,8 @@ firmware from `$FUJINET_FIRMWARE`. Its default is the worktree
 | | `stitch_transitions.py`, `check_vias.py` | GND return vias at USB / crystal / SWCLK layer changes; a gate that no via touches another net's pad (KiCad's DRC re-nets such vias) |
 | | KiCad DRC `--schematic-parity` | Must report 0 errors |
 | Outputs | `export.py` | BOM, JLC BOM/CPL, gerbers, PDF, renders |
+| | `audit/check_plane_shorts.py`, `audit/check_fab.py` | The zip: no plated hole in another net's pour; the JLC package against the board (see *Status*) |
+| Shell | `gen_pcb.case_anchors()`, `case_parts.py`, OpenSCAD `part="check"` | `case/board-anchors.scad` from the placement, `case/board-parts.scad` from the routed board; the check view must render empty |
 
 **Audit** (`tools/audit/`):
 
@@ -234,7 +246,8 @@ Rev0 redo, generated 2026-10-02 from a clean `tools/build_all.sh` run. The schem
 | Connector alignment (2026-10-13) | The USB-C (J3) moved 1.8 mm to HRO's recommended PCB-edge position (its face had sat 1.35 mm inside the board, where a plug's overmold meets the PCB edge), and the microSD / USB-C 3D models were re-seated on their footprints. DRC: no new findings, one silk warning fewer (design review, "Post-layout change") |
 | kicad-happy | Schematic + SPICE 16/16 pass; Deep Review 25/25 evidence-verified (Part 3 adds two datasheet deviations to decide: VSENSE vs RP2350-E9, DVDD decoupling); PCB / EMC / thermal (score 97) / gerbers dispositioned in `docs/design-review-rev0.md` |
 | Firmware | `fujicade_rp2354` (fujinet-firmware `astrocade-rp2354-board`) is unchanged by the redo: same pin map, same RUN/BOOTSEL contract |
-| Shell | Both halves render in OpenSCAD with the generated anchors (the existing non-manifold warning remains) |
+| `check_fab.py` | JLC BOM = CPL = board (82), LCSC codes, CPL against the measured rotations, 438 drill hits, 26 land openings in B.Mask, empty B.Paste, no drill in the land strip |
+| Shell (2026-11-21) | The `check` view renders empty (board, 92 part boxes, plunger, blade room against both halves); the bottom, top and plunger STLs are 2-manifold |
 
 **Layer count.** 4 layers was tried first:
 - F.Cu / In1 GND / In2 power / B.Cu, with B.Cu forbidden under the console blade.
@@ -251,13 +264,15 @@ The 6-layer stack closes completely.
   - clearance: 0.15 mm, and 0.12 mm only in the Raspberry Pi regulator corner
   - drill: 0.25 mm minimum
   - vias: 0.45 / 0.25 mm (0.1 mm ring), on the USB-C pad ties and a few router vias. That is within JLC's multilayer minimum of 0.25 / 0.15 mm.
-- **Upload files:** `exports/jlcpcb/`: `FujiNet-Astrocade-Rev0-gerbers.zip`, `BOM-JLCPCB.csv`, `CPL-JLCPCB.csv`. 82 placed parts, every one with an LCSC code, all in JLC stock on 2026-10-02. Lands, test pads, mounting holes and fiducials are not assembled.
+- **Upload files:** `exports/jlcpcb/`: `FujiNet-Astrocade-Rev0-gerbers.zip`, `BOM-JLCPCB.csv`, `CPL-JLCPCB.csv`. 82 placed parts, every one with an LCSC code. Lands, test pads, mounting holes and fiducials are not assembled.
+- **Stock on 2026-11-21:** every line in JLC stock except U5 AP63203WU-7 (C780769): 2 left, and LCSC has none. There is no drop-in fixed 3.3 V buck at JLC, so take the shortfall through JLC's global sourcing. The board has no order-number text, so choose "Remove" for the order number.
 
 ## Bring-up checklist (not verifiable in CAD)
 
-1. **Caliper pass** on a real Videocade and console: every VERIFY item in
-   `case/case-spec.md`. That includes the blade reach against the escape
-   holes 17.4 mm in; they need at least about 1 mm margin past the blade tip.
+1. **Console fit:** every VERIFY item in `case/case-spec.md`: mouth depth,
+   well length (the antenna hood) and rim, and the blade's contact force on
+   the lands. The shell's stop rib keeps the blade 6 mm short of the lands'
+   plated escapes.
 2. **Power-up:** scope +3V3_RP, CONS_5V and CA0 at a console cold start.
    +3V3_RP must follow the console rail as it rises (AP2112K in dropout).
 3. **VSENSE gate:** the cart must stay silent on USB power with the console
@@ -276,8 +291,8 @@ The 6-layer stack closes completely.
    band of D7 and D8.
 8. **WiFi RSSI** in the shell. The antenna overhangs the trailing edge, and
    the microSD shell is about 2 mm from it.
-9. **TL3342 RESET actuator** height against the roof (printed plunger, see
-   `case/case-spec.md`).
+9. **RESET plunger** travel: at rest its stem is 0.15 mm above the
+   SKQGABE010's stem, and the switch travels 0.25 mm. See `case/case-spec.md`.
 10. **DVDD under load:** scope DVDD (at C15) with WiFi and the bus busy. None
     of the DVDD pins has a capacitor close to it; the datasheet wants 4.7 uF at
     pin 23 (design review Part 3, finding 2, a Rev1 change).
@@ -319,4 +334,4 @@ The 6-layer stack closes completely.
 | `exports/jlcpcb/` | `BOM-JLCPCB.csv`, `CPL-JLCPCB.csv`, `FujiNet-Astrocade-Rev0-gerbers.zip` |
 | `docs/` | Schematic PDF, design review, layout SVGs, 3D renders |
 | `tools/` | Generators and checks (see *Regenerating*) |
-| `case/` | Dimension dossier, parametric shell, generated anchors |
+| `case/` | Dimension dossier, parametric shell (bottom, top, RESET plunger), generated anchors and part boxes |

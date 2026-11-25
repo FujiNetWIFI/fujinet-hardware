@@ -40,7 +40,7 @@ cfg = {
                    'KiCad joins them by design.'},
         {'rule_id': 'CG-AUD', 'components': K('J_M1'),
          'reason': "The TRS-80 Model I's expansion edge, as Tandy defined it (Tech Ref 26-2103 p.91): three grounds "
-                   '(8, 29, 37) among 40 pins; pin 39 is +5V on keyboard boards A-E and GND on G, so it is left open. '
+                   '(8, 29, 37; header 7, 30, 38 through the ribbon) among 40 pins; pin 39 is +5V on keyboard boards A-E and GND on G, so it is left open. '
                    'The card buffers every line at the header (tools/audit/spice/ribbon.py).'},
         {'rule_id': 'EP-AUD', 'components': K('J_M1'),
          'reason': "J_M1 is the Model I's own bus on a short ribbon, not a user-facing port: every line meets a 74LVC "

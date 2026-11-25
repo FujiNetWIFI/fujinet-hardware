@@ -48,16 +48,24 @@ def main():
     m('3G17 VT- min - LS367 VOL (strobes)', vt_lo, 0.4, 'V')
     m('LS02 / LS32 VOH - 3G17 VT+ (SYSRES*, INTAK*)', 2.7, vt_hi, 'V')
     m('3G17 hysteresis (ringing it rejects)', 0.56, 0.3, 'V', note='>= 0.3 V asked of a ribbon receiver')
-    # ---- the card's load on each line ----
-    pd = ohms(D.BY_KEY['RN_AH1'].value)
-    i_pd = 5.0 / pd + 5e-6
-    m('LS367 IOH - card load (100k pull-down + LVC II), uA', 2600, i_pd * 1e6, 'uA', higher_is_ok=True)
-    m('one LS load IIL (0.4 mA) - card load low (II only), uA', 400, 5, 'uA')
-    m('LS02 IOH (SYSRES*) - card load, uA', 400, i_pd * 1e6, 'uA')
-    # an unanswered read: the keyboard unit's LS inputs float high; the 100k pull-down cannot pull an LS
-    # input to VIL (it needs ~0.36 mA at 0.8 V): the Model I still reads FFh
-    m('current to pull an LS input low - 100k at 0.8 V, uA', 360, 0.8 / pd * 1e6, 'uA',
-      note='unanswered reads stay FFh (the ROM boot test at 37ECh)')
+    # ---- the card's load on each line: one LVC input and a 100k pull-up to +3V3_RP ----
+    pu = ohms(D.BY_KEY['RN_AH1'].value)
+    assert all(D.BY_KEY[k].pins['5'] == D.RP_RAIL for k in ('RN_AH1', 'RN_AH2', 'RN_AL1', 'RN_AL2', 'RN_D1',
+                                                            'RN_D2', 'RN_STA', 'RN_STB')), 'the bus pulls are pull-ups'
+    i_lo = VCC[1] / pu + 5e-6                  # driven low: the pull-up's current plus the LVC input's II
+    i_hi = (3.95 - VCC[0]) / pu + 5e-6         # driven high past the rail (LS VOH ~3.95 V unloaded at 5.25 V)
+    m('LS367 IOL 12 mA - card load low (100k pull-up + LVC II), uA', 12000, i_lo * 1e6, 'uA')
+    m('LS367 IOH 2.6 mA - card load high, uA', 2600, i_hi * 1e6, 'uA')
+    m('LS02 / LS32 IOL 8 mA (SYSRES*, INTAK*) - card load low, uA', 8000, i_lo * 1e6, 'uA')
+    # undriven (ribbon unplugged, the Model I off): the pull-up holds every input high, strobes inactive;
+    # an unanswered read floats the keyboard unit's LS inputs high anyway, and the pull-up agrees (FFh)
+    m('undriven input: +3V3_RP min - II x 100k - LVC VIH', VCC[0] - 5e-6 * pu, 2.0, 'V',
+      note='strobes inactive unplugged; unanswered reads stay FFh (the ROM boot test at 37ECh)')
+    # the Model I on, the card off: the keyboard unit's highs back-feed the unpowered RP rail through the
+    # 30 pull-ups (the LVC inputs themselves are Ioff)
+    i_bf = 30 * 3.95 / pu
+    m('back-feed into an unpowered +3V3_RP (30 x 3.95 V / 100k) under 10 % of its 70 mA draw, mA', 7.0,
+      i_bf * 1e3, 'mA', note='too little to start the RP; gone once USB powers the card')
     # INT* / WAIT*: the Z80's 4.7k pull-ups against the 2G07
     i_od = 5.0 / 4.7e3
     m('2G07 VOL at %.1f mA - Z80 VIL' % (i_od * 1e3), 0.8, 0.4, 'V', higher_is_ok=True)

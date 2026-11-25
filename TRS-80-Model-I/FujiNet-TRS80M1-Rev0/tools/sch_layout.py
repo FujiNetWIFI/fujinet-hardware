@@ -21,7 +21,7 @@ PAPER = {'m1-bus': 'A2', 'rp-core': 'A3', 'fujinet': 'A3', 'usb': 'A3', 'power':
 G = 2.54
 
 # ---- m1-bus rows (2.54 mm each), one block per buffer group, every line on an even row so its
-# pull-down / probe / pull-up can sit in the row beside it.  The header's units and the RP's GPIO units
+# pull-up / probe can sit in the row beside it.  The header's units and the RP's GPIO units
 # are built on these rows (gen_sch.header_symbol / rp_split_symbol), so every line is one straight wire
 # from its header pin through its buffer to its GPIO.
 R_AH, R_AL, R_D, R_DRIVE, R_G, R_STB, R_STA, R_OD = 0, 26, 52, 72, 82, 92, 108, 124
@@ -38,7 +38,9 @@ def _every_other(items, n=None):
 
 
 HDR_RIGHT = {hu: _every_other([D.EDGE_PIN[n] for n in lines]) for hu, ru, r0, lines, key in GROUPS}
-HDR_BOTTOM = [8, None, 29, None, 37, None, None, 1, None, 3, None, 16, None, 23, None, 39]
+_gnd = [p for p in sorted(D.EDGE) if D.EDGE[p][0] == 'GND']
+_nc = [p for p in sorted(D.EDGE) if D.EDGE[p][0] is None]
+HDR_BOTTOM = _every_other(_gnd) + [None, None] + _every_other(_nc)   # the grounds, then the open pins
 _gp = lambda n: D.GPIO_OF[D.rp_of(n)]
 RP_LEFT = {1: _every_other([_gp(n) for n in D.ADDR_HI]), 2: _every_other([_gp(n) for n in D.ADDR_LO])}
 RP_LEFT[3] = _every_other([_gp(n) for n in D.DATA]) + [None] * (R_DRIVE - R_D - 15) + [D.GPIO_OF['DRIVE']]
@@ -289,7 +291,7 @@ PROBE_UNIT = {n: i + 1 for i, n in enumerate(D.LA)}
 def m1_bus(sh):
     """The Model I's bus from the ribbon header to the RP2354B, left to right, one block per buffer group:
     each line one straight wire from its header pin (the header drawn in units by group) through its
-    100k pull-down (the row under it) into its buffer, and from the buffer on to its GPIO (the RP's
+    100k pull-up (the row under it) into its buffer, and from the buffer on to its GPIO (the RP's
     GPIO units built on the same rows).  A8-A15 and A0-A7: 74LVC245A, A -> B, always on.  D0-D7: 75R
     series, the 74LVC245A turned round (B, the bus, on the left), DIR = DRIVE and /OE from the
     74LVC1G11 under it (DRIVE . RD* . IN*).  RD* IN* INTAK* and SYSRES* OUT* WR*: two 74LVC3G17
@@ -303,7 +305,7 @@ def m1_bus(sh):
     row = lambda r: snap(y0 + r * G)
     x_h = 50.8                                   # the header units' pin ends
     x_r = snap(x_h + 5 * G)                      # data series resistor, pin 1
-    x_pd = snap(x_h + 12 * G)                    # pull-down tees
+    x_pd = snap(x_h + 12 * G)                    # pull-up tees
     x_bi = snap(x_h + 20 * G)                    # every buffer's bus-side pin ends
     x_rp = snap(x_bi + 50 * G)                   # the RP units' left pin ends
     hp = lambda n: sh.N(D.KEY[J], n)
@@ -345,7 +347,7 @@ def m1_bus(sh):
             rpn = D.rp_of(n)
             g = sh.N(D.KEY[U], rpn)
             assert g[1] == y, (rpn, g, y)
-            if key == 'U_DB':                     # header -> 75R -> pull-down tee -> '245 B
+            if key == 'U_DB':                     # header -> 75R -> pull-up tee -> '245 B
                 ds = D.ds_of(n)
                 rk, ru_ = next((k, u) for k in ('RS_D1', 'RS_D2') for u in range(1, 5)
                                if D.BY_KEY[k].pins[str(u)] == n)
@@ -366,7 +368,7 @@ def m1_bus(sh):
                 pk, pu = pd_unit.get(n, (None, None))
             assert bpin[1] == y, (n, bpin, y)
             if pk:
-                side_res(sh, pk, pu, (x_pd, y), 'GND', show='left' if pk not in shown else False)
+                side_res(sh, pk, pu, (x_pd, y), D.RP_RAIL, show='left' if pk not in shown else False)
                 shown.add(pk)
             # the RP side: buffer -> GPIO
             o = sh.N(D.KEY[key], rpn)
@@ -426,23 +428,26 @@ def m1_bus(sh):
         d = fit(sh, key, 4, (x_pd, y), {4: L_}, unit=4)
         d['hide_fields'] = ('Reference', 'Value')
         sh.nc(sh.P(key, 4, 4))
-        sh.rail(sh.P(key, 5, 4), 'GND', 90)
+        far = sh.P(key, 5, 4)                     # up to the last line's pull-up: its +3V3_RP symbol
+        sh.wire(far, (far[0], snap(far[1] - G)))
     # the header's grounds and open pins (unit 7), the RP's unit 5: DIP switches, LED, debug UART, spares
     x5 = snap(x_rp + 62 * G)
-    dj = pin_place(sh, J, 7, 8, (snap(x5 - 30 * G), row(R_AH + 6)), fields='abovebelow')
-    for p in (8, 29, 37):
+    dj = pin_place(sh, J, 7, _gnd[0], (snap(x5 - 30 * G), row(R_AH + 6)), fields='abovebelow')
+    for p in _gnd:
         sh.gnd(sh.P(J, p, 7))
-    for p in (1, 3, 16, 23, 39):
+    for p in _nc:
         sh.nc(sh.P(J, p, 7))
     dip_rp(sh, x5, row(R_AL))
     bus_buffer_bulk(sh, x_h, row(R_OD + 10))
     sh.text((snap(x5 - 34 * G), row(R_D)),
-            'The TRS-80 Model I expansion edge (Level II; Tech Ref 26-2103 p.91) on a 40-wire IDC ribbon, header pin n = edge pin n.\n'
-            'Grounds 8, 29, 37.  Pin 39 is +5V on keyboard boards A-E and GND on G: open.  RAS* CAS* MUX (the EI\'s DRAM timing) and\n'
-            'TEST* (it floats the keyboard unit\'s buses) are open.  Every line meets one LVC buffer at the header (3.3 V, 5 V-tolerant\n'
-            'inputs, Ioff) and a 100k pull-down (defined with the ribbon unplugged; to GND, so neither side back-feeds the other).\n'
-            'The strobes, SYSRES* and INTAK* through 74LVC3G17 Schmitt triggers.  D0-D7 IS the keyboard unit\'s data bus: the card\n'
-            'drives it only while RD* or IN* is low (OE* = DRIVE . RD* . IN*), through 75R.  GPIO map: m1_card.h (pico/trs80m1).', 1.27)
+            'The TRS-80 Model I expansion edge (Level II; Tech Ref 26-2103 p.91) on a straight 40-wire IDC ribbon.  Tandy numbers the\n'
+            'edge as the mirror of the IDC connector, so its pins arrive swapped in pairs: header 1 = edge 2, header 2 = edge 1 ...\n'
+            'Grounds: edge 8, 29, 37 = header 7, 30, 38.  Edge 39 (header 40) is +5V on keyboard boards A-E and GND on G: open.\n'
+            'RAS* CAS* MUX (the EI\'s DRAM timing) and TEST* (it floats the keyboard unit\'s buses) are open.  Every line meets one\n'
+            'LVC buffer at the header (3.3 V, 5 V-tolerant inputs, Ioff) and a 100k pull-up to +3V3_RP (defined with the ribbon\n'
+            'unplugged: the strobes idle inactive).  The strobes, SYSRES* and INTAK* through 74LVC3G17 Schmitt triggers.  D0-D7\n'
+            'IS the keyboard unit\'s data bus: the card drives it only while RD* or IN* is low (OE* = DRIVE . RD* . IN*), through 75R.\n'
+            'GPIO map: m1_card.h (pico/trs80m1).', 1.27)
     ncs(sh, U, 5)
     return sh
 
@@ -1089,7 +1094,7 @@ The card serves the Model I's cycles in software (fujinet-firmware pico/trs80m1)
 at E8h-EBh and the FujiBus pipe at D0h-D3h.  Every line meets an LVC buffer at the header: the
 strobes Schmitt-triggered, D0-D7 driven only while RD* or IN* is low (OE* = DRIVE . RD* . IN*).
 
-  m1-bus     the 2x20 ribbon header, 100k pull-downs, the five buffers (2 x 74LVC245A address, a
+  m1-bus     the 2x20 ribbon header, 100k pull-ups, the five buffers (2 x 74LVC245A address, a
              74LVC245A for data through 75R, 2 x 74LVC3G17 strobes, 74LVC2G07 INT* / WAIT*), the OE gate,
              the RP2354B's GPIOs, the DIP switches, LED, debug-UART pads, the logic-analyser header
   rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL /

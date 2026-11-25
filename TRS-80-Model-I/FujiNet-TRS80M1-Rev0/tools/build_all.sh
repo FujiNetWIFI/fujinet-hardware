@@ -9,6 +9,8 @@
 # check_nets.py reads pico/trs80m1 from $FUJINET_FIRMWARE (default ~/Workspace/fn-trs80m1, the bring-up's
 # dev tree) at $FUJINET_FIRMWARE_REF (default '': its working tree).
 # LAYOUT=1 regenerates and re-routes the board: routing varies run to run (README "Layout").
+# REUSE_FROM=old.kicad_pcb (with LAYOUT=1) first copies that board's copper for every net the change left
+# alone (tools/reuse_copper.py): how the header fix was routed, from PR #72's board (README "Layout").
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONDONTWRITEBYTECODE=1           # no __pycache__ in tools/
@@ -23,6 +25,9 @@ python3 tools/audit/spice/ribbon.py | tail -2 # the ribbon both ways (ngspice)
 python3 tools/audit/margins.py | tail -1      # levels, loads, contention, read timing, power
 if [ "${LAYOUT:-0}" = 1 ]; then
     python3 tools/gen_pcb.py                  # placement, outline, RP core graft, fan-out, planes, rules
+    if [ -n "${REUSE_FROM:-}" ]; then
+        python3 tools/reuse_copper.py "$REUSE_FROM"   # the old board's copper for the unchanged nets, locked
+    fi
     bash tools/route_board.sh                 # Freerouting, finisher, stitching, fills, DRC
 fi
 if [ -f $PCB ]; then

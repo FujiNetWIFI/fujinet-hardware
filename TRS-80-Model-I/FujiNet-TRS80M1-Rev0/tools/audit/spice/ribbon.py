@@ -2,7 +2,7 @@
 """ngspice: the 40-wire ribbon between the Model I's expansion edge and the card, both ways.
 
   strobe  the keyboard unit's 74LS367 (rise/fall 6 ns, ~30 Ohm high / 15 Ohm low) -> ribbon -> the card's
-          74LVC3G17 input (5 pF, 100k pull-down).  Checked: after each edge the input never re-crosses
+          74LVC3G17 input (5 pF, 100k pull-up to 3.3 V).  Checked: after each edge the input never re-crosses
           the Schmitt trigger's other threshold (VT- min 0.84 V after a rise, VT+ max 2.22 V after a fall:
           tools/audit/margins.py) -- a ringing strobe never double-counts.
   data    the card's 74LVC245A (rise/fall 1.5 ns, ~15 Ohm) -> Rs (the data series resistor) -> ribbon ->
@@ -36,7 +36,8 @@ Vs src 0 PULSE(0.2 3.4 20n 6n 6n 194n 400n)
 Rdrv src a 22
 T1 a 0 b 0 Z0={Z0} TD={td}n
 Cin b 0 5p
-Rpd b 0 100k
+Vpu vpu 0 3.3
+Rpu b vpu 100k
 .tran 0.05n 400n
 .control
 run

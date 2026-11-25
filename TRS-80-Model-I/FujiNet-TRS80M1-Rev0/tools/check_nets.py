@@ -12,7 +12,7 @@ yet) at the git ref $FUJINET_FIRMWARE_REF (default '': the working tree; the fil
 and checks every one of them, plus the Model I expansion edge (its own copy of the pinout), against
 the pin *functions* the netlist reports (GPIOn on the RP2354B, IOn on the S3, the buffers' A / B / Y
 pins): each header line must reach exactly its GPIO through exactly its buffer, the data lines through
-their 75R too, and every bus-side input must have its 100k pull-down.
+their 75R too, and every bus-side input must have its 100k pull-up.
 
 Firmware that does not yet match this board (INTAK* on GP32, the S3's RUN / BOOTSEL / card detect) is
 reported as NOTE lines, not failures: the README lists the changes.
@@ -31,13 +31,16 @@ CARD = 'pico/trs80m1/firmware/include/m1_card.h'
 BOARD = 'pico/trs80m1/firmware/boards/fujitrs80m1_rp2354b.h'
 PINMAP = 'include/pinmap/fujiversal-trs80m1.h'
 
-# The Model I expansion edge, Level II (TRS-80 Technical Reference Handbook 26-2103 p.91).  An
-# independent copy of the map (tools/audit/header_pinout.py checks it against four sources).
-EDGE = {1: 'RAS*', 2: 'SYSRES*', 3: 'CAS*', 4: 'A10', 5: 'A12', 6: 'A13', 7: 'A15', 8: 'GND', 9: 'A11',
+# The Model I expansion edge, Level II (TRS-80 Technical Reference Handbook 26-2103 p.91), in Tandy's
+# numbering.  An independent copy of the map (tools/audit/header_pinout.py checks it against four sources).
+TANDY = {1: 'RAS*', 2: 'SYSRES*', 3: 'CAS*', 4: 'A10', 5: 'A12', 6: 'A13', 7: 'A15', 8: 'GND', 9: 'A11',
         10: 'A14', 11: 'A8', 12: 'OUT*', 13: 'WR*', 14: 'INTAK*', 15: 'RD*', 16: 'MUX', 17: 'A9', 18: 'D4',
         19: 'IN*', 20: 'D7', 21: 'INT*', 22: 'D1', 23: 'TEST*', 24: 'D6', 25: 'A0', 26: 'D3', 27: 'A1',
         28: 'D5', 29: 'GND', 30: 'D0', 31: 'A4', 32: 'D2', 33: 'WAIT*', 34: 'A3', 35: 'A5', 36: 'A7',
         37: 'GND', 38: 'A6', 39: '+5V/GND', 40: 'A2'}
+# Tandy numbers the edge as the mirror of an IDC card-edge connector: a straight ribbon brings edge pins
+# 2 1 4 3 ... 40 39 to header pins 1 2 3 4 ... 39 40 (README "The cable").  Header pin -> signal:
+EDGE = {h: TANDY[h + 1 if h % 2 else h - 1] for h in range(1, 41)}
 OPEN = ('RAS*', 'CAS*', 'MUX', 'TEST*', '+5V/GND')
 STROBES = {'WR*': 'M1_PIN_WR', 'RD*': 'M1_PIN_RD', 'IN*': 'M1_PIN_IN', 'OUT*': 'M1_PIN_OUT',
            'SYSRES*': 'M1_PIN_SYSRES'}
@@ -189,16 +192,17 @@ def main():
             chk('J1.%d is GND' % p, n == 'GND')
         elif sig in OPEN:
             chk('J1.%d (%s) is not connected' % (p, sig), unconnected(n))
-    pd = lambda net: through_r(net, 'GND', arrays=True)
-    # address: header -> '245 A -> B -> GPIO, always on, 100k pull-down
+    pd = lambda net: through_r(net, '+3V3_RP', arrays=True)     # the bus inputs' 100k pull-ups
+    pdn = lambda net: through_r(net, 'GND', arrays=True)
+    # address: header -> '245 A -> B -> GPIO, always on, 100k pull-up
     for i in range(16):
         p = next(q for q, s in EDGE.items() if s == 'A%d' % i)
         n = hp(p)
         hops = across(n, None)
         ok = len(hops) == 1 and hops[0][0] in B245 and hops[0][1].startswith('A') and hops[0][2] == rp(a0 + i)
         chk('J1.%d A%d -> 74LVC245A A -> B -> GP%d (M1_PIN_A0 + %d)' % (p, i, a0 + i, i), ok)
-        chk('A%d pulled down by 100k' % i, pd(n) == '4x100k')
-        chk('A%d edge net touches only J1, its receiver and its pull-down' % i, len(nets.get(n, [])) == 3)
+        chk('A%d pulled up by 100k' % i, pd(n) == '4x100k')
+        chk('A%d edge net touches only J1, its receiver and its pull-up' % i, len(nets.get(n, [])) == 3)
         chk('GP%d (A%d) touches only its receiver' % (a0 + i, i), len(nets.get(rp(a0 + i), [])) == 2)
     for ref in B245:
         if any(f.startswith('A') and f[1:].isdigit() and node_net.get((ref, pin), '').startswith('M1_A')
@@ -206,7 +210,7 @@ def main():
             chk('%s (address): DIR high (+3V3_RP), /OE low' % ref,
                 func_net.get((ref, 'A->B')) == '+3V3_RP' and func_net.get((ref, 'CE')) == 'GND')
         chk('%s VCC on +3V3_RP, GND' % ref, func_net.get((ref, 'VCC')) == '+3V3_RP' and func_net.get((ref, 'GND')) == 'GND')
-    # data: header -> 75R -> '245 B <-> A -> GPIO; 100k pull-down on the buffer side
+    # data: header -> 75R -> '245 B <-> A -> GPIO; 100k pull-up on the buffer side
     dbuf = None
     for i in range(8):
         p = next(q for q, s in EDGE.items() if s == 'D%d' % i)
@@ -220,7 +224,7 @@ def main():
         if ok:
             chk('D0-D7 share one transceiver', dbuf in (None, hops[0][0]))
             dbuf = hops[0][0]
-        chk('D%d pulled down by 100k (buffer side)' % i, pd(ds) == '4x100k')
+        chk('D%d pulled up by 100k (buffer side)' % i, pd(ds) == '4x100k')
     if dbuf:
         chk('data transceiver DIR = GP%d (M1_PIN_DRIVE)' % drive, func_net.get((dbuf, 'A->B')) == rp(drive))
         oe = func_net.get((dbuf, 'CE'))
@@ -232,14 +236,14 @@ def main():
         chk('74LVC1G11 on +3V3_RP', node_net.get((g, '5')) == '+3V3_RP' and node_net.get((g, '2')) == 'GND')
         dr = through_r(rp(drive), 'GND')
         chk('DRIVE pulled down (%s) under RP2350-E9\'s 8.2 kOhm' % dr, dr is not None and ohms(dr) <= 8.2e3)
-    # strobes and INTAK*: header -> 74LVC3G17 (Schmitt) -> GPIO, 100k pull-down
+    # strobes and INTAK*: header -> 74LVC3G17 (Schmitt) -> GPIO, 100k pull-up
     for sig, g in list(gp.items()) + [('INTAK*', INTAK_GPIO)]:
         p = next(q for q, s in EDGE.items() if s == sig)
         n = hp(p)
         hops = across(n, None)
         chk('J1.%d %s -> 74LVC3G17 (Schmitt) -> GP%d' % (p, sig, g),
             len(hops) == 1 and hops[0][0] in G17 and hops[0][2] == rp(g))
-        chk('%s pulled down by 100k' % sig, pd(n) == '4x100k')
+        chk('%s pulled up by 100k' % sig, pd(n) == '4x100k')
     for ref in G17 + G07:
         chk('%s VCC on +3V3_RP' % ref, func_net.get((ref, 'VCC')) == '+3V3_RP' and func_net.get((ref, 'GND')) == 'GND')
     # INT*, WAIT*: GPIO -> 74LVC2G07 (open drain) -> header, the driver's input pulled up
@@ -250,7 +254,7 @@ def main():
         chk('GP%d -> 74LVC2G07 (open drain) -> J1.%d %s' % (g, p, sig),
             len(hops) == 1 and hops[0][0] in G07 and hops[0][2] == rp(g))
         chk('%s driver input pulled up (off through reset)' % sig, through_r(rp(g), '+3V3_RP') is not None)
-        chk('%s has no pull-down (the Z80\'s own 4.7k pull-up holds it)' % sig, pd(n) is None)
+        chk('%s has no pull resistor (the Z80\'s own 4.7k pull-up holds it)' % sig, pd(n) is None and pdn(n) is None)
     # DIPs, debug UART, LED
     for k, n in enumerate(('RAM', 'EI', 'RS232')):
         g = dip0 + k

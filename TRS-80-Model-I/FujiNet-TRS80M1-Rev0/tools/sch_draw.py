@@ -615,7 +615,7 @@ class Sheet:
                         continue
                     if b[0].startswith('body') and a[0].startswith('field ' + b[0][5:] + ' '):
                         continue
-                    err.append('overlap: %s / %s' % (a[0], b[0]))
+                    err.append('overlap: %s / %s at %s' % (a[0], b[0], tuple(round(v, 2) for v in a[1])))
         if self.wired:
             # every net with pins on this sheet is ONE wired piece: labels may name a wire or
             # leave the sheet, never join two pieces (rails are power symbols: exempt)

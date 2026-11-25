@@ -7,7 +7,7 @@ never moves a part.
                 its odd pins on the inboard row
   bus column    every buffer within ~15 mm of its header pins, in the header's order north to south:
                 the A0-A7 receiver (header pins 25-40) north, the data transceiver (18-32) with its 47R
-                and pull-down arrays in the middle, the A8-A15 receiver (4-17) south; the two Schmitt
+                and pull-up arrays in the middle, the A8-A15 receiver (4-17) south; the two Schmitt
                 receivers and the INT / WAIT driver beside them, the OE gate by the data buffer's /OE
   centre        the RP2354B at rotation 0 -- its bus pins on its west and south sides, toward the buffers
                 (FujiNet-StudioII / O2 Rev0's macro, turned with it: decoupling east, crystal south, the

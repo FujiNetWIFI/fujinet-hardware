@@ -1,0 +1,704 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "1b1008e3-246e-5898-ac43-b62c4a8e7dd1")
+	(paper "A3")
+	(title_block
+		(title "FujiNet TRS-80 Model I Rev0")
+		(date "2026-11-24")
+		(rev "0")
+		(company "FujiNet")
+		(comment 1 "Generated from tools/design.py + tools/sch_layout.py - edit those, not this file")
+		(comment 2 "CERN-OHL-W-2.0; RP2350 regulator corner after Raspberry Pi RP2350A minimal design (MIT)")
+		(comment 3 "Rev0 2026-11-24: RP2354B + ESP32-S3 on a buffered ribbon; firmware pico/trs80m1 m1_card.h pin map")
+		(comment 4 "Expansion edge: TRS-80 Technical Reference Handbook 26-2103 p.91 (tools/audit/header_pinout.py)")
+	)
+	(lib_symbols)
+	(sheet
+		(at 30.48 33.02)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "7dd9c43c-ac6a-5551-bcd5-9592ec96ebcc")
+		(property "Sheetname" "power"
+			(at 30.48 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 30.48 53.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-TRS80M1-Rev0"
+				(path "/1b1008e3-246e-5898-ac43-b62c4a8e7dd1"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 172.72)
+		(size 63.5 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "d50edf2f-578e-5f69-8a0f-b25aa5df8f50")
+		(property "Sheetname" "m1-bus"
+			(at 30.48 172.02 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "m1-bus.kicad_sch"
+			(at 30.48 193.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FujiNet-TRS80M1-Rev0"
+				(path "/1b1008e3-246e-5898-ac43-b62c4a8e7dd1"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 76.2)
+		(size 63.5 81.28)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "994eb81e-2868-5f6c-93a5-1f1119e9f3a5")
+		(property "Sheetname" "rp-core"
+			(at 30.48 75.5 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "rp-core.kicad_sch"
+			(at 30.48 158.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 93.98 81.28 0)
+			(uuid "b8c51c48-38fa-5e28-81c7-be20a16edb0b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 93.98 83.82 0)
+			(uuid "b07684ab-4d6d-5513-be9b-825803cd7652")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RUN_CTL" input
+			(at 93.98 86.36 0)
+			(uuid "3a295deb-76dd-5d19-86b2-c56032031d04")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "BOOTSEL_CTL" input
+			(at 93.98 88.9 0)
+			(uuid "92f10933-95a7-54d1-a134-6752daa0fdcf")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 93.98 127 0)
+			(uuid "a83f8c7f-e636-5b6b-bc8a-b703ace4c477")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "FujiNet-TRS80M1-Rev0"
+				(path "/1b1008e3-246e-5898-ac43-b62c4a8e7dd1"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 33.02)
+		(size 30.48 99.06)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "ef61e42f-be3e-54fb-a340-9f023d9341ca")
+		(property "Sheetname" "fujinet"
+			(at 132.08 32.32 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "fujinet.kicad_sch"
+			(at 132.08 132.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 132.08 81.28 180)
+			(uuid "ea1a583c-42e3-5e49-8b66-fced4813c1a4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 132.08 83.82 180)
+			(uuid "7614bfb6-268f-5f99-9b90-4be732e45cdd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RUN_CTL" output
+			(at 132.08 86.36 180)
+			(uuid "fedabb9b-4187-5dec-8e17-998306a7e1b9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "BOOTSEL_CTL" output
+			(at 132.08 88.9 180)
+			(uuid "f9f8b82b-1740-52a2-aa0f-0a89e09f6bc9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 116.84 180)
+			(uuid "6cde1ca8-c278-57c3-bc95-d4b4f297bab0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 119.38 180)
+			(uuid "d39dd2fa-9764-564a-91d9-b54a8936d686")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" output
+			(at 132.08 121.92 180)
+			(uuid "8333be3e-f740-5ed1-8154-d5890e849541")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_RXD" input
+			(at 132.08 124.46 180)
+			(uuid "d31a4b95-b53e-58ac-9895-3e9f0e8bdff1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-TRS80M1-Rev0"
+				(path "/1b1008e3-246e-5898-ac43-b62c4a8e7dd1"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 132.08 152.4)
+		(size 30.48 35.56)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 225 1)
+		)
+		(uuid "80da7f06-79ee-5295-88b7-d60dc29c93af")
+		(property "Sheetname" "usb"
+			(at 132.08 151.7 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+					bold
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 132.08 188.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "S3_RXD" output
+			(at 132.08 157.48 180)
+			(uuid "ea93b77b-070b-50b3-aebf-4785682b3b22")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_TXD" input
+			(at 132.08 160.02 180)
+			(uuid "355889f8-625e-5c6a-a6b6-68be2b42acef")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_IO0" bidirectional
+			(at 132.08 162.56 180)
+			(uuid "07d9592a-1680-5d3e-a3d7-9e9ed4331848")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "S3_EN" bidirectional
+			(at 132.08 165.1 180)
+			(uuid "392aa032-45f3-5a09-9b9d-6360019f52fe")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "FujiNet-TRS80M1-Rev0"
+				(path "/1b1008e3-246e-5898-ac43-b62c4a8e7dd1"
+					(page "5")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 93.98 81.28)
+			(xy 132.08 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58973852-98bd-5a70-96ea-1ba02f2c254b")
+	)
+	(wire
+		(pts
+			(xy 93.98 83.82)
+			(xy 132.08 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03bb5b5d-3c5b-5e05-a281-e956dfe8d65b")
+	)
+	(wire
+		(pts
+			(xy 93.98 86.36)
+			(xy 132.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab20b708-fac8-54cb-8fa3-11851149ffd4")
+	)
+	(wire
+		(pts
+			(xy 93.98 88.9)
+			(xy 132.08 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "da20f5a4-02d4-5934-86a3-bc4736c50d08")
+	)
+	(wire
+		(pts
+			(xy 132.08 116.84)
+			(xy 121.92 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84d59032-e84d-5da3-89b4-bb50f50b2a15")
+	)
+	(wire
+		(pts
+			(xy 121.92 116.84)
+			(xy 121.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bee1db11-8e74-59e2-a6fd-d3f3446b3988")
+	)
+	(wire
+		(pts
+			(xy 121.92 165.1)
+			(xy 132.08 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37c8d9af-b6fd-5358-8664-6fcc1a5d42e1")
+	)
+	(wire
+		(pts
+			(xy 132.08 119.38)
+			(xy 124.46 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34728877-b945-5768-9e97-8b777af191f4")
+	)
+	(wire
+		(pts
+			(xy 124.46 119.38)
+			(xy 124.46 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20e3e965-0438-5a06-be57-5a944186fa94")
+	)
+	(wire
+		(pts
+			(xy 124.46 162.56)
+			(xy 132.08 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e43c169f-10e8-5eaa-b543-5cf6015a277c")
+	)
+	(wire
+		(pts
+			(xy 132.08 121.92)
+			(xy 127 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89e0a24f-cf1e-5c99-89f7-903b2f02d665")
+	)
+	(wire
+		(pts
+			(xy 127 121.92)
+			(xy 127 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93d292f2-7ddc-5648-b39b-8bbf002aa94a")
+	)
+	(wire
+		(pts
+			(xy 127 160.02)
+			(xy 132.08 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3162088c-0394-5a6b-9909-b3f42700aa55")
+	)
+	(wire
+		(pts
+			(xy 132.08 124.46)
+			(xy 129.54 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e70a4dc0-95d9-529b-a36d-34fd80968d6c")
+	)
+	(wire
+		(pts
+			(xy 129.54 124.46)
+			(xy 129.54 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed080709-0278-5f6b-8a50-439dd266d4c5")
+	)
+	(wire
+		(pts
+			(xy 129.54 157.48)
+			(xy 132.08 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ebb1ab1c-9719-5611-a518-575c1f20597a")
+	)
+	(wire
+		(pts
+			(xy 93.98 127)
+			(xy 121.92 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ea85b0a-a15b-53c5-80d1-29500753dfcd")
+	)
+	(junction
+		(at 121.92 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f1ea9697-7de6-5f18-bab9-469caf213d3a")
+	)
+	(label "USB_DP"
+		(at 95.25 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7b4d5d99-fd25-50ad-abe0-f70994ec2bad")
+	)
+	(label "USB_DM"
+		(at 95.25 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "356d91c8-a6de-56f0-a519-b71fdc8b86e5")
+	)
+	(label "RUN_CTL"
+		(at 95.25 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ca0539c3-fafe-5dfe-96c8-367e2feac25c")
+	)
+	(label "BOOTSEL_CTL"
+		(at 95.25 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b6a3e95d-06d6-55e6-8bdc-964987f145d7")
+	)
+	(label "S3_EN"
+		(at 121.92 163.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c9885724-5fbc-5a4d-8f7c-05959600cc70")
+	)
+	(label "S3_IO0"
+		(at 124.46 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ed870464-a157-555a-8986-2d70848a4d3a")
+	)
+	(label "S3_TXD"
+		(at 127 158.75 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bdf42c30-9210-5142-8952-743d93b89bd5")
+	)
+	(label "S3_RXD"
+		(at 129.54 156.21 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "78a7c609-6d4d-5fe1-9e19-f051e09ee47f")
+	)
+	(text "the Model I expansion edge (the ribbon header) is on m1-bus"
+		(exclude_from_sim no)
+		(at 30.48 203.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "ae589220-ba34-5d4a-b0f7-7e16c20c6479")
+	)
+	(text "FujiNet for the TRS-80 Model I, Rev0: an RP2354B card in place of the Expansion Interface,\non a 40-wire ribbon from the keyboard unit's expansion edge, + ESP32-S3.\n\nThe card serves the Model I's cycles in software (fujinet-firmware pico/trs80m1): 32K of RAM at\n8000h-FFFFh, the EI's interrupt latch, drive select, printer and FD1771 at 37E0h-37EFh, the RS-232 board\nat E8h-EBh and the FujiBus pipe at D0h-D3h.  Every line meets an LVC buffer at the header: the\nstrobes Schmitt-triggered, D0-D7 driven only while RD* or IN* is low (OE* = DRIVE . RD* . IN*).\n\n  m1-bus     the 2x20 ribbon header, 100k pull-downs, the five buffers (2 x 74LVC245A address, a\n             74LVC245A for data through 47R, 2 x 74LVC3G17 strobes, 74LVC2G07 INT* / WAIT*), the OE gate,\n             the RP2354B's GPIOs, the DIP switches, LED, debug-UART pads, the logic-analyser header\n  rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL /\n             RESET, its USB out to the S3\n  fujinet    the ESP32-S3 (the FujiNet, the RP's USB host), microSD, WS2812 status light\n  usb        USB-C (the card's only power), the USBLC6 ESD array, the CP2102N bridge and esptool's\n             auto-program pair\n  power      VBUS -> 1.1 A fuse -> +5V, the RP's LDO (+3V3_RP), the S3's buck (+3V3)\n\nRails (GND, VBUS, +5V, +3V3, +3V3_RP, DVDD) join by their power symbols.\n\nFirmware contract (tools/check_nets.py checks this netlist against it): pico/trs80m1 m1_card.h (A0-A15\nGPIO0-15, D0-D7 GPIO16-23, WR* 24, RD* 25, IN* 26, OUT* 27, DRIVE 28, SYSRES* 29, INT* 30, WAIT* 31,\nDIPs 33-35, debug UART 44 / 45, LED 47); this board adds INTAK* on GPIO32.  The S3: fujiversal-trs80m1.h\n(SD 38-41, UART0 43 / 44, WS2812 48, USB host 19 / 20) + RUN / BOOTSEL on IO4 / IO5 and SD card detect\non IO42 (README: firmware changes)."
+		(exclude_from_sim no)
+		(at 187.96 25.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "fd5c9838-26a1-54cb-88f8-dab948fb02b9")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

@@ -55,3 +55,15 @@ python3 tools/export.py                       # BOM, JLCPCB BOM + CPL, gerbers, 
 if compgen -G 'exports/*/*-gerbers.zip' >/dev/null; then
     python3 tools/audit/check_plane_shorts.py   # the zips: no plated hole inside an inner pour of another net
 fi
+python3 tools/audit/check_fab.py              # JLC BOM / CPL / drills / contact lands, against the board
+# the printed shell: anchors from the placement, part boxes from the routed board, then the
+# "check" view (board, parts, plunger, blade room against both halves) must render empty
+python3 -c 'import sys; sys.path.insert(0, "tools"); import gen_pcb; gen_pcb.case_anchors()'
+python3 tools/case_parts.py
+if command -v openscad >/dev/null; then
+    t=$(mktemp -d)
+    out=$(openscad -D 'part="check"' -o "$t/check.stl" case/FujiNet-Astrocade-Shell.scad 2>&1 || true)
+    case "$out" in *'top level object is empty'*) ;; *) echo 'shell check: something touches the shell'; rm -rf "$t"; exit 1 ;; esac
+    rm -rf "$t"
+    echo 'shell check: empty'
+fi

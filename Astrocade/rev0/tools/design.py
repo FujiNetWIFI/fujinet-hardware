@@ -149,8 +149,10 @@ def C(value, a, b='GND', desc='', size=None, key=None):
 
 
 def SW(value, net, desc, key=None):
+    # ALPS SKQGABE010 (1.57 N, 1.5 mm with stem) on the TL3342 land: same 6.4 x 3.7 mm lead
+    # pattern, pins 1-2 / 3-4 tied the same way.  TL3342F160QG ran out at JLC (2026-11).
     return add('SW', 'Switch:SW_Push', value, FP('SW_SPST_TL3342'), {1: net, 2: 'GND'},
-               mpn='TL3342F160QG', lcsc='C2886898', desc=desc, key=key)
+               mpn='SKQGABE010', lcsc='C115351', desc=desc, key=key)
 
 
 def TP(net, label, key=None):

@@ -937,7 +937,7 @@
  },
  {
   "footprint": "SW_SPST_TL3342",
-  "lcsc": "C2886898",
+  "lcsc": "C115351",
   "value": "BOOTSEL / RESET / S3_RST / S3_BOOT",
   "refs": [
    "SW1",
@@ -951,11 +951,11 @@
    0.0,
    0.0
   ],
-  "pad_match_max_err_mm": 0.158,
-  "notes": "pad numbers not comparable (EasyEDA 1,2,3,4 vs ours 1,2): matched by geometry, EasyEDA 1->2, 2->2, 3->1, 4->1; pad pattern alone fits equally at 0/180: equivalent for this part (no pin 1)",
+  "pad_match_max_err_mm": 0.071,
+  "notes": "pad numbers not comparable (EasyEDA 1,2,3,4 vs ours 1,2): matched by geometry, EasyEDA 1->1, 2->1, 3->2, 4->2; pad pattern alone fits equally at 0/180: equivalent for this part (no pin 1)",
   "confidence": "medium (symmetric: 0/180 equivalent; matched by geometry)",
-  "easyeda_part": "TL3342F160QG",
-  "easyeda_package": "SW-SMD_4P-L5.2-W5.2-P3.70-LS6.4-BL",
+  "easyeda_part": "SKQGABE010",
+  "easyeda_package": "KEY-SMD_4P-L5.2-W5.2-P3.70-LS6.4",
   "origin_offset_bbox_method_mm": [
    0.0,
    0.0
@@ -978,7 +978,7 @@
   "npth_ours": 0,
   "holes_easyeda": 0,
   "pin1_pad_ours": "1",
-  "pin1_pad_easyeda": "3/4",
+  "pin1_pad_easyeda": "1/2",
   "pin1_angle_ours_deg": 90.0,
   "pin1_angle_easyeda_deg": 90.0,
   "pattern_rms_err_by_rotation_mm": {
@@ -989,15 +989,14 @@
   },
   "best_rotation_by_pattern": 0,
   "geometric_rms_err_by_rotation_mm": {
-   "0": 0.158,
-   "90": 1.703,
-   "180": 0.158,
-   "270": 1.703
+   "0": 0.071,
+   "90": 1.769,
+   "180": 0.071,
+   "270": 1.769
   },
   "flags": [
    "geometric-match"
   ],
-  "easyeda_package_pin1_suffix": "BL",
   "easyeda_pin1_marker_nearest_pad": "1",
   "easyeda_pin1_marker_ok": true
  },

@@ -1,0 +1,474 @@
+{
+ "schematic": "FujiNet-TRS80M1-Rev0.kicad_sch",
+ "last_sync": "2026-11-24",
+ "note": "PDFs are gitignored; this manifest says where each came from. The Model I edge and the 74LS367 are referenced, not BOM parts.",
+ "references": {
+  "TRS-80 Technical Reference Handbook (26-2103), p.91 expansion edge": "https://www.eevblog.com/files/TRS80model1/Radio%20Shack%20TRS-80%20Micro%20Computer%20Technical%20Reference%20Handbook%201st.pdf",
+  "SN74LS367A (the keyboard unit's bus drivers)": "https://www.ti.com/lit/ds/symlink/sn74ls367a.pdf"
+ },
+ "parts": {
+  "RP2354B": {
+   "lcsc": "C39843328",
+   "refs": [
+    "U1"
+   ],
+   "file": "RP2354B.pdf",
+   "source": "copied from fujinet-hardware/NES/FujiNet-NES-Rev0/datasheets",
+   "present": true
+  },
+  "BH254R-40P": {
+   "lcsc": "C48603651",
+   "refs": [
+    "J1"
+   ],
+   "file": "BH254R-40P.pdf",
+   "present": false
+  },
+  "SN74LVC245APWR": {
+   "lcsc": "C7848",
+   "refs": [
+    "U2",
+    "U3",
+    "U4"
+   ],
+   "file": "SN74LVC245APWR.pdf",
+   "source": "TI / Nexperia product page (ti.com/lit/ds/symlink/sn74lvc245a.pdf)",
+   "present": true
+  },
+  "CC0603KRX7R9BB104": {
+   "lcsc": "C14663",
+   "refs": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C9",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C15",
+    "C16",
+    "C17",
+    "C19",
+    "C22",
+    "C23",
+    "C30",
+    "C33",
+    "C35",
+    "C36",
+    "C40"
+   ],
+   "file": "CC0603KRX7R9BB104.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "4D03WGJ0104T5E": {
+   "lcsc": "C1996",
+   "refs": [
+    "RN1",
+    "RN2",
+    "RN3",
+    "RN4",
+    "RN7",
+    "RN8",
+    "RN9",
+    "RN10"
+   ],
+   "file": "4D03WGJ0104T5E.pdf",
+   "source": "copied from fujinet-hardware/NES/FujiNet-NES-Rev0/datasheets",
+   "present": true
+  },
+  "4D03WGJ0750T5E": {
+   "lcsc": "C25514",
+   "refs": [
+    "RN5",
+    "RN6"
+   ],
+   "file": "4D03WGJ0750T5E.pdf",
+   "present": false
+  },
+  "0603WAF4701T5E": {
+   "lcsc": "C23162",
+   "refs": [
+    "R1"
+   ],
+   "file": "0603WAF4701T5E.pdf",
+   "source": "copied from fujinet-hardware/Fairchild-Channel-F/FujiNet-ChannelF-Rev0/datasheets",
+   "present": true
+  },
+  "SN74LVC1G11DBVR": {
+   "lcsc": "C22046",
+   "refs": [
+    "U5"
+   ],
+   "file": "SN74LVC1G11DBVR.pdf",
+   "source": "TI / Nexperia product page (ti.com/lit/ds/symlink/sn74lvc1g11.pdf)",
+   "present": true
+  },
+  "SN74LVC3G17DCTR": {
+   "lcsc": "C18213",
+   "refs": [
+    "U6",
+    "U7"
+   ],
+   "file": "SN74LVC3G17DCTR.pdf",
+   "source": "TI / Nexperia product page (ti.com/lit/ds/symlink/sn74lvc3g17.pdf)",
+   "present": true
+  },
+  "0603WAF1002T5E": {
+   "lcsc": "C25804",
+   "refs": [
+    "R2",
+    "R3",
+    "R7",
+    "R9",
+    "R14",
+    "R15"
+   ],
+   "file": "0603WAF1002T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "CL10A106KP8NNNC": {
+   "lcsc": "C19702",
+   "refs": [
+    "C8",
+    "C20",
+    "C32",
+    "C39"
+   ],
+   "file": "CL10A106KP8NNNC.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "2.54-3P TPGT": {
+   "lcsc": "C7421520",
+   "refs": [
+    "SW1"
+   ],
+   "file": "2.54-3P TPGT.pdf",
+   "present": false
+  },
+  "4D03WGJ0103T5E": {
+   "lcsc": "C29718",
+   "refs": [
+    "RN11",
+    "RN12"
+   ],
+   "file": "4D03WGJ0103T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0603WAF6800T5E": {
+   "lcsc": "C23228",
+   "refs": [
+    "R4"
+   ],
+   "file": "0603WAF6800T5E.pdf",
+   "source": "copied from fujinet-hardware/ATARI-2600/Fujiversal-Atari2600-Rev1/datasheets",
+   "present": true
+  },
+  "KT-0603R": {
+   "lcsc": "C2286",
+   "refs": [
+    "D1"
+   ],
+   "file": "KT-0603R.pdf",
+   "source": "copied from fujinet-hardware/ATARI-2600/Fujiversal-Atari2600-Rev1/datasheets",
+   "present": true
+  },
+  "CL05B104KO5NNNC": {
+   "lcsc": "C1525",
+   "refs": [
+    "C14",
+    "C18",
+    "C24"
+   ],
+   "file": "CL05B104KO5NNNC.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "CL05A475MP5NRNC": {
+   "lcsc": "C23733",
+   "refs": [
+    "C21",
+    "C25",
+    "C26"
+   ],
+   "file": "CL05A475MP5NRNC.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0402WGF330JTCE": {
+   "lcsc": "C25105",
+   "refs": [
+    "R5"
+   ],
+   "file": "0402WGF330JTCE.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "AOTA-B201610S3R3-101-T": {
+   "lcsc": "C42411119",
+   "refs": [
+    "L1"
+   ],
+   "file": "AOTA-B201610S3R3-101-T.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "ABM8-272-T3": {
+   "lcsc": "C20625731",
+   "refs": [
+    "Y1"
+   ],
+   "file": "ABM8-272-T3.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "CL10C150JB8NNNC": {
+   "lcsc": "C1644",
+   "refs": [
+    "C27",
+    "C28"
+   ],
+   "file": "CL10C150JB8NNNC.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0603WAF1001T5E": {
+   "lcsc": "C21190",
+   "refs": [
+    "R6",
+    "R8",
+    "R10",
+    "R11",
+    "R21"
+   ],
+   "file": "0603WAF1001T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "TS-1187A-B-A-B": {
+   "lcsc": "C318884",
+   "refs": [
+    "SW2",
+    "SW3",
+    "SW4",
+    "SW5"
+   ],
+   "file": "TS-1187A-B-A-B.pdf",
+   "source": "copied from fujinet-hardware/SMS/FujiNet-SMS-Rev0/datasheets",
+   "present": true
+  },
+  "BAT54C,215": {
+   "lcsc": "C37704",
+   "refs": [
+    "D2"
+   ],
+   "file": "BAT54C_215.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0402WGF270JTCE": {
+   "lcsc": "C25100",
+   "refs": [
+    "R12",
+    "R13"
+   ],
+   "file": "0402WGF270JTCE.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "ESP32-S3-WROOM-1-N16R8": {
+   "lcsc": "C2913202",
+   "refs": [
+    "U9"
+   ],
+   "file": "ESP32-S3-WROOM-1-N16R8.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "CL21A226MAQNNNE": {
+   "lcsc": "C45783",
+   "refs": [
+    "C29",
+    "C38",
+    "C41",
+    "C42"
+   ],
+   "file": "CL21A226MAQNNNE.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "CL10A105KB8NNNC": {
+   "lcsc": "C15849",
+   "refs": [
+    "C31",
+    "C34",
+    "C43",
+    "C44"
+   ],
+   "file": "CL10A105KB8NNNC.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "TF-015": {
+   "lcsc": "C113206",
+   "refs": [
+    "J3"
+   ],
+   "file": "TF-015.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0603WAF3300T5E": {
+   "lcsc": "C23138",
+   "refs": [
+    "R16"
+   ],
+   "file": "0603WAF3300T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "WS2812B-2020-V6": {
+   "lcsc": "C52917434",
+   "refs": [
+    "D3"
+   ],
+   "file": "WS2812B-2020-V6.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "TYPE-C-31-M-12": {
+   "lcsc": "C165948",
+   "refs": [
+    "J4"
+   ],
+   "file": "TYPE-C-31-M-12.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0603WAF5101T5E": {
+   "lcsc": "C23186",
+   "refs": [
+    "R17",
+    "R18"
+   ],
+   "file": "0603WAF5101T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "USBLC6-2SC6": {
+   "lcsc": "C7519",
+   "refs": [
+    "U10"
+   ],
+   "file": "USBLC6-2SC6.pdf",
+   "source": "copied from fujinet-hardware/RCA-Studio-II/FujiNet-StudioII-Rev0/datasheets",
+   "present": true
+  },
+  "CP2102N-A02-GQFN28R": {
+   "lcsc": "C964632",
+   "refs": [
+    "U11"
+   ],
+   "file": "CP2102N-A02-GQFN28R.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "CL10A475KO8NNNC": {
+   "lcsc": "C19666",
+   "refs": [
+    "C37"
+   ],
+   "file": "CL10A475KO8NNNC.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0603WAF2202T5E": {
+   "lcsc": "C31850",
+   "refs": [
+    "R19",
+    "R23"
+   ],
+   "file": "0603WAF2202T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "0603WAF4702T5E": {
+   "lcsc": "C25819",
+   "refs": [
+    "R20"
+   ],
+   "file": "0603WAF4702T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "UMH3N": {
+   "lcsc": "C62892",
+   "refs": [
+    "U12"
+   ],
+   "file": "UMH3N.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "SMD1206B110TFT": {
+   "lcsc": "C269119",
+   "refs": [
+    "F1"
+   ],
+   "file": "SMD1206B110TFT.pdf",
+   "present": false
+  },
+  "TLV62569DBVR": {
+   "lcsc": "C141836",
+   "refs": [
+    "U13"
+   ],
+   "file": "TLV62569DBVR.pdf",
+   "source": "TI / Nexperia product page (ti.com/lit/ds/symlink/tlv62569.pdf)",
+   "present": true
+  },
+  "SWPA4030S2R2MT": {
+   "lcsc": "C36409",
+   "refs": [
+    "L2"
+   ],
+   "file": "SWPA4030S2R2MT.pdf",
+   "present": false
+  },
+  "0603WAF1003T5E": {
+   "lcsc": "C25803",
+   "refs": [
+    "R22"
+   ],
+   "file": "0603WAF1003T5E.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "AP2112K-3.3TRG1": {
+   "lcsc": "C51118",
+   "refs": [
+    "U14"
+   ],
+   "file": "AP2112K-3.3TRG1.pdf",
+   "source": "copied from fujinet-hardware/Astrocade/rev0/datasheets",
+   "present": true
+  },
+  "SN74LVC2G07DCKR": {
+   "lcsc": "C7849",
+   "refs": [
+    "U8"
+   ],
+   "file": "SN74LVC2G07DCKR.pdf",
+   "present": true,
+   "source": "TI product page (ti.com/lit/ds/symlink/sn74lvc2g07.pdf)"
+  }
+ }
+}

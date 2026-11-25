@@ -1,0 +1,120 @@
+(footprint "SW_DIP_SPSTx03_SMD_P2.54mm_HX"
+	(version 20241229)
+	(generator "fujinet_gen")
+	(generator_version "1.0")
+	(layer "F.Cu")
+	(descr "SHOU HAN 2.54-3P TPGT (LCSC C7421520) 3-way SMD DIP switch, 2.54 mm; pins 1-3 / 6-4 switch pairs, ON toward pins 4-6 (pads from the EasyEDA footprint)")
+	(property "Reference" "REF**"
+		(at 0 -6.4 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SW_DIP_SPSTx03_SMD_P2.54mm_HX"
+		(at 0 6.4 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_rect
+		(start -3.81 -3.05)
+		(end 3.81 3.05)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+	)
+	(fp_rect
+		(start -3.93 -3.17)
+		(end 3.93 3.17)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_text user "ON"
+		(at -2.6 -2 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "1"
+		(at -2.54 2 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_rect
+		(start -4.3 -5.45)
+		(end 4.3 5.45)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+	)
+	(pad "1" smd rect
+		(at -2.54 4.3)
+		(size 1.1 1.8)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "2" smd rect
+		(at 0 4.3)
+		(size 1.1 1.8)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "3" smd rect
+		(at 2.54 4.3)
+		(size 1.1 1.8)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "4" smd rect
+		(at 2.54 -4.3)
+		(size 1.1 1.8)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "5" smd rect
+		(at 0 -4.3)
+		(size 1.1 1.8)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(pad "6" smd rect
+		(at -2.54 -4.3)
+		(size 1.1 1.8)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+	)
+	(model "${KIPRJMOD}/3d/SW_DIP_SPSTx03_Slide_6.7x9.18mm_W8.61mm_P2.54mm_LowProfile.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 -90)
+		)
+	)
+	(embedded_fonts no)
+)

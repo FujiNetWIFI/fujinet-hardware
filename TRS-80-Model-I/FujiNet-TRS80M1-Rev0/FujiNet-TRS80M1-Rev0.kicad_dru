@@ -1,0 +1,12 @@
+(version 1)
+(rule "default_clearance"
+	(constraint clearance (min 0.12mm)))
+(rule "gnd_solid_under_ics"
+	(condition "A.NetName == 'GND' && (A.memberOfFootprint('U1') || A.memberOfFootprint('U11') || A.memberOfFootprint('U13') || A.memberOfFootprint('U14'))")
+	(constraint zone_connection solid))
+(rule "la_gnd_spokes"
+	(condition "A.memberOfFootprint('J2') && A.NetName == 'GND'")
+	(constraint min_resolved_spokes 1))
+(rule "header_edge"
+	(condition "A.memberOfFootprint('J1')")
+	(constraint edge_clearance (min 0.3mm)))

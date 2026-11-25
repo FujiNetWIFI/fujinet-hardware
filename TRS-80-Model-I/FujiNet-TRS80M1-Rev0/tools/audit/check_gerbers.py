@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 """Gate on the fab outputs themselves (not the .kicad_pcb): the gerbers and drills that
-tools/export.py zipped for JLCPCB, checked against tools/edge_geom.py.
+tools/export.py zipped for JLCPCB, checked against tools/header_geom.py and tools/placement.py.
 
   1. the zip holds the 4 copper layers (F, In1, In2, B), both masks, pastes and silkscreens, the
      outline, plated and unplated Excellon -- and nothing for a 6-layer stack
-  2. Edge.Cuts: the board's width and height, both sides' straight runs and the two side notches
-     (edge_geom.NOTCH_L / NOTCH_R, NOTCH_D deep), the two 5 mm shell-post holes in the NPTH drill
-  3. F.Cu: exactly 15 fingers (pins 1-15) at their pins' x; B.Cu: exactly 15 (pins A-R) behind
-     them; each edge_geom.LAND_W wide, LAND_Y0..LAND_Y1 in from the edge
-  4. F.Cu and B.Cu: no other copper between the fingers in the finger field (each finger's neck
-     stays within its own width)
-  5. F.Mask / B.Mask: every finger inside a mask opening
-  6. In1 / In2: no copper in the finger field (the planes stop above it)
-  7. no paste closer to the edge than edge_geom.PARTS_Y (no parts there); no silkscreen in the
-     fingers' mask openings; no drill hit in the finger field
+  2. Edge.Cuts: the board's width and height (header_geom.BOARD_W x BOARD_H)
+  3. the NPTH drill: exactly the four M3 corner holes (header_geom.HOLE_D) where placement.HOLES has them
+  4. the PTH drill: the box header's 40 holes, each at its pin's position (placement.hdr_pin), 1.1 mm,
+     with a pad flashed on F.Cu and B.Cu and a mask opening on both sides
+  5. the antenna band (gen_pcb.ANT_KEEP): no copper on any layer, no drill hit
+  6. no paste and no copper (but the header's shroud has none: it is plastic) past the outline
   8. no plated hole inside an inner-layer pour of another net: each PTH hit takes its net from the
      copper flashed at it (KiCad's X2 %TO.N attributes), and every In1 / In2 region (zone fill) that
      contains it must carry that net (the plot is of the SAVED fills: vias added after the last fill
@@ -25,7 +21,8 @@ Usage: python3 tools/audit/check_gerbers.py          exit 1 on any failure
 import io, os, re, sys, zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-import edge_geom as EG
+import header_geom as EG
+import placement as PL
 import gen_pcb as G
 import design as D
 
@@ -201,79 +198,56 @@ def main():
                                                              ' -- missing %s' % [s for s in want if not has(s)]))
     layer = lambda suffix: parse(next(t for n, t in files.items() if n.endswith(suffix)))
 
-    xc, y1, field_y = G.XC, G.Y1, G.FINGER_Y
-    # 2. outline: the profile is drawn segment by segment; collect vertical runs
+    # 2. outline
     edges = [o for o in layer('Edge_Cuts.gbr') if o[4] == 'draw']
-    w = 0.1
-    vert = [(round((o[0] + o[2]) / 2, 3), round(o[1] + w / 2, 3), round(o[3] - w / 2, 3)) for o in edges
-            if abs((o[2] - o[0]) - w) < 1e-3]
-    has_run = lambda xx, ya, yb: any(abs(v[0] - xx) < EPS and abs(v[1] - ya) < EPS and abs(v[2] - yb) < EPS
-                                     for v in vert)
-    for side, xx, inner, (lo, hi) in (('west', G.X0, G.X0 + EG.NOTCH_D, EG.NOTCH_L),
-                                      ('east', G.X1, G.X1 - EG.NOTCH_D, EG.NOTCH_R)):
-        check(has_run(xx, G.Y0 + EG.TOP_R, y1 - hi) and has_run(xx, y1 - lo, y1 - EG.CHAMF_Y),
-              '2. %s side at x %.3f: y %.2f..%.2f and %.2f..%.2f' % (side, xx, G.Y0 + EG.TOP_R, y1 - hi, y1 - lo,
-                                                                    y1 - EG.CHAMF_Y))
-        check(has_run(inner, y1 - hi, y1 - lo), '2. %s notch at x %.3f: y %.2f..%.2f (%.1f-%.1f mm up)'
-              % (side, inner, y1 - hi, y1 - lo, lo, hi))
+    x0, y0 = min(o[0] for o in edges) + 0.05, min(o[1] for o in edges) + 0.05
+    x1, y1 = max(o[2] for o in edges) - 0.05, max(o[3] for o in edges) - 0.05
+    check(abs((x1 - x0) - EG.BOARD_W) < EPS and abs((y1 - y0) - EG.BOARD_H) < EPS,
+          '2. board %.3f x %.3f mm (want %g x %g)' % (x1 - x0, y1 - y0, EG.BOARD_W, EG.BOARD_H))
+    check(abs(x0 - PL.X0) < EPS and abs(y0 - PL.Y0) < EPS, '2. the outline where placement.py puts it (%.2f, %.2f)' % (x0, y0))
+    # 3. NPTH: the corner holes
     npth = drills(next(t for n, t in files.items() if n.endswith('-NPTH.drl')))
-    posts = [(hx, hy) for hx, hy, d in npth if abs(d - EG.HOLE_D) < EPS]
-    want = sorted((round(x, 2), round(y, 2)) for x, y, d in G.HOLES)
-    check(sorted((round(x, 2), round(y, 2)) for x, y in posts) == want,
-          '2. NPTH: the shell posts, %.1f mm, at %s' % (EG.HOLE_D, want))
-    x0, x1 = min(o[0] for o in edges) + w / 2, max(o[2] for o in edges) - w / 2
-    check(abs((x1 - x0) - EG.BOARD_W) < EPS, '2. board width %.3f mm (want %.3f)' % (x1 - x0, EG.BOARD_W))
-    ytop = min(o[1] for o in edges) + w / 2
-    check(abs((y1 - ytop) - EG.CART_H) < EPS, '2. board height %.2f mm (want %.2f)' % (y1 - ytop, EG.CART_H))
-
-    # 3-5. fingers: pins 1-15 on F.Cu, A-R on B.Cu
-    size = (EG.LAND_W, round(EG.LAND_Y1 - EG.LAND_Y0, 3))
-    for side, cu_n, mask_n, pins in (('F', 'F_Cu.gbr', 'F_Mask.gbr', EG.ROW_F),
-                                     ('B', 'B_Cu.gbr', 'B_Mask.gbr', EG.ROW_B)):
-        cu = layer(cu_n)
-        fing = [o for o in cu if o[4] == 'flash' and o[5] == size and o[3] > y1 - EG.LAND_Y0 - 1
-                and o[1] > y1 - EG.LAND_Y1 - EPS]
-        got = {round((o[0] + o[2]) / 2, 3): o for o in fing}
-        bad = []
-        for p in pins:
-            xx = round(xc + EG.finger_x(p), 3)
-            o = next((v for k, v in got.items() if abs(k - xx) < EPS), None)
-            if o is None or abs(o[1] - (y1 - EG.LAND_Y1)) > EPS or abs(o[3] - (y1 - EG.LAND_Y0)) > EPS:
-                bad.append(p)
-        check(len(fing) == EG.N_PER_FACE and not bad,
-              '3. %s.Cu: %d fingers at their pins\' x (pin %s at %.2f, pin %s at %.2f), %.2f wide, %.2f..%.2f mm in%s'
-              % (side, len(fing), pins[0], xc + EG.finger_x(pins[0]), pins[-1], xc + EG.finger_x(pins[-1]),
-                 EG.LAND_W, EG.LAND_Y0, EG.LAND_Y1, ' -- bad pins %s' % bad if bad else ''))
-        stray = [o for o in cu if o not in fing and o[3] > field_y + EPS
-                 and not any(f[0] - EPS <= o[0] and o[2] <= f[2] + EPS for f in fing)]
-        check(not stray, '4. %s.Cu: no copper between the fingers in the finger field (%d stray)' % (side, len(stray)))
-        mask = layer(mask_n)
-        cov = [f for f in fing if any(m[0] <= f[0] + EPS and m[1] <= f[1] + EPS and m[2] >= f[2] - EPS
-                                      and m[3] >= f[3] - EPS for m in mask)]
-        check(len(cov) == len(fing), '5. %s.Mask: %d / %d fingers inside their own mask openings'
-              % (side, len(cov), len(fing)))
-
-    # 6-7. the finger field and the tab
-    for n in ('In1_Cu', 'In2_Cu'):
-        low = max(o[3] for o in layer(n + '.gbr'))
-        check(low <= field_y + EPS, '6. %s: lowest copper at y %.2f, finger field from %.2f' % (n, low, field_y))
-    for n in ('F_Paste', 'B_Paste'):
-        low = max((o[3] for o in layer(n + '.gbr')), default=0)
-        check(low <= G.PARTS_MAX_Y + EPS, '7. %s: lowest object at y %.2f (no parts south of %.2f)'
-              % (n, low, G.PARTS_MAX_Y))
-    win = y1 - EG.LAND_Y1 - 0.05
-    for n in ('F_Silkscreen', 'B_Silkscreen'):
-        low = max((o[3] for o in layer(n + '.gbr')), default=0)
-        check(low <= win - 0.1, '7. %s: lowest ink at y %.2f, finger mask window from %.2f' % (n, low, win))
-    for n, t in files.items():
-        if n.endswith('.drl'):
-            h = drills(t)
-            low = max((p[1] for p in h), default=0)
-            check(low <= field_y + EPS, '7. %s: %d hits, lowest at y %.2f (finger field from %.2f)'
-                  % (n, len(h), low, field_y))
-
-    # 8. plated holes against the inner pours of other nets
+    want_h = sorted((round(x, 2), round(y, 2), d) for x, y, d in PL.HOLES)
+    got_h = sorted((round(x, 2), round(y, 2), d) for x, y, d in npth if d >= 3.0)   # (the connectors' pegs are NPTH too)
+    check(len(got_h) == 4 and all(abs(a[0] - b[0]) < EPS and abs(a[1] - b[1]) < EPS and abs(a[2] - b[2]) < 0.01
+                                  for a, b in zip(want_h, got_h)),
+          '3. NPTH: the four %.1f mm corner holes %s' % (EG.HOLE_D, got_h if len(got_h) != 4 else ''))
+    # 4. the header's holes, pads and mask openings
     pth = drills(next(t for n, t in files.items() if n.endswith('-PTH.drl')))
+    fcu, bcu = layer('F_Cu.gbr'), layer('B_Cu.gbr')
+    fm, bm = layer('F_Mask.gbr'), layer('B_Mask.gbr')
+    covers = lambda objs, x, y, r: any(o[4] == 'flash' and o[0] <= x - r + EPS and o[2] >= x + r - EPS and
+                                       o[1] <= y - r + EPS and o[3] >= y + r - EPS for o in objs)
+    bad = []
+    for n in range(1, 41):
+        hx, hy = PL.hdr_pin(n)
+        hit = [h for h in pth if abs(h[0] - hx) < EPS and abs(h[1] - hy) < EPS]
+        if len(hit) != 1 or abs(hit[0][2] - 1.1) > 0.01:
+            bad.append('%d: hole %s' % (n, hit))
+            continue
+        for nm, objs in (('F.Cu', fcu), ('B.Cu', bcu), ('F.Mask', fm), ('B.Mask', bm)):
+            if not covers(objs, hx, hy, 0.8):
+                bad.append('%d: no %s pad' % (n, nm))
+    check(not bad, '4. the box header: 40 x 1.1 mm plated holes at their pins, pads and mask openings both sides%s'
+          % (' -- %s' % bad[:6] if bad else ''))
+    # 5. the antenna band
+    ax0, ay0, ax1, ay1 = G.ANT_KEEP
+    inband = lambda o: o[2] > ax0 + EPS and o[0] < ax1 - EPS and o[3] > ay0 + EPS and o[1] < ay1 - EPS
+    grid = [(ax0 + 0.05 + 0.25 * i, ay0 + 0.05 + 0.25 * j) for i in range(int((ax1 - ax0) / 0.25)) for j in range(int((ay1 - ay0) / 0.25))]
+    for n in ('F_Cu.gbr', 'In1_Cu.gbr', 'In2_Cu.gbr', 'B_Cu.gbr'):
+        text = next(t for k, t in files.items() if k.endswith(n))
+        objs = [o for o in parse(text) if o[4] != 'region' and inband(o)]          # pads, tracks
+        regs = [r for _net, r in net_objects(text)[0]]                              # pours: point in polygon
+        filled = [(x, y) for x, y in grid if any(inside(x, y, r) for r in regs)]
+        check(not objs and not filled, '5. %s: no copper in the antenna band x %.1f..%.1f, y %.1f..%.1f%s'
+              % (n[:-4], ax0, ax1, ay0, ay1, ' -- %d objects, %d filled points, e.g. %s' % (len(objs), len(filled), (objs[:1] or filled[:1])) if objs or filled else ''))
+    hits = [h for h in pth + npth if ax0 < h[0] < ax1 and ay0 < h[1] < ay1]
+    check(not hits, '5. no drill hit in the antenna band%s' % (' -- %s' % hits[:3] if hits else ''))
+    # 6. nothing past the outline
+    for n in ('F_Paste.gbr', 'F_Cu.gbr', 'B_Cu.gbr'):
+        out = [o for o in layer(n) if o[0] < x0 - EPS or o[2] > x1 + EPS or o[1] < y0 - EPS or o[3] > y1 + EPS]
+        check(not out, '6. %s: nothing past the outline%s' % (n[:-4], ' -- %s' % [o[:4] for o in out[:3]] if out else ''))
+    # 8. plated holes against the inner pours of other nets
     flash = {}                      # 0.1 mm buckets of net-tagged flashes; a hit takes the one within 0.01 mm
     for n in ('F_Cu.gbr', 'B_Cu.gbr', 'In1_Cu.gbr', 'In2_Cu.gbr'):
         for fx, fy, fnet in net_objects(next(t for k, t in files.items() if k.endswith(n)))[1]:

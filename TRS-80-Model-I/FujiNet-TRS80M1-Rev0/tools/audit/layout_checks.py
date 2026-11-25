@@ -12,11 +12,13 @@
   5. the exposed pads: vias inside the RP2354B's and the CP2102N's
   6. the USB pairs: each line's length and the skew within each pair (full speed: edges 4-20 ns); the
      USBLC6's flow-through pins joined; no loop in any USB line's copper
-  7. the edge: every bus finger reaches its series resistor; nothing on In1 / In2 in the finger
-     field (filled copper); +5V finger (D) -> the mux's VIN2; the GND finger on GND
-  8. the ESP32-S3: its antenna keep-out (the module footprint's zone: the antenna plus Espressif's
-     15 mm each side) empty of tracks, vias, fills and parts on every layer; the antenna end flush
-     with the top edge
+  7. the ribbon header: every bus line reaches its buffer on copper, short beside the ribbon (at most
+     45 mm of track and 4 vias from the header pin to the buffer pin, the data lines to their 75R: the
+     ribbon itself is 150 mm); the three GND pins (8, 29, 37) joined to the In1 GND plane by its fill
+     (thermal spokes); every bus buffer's 100 nF within 6 mm of its VCC pin (check 2)
+  8. the ESP32-S3: its antenna keep-out (the module footprint's zone: the antenna end to the board
+     edge, 24 mm each way along it) empty of tracks, vias, fills and parts on every layer; the antenna
+     end flush with the east edge
   9. the buck's input loop: VIN and GND to the input caps short
 Copper paths are shortest paths over the net's own tracks and vias (pad to pad); a via adds no length
 but is counted.  Usage: python3 tools/audit/layout_checks.py [board]      exit 1 on any failure
@@ -25,7 +27,7 @@ import heapq, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 import gen_pcb as G
-import edge_geom as EG
+import header_geom as EG
 import design as D
 from sexpr import parse, find, findall
 
@@ -232,9 +234,10 @@ for key, pin in rp_caps:
     lim = 17.0 if pin in SOUTH else 14.0
     check(dist <= lim, '2. %s on pin %s (%s): %.1f mm from the pin, through the ring under the package (limit %.0f)'
           % (key, pin, C(net), dist, lim))
-for key, ukey, upin in (('C_UART', 'U_UART', '6'), ('C_S3', 'U_S3', '2'), ('C_BINHF', 'U_BUCK', '3'),
+for key, ukey, upin in (('C_UART', 'U_UART', '6'), ('C_S3', 'U_S3', '2'), ('C_BINHF', 'U_BUCK', '4'),
                         ('C_LDOIN', 'U_LDO', '1'), ('C_LDOOUT', 'U_LDO', '5'), ('C_WS', 'D_WS', '4'),
-                        ('C_MUXV1', 'U_MUX', '3')):
+                        ('C_AH', 'U_AH', '20'), ('C_AL', 'U_AL', '20'), ('C_DB', 'U_DB', '20'), ('C_STA', 'U_STA', '8'),
+                        ('C_STB', 'U_STB', '8'), ('C_OD', 'U_OD', '5'), ('C_OE', 'U_OE', '5')):
     a, c = pad(ukey, upin), pad(key, '1')
     dist = math.dist((a.cx, a.cy), (c.cx, c.cy))
     lim = 7.0 if key == 'C_UART' else 6.0          # the bridge's 100 nF: 6.2 mm, both ends on the +3V3 island
@@ -266,42 +269,33 @@ for x, y in (('1', '6'), ('3', '4')):
     net = pad('U_ESD', x).net
     d, nv = path(net, pad('U_ESD', x), pad('U_ESD', y))
     check(d is not None, '6. USBLC6 pins %s / %s (%s) joined on copper: %s' % (x, y, net, '%.1f mm' % d if d is not None else 'NO'))
-# ---- 7. the edge ------------------------------------------------------------------------------------------------------
-bad, worst = [], 0
-RKEY = {cn: 'R_' + rn[3:] for cn, rn, g, rv in D.BUS}
+# ---- 7. the ribbon header ----------------------------------------------------------------------------------
+bad, worst, longest = [], 0, 0.0
 for pin, (net, _nm) in D.EDGE.items():
-    if net is None or net in ('GND', 'CONS_5V'):
+    if net is None or net == 'GND':
         continue
-    key = RKEY[net]
-    d, nv = path(net, pad('J_EDGE', str(pin)), pad(key, '1'))
-    if d is None or nv > 8:
-        bad.append('%s(%s)' % (pin, 'open' if d is None else '%d vias' % nv))
-    elif nv > worst:
-        worst = nv
-check(not bad, '7. every bus finger reaches its series resistor on copper (at most %d vias; ~1 us /PSEN does not mind)%s'
-      % (worst, ' -- ' + ', '.join(bad) if bad else ''))
-inner = [pts for n, L, pts in fills('', None) if L in ('In1.Cu', 'In2.Cu') and max(p[1] for p in pts) > G.FINGER_Y + 0.01]
-check(not inner, '7. In1 / In2: no filled copper below y %.2f (the finger field)' % G.FINGER_Y)
-# the console 5 V: finger D -> its neck via -> In2's CONS_5V island <- VIN2's via (no track between them)
-isl = fills('cons5v_island')
-viav = [(float(find(e, 'at')[1]), float(find(e, 'at')[2])) for e in b if isinstance(e, list) and e and e[0] == 'via'
-        and C(str(find(e, 'net')[1])) == 'CONS_5V']
-on_isl = [v for v in viav if in_fill(isl, v[0], v[1], 'CONS_5V')]
-fp4 = pad('J_EDGE', 'D')
-near4 = [v for v in on_isl if abs(v[1] - (G.Y1 - EG.NECK_Y1)) < 1.0 and abs(v[0] - fp4.cx) < 2.0]
-vin2 = pad('U_MUX', '6')
-d, nv = None, None
-for v in on_isl:
-    q = type(vin2)('via', 'v', vin2.net, v[0], v[1], 0.3, 0.3, ['F.Cu', 'B.Cu'], True, v)
-    d0, n0 = path('CONS_5V', vin2, q)
-    if d0 is not None and (d is None or d0 < d):
-        d, nv = d0, n0
-check(bool(isl) and near4 and d is not None,
-      '7. +5V finger (pin D) -> neck via on In2\'s CONS_5V island (%d vias on it) <- TPS2116 VIN2 (%s)'
-      % (len(on_isl), '%.1f mm to its via' % d if d is not None else 'NO via on the island'))
+    if net in D.DATA:                            # header -> 75R
+        rk, u = next((k, u) for k in ('RS_D1', 'RS_D2') for u in range(1, 5) if D.BY_KEY[k].pins[str(u)] == net)
+        tgt = pad(rk, str(u))
+    else:                                        # header -> the buffer's input (or the 2G07's output)
+        tgt = next(q for q in PADS if C(q.net) == net and q.ref != K['J_M1'] and q.ref[0] == 'U')
+    d, nv = path(net, pad('J_M1', str(pin)), tgt)
+    if d is None or nv > 4 or d > 45.0:
+        bad.append('%d %s(%s)' % (pin, net, 'open' if d is None else '%.1f mm, %d vias' % (d, nv)))
+    else:
+        worst, longest = max(worst, nv), max(longest, d)
+check(not bad, '7. every header line reaches its buffer on copper: longest %.1f mm, at most %d vias%s'
+      % (longest, worst, ' -- ' + ', '.join(bad) if bad else ''))
+gnd_in1 = fills('GND_plane', 'In1.Cu')
+for pin in (8, 29, 37):
+    q = pad('J_M1', str(pin))
+    r = q.hw + 0.35                              # just outside the pad: the spokes of the thermal relief
+    spokes = sum(in_fill(gnd_in1, q.cx + r * math.cos(a * math.pi / 4), q.cy + r * math.sin(a * math.pi / 4), 'GND')
+                 for a in range(8))
+    check(C(q.net) == 'GND' and spokes >= 2, '7. header pin %d (GND) joined to the In1 GND fill (%d of 8 directions)' % (pin, spokes))
 # ---- 8. the ESP32-S3 antenna --------------------------------------------------------------------------------------------
 ux, uy, _r = G.PLACE[K['U_S3']]
-ko = (ux - 24.0, uy - 27.75, ux + 24.0, uy - 6.75)
+ko = G.ANT_KEEP
 inside = lambda x, y: ko[0] < x < ko[2] and ko[1] < y < ko[3]
 segs = [e for e in b if isinstance(e, list) and e and e[0] == 'segment'
         and (inside(float(find(e, 'start')[1]), float(find(e, 'start')[2])) or inside(float(find(e, 'end')[1]), float(find(e, 'end')[2])))]
@@ -311,10 +305,10 @@ fl = [1 for n, L, pts in fills('', None) if any(inside(x, y) for x, y in pts)
 parts_in = [p.ref for p in PADS if p.ref != K['U_S3'] and inside(p.cx, p.cy)]
 check(not segs and not vias and not fl and not parts_in, '8. S3 antenna keep-out: %d tracks, %d vias, %d fills, parts %s'
       % (len(segs), len(vias), len(fl), sorted(set(parts_in)) or 'none'))
-check(abs((uy - 12.85) - G.Y0) < 0.3, '8. the module\'s antenna end (y %.2f) flush with the top edge (y %.2f)' % (uy - 12.85, G.Y0))
+check(abs((ux + 12.85) - G.X1) < 0.3, '8. the module\'s antenna end (x %.2f) flush with the east edge (x %.2f)' % (ux + 12.85, G.X1))
 # ---- 9. buck input loop ----------------------------------------------------------------------------------------------------
 for key in ('C_BIN', 'C_BINHF'):
-    a, c = pad('U_BUCK', '3'), pad(key, '1')
+    a, c = pad('U_BUCK', '4'), pad(key, '1')
     dist = math.dist((a.cx, a.cy), (c.cx, c.cy))
     check(dist <= 5.0, '9. buck VIN -> %s: %.1f mm' % (key, dist))
 print('%d failures' % len(fails))

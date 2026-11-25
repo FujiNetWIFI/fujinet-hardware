@@ -55,14 +55,31 @@
 			)
 		)
 	)
-	(fp_rect
+	(fp_line
 		(start -29.41 3.32)
-		(end 29.41 12.35)
+		(end 29.41 3.32)
 		(stroke
 			(width 0.12)
 			(type solid)
 		)
-		(fill no)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -29.41 3.32)
+		(end -29.41 11.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start 29.41 3.32)
+		(end 29.41 11.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
 		(layer "F.SilkS")
 	)
 	(fp_poly
@@ -376,7 +393,7 @@
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz 0 0 -90)
+			(xyz 0 0 90)
 		)
 	)
 	(embedded_fonts no)

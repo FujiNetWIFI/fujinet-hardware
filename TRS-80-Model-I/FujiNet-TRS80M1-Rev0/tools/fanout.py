@@ -9,7 +9,7 @@ then left with signal nets only -- it is poor at plane fan-out on its own.
 """
 import math
 
-PLANE_NETS = ('GND', '+5V', '+3V3', '+3V3_RP', 'DVDD', 'CONS_5V')
+PLANE_NETS = ('GND', '+5V', '+3V3', '+3V3_RP', 'DVDD')
 VIA_D, VIA_DRILL = 0.6, 0.3
 STUB_W = 0.3
 CLR = 0.16          # copper clearance kept by the fan-out (rules say 0.15)

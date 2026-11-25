@@ -26,6 +26,13 @@ PCB = os.path.join(PRJ, 'FujiNet-TRS80M1-Rev0.kicad_pcb')
 # KiCad places a model as  footprint * T(offset) * R(rotate) * v : the offset is applied
 # AFTER the rotation, in the footprint frame (3D +y = footprint -y).
 MODELS = {
+    'TSSOP-20_4.4x6.5mm_P0.65mm': ('TSSOP-20_4.4x6.5mm_P0.65mm.step', (0, 0, 0), (0, 0, 0)),
+    'SSOP-8_2.95x2.8mm_P0.65mm': ('SSOP-8_2.95x2.8mm_P0.65mm.step', (0, 0, 0), (0, 0, 0)),
+    'PinHeader_2x10_P2.54mm_Vertical': ('PinHeader_2x10_P2.54mm_Vertical.step', (0, 0, 0), (0, 0, 0)),
+    'Fuse_1206_3216Metric': ('Fuse_1206_3216Metric.step', (0, 0, 0), (0, 0, 0)),
+    # the two EasyEDA-derived footprints (tools/make_fp_m1.py): KiCad's generic models, turned onto them
+    'IDC-Header_2x20_P2.54mm_Horizontal_BH254R-40P': ('IDC-Header_2x20_P2.54mm_Horizontal.step', (24.13, 1.27, 0), (0, 0, 90)),
+    'SW_DIP_SPSTx03_SMD_P2.54mm_HX': ('SW_DIP_SPSTx03_Slide_6.7x9.18mm_W8.61mm_P2.54mm_LowProfile.step', (0, 0, 0), (0, 0, -90)),
     'C_0603_1608Metric': ('C_0603_1608Metric.step', (0, 0, 0), (0, 0, 0)),
     'C_0805_2012Metric': ('C_0805_2012Metric.step', (0, 0, 0), (0, 0, 0)),
     'R_0603_1608Metric': ('R_0603_1608Metric.step', (0, 0, 0), (0, 0, 0)),

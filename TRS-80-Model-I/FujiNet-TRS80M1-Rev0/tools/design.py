@@ -158,7 +158,7 @@ CAP = {'15pF': (C0603, 'CL10C150JB8NNNC', 'C1644'),
        '4.7uF/0402': (FP('RPI_C0402'), 'CL05A475MP5NRNC', 'C23733'),
        '4.7uF/0402w': (FP('RPI_C0402_wide'), 'CL05A475MP5NRNC', 'C23733')}
 RPACK = {'4x10k': ('4D03WGJ0103T5E', 'C29718'), '4x100k': ('4D03WGJ0104T5E', 'C1996'),
-         '4x47R': ('4D03WGJ0470T5E', 'C16081')}
+         '4x75R': ('4D03WGJ0750T5E', 'C25514')}
 
 # MPN -> manufacturer (names from LCSC's / JLCPCB's pages)
 MFR = {'RP2354B': 'Raspberry Pi', 'CC0603KRX7R9BB104': 'YAGEO', 'CL10A106KP8NNNC': 'Samsung Electro-Mechanics',
@@ -169,12 +169,12 @@ MFR = {'RP2354B': 'Raspberry Pi', 'CC0603KRX7R9BB104': 'YAGEO', 'CL10A106KP8NNNC
        'KT-0603R': 'Hubei KENTO Elec', 'TYPE-C-31-M-12': 'Korean Hroparts Elec',
        'AP2112K-3.3TRG1': 'Diodes Incorporated', 'TLV62569DBVR': 'Texas Instruments',
        'ESP32-S3-WROOM-1-N16R8': 'Espressif', 'TF-015': 'SOFNG', 'WS2812B-2020-V6': 'Worldsemi',
-       '4D03WGJ0103T5E': 'UNI-ROYAL', '4D03WGJ0104T5E': 'UNI-ROYAL', '4D03WGJ0470T5E': 'UNI-ROYAL',
+       '4D03WGJ0103T5E': 'UNI-ROYAL', '4D03WGJ0104T5E': 'UNI-ROYAL', '4D03WGJ0750T5E': 'UNI-ROYAL',
        'CP2102N-A02-GQFN28R': 'Silicon Labs', 'UMH3N': 'Jiangsu Changjing (JSCJ)',
        'USBLC6-2SC6': 'STMicroelectronics', 'BAT54C,215': 'Nexperia', 'SWPA4030S2R2MT': 'Sunlord',
        'SN74LVC245APWR': 'Texas Instruments', 'SN74LVC3G17DCTR': 'Texas Instruments',
-       'SN74LVC1G11DBVR': 'Texas Instruments', '74LVC2G07GW,125': 'Nexperia',
-       'SMD1206B110TFT': 'Brightking', 'BH254R-40P': 'XFCN', '2.54-3P TPGT': 'HANXIA'}
+       'SN74LVC1G11DBVR': 'Texas Instruments', 'SN74LVC2G07DCKR': 'Texas Instruments',
+       'SMD1206B110TFT': 'Brightking', 'BH254R-40P': 'XFCN', '2.54-3P TPGT': 'SHOU HAN'}
 for _v in list(RES.values()) + list(RES0402.values()):
     MFR.setdefault(_v[0], 'UNI-ROYAL')
 
@@ -317,8 +317,9 @@ for key, lines, pd_keys, desc in (('U_AH', ADDR_HI, ('RN_AH1', 'RN_AH2'), 'A8-A1
     for i, pk in enumerate(pd_keys):
         RN('4x100k', lines[4 * i:4 * i + 4], 'GND', desc='%s pull-downs (ribbon unplugged)' % desc, key=pk)
 
-# -- D0-D7: 74LVC245A, A = the RP, B = the bus through 47R (source termination for the ribbon, and
-# the limit on the overlap current when RD rises and the keyboard unit's buffers take the bus back).
+# -- D0-D7: 74LVC245A, A = the RP, B = the bus through 75R: source termination for the ribbon (tools/audit/
+# spice/ribbon.py: clean to 45 cm of cable) and the limit on the overlap current when RD rises and the
+# keyboard unit's buffers take the bus back (~31 mA for <= 52 ns: tools/audit/margins.py).
 # DIR = DRIVE (GP28; 1 = A -> B = onto the bus), 4.7k pull-down (under RP2350-E9's 8.2k): the buffer
 # faces the RP through reset.  OE* = DRIVE . RD* . IN* (74LVC1G11, from the BUFFERED strobes): with
 # DRIVE low it always listens (the RP sees write data), with DRIVE high it drives only while a read
@@ -330,8 +331,8 @@ add('U', '%s:74LVC245A_Fn_BA' % LIB, '74LVC245A', FP('TSSOP-20_4.4x6.5mm_P0.65mm
     mpn='SN74LVC245APWR', lcsc='C7848', desc='data transceiver D0-D7 (DIR = DRIVE, OE* = DRIVE.RD*.IN*)',
     key='U_DB', ds=TI_245)
 C('100nF', RP_RAIL, desc='U_DB decoupling', key='C_DB')
-RS('4x47R', [(n, ds_of(n)) for n in DATA[:4]], desc='data series (ribbon source termination)', key='RS_D1')
-RS('4x47R', [(n, ds_of(n)) for n in DATA[4:]], desc='data series (ribbon source termination)', key='RS_D2')
+RS('4x75R', [(n, ds_of(n)) for n in DATA[:4]], desc='data series (ribbon source termination)', key='RS_D1')
+RS('4x75R', [(n, ds_of(n)) for n in DATA[4:]], desc='data series (ribbon source termination)', key='RS_D2')
 RN('4x100k', [ds_of(n) for n in DATA[:4]], 'GND', desc='data pull-downs (ribbon unplugged)', key='RN_D1')
 RN('4x100k', [ds_of(n) for n in DATA[4:]], 'GND', desc='data pull-downs (ribbon unplugged)', key='RN_D2')
 R('4.7k', 'DRIVE', 'GND', desc='DRIVE pull-down: the data buffer listens through reset', key='R_DRIVE')
@@ -359,8 +360,8 @@ RN('4x100k', STROBE_B + [None], 'GND', desc='strobe pull-downs (ribbon unplugged
 # the inputs pulled up so the outputs stay off while the RP is in reset
 add('U', '%s:74LVC2G07_Fn' % LIB, '74LVC2G07', FP('SOT-363_SC-70-6'),
     {1: 'RP_INT_N', 2: 'GND', 3: 'RP_WAIT_N', 4: 'M1_WAIT_N', 5: RP_RAIL, 6: 'M1_INT_N'},
-    mpn='74LVC2G07GW,125', lcsc='C52140489', desc='INT* / WAIT* open-drain drivers', key='U_OD',
-    ds='https://assets.nexperia.com/documents/data-sheet/74LVC2G07.pdf')
+    mpn='SN74LVC2G07DCKR', lcsc='C7849', desc='INT* / WAIT* open-drain drivers', key='U_OD',
+    ds='https://www.ti.com/lit/ds/symlink/sn74lvc2g07.pdf')
 C('100nF', RP_RAIL, desc='74LVC2G07 decoupling', key='C_OD')
 R('10k', RP_RAIL, 'RP_INT_N', desc='INT driver input pull-up (off through reset)', key='R_INTPU')
 R('10k', RP_RAIL, 'RP_WAIT_N', desc='WAIT driver input pull-up (off through reset)', key='R_WAITPU')

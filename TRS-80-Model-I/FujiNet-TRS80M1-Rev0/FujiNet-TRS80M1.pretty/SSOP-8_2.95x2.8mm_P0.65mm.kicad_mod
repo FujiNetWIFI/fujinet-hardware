@@ -76,7 +76,10 @@
 	)
 	(fp_poly
 		(pts
-			(xy -1.85 -1.4) (xy -2.09 -1.73) (xy -1.61 -1.73) (xy -1.85 -1.4)
+			(xy -1.85 -1.4)
+			(xy -2.09 -1.73)
+			(xy -1.61 -1.73)
+			(xy -1.85 -1.4)
 		)
 		(stroke
 			(width 0.12)
@@ -235,8 +238,7 @@
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(uuid "5af52b66-3be9-4f79-ba15-e09c6cbb9a91")
 	)
-	(embedded_fonts no)
-	(model "${KICAD9_3DMODEL_DIR}/Package_SO.3dshapes/SSOP-8_2.95x2.8mm_P0.65mm.wrl"
+	(model "${KIPRJMOD}/3d/SSOP-8_2.95x2.8mm_P0.65mm.step"
 		(offset
 			(xyz 0 0 0)
 		)
@@ -247,4 +249,5 @@
 			(xyz 0 0 0)
 		)
 	)
+	(embedded_fonts no)
 )

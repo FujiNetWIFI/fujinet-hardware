@@ -290,7 +290,7 @@ def m1_bus(sh):
     """The Model I's bus from the ribbon header to the RP2354B, left to right, one block per buffer group:
     each line one straight wire from its header pin (the header drawn in units by group) through its
     100k pull-down (the row under it) into its buffer, and from the buffer on to its GPIO (the RP's
-    GPIO units built on the same rows).  A8-A15 and A0-A7: 74LVC245A, A -> B, always on.  D0-D7: 47R
+    GPIO units built on the same rows).  A8-A15 and A0-A7: 74LVC245A, A -> B, always on.  D0-D7: 75R
     series, the 74LVC245A turned round (B, the bus, on the left), DIR = DRIVE and /OE from the
     74LVC1G11 under it (DRIVE . RD* . IN*).  RD* IN* INTAK* and SYSRES* OUT* WR*: two 74LVC3G17
     Schmitt receivers.  INT* WAIT*: the 74LVC2G07 turned round (the RP drives them), pulled up on the
@@ -345,7 +345,7 @@ def m1_bus(sh):
             rpn = D.rp_of(n)
             g = sh.N(D.KEY[U], rpn)
             assert g[1] == y, (rpn, g, y)
-            if key == 'U_DB':                     # header -> 47R -> pull-down tee -> '245 B
+            if key == 'U_DB':                     # header -> 75R -> pull-down tee -> '245 B
                 ds = D.ds_of(n)
                 rk, ru_ = next((k, u) for k in ('RS_D1', 'RS_D2') for u in range(1, 5)
                                if D.BY_KEY[k].pins[str(u)] == n)
@@ -442,7 +442,7 @@ def m1_bus(sh):
             'TEST* (it floats the keyboard unit\'s buses) are open.  Every line meets one LVC buffer at the header (3.3 V, 5 V-tolerant\n'
             'inputs, Ioff) and a 100k pull-down (defined with the ribbon unplugged; to GND, so neither side back-feeds the other).\n'
             'The strobes, SYSRES* and INTAK* through 74LVC3G17 Schmitt triggers.  D0-D7 IS the keyboard unit\'s data bus: the card\n'
-            'drives it only while RD* or IN* is low (OE* = DRIVE . RD* . IN*), through 47R.  GPIO map: m1_card.h (pico/trs80m1).', 1.27)
+            'drives it only while RD* or IN* is low (OE* = DRIVE . RD* . IN*), through 75R.  GPIO map: m1_card.h (pico/trs80m1).', 1.27)
     ncs(sh, U, 5)
     return sh
 
@@ -1090,7 +1090,7 @@ at E8h-EBh and the FujiBus pipe at D0h-D3h.  Every line meets an LVC buffer at t
 strobes Schmitt-triggered, D0-D7 driven only while RD* or IN* is low (OE* = DRIVE . RD* . IN*).
 
   m1-bus     the 2x20 ribbon header, 100k pull-downs, the five buffers (2 x 74LVC245A address, a
-             74LVC245A for data through 47R, 2 x 74LVC3G17 strobes, 74LVC2G07 INT* / WAIT*), the OE gate,
+             74LVC245A for data through 75R, 2 x 74LVC3G17 strobes, 74LVC2G07 INT* / WAIT*), the OE gate,
              the RP2354B's GPIOs, the DIP switches, LED, debug-UART pads, the logic-analyser header
   rp-core    the RP2354B's supplies and decoupling, core regulator, crystal, SWD, RUN / BOOTSEL /
              RESET, its USB out to the S3

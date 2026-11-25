@@ -1,4 +1,4 @@
-# JLCPCB CPL rotations and origin offsets (FujiNet-O2 Rev0)
+# JLCPCB CPL rotations and origin offsets (FujiNet-TRS80M1 Rev0)
 
 JLCPCB places each part by the **EasyEDA footprint of its LCSC code**, not by our
 KiCad footprint. When the two libraries draw the same package in different
@@ -22,7 +22,7 @@ python3 tools/audit/jlc/measure_rotations.py --offline   # cache only, never tou
 python3 tools/audit/jlc/measure_rotations.py --markdown  # also print the full table with all notes
 ```
 
-The script reads `tools/design.py` and `FujiNet-O2.pretty/` at run time, so
+The script reads `tools/design.py` and `FujiNet-TRS80M1.pretty/` at run time, so
 a new part or a changed LCSC code is picked up automatically. The endpoint is
 easyeda2kicad's (`https://easyeda.com/api/products/<LCSC>/components?version=6.4.19.5`);
 it sits behind CloudFront, which refuses non-browser User-Agents and rate-limits
@@ -42,7 +42,7 @@ sleeps 2 s between fetches.
 ## Method (short)
 
 1. Both footprints are read pad by pad (EasyEDA: 10 mil units, +y down, origin
-   at `head.x/y`; KiCad: an s-expression reader of `FujiNet-O2.pretty`).
+   at `head.x/y`; KiCad: an s-expression reader of `FujiNet-TRS80M1.pretty`).
    Pads that share a number (an exposed pad with its via pads, the USB-C `SH`
    tabs, a switch's bonded contacts) are compared as one group.
 2. Pads are paired by number, then by EasyEDA's merged numbers (`A1B12` = our

@@ -267,7 +267,7 @@ def g2_symbol(stock):
     right = [P(a, '%dA' % (i + 1)) for i, (a, y) in enumerate(D.CH2G07)]   # from the RP
     left = [P(y, '%dY' % (i + 1)) for i, (a, y) in enumerate(D.CH2G07)]    # onto the bus
     sym, pl = _box('74LVC2G07_Fn', '74LVC2G07', 'SOT-363_SC-70-6',
-                   'https://assets.nexperia.com/documents/data-sheet/74LVC2G07.pdf',
+                   'https://www.ti.com/lit/ds/symlink/sn74lvc2g07.pdf',
                    'Dual buffer, open-drain outputs, 5V-tolerant (74xGxx:74LVC2G07 pins in one box: the outputs '
                    'on the left, toward the bus)',
                    left, right, [P(5, 'VCC'), None, P(2, 'GND')], w=10.16)

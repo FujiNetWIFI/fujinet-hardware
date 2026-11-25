@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """Gate on the JLCPCB package tools/export.py writes, against the board and design.py:
 
-  1. designators: JLC BOM = JLC CPL = the board's assembled parts (every footprint design.py puts in
-     the BOM and does not mark DNP), each exactly once
+  1. designators: JLC BOM = JLC CPL = PCBWay BOM = PCBWay centroid = the board's assembled parts (every
+     footprint design.py puts in the BOM and does not mark DNP), each exactly once
   2. JLC BOM: every line has an LCSC code, the one design.py gives its parts
-  3. the full BOM (FujiNet-O2-Rev0-BOM.csv): every assembled line has an MPN and a manufacturer, design.py's
+  3. the full BOM (FujiNet-TRS80M1-Rev0-BOM.csv) and the PCBWay BOM: every assembled line has an MPN and a
+     manufacturer, design.py's; the PCBWay centroid is KiCad's own centres and rotations, unmodified
   4. JLC CPL: every row has a measured rotation / origin entry (tools/audit/jlc/jlc_rotations.json)
      and sits at the footprint's centre plus that origin offset, turned with the footprint, at its
      rotation plus the correction; every part on the top side
   5. drills: the zip's Excellon hit count equals the board's vias + plated and unplated holes
-  6. the order-number text: inside the board, clear of every F.Cu pad, F.Silkscreen item and
-     courtyard, and present in the zip's F.Silkscreen
+  6. the order-number text: inside the board, clear of every pad, silkscreen item and courtyard on
+     its side (placement.JLC_ORDER), present in the JLC zip's silkscreen and absent from PCBWay's
   7. tools/audit/check_gerbers.py passes (fingers, outline, masks, inner layers, plane shorts)
-  0. tools/edge_geom.VERIFIED and tools/audit/edge_orientation.py: the edge matches its sources (until then the
-     package is PROVISIONAL and this gate fails, whatever else passes)
+  0. tools/header_geom.VERIFIED and tools/audit/header_pinout.py: the ribbon header matches the Model I's
+     expansion edge (until then the package is PROVISIONAL and this gate fails, whatever else passes)
 
 Usage: python3 tools/audit/check_fab.py          exit 1 on any failure
 """
@@ -23,11 +24,12 @@ PRJ = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(PRJ, 'tools'))
 import design as D
 import placement as PL
-import edge_geom as EG
+import header_geom as EG
 from sexpr import parse, find, findall
 
 PCB = os.path.join(PRJ, D.PROJECT + '.kicad_pcb')
 J = os.path.join(PRJ, 'exports', 'jlcpcb')
+W = os.path.join(PRJ, 'exports', 'pcbway')
 FAIL = []
 
 
@@ -78,8 +80,12 @@ def main():
     jb = list(csv.DictReader(open(os.path.join(J, 'BOM-JLCPCB.csv'))))
     jc = list(csv.DictReader(open(os.path.join(J, 'CPL-JLCPCB.csv'))))
     fb = list(csv.DictReader(open(os.path.join(PRJ, D.PROJECT + '-BOM.csv'))))
+    wb = list(csv.DictReader(open(os.path.join(W, 'BOM-PCBWay.csv'))))
+    wc = list(csv.DictReader(open(os.path.join(W, 'Centroid-PCBWay.csv'))))
     sets = {'JLC BOM': [r for row in jb for r in refs_of(row['Designator'])],
-            'JLC CPL': [row['Designator'] for row in jc]}
+            'JLC CPL': [row['Designator'] for row in jc],
+            'PCBWay BOM': [r for row in wb for r in refs_of(row['Designator'])],
+            'PCBWay centroid': [row['Designator'] for row in wc]}
     on_board = sorted(r for r in want if r in fps)
     check(on_board == want, '1. every assembled design.py part is on the board (%d)' % len(want))
     for name, lst in sets.items():
@@ -94,6 +100,16 @@ def main():
             any((D.BY_REF[r].mpn, D.BY_REF[r].mfr) != (row['MPN'], row['Manufacturer'])
                 for r in row['References'].split()))]
     check(not bad, '3. full BOM: every line carries its parts\' MPN and manufacturer%s' % (' (bad: %s)' % bad if bad else ''))
+    bad = [row['Designator'] for row in wb
+           if any((D.BY_REF[r].mpn, D.BY_REF[r].mfr) != (row['MPN'], row['Manufacturer']) for r in refs_of(row['Designator']))]
+    check(not bad, '3. PCBWay BOM: every line carries its parts\' MPN and manufacturer%s' % (' (bad: %s)' % bad if bad else ''))
+    errs = []
+    for row in wc:
+        f = fps[row['Designator']]
+        if abs(mm(row['Mid X']) - f['x']) > 0.002 or abs(mm(row['Mid Y']) + f['y']) > 0.002 or \
+                abs((float(row['Rotation']) - f['rot'] + 180) % 360 - 180) > 0.01:
+            errs.append(row['Designator'])
+    check(not errs, '3. PCBWay centroid: KiCad centres and rotations, unmodified%s' % (': ' + ' '.join(errs[:10]) if errs else ''))
     # ---- 4. JLC CPL ------------------------------------------------------------------------------------
     rot = {(e['footprint'], e['lcsc']): e for e in json.load(open(os.path.join(HERE, 'jlc', 'jlc_rotations.json')))}
     errs = []
@@ -121,7 +137,7 @@ def main():
     # ---- 5. drills ---------------------------------------------------------------------------------------
     holes = nvia + sum(1 for f in fps.values() for p in f['pads'] if p[6] == 'thru_hole')
     npth = sum(1 for f in fps.values() for p in f['pads'] if p[6] == 'np_thru_hole')
-    for z in (J,):
+    for z in (J, W):
         zf = zipfile.ZipFile(os.path.join(z, D.PROJECT + '-gerbers.zip'))
         hits = 0
         for n in zf.namelist():
@@ -132,16 +148,16 @@ def main():
         check(hits == holes + npth, '5. %s drills: %d hits = %d vias + %d plated pads + %d unplated'
               % (os.path.basename(z), hits, nvia, holes - nvia, npth))
     # ---- 6. the order-number text --------------------------------------------------------------------
-    (x, y), h = PL.JLC_ORDER
+    (x, y), h, side = PL.JLC_ORDER
     w = 0.95 * h * len('JLCJLCJLCJLC')
     box = (x - w / 2 - 0.3, y - h / 2 - 0.3, x + w / 2 + 0.3, y + h / 2 + 0.3)
     hit = []
     for ref, f in fps.items():
         for (n, px, py, sx, sy, layers, kind) in f['pads']:
-            if any(l in ('F.Cu', '*.Cu') for l in layers) and \
+            if any(l in ('%s.Cu' % side, '*.Cu') for l in layers) and \
                     box[0] < px + sx / 2 and px - sx / 2 < box[2] and box[1] < py + sy / 2 and py - sy / 2 < box[3]:
                 hit.append('%s pad %s' % (ref, n))
-        for (x0, y0, x1, y1) in f['crt']:
+        for (x0, y0, x1, y1) in (f['crt'] if side == 'F' else ()):     # every part is on F.Cu
             th = math.radians(-f['rot'])
             pts = [(f['x'] + a * math.cos(th) - b * math.sin(th), f['y'] + a * math.sin(th) + b * math.cos(th))
                    for a in (x0, x1) for b in (y0, y1)]
@@ -150,7 +166,7 @@ def main():
             if box[0] < cx1 and cx0 < box[2] and box[1] < cy1 and cy0 < box[3]:
                 hit.append('%s courtyard' % ref)
     for g in findall(t, 'gr_text'):
-        if str(find(g, 'layer')[1]) == 'F.SilkS':
+        if str(find(g, 'layer')[1]) == '%s.SilkS' % side:
             gx, gy = float(find(g, 'at')[1]), float(find(g, 'at')[2])
             if box[0] - 3 < gx < box[2] + 3 and box[1] - 1.5 < gy < box[3] + 1.5:
                 hit.append('silk text %r' % str(g[1]))
@@ -168,10 +184,10 @@ def main():
         hit.append('outside the board outline at %s' % ', '.join('(%.1f, %.1f)' % c for c in out))
     check(not hit, '6. order-number text at (%.1f, %.1f), %.1f mm: inside the board and clear%s'
           % (x, y, h, (' -- hits ' + ', '.join(hit[:8])) if hit else ''))
-    # the text is in the JLC zip's F.Silkscreen
+    # the text is in the JLC zip's silkscreen on its side
     def strokes_at(zfn):
         z = zipfile.ZipFile(zfn)
-        txt = z.read(next(n for n in z.namelist() if n.endswith('F_Silkscreen.gbr'))).decode()
+        txt = z.read(next(n for n in z.namelist() if n.endswith('%s_Silkscreen.gbr' % side))).decode()
         n, last = 0, None
         for line in txt.splitlines():
             m = re.match(r'X(-?\d+)Y(-?\d+)D0([12])\*', line)
@@ -181,14 +197,15 @@ def main():
                     n += 1
         return n
     nj = strokes_at(os.path.join(J, D.PROJECT + '-gerbers.zip'))
-    check(nj > 20, '6. the order-number text is in the zip\'s F.Silkscreen (%d strokes)' % nj)
+    nw = strokes_at(os.path.join(W, D.PROJECT + '-gerbers.zip'))
+    check(nj > 20 and nw == 0, '6. the order-number text is in the JLC %s.Silkscreen (%d strokes) and not in PCBWay\'s (%d)' % (side, nj, nw))
     # ---- 7. gerber gate -----------------------------------------------------------------------------------
     r = subprocess.run([sys.executable, os.path.join(HERE, 'check_gerbers.py')], capture_output=True, text=True)
     check(r.returncode == 0, '7. check_gerbers.py%s' % ('' if r.returncode == 0 else ':\n' + r.stdout[-1500:]))
-    check(EG.VERIFIED, '0. tools/edge_geom.VERIFIED: the edge checked against the pinout and three built Videopac carts%s'
-          % ('' if EG.VERIFIED else ' -- DO NOT ORDER (tools/audit/edge_orientation.py)'))
-    r = subprocess.run([sys.executable, os.path.join(HERE, 'edge_orientation.py')], capture_output=True, text=True)
-    check(r.returncode == 0, '0. edge_orientation.py%s' % ('' if r.returncode == 0 else ':\n' + r.stdout[-1500:]))
+    check(EG.VERIFIED, '0. tools/header_geom.VERIFIED: the header checked against four sources for the Model I expansion edge%s'
+          % ('' if EG.VERIFIED else ' -- DO NOT ORDER (tools/audit/header_pinout.py)'))
+    r = subprocess.run([sys.executable, os.path.join(HERE, 'header_pinout.py')], capture_output=True, text=True)
+    check(r.returncode == 0, '0. header_pinout.py%s' % ('' if r.returncode == 0 else ':\n' + r.stdout[-1500:]))
     print('check_fab: %s' % ('%d failure(s)' % len(FAIL) if FAIL else 'all checks pass'))
     return 1 if FAIL else 0
 

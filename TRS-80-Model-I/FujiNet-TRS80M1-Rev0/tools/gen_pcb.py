@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
-"""Generate FujiNet-O2-Rev0.kicad_pcb (placed, unrouted) from design.py.
+"""Generate FujiNet-TRS80M1-Rev0.kicad_pcb (placed, unrouted) from design.py.
 
-Board (tools/edge_geom.py; tools/placement.py owns the frame): x 68.5..131.5, y 45..130, bwack's /
-PicoPAC's 63 x 85 Videopac outline -- the full bottom edge carries the 2x15 gold fingers at y = 130
-(the insertion edge), its corners chamfered, two side notches and two 5 mm shell-post holes.  No
-parts below the shell's bottom (edge_geom.PARTS_Y) or near a post.  1.6 mm, 4 copper layers
-(JLC04161H-7628):
-  F.Cu  signals + GND pour            (pins 1-15: T0, DB0-DB7, A10, P14, P11, P10, A11, A9)
+Board (tools/header_geom.py; tools/placement.py owns the frame): x 50..150, y 40..116, a 100 x 76
+rectangle with rounded corners and an M3 hole in each corner, the 2x20 right-angle box header along
+the west edge (its mouth flush with the edge).  1.6 mm, 4 copper layers (JLC04161H-7628):
+  F.Cu  signals + GND pour
   In1   GND plane
-  In2   +5V plane (the mux's output), with a +3V3_RP island under the RP2354B, its ring and its LDO,
-        a +3V3 island (the buck: the S3 band along the top and a strip down the right edge to the
-        buck) and a CONS_5V island from the +5V finger up under the mux
-  B.Cu  signals + GND pour            (pins A-R behind them)
-The finger field is a rule area on F/B (fingers only); the inner planes stop above it.  The
-ESP32-S3 antenna (the top 6 mm of the module) sits flush with the top edge over a band that is
+  In2   +5V plane (after the fuse), with a +3V3_RP island under the RP2354B, its LDO and every bus
+        buffer, and a +3V3 island (the buck: the S3, the CP2102N and the microSD) down the east side
+  B.Cu  signals + GND pour
+The ESP32-S3 antenna (the module's east end) sits flush with the east edge over a strip that is
 copper-free on every layer.
 
 The RP2354B's supplies join under the package in two F.Cu rings (rp_support, FujiNet-StudioII
@@ -37,20 +33,20 @@ PRJ = os.path.dirname(HERE)
 PCB = os.path.join(PRJ, D.PROJECT + '.kicad_pcb')
 
 # ---- geometry (mm, KiCad frame: y down) -----------------------------------
-import edge_geom as EG
+import header_geom as HG
 import placement as PL
-X0, Y0, X1, Y1 = PL.X0, PL.Y0, PL.X1, PL.Y_EDGE
+X0, Y0, X1, Y1 = PL.X0, PL.Y0, PL.X1, PL.Y1
 XC = PL.XC
-FINGER_Y = Y1 - EG.FIELD_TOP    # finger field: no tracks / vias / pour on F.Cu or B.Cu below this
-TAB_Y = FINGER_Y - 0.5    # routers stay above this; a finger is entered at its neck
-BLADE_Y = TAB_Y           # (fanout.py name)
-PLANE_Y = Y1 - EG.PLANE_Y # inner planes stop short of the fingers and the bevel
-PARTS_MAX_Y = Y1 - EG.PARTS_Y   # courtyards above the shell's bottom
-THICKNESS = EG.THICKNESS
-HOLES = list(PL.HOLES)    # the shell posts: (x, y, diameter)
-HOLE_CU = EG.HOLE_D / 2 + 0.6   # no copper within this radius of a post
-_S3X, _S3Y = PL.S3
-ANT_KEEP = (_S3X - 24.0, Y0, X1, _S3Y - 6.75)     # antenna band: the module footprint's keep-out (its antenna end, 24 mm each side)
+BLADE_Y = Y1 + 10.0       # (fanout.py name: no card edge here)
+TAB_Y = Y1 + 1.0          # (finish_route / stitch_gnd: the routable area's south limit -- the board edge itself)
+THICKNESS = HG.THICKNESS
+HOLES = list(PL.HOLES)    # the M3 corner holes: (x, y, diameter)
+HOLE_CU = HG.HOLE_D / 2 + 0.6   # no copper within this radius of a hole
+_S3X, _S3Y, _S3R = PL.S3
+assert _S3R == 270, 'the antenna band below assumes the module turned 270 (antenna east)'
+# antenna band: the module footprint's keep-out, its antenna end (east of local y -6.75) to the board
+# edge, 24 mm either way along it
+ANT_KEEP = (_S3X + 6.75, max(Y0, _S3Y - 24.0), X1, min(Y1, _S3Y + 24.0))
 PWR_LAYER = 'In2.Cu'
 UNDER = 4.6               # half-size of the square under the RP2354B the finisher keeps off F.Cu
 RP_KEEP = 4.45            # half-size of the square under the RP2354B Freerouting never enters (route.rp_keepout)
@@ -70,36 +66,17 @@ STUB_DVDD = 2.3     # a DVDD pin's stub ends here (mid-ring, through the +3V3_RP
 
 
 def outline_pts():
-    """Board outline, clockwise from the top-left (y down): the top corners rounded (edge_geom.TOP_R),
-    the side notches (edge_geom.NOTCH_L / NOTCH_R, seen from F.Cu) and the chamfered bottom corners."""
-    r = EG.TOP_R
+    """Board outline, clockwise from the top-left (y down): a rectangle, its corners rounded."""
+    r = HG.CORNER_R
     arc = lambda cx, cy, a0, a1: [(round(cx + r * math.cos(math.radians(a0 + (a1 - a0) * k / 6)), 4),
                                    round(cy + r * math.sin(math.radians(a0 + (a1 - a0) * k / 6)), 4))
                                   for k in range(7)]
-    nd = EG.NOTCH_D
-    (rl, rh), (ll, lh) = EG.NOTCH_R, EG.NOTCH_L
-    return (arc(X0 + r, Y0 + r, 180, 270) + arc(X1 - r, Y0 + r, 270, 360) +
-            [(X1, Y1 - rh), (X1 - nd, Y1 - rh), (X1 - nd, Y1 - rl), (X1, Y1 - rl),
-             (X1, Y1 - EG.CHAMF_Y), (X1 - EG.CHAMF_X, Y1), (X0 + EG.CHAMF_X, Y1), (X0, Y1 - EG.CHAMF_Y),
-             (X0, Y1 - ll), (X0 + nd, Y1 - ll), (X0 + nd, Y1 - lh), (X0, Y1 - lh)])
-
-
-def clip_below(pts, ymax):
-    """The outline polygon cut off at y = ymax (for planes / pours)."""
-    out = []
-    n = len(pts)
-    for i in range(n):
-        (xa, ya), (xb, yb) = pts[i], pts[(i + 1) % n]
-        if ya <= ymax:
-            out.append((xa, ya))
-        if (ya - ymax) * (yb - ymax) < 0:
-            t = (ymax - ya) / (yb - ya)
-            out.append((round(xa + t * (xb - xa), 4), ymax))
-    return out
+    return (arc(X0 + r, Y0 + r, 180, 270) + arc(X1 - r, Y0 + r, 270, 360) + arc(X1 - r, Y1 - r, 0, 90) +
+            arc(X0 + r, Y1 - r, 90, 180))
 
 
 OUTLINE = outline_pts()
-BODY = clip_below(OUTLINE, PLANE_Y)       # planes and pours
+BODY = OUTLINE                            # planes and pours
 
 # ref -> (x, y, rotation deg CCW)  -- top view, y down
 PLACE = {}
@@ -359,39 +336,10 @@ def footprint_of(board, ref):
                 and any(p[1] == 'Reference' and p[2] == ref for p in findall(e, 'property')))
 
 
-def mux_link(board):
-    """The TPS2116 at rotation 270, its two pin rows north (PR1, VIN1, VOUT, GND) and south (MODE, VIN2,
-    VOUT, ST), the south row on the CONS_5V island: drawn under the body, the two joins neither router
-    finds at the 0.5 mm pitch -- VOUT 2 to VOUT 7 straight across, MODE 5 to VIN1 3 diagonally (priority
-    mode: MODE on VIN1, datasheet 7.6.1) -- and VOUT's stub north out of the island to its +5V plane via
-    (FujiNet-StudioII Rev0's mux_link)."""
-    u = footprint_of(board, D.KEY['U_MUX'])
-    ux, uy, _ = PLACE[D.KEY['U_MUX']]
-    pads, _ = board_pads([u])
-    P = {p.num: p for p in pads}
-    v2, v7, i3, m5 = P['2'], P['7'], P['3'], P['5']
-    assert v2.net == v7.net == NET('+5V') and i3.net == m5.net == NET('VBUS'), 'mux_link: nets'
-    assert abs(v2.cx - v7.cx) < 1e-3 and v2.cy < uy < v7.cy, 'mux_link: VOUT 2 north, 7 south, same column'
-    assert i3.cy < uy < m5.cy, 'mux_link: VIN1 north, MODE south'
-    inner = lambda p: (p.cx, round(p.cy + (p.hh if p.cy < uy else -p.hh), 4))
-    out = [seg(v2.cx, v2.cy, v7.cx, v7.cy, 0.25, 'F.Cu', v2.net, ('mux', 'vout'))]
-    a, c = inner(m5), inner(i3)
-    out += [seg(m5.cx, m5.cy, *a, 0.2, 'F.Cu', m5.net, ('mux', 'mode', 0)),
-            seg(*a, *c, 0.2, 'F.Cu', m5.net, ('mux', 'mode', 1)),
-            seg(*c, i3.cx, i3.cy, 0.2, 'F.Cu', m5.net, ('mux', 'mode', 2))]
-    vy = round(v2.cy - v2.hh - 0.9, 4)
-    assert plane_net_at(v2.cx, vy) == '+5V', 'mux_link: the VOUT via must land on In2 +5V'
-    out += [seg(v2.cx, v2.cy, v2.cx, vy, 0.25, 'F.Cu', v2.net, ('mux', 'vstub')),
-            via(v2.cx, vy, v2.net, ('mux', 'vvia'))]
-    return out
-
-
 # ---- the In2 plane and its islands -----------------------------------------------------------
 def plane_net_at(x, y):
     """Which net the In2 plane carries at (x, y)."""
-    from placement import RP_ISLAND, S3_ISLAND, CONS5V_ISLAND
-    if point_in_poly(x, y, CONS5V_ISLAND):
-        return 'CONS_5V'
+    from placement import RP_ISLAND, S3_ISLAND
     if point_in_poly(x, y, RP_ISLAND):
         return D.RP_RAIL
     if point_in_poly(x, y, S3_ISLAND):
@@ -544,29 +492,6 @@ def tp_dvdd_link(board, graft):
             seg(tp.cx, vy, tx, ty, 0.3, 'B.Cu', tp.net, ('tpdv', 'b'))]
 
 
-def finger_gnd_vias(board):
-    """The three GND fingers (2 on B.Cu, 25 and 27 on F.Cu) stitch straight into the In1 plane, and the
-    +5V finger (4, B.Cu) into In2's CONS_5V island, at the top of their necks (the description below is
-    the GND case).  The
-    plane at the top of their necks.  The fingers are back to back, so a via ON
-    a neck would hit the other face's neck: go 1.27 mm outboard, between columns."""
-    out = []
-    for e in board:
-        if isinstance(e, list) and e and e[0] == 'footprint' and \
-                any(p[1] == 'Reference' and p[2] == D.KEY['J_EDGE'] for p in findall(e, 'property')):
-            jx, jy = float(find(e, 'at')[1]), float(find(e, 'at')[2])
-            for pd in findall(e, 'pad'):
-                a, sz = find(pd, 'at'), find(pd, 'size')
-                if find(pd, 'net') and str(find(pd, 'net')[1]) in ('GND', 'CONS_5V') and float(sz[1]) < 1.0:    # the neck
-                    nx, ny = jx + float(a[1]), round(jy + float(a[2]) - float(sz[2]) / 2 + 0.4, 4)
-                    vx = round(nx + math.copysign(1.27, nx - jx), 4)
-                    layer = [str(l) for l in find(pd, 'layers')[1:]][0]
-                    net = str(find(pd, 'net')[1])
-                    out.append(seg(nx, ny, vx, ny, 0.4, layer, net, ('fingergnds', pd[1])))
-                    out.append(via(vx, ny, net, ('fingergnd', pd[1])))
-    return out
-
-
 def add_fanout(board, extra):
     import fanout
     pads, crt = board_pads(board)
@@ -598,7 +523,7 @@ def add_fanout(board, extra):
         return p.cx, p.cy
     skip = set(served)
     for p in pads:
-        if p.net in (NET('+5V'), NET('+3V3'), NET(D.RP_RAIL), NET('CONS_5V')) and NET(plane_net_at(*via_spot(p))) != p.net:
+        if p.net in (NET('+5V'), NET('+3V3'), NET(D.RP_RAIL)) and NET(plane_net_at(*via_spot(p))) != p.net:
             skip.add(id(p))
         if p.net == NET('DVDD') or p.net == NET('VBUS'):
             skip.add(id(p))                    # DVDD rides the rings / graft, VBUS is routed
@@ -606,14 +531,13 @@ def add_fanout(board, extra):
             skip.add(id(p))                    # every RP supply pin is on its ring (rp_support), PGND on the graft
         if p.ref in GRAFT_REFS and (p.ref, p.num) != (K['R_AVDD'], '1'):
             skip.add(id(p))                    # the graft carries its own pours, traces and vias
-    keep = [crt[K[k]] for k in ('J_USB', 'J_SD', 'SW_RESET', 'SW_BOOTSEL', 'SW_S3EN', 'SW_S3BOOT')
+    keep = [crt[K[k]] for k in ('J_USB', 'J_SD', 'SW_RESET', 'SW_BOOTSEL', 'SW_S3EN', 'SW_S3BOOT', 'SW_DIP', 'J_M1')
             if K[k] in crt]
     keep.append((ux - UNDER, uy - UNDER, ux + UNDER, uy + UNDER))   # no fan-out vias under the RP2354B
-    sx, sy, _ = PLACE[K['U_S3']]                                      # nor in the S3 antenna keep-out
-    keep.append((sx - 24.0, Y0 - 1.0, sx + 24.0, max(sy - 6.75, ANT_KEEP[3]) + 1.0))   # (the module footprint's zone)
+    keep.append((ANT_KEEP[0] - 1.0, ANT_KEEP[1], X1 + 1.0, ANT_KEEP[3]))  # nor in the S3 antenna keep-out
     holes = [(x, y, HOLE_CU) for x, y, d in HOLES]
     vias, segs, failed = fanout.plan(pads, keep, (X0, Y0, X1, Y1), BLADE_Y, holes,
-                                     skip_refs=(K['J_EDGE'],), extra_segs=extra_segs,
+                                     skip_refs=(), extra_segs=extra_segs,
                                      extra_vias=extra_vias, skip_pads=skip, outline=OUTLINE)
     for i, (x, y, n) in enumerate(vias):
         board.append(via(x, y, n, ('fv', i), fanout.VIA_D, fanout.VIA_DRILL))
@@ -649,7 +573,7 @@ from placement import do_placement  # noqa: E402  (placement table lives in its 
 
 
 NETCLASSES = [  # name, clearance, track, via dia, via drill, nets
-    ('PWR', 0.2, 0.5, 0.8, 0.4, ['+5V', 'CONS_5V', 'BUCK_SW', '+3V3']),
+    ('PWR', 0.2, 0.5, 0.8, 0.4, ['+5V', 'BUCK_SW', '+3V3']),
     # VBUS threads between the USB-C pads; 0.3 mm (~0.9 A outer) covers the board's USB draw
     ('VBUS', 0.15, 0.3, 0.6, 0.3, ['VBUS']),
     ('USB', 0.15, 0.25, 0.6, 0.3, ['USB_DP', 'USB_DM', 'RP_USB_DP', 'RP_USB_DM', 'UBRG_DP', 'UBRG_DM']),
@@ -692,7 +616,7 @@ def configure_project():
     json.dump(pro, open(fn, 'w'), indent=2)
     open(fn, 'a').write('\n')
     K = D.KEY
-    solid = ' || '.join("A.memberOfFootprint('%s')" % K[k] for k in ('U_RP', 'U_UART', 'U_BUCK', 'U_LDO', 'U_MUX'))
+    solid = ' || '.join("A.memberOfFootprint('%s')" % K[k] for k in ('U_RP', 'U_UART', 'U_BUCK', 'U_LDO'))
     open(os.path.join(PRJ, D.PROJECT + '.kicad_dru'), 'w').write(
         '(version 1)\n'
         # the grafted Raspberry Pi regulator corner and the 0.4 mm-pitch neck-downs: 0.12 mm
@@ -703,10 +627,15 @@ def configure_project():
         '(rule "gnd_solid_under_ics"\n'
         '\t(condition "A.NetName == \'GND\' && (%s)")\n'
         '\t(constraint zone_connection solid))\n'
-        # the fingers start 0.5 mm from the bevelled insertion edge by design (make_edge_fp.py)
-        '(rule "finger_edge"\n'
+        # the logic-analyser header (not fitted): its GND pads sit between B.Cu signal tracks; one spoke on
+        # B.Cu is enough (they also join In1 GND and the F.Cu pour)
+        '(rule "la_gnd_spokes"\n'
+        '\t(condition "A.memberOfFootprint(\'%s\') && A.NetName == \'GND\'")\n'
+        '\t(constraint min_resolved_spokes 1))\n'
+        # the header's mouth stands 0.24 mm past the board edge by design (header_geom.HDR_OVERHANG)
+        '(rule "header_edge"\n'
         '\t(condition "A.memberOfFootprint(\'%s\')")\n'
-        '\t(constraint edge_clearance (min 0.4mm)))\n' % (solid, K['J_EDGE']))
+        '\t(constraint edge_clearance (min 0.3mm)))\n' % (solid, K['J_LA'], K['J_M1']))
 
 
 # assembled height above F.Cu by footprint (datasheets; the shell's front gap clears the tallest)
@@ -715,7 +644,10 @@ PART_H = {'USB_C_Receptacle_HRO_TYPE-C-31-M-12': 3.26, 'ESP32-S3-WROOM-1': 3.1, 
           'SOT-23-5': 1.45, 'SOT-23-6': 1.45, 'TSOT-23-6': 1.0, 'SOT-363_SC-70-6': 1.1, 'SOT-583-8': 0.6,
           'QFN-80-1EP_10x10mm_P0.4mm_EP3.4x3.4mm': 0.9, 'QFN-28-1EP_5x5mm_P0.5mm_EP3.35x3.35mm': 0.9,
           'Crystal_SMD_3225-4Pin_3.2x2.5mm': 0.8, 'RPI_L_AOTA-B201610S3R3': 1.0,
-          'LED_WS2812B-2020_PLCC4_2.0x2.0mm': 0.84, 'R_Array_Convex_4x0603': 0.6}
+          'LED_WS2812B-2020_PLCC4_2.0x2.0mm': 0.84, 'R_Array_Convex_4x0603': 0.6,
+          'TSSOP-20_4.4x6.5mm_P0.65mm': 1.2, 'SSOP-8_2.95x2.8mm_P0.65mm': 1.3, 'Fuse_1206_3216Metric': 0.85,
+          'SW_DIP_SPSTx03_SMD_P2.54mm_HX': 3.6, 'PinHeader_2x10_P2.54mm_Vertical': 8.5,
+          'IDC-Header_2x20_P2.54mm_Horizontal_BH254R-40P': HG.HDR_H}
 
 
 def courtyard(key):
@@ -743,43 +675,41 @@ def courtyard(key):
 
 
 def write_case_anchors():
-    """case/board-anchors.scad: what the printed shell needs from the board, so its openings, keys and
-    posts follow the placement and the outline (case/FujiNet-O2-Shell.scad includes it)."""
+    """case/board-anchors.scad: what the printed case needs from the board, so its openings, bosses and
+    plungers follow the placement and the outline (case/FujiNet-TRS80M1-Case.scad includes it)."""
     def at(key, dx=0.0, dy=0.0):
         x, y, r = PLACE[D.KEY[key]]
         ox, oy = rot_pt(dx, dy, r)
         return round(x + ox, 3), round(y + oy, 3)
     parts = []
     for p in D.PARTS:
-        if p.key in ('J_EDGE',) or p.prefix in ('TP',):
+        if p.prefix in ('TP',) or p.dnp:
             continue
         fpn = p.footprint.split(':')[1]
         parts.append(courtyard(p.key) + (PART_H.get(fpn, 1.0),))
     hmax = max(q[4] for q in parts)
-    nl, nr = EG.NOTCH_L, EG.NOTCH_R
     v = lambda t: '[%s]' % ', '.join('%g' % c for c in t)
-    lines = ['// GENERATED by tools/gen_pcb.py from tools/placement.py and tools/edge_geom.py -- do not edit.',
-             '// KiCad board frame (mm, y down), seen from F.Cu (every part; pins 1-15; toward the player):',
-             '// x %g..%g, y %g (top edge) .. %g (the insertion edge). Pins A-R are on B.Cu.' % (X0, X1, Y0, Y1),
-             'pcb_x0 = %g; pcb_x1 = %g; pcb_y0 = %g; pcb_y1 = %g; pcb_t = %g;' % (X0, X1, Y0, Y1, THICKNESS),
-             'pcb_outline = [%s];   // the notches, chamfers and rounded top corners' % ', '.join(v(q) for q in OUTLINE),
-             'pcb_holes = [%s];   // [x, y, diameter]: the shell posts (bwack / PicoPAC)' % ', '.join(v(h) for h in HOLES),
-             'post_keep = %g;   // no part within this radius of a post' % EG.POST_KEEP,
-             '// side notches [x0, y0, x1, y1]: the shell\'s keys go through them',
-             'pcb_notches = [%s, %s];' % (v((X0, Y1 - nl[1], X0 + EG.NOTCH_D, Y1 - nl[0])),
-                                          v((X1 - EG.NOTCH_D, Y1 - nr[1], X1, Y1 - nr[0]))),
-             'parts_min_y = %g;   // no part south of this (%g mm in): the bare band and the contacts' % (PARTS_MAX_Y, EG.PARTS_Y),
-             'contacts_y = %g;    // the fingers\' copper ends here (%g mm in)' % (Y1 - EG.LAND_Y1, EG.LAND_Y1),
+    hx, hy, _ = PL.HDR
+    lines = ['// GENERATED by tools/gen_pcb.py from tools/placement.py and tools/header_geom.py -- do not edit.',
+             '// KiCad board frame (mm, y down), seen from F.Cu (every part is on F.Cu):',
+             '// x %g..%g (west .. east), y %g (north) .. %g (south).' % (X0, X1, Y0, Y1),
+             'pcb_x0 = %g; pcb_x1 = %g; pcb_y0 = %g; pcb_y1 = %g; pcb_t = %g; pcb_r = %g;' % (X0, X1, Y0, Y1, THICKNESS, HG.CORNER_R),
+             'pcb_holes = [%s];   // [x, y, diameter]: the M3 corner holes' % ', '.join(v(h) for h in HOLES),
+             'hole_keep = %g;   // no part within this radius of a hole centre' % HG.HOLE_KEEP,
              'parts_max_h = %g;   // tallest part above F.Cu; B.Cu has none' % hmax,
-             '// every F.Cu part: [x0, y0, x1, y1, height above F.Cu] (courtyard box)',
+             '// every fitted F.Cu part: [x0, y0, x1, y1, height above F.Cu] (courtyard box)',
              'parts = [%s];' % ', '.join(v(q) for q in parts),
-             'esp32_ant  = %s;   // ESP32-S3 antenna, at the top edge: no metal within 15 mm' % v((at('U_S3')[0], Y0 + 3.0)),
-             'usb_c      = %s;   // USB-C mouth on the top edge (receptacle 8.94 x 3.26, centre 1.63 above F.Cu)' % v((at('J_USB')[0], Y0)),
-             'microsd    = %s;   // microSD card slot on the left edge: the card\'s centreline (between its pegs)' % v((X0, at('J_SD', -0.9, 0.0)[1])),
+             'hdr_mouth  = %s;   // the box header\'s mouth on the west edge: [x, y centre]' % v((round(hx - HG.HDR_MOUTH, 3), hy)),
+             'hdr_len = %g; hdr_h = %g;   // the shroud\'s length (along y) and height above F.Cu' % (2 * HG.HDR_HALF_LEN, HG.HDR_H),
+             'hdr_pin1   = %s;   // pin 1 (south end, inboard row)' % v(PL.hdr_pin(1)),
+             'esp32_ant  = %s;   // ESP32-S3 antenna, at the east edge: no metal within 15 mm' % v((X1 - 3.0, PL.S3[1])),
+             'usb_c      = %s;   // USB-C mouth on the north edge (receptacle 8.94 x 3.26, centre 1.63 above F.Cu)' % v((at('J_USB')[0], Y0)),
+             'microsd    = %s;   // microSD card slot on the south edge: the card\'s centreline' % v((at('J_SD', -0.9, 0.0)[0], Y1)),
              'sw_reset   = %s;   // RESET: the RP2354B and the ESP32-S3 together (back to CONFIG)' % v(at('SW_RESET')),
              'sw_bootsel = %s;   // RP BOOTSEL (hold while pressing RESET)' % v(at('SW_BOOTSEL')),
              'sw_s3en    = %s;   // ESP32-S3 EN' % v(at('SW_S3EN')),
              'sw_s3boot  = %s;   // ESP32-S3 BOOT (IO0)' % v(at('SW_S3BOOT')),
+             'sw_dip     = %s;   // the 3-way DIP switch (RAM / EI / RS-232 force-off)' % v(at('SW_DIP')),
              'led_status = %s;   // WS2812 status light' % v(at('D_WS')),
              'led_rp     = %s;   // RP activity LED' % v(at('D_LED')),
              '']
@@ -816,26 +746,38 @@ def board_only(name, fpname, x, y, desc):
     return inst
 
 
+def silk_texts():
+    """The board's own silkscreen: its name, the header's pin 1 / ribbon stripe, the DIP switches' meaning,
+    the ribbon note on the back."""
+    p1x, p1y = PL.hdr_pin(1)
+    sx, sy, _ = PLACE[K['SW_DIP']]
+    return [text('FujiNet-TRS80M1 Rev0   TRS-80 MODEL I', 110.0, 114.4, 'F.SilkS', 1.0),
+            text('PIN 1 / STRIPE', p1x + 1.0, p1y + 4.2, 'F.SilkS', 0.9),
+            text('ON = OFF: RAM  EI  RS232', sx, sy + 6.2, 'F.SilkS', 0.8),
+            text('TO THE MODEL I EXPANSION EDGE: 40-WIRE IDC RIBBON, PIN 1 = STRIPE', 92.0, 50.6, 'B.SilkS', 0.9, mirror=True),
+            text('RP2354B + ESP32-S3   CERN-OHL-W-2.0', 92.0, 52.4, 'B.SilkS', 0.8, mirror=True),
+            text('github.com/FujiNetWIFI', 92.0, 54.2, 'B.SilkS', 0.8, mirror=True)]
+
+
 def check_parts_inside(board):
     _, crt = board_pads(board)
     bad = []
     for p in D.PARTS:
-        if p.ref == D.KEY['J_EDGE'] or p.ref not in crt:
+        if p.ref not in crt:
             continue
         x0, y0, x1, y1 = crt[p.ref]
-        top = 1.0 if p.key == 'J_USB' else 0.2      # HRO's recommended edge: the shell face 0.46 mm past it
-        if y1 > PARTS_MAX_Y or x0 < X0 - 0.01 or x1 > X1 + 0.01 or y0 < Y0 - top:
+        west = 0.8 if p.key == 'J_M1' else 0.2     # the header's mouth stands 0.24 mm past the edge
+        north = 1.0 if p.key == 'J_USB' else 0.2    # HRO's recommended edge: the shell face 0.46 mm past it
+        south = 0.6 if p.key == 'J_SD' else 0.2
+        if x0 < X0 - west or x1 > X1 + 0.2 or y0 < Y0 - north or y1 > Y1 + south:
             bad.append('%s(%s)' % (p.ref, p.key))
             continue
-        for hx, hy, hd in HOLES:                    # the shell posts' bosses
+        for hx, hy, hd in HOLES:                    # the case's bosses
             dx, dy = max(x0 - hx, 0, hx - x1), max(y0 - hy, 0, hy - y1)
-            if math.hypot(dx, dy) < EG.POST_KEEP:
-                bad.append('%s(%s) at the post (%g, %g)' % (p.ref, p.key, hx, hy))
-        for (nl, nh), side in ((EG.NOTCH_L, X0), (EG.NOTCH_R, X1)):   # the side notches
-            if y1 > Y1 - nh and y0 < Y1 - nl and (x0 < X0 + EG.NOTCH_D if side == X0 else x1 > X1 - EG.NOTCH_D):
-                bad.append('%s(%s) in a notch' % (p.ref, p.key))
+            if math.hypot(dx, dy) < HG.HOLE_KEEP:
+                bad.append('%s(%s) at the hole (%g, %g)' % (p.ref, p.key, hx, hy))
     if bad:
-        raise SystemExit('courtyard outside the shell / board: ' + ' '.join(bad))
+        raise SystemExit('courtyard outside the board / on a hole: ' + ' '.join(bad))
 
 
 def main():
@@ -870,42 +812,33 @@ def main():
         board.append(instance(p, x, y, r, path, '/%s/' % stem, stem + '.kicad_sch', p.ds or ds))
     check_parts_inside(board)
     for i, (x, y, d) in enumerate(HOLES, 1):
-        board.append(board_only('H%d' % i, 'MountingHole_5mm_NPTH', x, y, 'Videopac shell post'))
+        board.append(board_only('H%d' % i, 'MountingHole_3.2mm_NPTH', x, y, 'M3 corner hole (the case)'))
     for name, x, y in FIDUCIALS:
         board.append(board_only(name, 'Fiducial_1mm_Mask2mm', x, y, 'assembly fiducial'))
     rs, rzones = rp_support(board)
     gc, gzones = graft_copper()
-    extra = gc + rs + cap_links(board) + finger_gnd_vias(board) + mux_link(board) + tp_dvdd_link(board, gc)
+    extra = gc + rs + cap_links(board) + tp_dvdd_link(board, gc)
     board += extra
     add_fanout(board, extra)
     board += outline()
     board += rzones + gzones
-    # finger strip: fingers only on F/B
-    strip = [(X0 - 1, FINGER_Y), (X1 + 1, FINGER_Y), (X1 + 1, Y1 + 1), (X0 - 1, Y1 + 1)]
-    for L in ('F.Cu', 'B.Cu'):
-        board.append(zone('finger_strip_' + L[0], None, L, strip, keepout={}))
     # antenna band: nothing, on any layer
     ax0, ay0, ax1, ay1 = ANT_KEEP
-    band = [(ax0 - 1, ay0 - 1), (ax1, ay0 - 1), (ax1, ay1), (ax0 - 1, ay1)]
+    band = [(ax0, ay0), (ax1 + 1, ay0), (ax1 + 1, ay1), (ax0, ay1)]
     for L in ('F.Cu', 'In1.Cu', 'In2.Cu', 'B.Cu'):
         board.append(zone('antenna_' + L.split('.')[0], None, L, band, keepout={'pads': 'allowed'}))
-    # the shell posts: no copper near the holes
+    # the corner holes: no copper near them
     for i, (x, y, d) in enumerate(HOLES):
         for L in ('F.Cu', 'In1.Cu', 'In2.Cu', 'B.Cu'):
-            board.append(zone('post_%d_%s' % (i, L.split('.')[0]), None, L, circle_pts(x, y, HOLE_CU), keepout={}))
+            board.append(zone('hole_%d_%s' % (i, L.split('.')[0]), None, L, circle_pts(x, y, HOLE_CU), keepout={}))
     board.append(zone('GND_plane', 'GND', 'In1.Cu', BODY))
     board.append(zone('5V_plane', '+5V', PWR_LAYER, BODY))
-    from placement import RP_ISLAND, S3_ISLAND, CONS5V_ISLAND
+    from placement import RP_ISLAND, S3_ISLAND
     board.append(zone('s3_3v3_island', '+3V3', PWR_LAYER, S3_ISLAND, priority=2))
-    board.append(zone('cons5v_island', 'CONS_5V', PWR_LAYER, CONS5V_ISLAND, priority=4))
     for name, x, y in FIDUCIALS:            # fiducials: 1 mm copper in a clear 3 mm field
         board.append(zone('fid_' + name, None, 'F.Cu', circle_pts(x, y, 1.6), keepout={}))
     board.append(zone('rp_io_island', D.RP_RAIL, PWR_LAYER, RP_ISLAND, priority=3))
-    ty = PARTS_MAX_Y + 2.6
-    board.append(text('FujiNet-O2 Rev0   ODYSSEY 2 / VIDEOPAC', XC, ty - 1.0, 'F.SilkS', 1.0))
-    board.append(text('THIS SIDE TO THE PLAYER  (PINS 1-15)', XC, ty + 1.0, 'F.SilkS', 0.9))
-    board.append(text('BACK OF THE CONSOLE  (PINS A-R)', XC, ty - 1.0, 'B.SilkS', 1.0, mirror=True))
-    board.append(text('RP2354B + ESP32-S3   CERN-OHL-W-2.0', XC, ty + 1.0, 'B.SilkS', 0.8, mirror=True))
+    board += silk_texts()
     board.append(['embedded_fonts', 'no'])
     open(PCB, 'w').write(dump(board) + '\n')
     print('placed %d parts -> %s' % (len(D.PARTS), os.path.basename(PCB)))

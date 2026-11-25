@@ -10,14 +10,14 @@ Reviewed 2026-11-24 against the routed board (686 vias, 1678 tracks), with:
 
 | Claim | Check | Result |
 |---|---|---|
-| Header pin n carries the Model I's expansion-edge pin n | `tools/audit/header_pinout.py`: the netlist against four independent sources (Tech Ref 26-2103 p.91, the RetroStack rev G replica, the 26-1132 HD-adapter document, TRS-IO M1), the footprint against its EasyEDA original, pin 1 at the south end | 0 failures |
-| Pin 39 is open (+5V on keyboard boards A-E, GND on G); grounds are 8, 29, 37 | the same | ok |
+| Header pin h carries the Model I's edge pin h+1 (h odd) or h-1 (h even): a straight IDC ribbon swaps Tandy's pairs, because Fig. 22 is the mirror of the IDC connector | `tools/audit/header_pinout.py`: the netlist against four independent sources (Tech Ref 26-2103 p.91, the RetroStack rev G replica, the 26-1132 HD-adapter document, TRS-IO M1); the pair swap derived from Fig. 22 and checked against the HD adapter's cable table and TRS-IO M1's pad numbers; the footprint against its EasyEDA original, pin 1 at the south end | 0 failures |
+| Edge pin 39 (header 40) is open (+5V on keyboard boards A-E, GND on G); grounds are edge 8, 29, 37 (header 7, 30, 38) | the same | ok |
 | Every line reaches the RP through exactly its buffer, on the firmware's GPIO | `tools/check_nets.py` against `m1_card.h`, `fujitrs80m1_rp2354b.h` and `fujiversal-trs80m1.h` in the dev tree (sha256 printed) | 461 checks, 0 failed, 4 NOTEs (firmware changes, README) |
-| Every bus input defined with the ribbon unplugged | `check_nets.py`: a 100k pull-down on each of the 30 inputs; none on INT* / WAIT* (the Z80's own 4.7k pull-ups) | ok |
+| Every bus input defined with the ribbon unplugged, idling inactive | `check_nets.py`: a 100k pull-up to +3V3_RP on each of the 30 inputs; none on INT* / WAIT* (the Z80's own 4.7k pull-ups) | ok |
 | The data buffer drives only while RD* or IN* is low | `check_nets.py`: /OE = 74LVC1G11(DRIVE, the BUFFERED RD*, the BUFFERED IN*); DIR = DRIVE with 4.7k down | ok |
 | A ringing strobe never counts twice | `spice/ribbon.py`: LS367 -> 15 / 45 cm ribbon -> 74LVC3G17. The input never re-crosses the other Schmitt threshold (lowest high 2.66 V vs VT- 0.84 V; highest low 0.94 V vs VT+ 2.22 V at 45 cm) | ok |
 | The card's data drive is clean on the ribbon | `spice/ribbon.py`, swept over the series resistor. At 75R: peak 3.30 V at 15 cm, 3.45 V / -0.15 V at 45 cm, settled by 13 ns. At 47R and 45 cm it was 3.94 / -0.64 V, which is why 75R | ok |
-| Levels, loads, contention, read timing, power | `tools/audit/margins.py` | 26 margins, 0 negative |
+| Levels, loads, contention, read timing, power | `tools/audit/margins.py` | 27 margins, 0 negative |
 | Layout claims on the copper | `tools/audit/layout_checks.py` | 69 checks, 0 failures |
 
 Margin highlights:
@@ -25,14 +25,15 @@ Margin highlights:
 - **Read timing:** the stock 1.774 MHz read has 600 ns of budget against 464 ns worst case: +136 ns.
   - 2.66 / 3.55 MHz speed-ups are met only when no FD1771 post lands as the strobe falls, as the firmware README says (+164 / +23 ns typical).
 - **Contention at the end of a read:** 31 mA through the 75R for at most ~52 ns, inside the LVC245's 50 mA.
-- **Load per line:** the card asks at most 55 uA of an LS367 (2.6 mA available).
-- **Unanswered reads stay FFh:** a 100k pull-down cannot pull an LS input below VIL.
+- **Load per line:** the card asks at most 41 uA of an LS367 driving low (12 mA available).
+- **Unanswered reads stay FFh:** the LS inputs float high and the card's pull-ups agree.
+- **Back-feed:** with the Model I on and the card unpowered, the 30 pull-ups carry ~1.2 mA into +3V3_RP, under 2 % of its running draw.
 
-## 2. kicad-happy findings (run 2026-11-24_2050, 211 findings in 52 rule groups)
+## 2. kicad-happy findings (run 2026-11-25_1315 after the header fix, 225 findings in 53 rule groups; the same high groups as 2026-11-24_2050)
 
 **High**
 - **TS-001: the AP2112K (U14) at Tj 142 C.** The analyzer assumes 275 mA out of it. Its loads are the RP2354B (~60 mA at 200 MHz) and the seven bus buffers (~10 mA): (5.25 - 3.3) V x 70 mA = 0.14 W, +26 C at the datasheet's 184 C/W. Not a defect (`margins.py`).
-- **GP-001: M1_D3 has 62 % reference-plane coverage over 9 mm.** The box header's 40 clearance holes interrupt In1 / In2 beside the header. The line runs 9 mm on the board after 150 mm of ribbon with three grounds in 40 wires. Accepted.
+- **GP-001 (5): header-side bus lines with 50-78 % reference-plane coverage over 7-21 mm** (M1_D2, M1_DS2, M1_D0, M1_D5, M1_A0; M1_D3 before the header fix's re-route). The box header's 40 clearance holes interrupt In1 / In2 beside the header. Each line runs a few mm on the board after 150 mm of ribbon with three grounds in 40 wires. Accepted.
 - **RP-001: USB_DP has two layer changes without a GND via within 1 mm.** It is a 12 Mb/s full-speed link (edges 4-20 ns). The same was accepted on the sibling carts.
 - **PM-002: J1's courtyard overhangs the edge by 0.74 mm.** By design: the box header's mouth stands 0.24 mm past the west edge, flush with the case wall.
 - **KO-001 (7): FID1-3 and the holes "inside" their keep-outs.** The analyzer tests the circles' bounding boxes; each part sits in its own clear circle, and KiCad DRC passes.

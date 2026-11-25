@@ -4,8 +4,9 @@ gen_pcb.py, the case and the audits.
 The card is a free-standing board (in a printed case, case/), not a cartridge: a 100 x 76 mm rectangle,
 rounded corners, an M3 hole in each corner.  The TRS-80 Model I's expansion edge reaches it on a
 40-wire IDC ribbon: a 3M 3464-series (or equivalent) 40-way 0.100" card-edge IDC on the keyboard unit's
-edge, a 2x20 IDC socket on this board's right-angle box header.  A straight ribbon puts edge pin n on
-header pin n.
+edge, a 2x20 IDC socket on this board's right-angle box header.  Tandy numbers the edge as the mirror
+of that connector, so a straight ribbon, its stripe at the end of edge pins 1-2, brings the edge pins
+to the header swapped in pairs: header 1 = edge 2, header 2 = edge 1 ... (design.edge_of_hdr).
 
 The header (XFCN BH254R-40P, tools/make_fp_m1.py) lies along the west edge, its mouth flush with the
 board edge, turned 270 deg: the odd pins on its inboard row, the even pins on the row by the mouth,

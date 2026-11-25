@@ -14,7 +14,7 @@
      USBLC6's flow-through pins joined; no loop in any USB line's copper
   7. the ribbon header: every bus line reaches its buffer on copper, short beside the ribbon (at most
      45 mm of track and 4 vias from the header pin to the buffer pin, the data lines to their 75R: the
-     ribbon itself is 150 mm); the three GND pins (8, 29, 37) joined to the In1 GND plane by its fill
+     ribbon itself is 150 mm); the three GND pins (header 7, 30, 38 = edge 8, 29, 37) joined to the In1 GND plane by its fill
      (thermal spokes); every bus buffer's 100 nF within 6 mm of its VCC pin (check 2)
   8. the ESP32-S3: its antenna keep-out (the module footprint's zone: the antenna end to the board
      edge, 24 mm each way along it) empty of tracks, vias, fills and parts on every layer; the antenna
@@ -287,7 +287,7 @@ for pin, (net, _nm) in D.EDGE.items():
 check(not bad, '7. every header line reaches its buffer on copper: longest %.1f mm, at most %d vias%s'
       % (longest, worst, ' -- ' + ', '.join(bad) if bad else ''))
 gnd_in1 = fills('GND_plane', 'In1.Cu')
-for pin in (8, 29, 37):
+for pin in [h for h in sorted(D.EDGE) if D.EDGE[h][0] == 'GND']:
     q = pad('J_M1', str(pin))
     r = q.hw + 0.35                              # just outside the pad: the spokes of the thermal relief
     spokes = sum(in_fill(gnd_in1, q.cx + r * math.cos(a * math.pi / 4), q.cy + r * math.sin(a * math.pi / 4), 'GND')

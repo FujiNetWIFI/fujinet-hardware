@@ -12,8 +12,13 @@ FujiNet for the TRS-80 Model I, in place of the Expansion Interface, on one boar
   - the strobes go through Schmitt triggers;
   - D0-D7 are driven only while RD* or IN* is low, through 75R.
 
-**Status (2026-11-24): board routed on 4 layers, JLCPCB and PCBWay packages generated, every gate passing, printed case
+**Status (2026-11-25): board routed on 4 layers, JLCPCB and PCBWay packages generated, every gate passing, printed case
 drawn. Nothing has been built yet.**
+- **Fixed since PR #72:**
+  - PR #72 wired header pin n to edge pin n, which no straight ribbon can give: Tandy numbers the edge as the mirror
+    image of an IDC connector. The header now carries the edge pins swapped in pairs (*The expansion edge and the header*).
+  - The 30 bus inputs are now pulled up to +3V3_RP instead of down.
+  - Don't build PR #72's files.
 - **Board:** 4 layers, 100 x 76 mm, an M3 hole in each corner. Assembled by JLCPCB or PCBWay, top side: 107 SMD
   parts and the through-hole box header.
 - **Firmware:** the schematic implements `pico/trs80m1/firmware/include/m1_card.h`, as it stands in the bring-up's
@@ -22,23 +27,23 @@ drawn. Nothing has been built yet.**
 - **Header:** checked against four sources for the Model I's expansion edge (`tools/audit/header_pinout.py`).
 - **Case:** `case/`, checked in OpenSCAD against every part. Not printed yet.
 
-| Check (2026-11-24) | Result |
+| Check (2026-11-25) | Result |
 |---|---|
 | Drawing checks (`gen_sch.py`) | every sheet wired. Crossings: 0 on `rp-core`, `fujinet`, `power`; 1 on `usb` (esptool's auto-program pair, as on the sibling carts); 1 on `m1-bus` (the OE gate's IN* tap past RD*: `docs/design-review-rev0.md` 3) |
 | Netlist parity: kicad-cli netlist vs `design.py`, names included | 127 / 127 nets |
 | KiCad ERC, all severities (kicad-cli and the KiCad MCP) | 0 errors, 0 warnings |
-| `tools/audit/header_pinout.py`: the 40 header pins against the Tech Ref 26-2103 p.91, the RetroStack rev G replica, the 26-1132 HD-adapter document and TRS-IO M1; the footprint against its EasyEDA original; pin 1 on the board | 0 failures (`tools/header_geom.VERIFIED = True`) |
+| `tools/audit/header_pinout.py`: the 40 edge pins against the Tech Ref 26-2103 p.91, the RetroStack rev G replica, the 26-1132 HD-adapter document and TRS-IO M1; the ribbon's pair swap against Fig. 22, the HD adapter's cable table and TRS-IO M1's pad numbers; the footprint against its EasyEDA original; pin 1 on the board | 0 failures (`tools/header_geom.VERIFIED = True`) |
 | `tools/check_nets.py`: the netlist vs `m1_card.h`, `fujitrs80m1_rp2354b.h`, `fujiversal-trs80m1.h` | 461 checks, 0 failed; 4 NOTE lines (the firmware changes below) |
 | `tools/audit/spice/ribbon.py` (ngspice): the ribbon both ways, 15 and 45 cm | strobes never ring through the Schmitt thresholds; the 75R data drive is clean to 45 cm |
-| `tools/audit/margins.py`: levels, loads, contention, read timing (in step with the firmware's `test_timing.c`), power | 26 margins, 0 negative (tightest: +23 ns, a 3.55 MHz speed-up's typical read) |
+| `tools/audit/margins.py`: levels, loads, contention, read timing (in step with the firmware's `test_timing.c`), power | 27 margins, 0 negative (tightest: +23 ns, a 3.55 MHz speed-up's typical read) |
 | Routing | 100 % on 4 layers; 686 vias, 1678 tracks |
 | KiCad DRC + schematic parity on the saved zone fills (kicad-cli, and again through the KiCad MCP) | 0 errors, 0 unconnected, 0 parity issues; 3 silk-over-edge warnings (the S3 module's outline at the flush east edge) |
 | `tools/check_vias.py`: no via in a foreign SMD pad | 686 vias, 0 failures |
-| `tools/audit/layout_checks.py`: the layout's claims measured on the copper | 69 / 69. Covers the regulator corner, decoupling (every bus buffer's within 6 mm), the USB pairs and their skew, the crystal, the exposed pads, the antenna band, the buck loop, and every header line to its buffer (40.4 mm and 2 vias at most) |
+| `tools/audit/layout_checks.py`: the layout's claims measured on the copper | 69 / 69. Covers the regulator corner, decoupling (every bus buffer's within 6 mm), the USB pairs and their skew, the crystal, the exposed pads, the antenna band, the buck loop, and every header line to its buffer (42.5 mm and 2 vias at most) |
 | `tools/audit/check_gerbers.py`: the zip itself | 0 failures: outline, the four M3 holes, the header's 40 drills with pads and mask both sides, no copper in the antenna band, nothing past the outline, no plated hole in an In1 / In2 pour of another net (762 holes) |
 | `tools/audit/check_fab.py`: JLC and PCBWay BOM / CPL / centroid / drills / order-number text / gerbers / the header gate | all pass |
 | JLCPCB CPL rotations (`tools/audit/jlc/`), measured against each LCSC part's EasyEDA footprint | 46 (footprint, LCSC) pairs. The RP2354B, the box header, the DIP switch and every logic part are high confidence. Medium: the 1G11, the AOTA and buck inductors, the TS-1187A, the BAT54C, the USB-C, the TLV62569. Check those in JLC's preview |
-| kicad-happy 2.2.1 (`tools/audit/run_sch_audit.sh`, `run_pcb_audit.sh`), triaged in `docs/design-review-rev0.md` | 6 high groups: 4 false positives (keep-out circles, U12 decoupling, the LDO thermal estimate at 4x the real load, the header at the edge by design), 2 accepted (a 9 mm plane gap at the header, USB full-speed layer changes) |
+| kicad-happy 2.2.1 (`tools/audit/run_sch_audit.sh`, `run_pcb_audit.sh`), triaged in `docs/design-review-rev0.md` | 6 high groups: 4 false positives (keep-out circles, U12 decoupling, the LDO thermal estimate at 4x the real load, the header at the edge by design), 2 accepted (plane gaps beside the header's 40 holes, USB full-speed layer changes) |
 | Printed case (`case/`, OpenSCAD) | `check` and `parts_check` empty, `parts_control` not |
 
 ## Sheets
@@ -59,24 +64,42 @@ Drawn with the FujiNet-StudioII / O2 / ColecoVision toolkit:
 
 ## The expansion edge and the header
 
-40 contacts, two rows of 20 at 0.100". A straight 40-wire IDC ribbon puts edge pin n on header pin n:
+40 contacts, two rows of 20 at 0.100", on a straight 40-wire IDC ribbon:
 - **The Model I end:** a 40-way card-edge IDC connector (3M 3464-series or equivalent) on the keyboard unit's edge.
 - **This board's end:** a 2x20 IDC socket on the box header.
 
-| Pin | Signal | Card | Pin | Signal | Card |
-|---|---|---|---|---|---|
-| 1 | RAS* | open | 2 | SYSRES* | 3G17 -> GP29 |
-| 3 | CAS* | open | 4, 5, 6, 7 | A10, A12, A13, A15 | '245 -> GP10, 12, 13, 15 |
-| 8 | GND | GND | 9, 10, 11 | A11, A14, A8 | '245 -> GP11, 14, 8 |
-| 12 | OUT* | 3G17 -> GP27 | 13 | WR* | 3G17 -> GP24 |
-| 14 | INTAK* | 3G17 -> GP32 | 15 | RD* | 3G17 -> GP25 |
-| 16 | MUX | open | 17 | A9 | '245 -> GP9 |
-| 18, 20, 22, 24 | D4, D7, D1, D6 | 75R, '245 <-> GP20, 23, 17, 22 | 19 | IN* | 3G17 -> GP26 |
-| 21 | INT* | GP30 -> 2G07 (open drain) | 23 | TEST* | open (it floats the keyboard unit's buses) |
-| 25, 27 | A0, A1 | '245 -> GP0, 1 | 26, 28, 30, 32 | D3, D5, D0, D2 | 75R, '245 <-> GP19, 21, 16, 18 |
-| 29 | GND | GND | 31, 34, 35, 36, 38, 40 | A4, A3, A5, A7, A6, A2 | '245 -> GP4, 3, 5, 7, 6, 2 |
-| 33 | WAIT* | GP31 -> 2G07 (open drain) | 37 | GND | GND |
-| 39 | +5V (keyboard boards A-E) / GND (G) | **open** | | | |
+**Tandy numbers the edge as the mirror image of that connector**, so the edge pins reach the header swapped in pairs:
+header 1 = edge 2, header 2 = edge 1, header 3 = edge 4, and so on.
+- Tech Ref Fig. 22, seen from the rear: odd pins on top, pin 1 at the **left**. Tandy's own EI floppy and printer
+  edges have pin 1 at the top **right**.
+- Buzbee / Fosdick: the expansion port "is configured opposite to other connectors on the expansion interface board".
+  Plugged Tandy's way (stripe right, cable down), "the pin 1 stripe will actually connect to pin 39".
+- TRS-IO M1 numbers its own edge pads the same way as this header (pad 1 SYSRES*, pad 2 RAS*).
+
+Edge numbers are Tandy's:
+
+| Header | Edge | Signal | Card | Header | Edge | Signal | Card |
+|---|---|---|---|---|---|---|---|
+| 1 | 2 | SYSRES* | 3G17 -> GP29 | 21 | 22 | D1 | 75R, '245 <-> GP17 |
+| 2 | 1 | RAS* | open | 22 | 21 | INT* | GP30 -> 2G07 (OD) |
+| 3 | 4 | A10 | '245 -> GP10 | 23 | 24 | D6 | 75R, '245 <-> GP22 |
+| 4 | 3 | CAS* | open | 24 | 23 | TEST* | open (floats the buses) |
+| 5 | 6 | A13 | '245 -> GP13 | 25 | 26 | D3 | 75R, '245 <-> GP19 |
+| 6 | 5 | A12 | '245 -> GP12 | 26 | 25 | A0 | '245 -> GP0 |
+| 7 | 8 | GND | GND | 27 | 28 | D5 | 75R, '245 <-> GP21 |
+| 8 | 7 | A15 | '245 -> GP15 | 28 | 27 | A1 | '245 -> GP1 |
+| 9 | 10 | A14 | '245 -> GP14 | 29 | 30 | D0 | 75R, '245 <-> GP16 |
+| 10 | 9 | A11 | '245 -> GP11 | 30 | 29 | GND | GND |
+| 11 | 12 | OUT* | 3G17 -> GP27 | 31 | 32 | D2 | 75R, '245 <-> GP18 |
+| 12 | 11 | A8 | '245 -> GP8 | 32 | 31 | A4 | '245 -> GP4 |
+| 13 | 14 | INTAK* | 3G17 -> GP32 | 33 | 34 | A3 | '245 -> GP3 |
+| 14 | 13 | WR* | 3G17 -> GP24 | 34 | 33 | WAIT* | GP31 -> 2G07 (OD) |
+| 15 | 16 | MUX | open | 35 | 36 | A7 | '245 -> GP7 |
+| 16 | 15 | RD* | 3G17 -> GP25 | 36 | 35 | A5 | '245 -> GP5 |
+| 17 | 18 | D4 | 75R, '245 <-> GP20 | 37 | 38 | A6 | '245 -> GP6 |
+| 18 | 17 | A9 | '245 -> GP9 | 38 | 37 | GND | GND |
+| 19 | 20 | D7 | 75R, '245 <-> GP23 | 39 | 40 | A2 | '245 -> GP2 |
+| 20 | 19 | IN* | 3G17 -> GP26 | 40 | 39 | +5V / GND | **open** (+5V on boards A-E, GND on G) |
 
 **Sources** (2026-11-24; `tools/audit/header_pinout.py` has them):
 - the TRS-80 Technical Reference Handbook (Radio Shack 26-2103) p.91 table and Fig. 22;
@@ -85,37 +108,44 @@ Drawn with the FujiNet-StudioII / O2 / ColecoVision toolkit:
 - TRS-IO M1 v1.4.
 
 All four agree on every pin but 39, which Tandy's own text says Level II machines ground and the replicas show as +5V
-on boards A-E.
+on boards A-E. `header_pinout.py` also derives the pair swap from Fig. 22 and the connector, and checks it against
+Buzbee / Fosdick's adapter table (the same map, plugged the other way up) and TRS-IO M1's pad numbers.
 
 **What drives the edge** (the replica, and Tech Ref pp.15-18):
 - A0-A15, RD*, WR*, IN*, OUT*, RAS*, CAS* and MUX come from 74LS367s ("one TTL load" each).
 - SYSRES* comes from an LS02, INTAK* from an LS32.
 - INT*, WAIT* and TEST* go straight to the Z80, each with a 4.7k pull-up.
 - D0-D7 is the keyboard unit's internal data bus, driven by it except while the Z80 reads.
-- The card puts one LVC input and a 100k pull-down on each line (`margins.py`).
+- The card puts one LVC input and a 100k pull-up to +3V3_RP on each line (`margins.py`). Unplugged, or with the Model I
+  off, every line idles high: the strobes and SYSRES* inactive. With the Model I on and the card unpowered, the
+  pull-ups back-feed its RP rail about 1 mA, too little to start anything.
 
 **The header:** XFCN BH254R-40P (Ckmtw B-3000R40P-0110 fits the same holes), a right-angle shrouded 2x20.
 - It lies along the west edge, its mouth flush with the board edge (0.24 mm past it), the key up.
-- The odd pins are on its inboard row, **pin 1 at the south end** by the PIN 1 / STRIPE arrow.
+- The odd pins are on its inboard row, **pin 1 (SYSRES*, edge pin 2) at the south end** by the PIN 1 / STRIPE arrow.
 
 ## The cable
 
-**Buy or make** a 40-wire flat ribbon, **15 cm** (Tandy's EI cable was 6 in; no more than 30 cm):
+**Buy or make** a straight 40-wire flat ribbon, **15 cm** (Tandy's EI cable was 6 in; no more than 30 cm):
 - the Model I end: a 40-way 0.100" card-edge IDC connector (3M 3464-0000 or equivalent, for 1.4-1.8 mm boards);
 - this board's end: a 2x20 IDC socket;
-- both crimped with the red stripe (wire 1) at pin 1.
+- both crimped with the red stripe (wire 1) at their pin-1 marks.
 
-**The Model I's edge has no key slot**, so the card-edge connector can go on either way up.
-- Seen from the rear of the keyboard unit, its odd pins are on top, pin 1 at the left (Tech Ref Fig. 22): the stripe goes there.
-- **Reversed, the card's grounds hold OUT* and A10 low.**
+**On the Model I, the stripe goes at the left, seen from the rear** (the end of edge pins 1 and 2). The edge has no key slot.
+- This is upside down from Tandy's own cables: the ribbon leaves the connector at the top. Wire 1 meets edge pin 2
+  (bottom row), wire 2 edge pin 1.
+- **Plugged Tandy's way round (stripe right), the card's grounds hold WAIT*, OUT* and A10 low.**
+- To plug it Tandy's way round instead, crimp the socket end with its stripe at header pin 40, the north end.
 
 **Before powering anything, with a meter and the Model I off:**
-1. Continuity from header pin 1 to the edge connector's pin 1 position, and from header pin 40 to its pin 40: the
-   ribbon is straight and the connector the right way round.
-2. With the connector on the keyboard unit: header pin 8 (and 29, 37) to the Model I's ground.
+1. The cable alone: header pin 1 to the card-edge connector's contact at its stripe end, and header pin 40 to the
+   contact at the far end on the other row. This shows the ribbon is straight.
+2. With the connector on the keyboard unit: header pins 7, 30 and 38 to the Model I's ground. All three must ring.
 
-To keep a real Expansion Interface too: crimp a third connector (the EI's card-edge) onto the same ribbon, then set
-the DIP switches to force off whatever the EI provides.
+To keep a real Expansion Interface too:
+- Crimp a third connector (the EI's card-edge) onto the same ribbon.
+- Plug it onto the EI the same way round as the Model I end: the stripe at the end of the EI edge's pins 1-2.
+- Set the DIP switches to force off whatever the EI provides.
 
 ## RP2354B pin map
 
@@ -186,7 +216,7 @@ The Model I's edge carries no supply the card can use, so the card runs from its
   - B.Cu: signals + GND pour.
 - **Placement (`tools/placement.py`):**
   - **West edge:** the box header, mouth outward.
-  - **Bus column:** every buffer within ~15 mm of its header pins, in the header's order. The A0-A7 receiver north, the data transceiver with its 75R and pull-down arrays in the middle, the A8-A15 receiver south. The Schmitt receivers, the INT / WAIT driver and the OE gate east of them.
+  - **Bus column:** every buffer within ~15 mm of its header pins, in the header's order. The A0-A7 receiver north, the data transceiver with its 75R and pull-up arrays in the middle, the A8-A15 receiver south. The Schmitt receivers, the INT / WAIT driver and the OE gate east of them.
   - **Centre:** the RP2354B at rotation 0, its bus pins on its west and south sides, with FujiNet-StudioII / O2 Rev0's macro and Raspberry Pi's regulator corner turned with it.
   - **East edge:** the ESP32-S3, its antenna flush with the edge over a strip with no copper on any layer.
   - **North edge:** the USB-C and its ESD, fuse and CP2102N; the buck north-east.
@@ -197,9 +227,14 @@ The Model I's edge carries no supply the card can use, so the card runs from its
   - the north-side capacitor links;
   - the core-rail pad's link.
 - **Routing:** Freerouting, the grid finisher, clean-up, GND stitching, fills, DRC (`tools/route_board.sh`).
-- **The board is not reproduced by `LAYOUT=1`.**
-  - Routing results vary run to run. This board is the one of five isolated placement variants that closed every connection (`docs/design-review-rev0.md` 3).
-  - One part was moved by hand afterwards: the data buffer's 100 nF, to its VCC pin.
+- **The board is not reproduced by `LAYOUT=1` alone.**
+  - PR #72's board was the one of five isolated placement variants that closed every connection (`docs/design-review-rev0.md` 3).
+  - The header fix (2026-11-25) re-routed only what it changed. `tools/reuse_copper.py` copied PR #72's copper, locked,
+    for every net off the m1-bus sheet, VBUS, and the RP-side nets around the RP2354B's south pins. Freerouting and
+    the finisher routed the rest: the header lines, the pull-ups and six RP-side address lines.
+  - To repeat it: `git show 3278d76:TRS-80-Model-I/FujiNet-TRS80M1-Rev0/FujiNet-TRS80M1-Rev0.kicad_pcb > old.kicad_pcb`,
+    then `LAYOUT=1 REUSE_FROM=old.kicad_pcb bash tools/build_all.sh`. Freerouting is deterministic for a given input,
+    so the same input gives the same board.
 
 ## Parts
 
@@ -248,7 +283,8 @@ In the bring-up's PR series (`pico/trs80m1` is not on master yet):
 
 ## Known limits
 
-- **The cable is the user's to plug the right way round:** the Model I's edge has no key. See *The cable*.
+- **The cable is the user's to plug the right way round:** the Model I's edge has no key, and the right way is upside
+  down from Tandy's own cables. See *The cable*.
 - **Ribbon length:** the simulation is clean to 45 cm, but longer cables undershoot into the receivers' clamp
   diodes. Keep it to 15 cm.
 - **Real-hardware timing:**

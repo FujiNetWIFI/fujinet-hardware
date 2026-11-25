@@ -192,8 +192,9 @@ def rp_split_symbol(stock):
 
 
 # The expansion header by function, in seven units: one per buffer group (sch_layout.HDR_RIGHT: the
-# group's lines on the right, row for row with its buffer), and the grounds (8, 29, 37) with the
-# open pins (RAS* 1, CAS* 3, MUX 16, TEST* 23, pin 39) on unit 7.  Pin names are the Tech Ref's.
+# group's lines on the right, row for row with its buffer), and the grounds (header 7, 30, 38) with the
+# open pins (RAS* 2, CAS* 4, MUX 15, TEST* 24, edge pin 39 on 40) on unit 7.  Pin names are the Tech Ref's;
+# numbers are the header's (design.edge_of_hdr).
 def header_symbol():
     used = []
     units = []
@@ -225,7 +226,7 @@ def _box(name, value, fp, ds, desc, left, right, bottom, w, pitch=5.08, top=()):
 
 
 # The 74LVC245A by function (74xx:74HC245 pin names and numbers), channel for channel at 5.08 mm (a line
-# and its pull-down between each), in two drawings: 74LVC245A_Fn with the A port on the left (the
+# and its pull-up between each), in two drawings: 74LVC245A_Fn with the A port on the left (the
 # address receivers: the bus in on A) and 74LVC245A_Fn_BA with the B port on the left (the data
 # transceiver: the bus on B).  The foot, left to right: VCC, GND, /OE (CE), DIR -- DIR nearest the RP.
 def buf_symbol(stock, ba=False):

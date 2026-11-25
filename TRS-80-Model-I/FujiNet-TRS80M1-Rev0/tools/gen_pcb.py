@@ -754,7 +754,7 @@ def silk_texts():
     return [text('FujiNet-TRS80M1 Rev0   TRS-80 MODEL I', 110.0, 114.4, 'F.SilkS', 1.0),
             text('PIN 1 / STRIPE', p1x + 1.0, p1y + 4.2, 'F.SilkS', 0.9),
             text('ON = OFF: RAM  EI  RS232', sx, sy + 6.2, 'F.SilkS', 0.8),
-            text('TO THE MODEL I EXPANSION EDGE: 40-WIRE IDC RIBBON, PIN 1 = STRIPE', 92.0, 50.6, 'B.SilkS', 0.9, mirror=True),
+            text('MODEL I EDGE: STRAIGHT RIBBON, STRIPE AT EDGE PINS 1-2 (REAR LEFT)', 92.0, 50.6, 'B.SilkS', 0.9, mirror=True),
             text('RP2354B + ESP32-S3   CERN-OHL-W-2.0', 92.0, 52.4, 'B.SilkS', 0.8, mirror=True),
             text('github.com/FujiNetWIFI', 92.0, 54.2, 'B.SilkS', 0.8, mirror=True)]
 

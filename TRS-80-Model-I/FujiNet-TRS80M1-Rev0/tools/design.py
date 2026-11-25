@@ -22,7 +22,10 @@ at 3.3 V.
 The expansion edge (Level II; TRS-80 Technical Reference Handbook 26-2103 p.91 + Fig. 22, checked
 against the RetroStack rev G replica netlist, the Tandy 26-1132 hard-disk adapter document and
 TRS-IO M1 v1.4: tools/audit/header_pinout.py has the sources):
-  * grounds are 8, 29 and 37; pin 39 is +5V on keyboard boards A-E and GND on rev G: left OPEN
+  * Tandy's numbering is the mirror of a standard IDC card-edge connector's, so a straight ribbon
+    brings the pins to the header swapped in pairs (edge_of_hdr): header 1 = edge 2, 2 = 1, 3 = 4 ...
+  * grounds are 8, 29 and 37 (header 7, 30, 38); pin 39 is +5V on keyboard boards A-E and GND on rev G:
+    left OPEN
   * address and RD* WR* IN* OUT* RAS* CAS* MUX come from 74LS367s (Tandy: one LS load each), SYSRES*
     from an LS02, INTAK* from an LS32; INT*, WAIT* and TEST* go straight to the Z80 with 4.7k
     pull-ups; D0-D7 IS the keyboard unit's internal data bus, driven by it except while the Z80
@@ -63,10 +66,9 @@ RP_RAIL = '+3V3_RP'   # IOVDD x8, QSPI_IOVDD, USB_OTP_VDD, ADC_AVDD, VREG_VIN, t
 RP_IO_RAIL = RP_CORE_RAIL = RP_RAIL     # (FujiNet-StudioII Rev0's names for it, in the ported core)
 S3_RAIL = '+3V3'      # the TLV62569 buck: ESP32-S3, CP2102N, microSD
 
-# ---- the expansion edge, as the 2x20 header carries it (header pin n = edge pin n through a straight
-# IDC ribbon) -------------------------------------------------------------------------------------
-# pin -> (net, symbol pin name); NC = not connected on this card
-EDGE = {1: (NC, '~{RAS}'), 2: ('M1_SYSRES_N', '~{SYSRES}'), 3: (NC, '~{CAS}'), 4: ('M1_A10', 'A10'),
+# ---- the expansion edge, in Tandy's numbering (Tech Ref p.91 + Fig. 22) -----------------------------
+# edge pin -> (net, symbol pin name); NC = not connected on this card
+TANDY_EDGE = {1: (NC, '~{RAS}'), 2: ('M1_SYSRES_N', '~{SYSRES}'), 3: (NC, '~{CAS}'), 4: ('M1_A10', 'A10'),
         5: ('M1_A12', 'A12'), 6: ('M1_A13', 'A13'), 7: ('M1_A15', 'A15'), 8: ('GND', 'GND'),
         9: ('M1_A11', 'A11'), 10: ('M1_A14', 'A14'), 11: ('M1_A8', 'A8'), 12: ('M1_OUT_N', '~{OUT}'),
         13: ('M1_WR_N', '~{WR}'), 14: ('M1_INTAK_N', '~{INTAK}'), 15: ('M1_RD_N', '~{RD}'), 16: (NC, 'MUX'),
@@ -76,7 +78,23 @@ EDGE = {1: (NC, '~{RAS}'), 2: ('M1_SYSRES_N', '~{SYSRES}'), 3: (NC, '~{CAS}'), 4
         30: ('M1_D0', 'D0'), 31: ('M1_A4', 'A4'), 32: ('M1_D2', 'D2'), 33: ('M1_WAIT_N', '~{WAIT}'),
         34: ('M1_A3', 'A3'), 35: ('M1_A5', 'A5'), 36: ('M1_A7', 'A7'), 37: ('GND', 'GND'), 38: ('M1_A6', 'A6'),
         39: (NC, '+5V/GND'), 40: ('M1_A2', 'A2')}
-assert sorted(EDGE) == list(range(1, 41))
+assert sorted(TANDY_EDGE) == list(range(1, 41))
+
+
+def edge_of_hdr(h):
+    """The Tandy edge pin a straight 40-wire IDC ribbon brings to header pin h: the pairs swapped.
+
+    Fig. 22 numbers the edge as the MIRROR of a standard IDC card-edge connector (Buzbee / Fosdick,
+    the 26-1132 adapter document: "configured opposite to other connectors on the expansion
+    interface"; plugged Tandy's way, stripe right and cable down, wire 1 meets pin 39).  With the
+    connector turned over, stripe at the end of Tandy's pins 1-2, wire 1 meets pin 2 and wire 2 pin 1.
+    TRS-IO M1 v1.4 numbers its own edge pads the same way (pad 1 SYSRES*, pad 2 RAS*).
+    """
+    return h + 1 if h % 2 else h - 1
+
+
+# header pin -> (net, symbol pin name): what J_M1 carries
+EDGE = {h: TANDY_EDGE[edge_of_hdr(h)] for h in range(1, 41)}
 EDGE_PIN = {n: p for p, (n, _) in EDGE.items() if n and n != 'GND'}
 
 # ---- the buffers: every line in, every driven line out, at the header -------------------------
@@ -85,13 +103,14 @@ EDGE_PIN = {n: p for p, (n, _) in EDGE.items() if n and n != 'GND'}
 # edge with pin 1 at its south end; the address '245s face it with their A side (pin 2, channel 0, at
 # the north end), the data '245 turned round with its B side (pin 18, channel 0, at the south end).
 CH245 = [(2 + k, 18 - k) for k in range(8)]
-ADDR_HI = ['M1_A9', 'M1_A8', 'M1_A14', 'M1_A11', 'M1_A15', 'M1_A13', 'M1_A12', 'M1_A10']   # header pins 17-4
-ADDR_LO = ['M1_A2', 'M1_A6', 'M1_A7', 'M1_A5', 'M1_A3', 'M1_A4', 'M1_A1', 'M1_A0']         # header pins 40-25
-DATA = ['M1_D4', 'M1_D7', 'M1_D1', 'M1_D6', 'M1_D3', 'M1_D5', 'M1_D0', 'M1_D2']            # header pins 18-32
+# (sorted by header pin: the address groups from the north end, the data group from the south)
+ADDR_HI = sorted(['M1_A%d' % i for i in range(8, 16)], key=lambda n: -EDGE_PIN[n])   # header pins 18-3
+ADDR_LO = sorted(['M1_A%d' % i for i in range(8)], key=lambda n: -EDGE_PIN[n])       # header pins 39-26
+DATA = sorted(['M1_D%d' % i for i in range(8)], key=lambda n: EDGE_PIN[n])           # header pins 17-31
 # 74LVC3G17 (DCT): (input pin, output pin) per Schmitt channel: 1A->1Y, 2A->2Y, 3A->3Y
 CH3G17 = [(1, 7), (3, 5), (6, 2)]
-STROBE_A = ['M1_SYSRES_N', 'M1_OUT_N', 'M1_WR_N']     # header pins 2, 12, 13
-STROBE_B = ['M1_RD_N', 'M1_IN_N', 'M1_INTAK_N']       # header pins 15, 19, 14 (RD, IN on top: the OE gate taps them)
+STROBE_A = ['M1_SYSRES_N', 'M1_OUT_N', 'M1_WR_N']     # header pins 1, 11, 14
+STROBE_B = ['M1_RD_N', 'M1_IN_N', 'M1_INTAK_N']       # header pins 16, 20, 13 (RD, IN on top: the OE gate taps them)
 # 74LVC2G07: (input, open-drain output)
 CH2G07 = [(1, 6), (3, 4)]
 
@@ -302,10 +321,13 @@ U_RP.pin_unit.update({str(RP_GPIO_PIN[g]): u for g, u in _gp_unit.items()})
 add('J', '%s:TRS80_M1_Expansion_40' % LIB, 'TRS-80 Model I expansion', FP(HDR_FP),
     {p: n for p, (n, _) in EDGE.items()}, mpn='BH254R-40P', lcsc='C48603651',
     desc='2x20 right-angle box header, 2.54 mm: the Model I expansion edge through a 40-wire IDC ribbon '
-         '(header pin n = edge pin n); pin 39 (+5V on boards A-E, GND on G) left open', key='J_M1')
+         '(edge pins swapped in pairs: header 1 = edge 2 SYSRES*); edge pin 39 (+5V on boards A-E, GND on G) '
+         'left open', key='J_M1')
 
-# -- A8-A15 and A0-A7: 74LVC245A, A -> B fixed (DIR high, OE low), each input pulled down by 100k
-# (defined with the ribbon unplugged; to GND, so nothing back-feeds a machine or a card that is off)
+# -- A8-A15 and A0-A7: 74LVC245A, A -> B fixed (DIR high, OE low), each input pulled up by 100k to
+# +3V3_RP: defined with the ribbon unplugged or the Model I off, idling where a TTL bus does (the
+# strobes and SYSRES* inactive).  With the Model I on and the card off they back-feed the RP rail
+# ~1 mA at most (tools/audit/margins.py); the LVC inputs themselves are Ioff
 for key, lines, pd_keys, desc in (('U_AH', ADDR_HI, ('RN_AH1', 'RN_AH2'), 'A8-A15'),
                                   ('U_AL', ADDR_LO, ('RN_AL1', 'RN_AL2'), 'A0-A7')):
     pins = {1: RP_RAIL, 10: 'GND', 19: 'GND', 20: RP_RAIL}
@@ -315,7 +337,7 @@ for key, lines, pd_keys, desc in (('U_AH', ADDR_HI, ('RN_AH1', 'RN_AH2'), 'A8-A1
         mpn='SN74LVC245APWR', lcsc='C7848', desc='address receiver %s (A -> B, always on)' % desc, key=key, ds=TI_245)
     C('100nF', RP_RAIL, desc='%s decoupling' % key, key='C_' + key[2:])
     for i, pk in enumerate(pd_keys):
-        RN('4x100k', lines[4 * i:4 * i + 4], 'GND', desc='%s pull-downs (ribbon unplugged)' % desc, key=pk)
+        RN('4x100k', lines[4 * i:4 * i + 4], RP_RAIL, desc='%s pull-ups (ribbon unplugged)' % desc, key=pk)
 
 # -- D0-D7: 74LVC245A, A = the RP, B = the bus through 75R: source termination for the ribbon (tools/audit/
 # spice/ribbon.py: clean to 45 cm of cable) and the limit on the overlap current when RD rises and the
@@ -333,8 +355,8 @@ add('U', '%s:74LVC245A_Fn_BA' % LIB, '74LVC245A', FP('TSSOP-20_4.4x6.5mm_P0.65mm
 C('100nF', RP_RAIL, desc='U_DB decoupling', key='C_DB')
 RS('4x75R', [(n, ds_of(n)) for n in DATA[:4]], desc='data series (ribbon source termination)', key='RS_D1')
 RS('4x75R', [(n, ds_of(n)) for n in DATA[4:]], desc='data series (ribbon source termination)', key='RS_D2')
-RN('4x100k', [ds_of(n) for n in DATA[:4]], 'GND', desc='data pull-downs (ribbon unplugged)', key='RN_D1')
-RN('4x100k', [ds_of(n) for n in DATA[4:]], 'GND', desc='data pull-downs (ribbon unplugged)', key='RN_D2')
+RN('4x100k', [ds_of(n) for n in DATA[:4]], RP_RAIL, desc='data pull-ups (ribbon unplugged)', key='RN_D1')
+RN('4x100k', [ds_of(n) for n in DATA[4:]], RP_RAIL, desc='data pull-ups (ribbon unplugged)', key='RN_D2')
 R('4.7k', 'DRIVE', 'GND', desc='DRIVE pull-down: the data buffer listens through reset', key='R_DRIVE')
 add('U', '74xGxx:74LVC1G11', '74LVC1G11', FP('SOT-23-6'),
     {6: 'DRIVE', 2: 'GND', 1: 'RP_RD_N', 4: 'BUF_OE_N', 5: RP_RAIL, 3: 'RP_IN_N'},
@@ -343,8 +365,8 @@ add('U', '74xGxx:74LVC1G11', '74LVC1G11', FP('SOT-23-6'),
 C('100nF', RP_RAIL, desc='74LVC1G11 decoupling', key='C_OE')
 
 # -- the strobes, SYSRES* and INTAK*: Schmitt-trigger receivers (74LVC3G17, hysteresis ~0.5 V at 3.3 V)
-# against ringing and crosstalk on the ribbon; 100k pull-downs (stuck low = no Model I: the
-# firmware's power-off rule)
+# against ringing and crosstalk on the ribbon; 100k pull-ups (no strobe = no Model I: the firmware's
+# power-off rule)
 for key, lines, pd in (('U_STA', STROBE_A, 'RN_STA'), ('U_STB', STROBE_B, 'RN_STB')):
     pins = {4: 'GND', 8: RP_RAIL}
     for (a, y), n in zip(CH3G17, lines):
@@ -353,8 +375,8 @@ for key, lines, pd in (('U_STA', STROBE_A, 'RN_STA'), ('U_STB', STROBE_B, 'RN_ST
         mpn='SN74LVC3G17DCTR', lcsc='C18213', desc='Schmitt receivers: ' + ', '.join(n[3:] for n in lines),
         key=key, ds=TI_3G17)
     C('100nF', RP_RAIL, desc='%s decoupling' % key, key='C_' + key[2:])
-RN('4x100k', STROBE_A + [None], 'GND', desc='strobe pull-downs (ribbon unplugged)', key='RN_STA')
-RN('4x100k', STROBE_B + [None], 'GND', desc='strobe pull-downs (ribbon unplugged)', key='RN_STB')
+RN('4x100k', STROBE_A + [None], RP_RAIL, desc='strobe pull-ups (ribbon unplugged)', key='RN_STA')
+RN('4x100k', STROBE_B + [None], RP_RAIL, desc='strobe pull-ups (ribbon unplugged)', key='RN_STB')
 
 # -- INT* and WAIT*: open drain (74LVC2G07, 5 V-tolerant outputs) onto the Z80's own 4.7k pull-ups;
 # the inputs pulled up so the outputs stay off while the RP is in reset
